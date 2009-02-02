@@ -4,6 +4,9 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+ADD: Support for arbitrary HTTP POST Content Types (#1015) (David)
+ADD: Automatically decode HTTP PUT payload into request parameters for application/x-www-form-urlencoded Content-Type in AgaviWebRequest (#1016) (David)
+ADD: Support for anti-stampede callbacks in Execution Filter (#744) (David)
 ADD: AgaviResponse::hasContent() (#1007) (David)
 ADD: Complete support for multiple SOAP services in the same application (#1001) (David)
 ADD: AgaviException::render() should send shell exit code (#990) (David)
@@ -13,11 +16,17 @@ ADD: Optionally set 'secure' flag on session cookies automatically (#981) (David
 ADD: Add AgaviWebRequest::isHttps() convenience method (#980) (David)
 ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 
+CHG: Update timezone database to 2009a (#1013) (David)
 CHG: Steamline date formatting and parsing behaviors when using timezones (#964) (Dominik, David, Felix)
 CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone() (#994) (David)
 CHG: Remove unused property AgaviOperatorValidator::$errors (#987) (David)
 CHG: Allow arbitrary number of fractional seconds for parsing date formats (#977) (Dominik)
 
+FIX: Content-Type and Content-Length request headers are treated incorrectly (#1017) (David)
+FIX: AgaviWebRequest HTTP PUT support ignores Content-Type header (#1014) (David)
+FIX: Project configuration system does not reflect user-specified template extension in configuration (#1003) (Noah)
+FIX: Project configuration system does not copy all templates according to user-specified extension (#1002) (Noah)
+FIX: Several date classes are lacking type hints in method signatures (#997) (Dominik)
 FIX: FPF does not insert error messages or classes for submit buttons (#1011) (David)
 FIX: Shiny exception template produces invalid XHTML (#1009) (David)
 FIX: Sample App's and code templates' SecureSuccessView responds with a 401 HTTP status code instead of 403 (#1010) (David)

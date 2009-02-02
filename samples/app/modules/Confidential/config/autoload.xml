@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+	<ae:configuration>
+		<autoloads>
+			<autoload name="AgaviSampleAppConfidentialBaseAction">%core.module_dir%/Confidential/lib/action/AgaviSampleAppConfidentialBaseAction.class.php</autoload>
+			<autoload name="AgaviSampleAppConfidentialBaseModel">%core.module_dir%/Confidential/lib/model/AgaviSampleAppConfidentialBaseModel.class.php</autoload>
+			<autoload name="AgaviSampleAppConfidentialBaseView">%core.module_dir%/Confidential/lib/view/AgaviSampleAppConfidentialBaseView.class.php</autoload>
+		</autoloads>
+	</ae:configuration>
+</ae:configurations>

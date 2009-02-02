@@ -87,7 +87,10 @@ abstract class AgaviTimeZone
 	}
 
 	/**
-	 * TODO: document the overloads
+	 * Overloaded.
+	 * 
+	 * @see        AgaviTimeZone::getOffsetIIIIII()
+	 * @see        AgaviTimeZone::getOffsetIIIIIII()
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -292,7 +295,7 @@ abstract class AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function getDisplayName($daylight = null, $style = null, $locale = null)
+	public function getDisplayName($daylight = null, $style = null, AgaviLocale $locale = null)
 	{
 		if($daylight === null) {
 			$daylight = false;
@@ -385,7 +388,7 @@ abstract class AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function hasSameRules($other)
+	public function hasSameRules(AgaviTimeZone $other)
 	{
 		return ($this->getRawOffset() == $other->getRawOffset() && 
 						$this->useDaylightTime() == $other->useDaylightTime());
@@ -553,7 +556,7 @@ abstract class AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function __is_equal($that) {
+	public function __is_equal(AgaviTimeZone $that) {
 		return get_class($this) == get_class($that) && $this->getId() == $that->getId();
 	}
 
@@ -570,7 +573,7 @@ abstract class AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function __is_not_equal($that) {
+	public function __is_not_equal(AgaviTimeZone $that) {
 		return get_class($this) != get_class($that) || $this->getId() != $that->getId();
 	}
 

@@ -37,7 +37,9 @@
 						<xi:include xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(ot=http://agavi.org/agavi/config/parts/output_types/1.0) xpointer(/ae:configurations/ae:sandbox/ot:layers/*)" />
 						<!-- and then define those special tp this layout -->
 						<layer name="decorator">
-							<slot name="menu" module="Default" action="Menu" />
+							<slot name="header" module="Default" action="Widgets.Header" />
+							<slot name="menu" module="Default" action="Widgets.Menu" />
+							<slot name="footer" module="Default" action="Widgets.Footer" />
 							<ae:parameter name="directory">%core.template_dir%</ae:parameter>
 							<ae:parameter name="template">Master</ae:parameter>
 						</layer>

@@ -320,12 +320,11 @@
 
 	<target name="project-wizard-welcome-template" depends="project-locate,module-locate,action-locate">
 		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.modules.templates}/WelcomeSuccess.php.tmpl">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
+		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -333,7 +332,7 @@
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="TEMPLATE_NAME" value="${template.name}" />
-					<token key="TEMPLATE_EXTENSION" value="${template.extension}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -371,7 +370,8 @@
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
-					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
+                                        <token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -382,9 +382,9 @@
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
 		<copy todir="${project.directory}/${project.directory.app.templates}">
-			<mapper type="glob" from="*.tmpl" to="*" />
+			<mapper type="glob" from="*.php.tmpl" to="*.${template.extension.default}" />
 			<fileset dir="${template.path}">
-				<include name="**/*.tmpl" />
+				<include name="**/*.php.tmpl" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
@@ -392,6 +392,7 @@
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>
@@ -411,12 +412,11 @@
 	
 	<target name="project-wizard-system-action-error_404-template" depends="project-locate,module-locate,action-locate">
 		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.modules.templates}/Error404Success.php.tmpl">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
+		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -424,7 +424,7 @@
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="TEMPLATE_NAME" value="${template.name}" />
-					<token key="TEMPLATE_EXTENSION" value="${template.extension}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -452,12 +452,11 @@
 
 	<target name="project-wizard-system-action-unavailable-template" depends="project-locate,module-locate,action-locate">
 		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.modules.templates}/UnavailableSuccess.php.tmpl">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
+		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -465,7 +464,7 @@
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="TEMPLATE_NAME" value="${template.name}" />
-					<token key="TEMPLATE_EXTENSION" value="${template.extension}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -493,12 +492,11 @@
 
 	<target name="project-wizard-system-action-module_disabled-template" depends="project-locate,module-locate,action-locate">
 		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.modules.templates}/ModuleDisabledSuccess.php.tmpl">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
+		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -506,7 +504,7 @@
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="TEMPLATE_NAME" value="${template.name}" />
-					<token key="TEMPLATE_EXTENSION" value="${template.extension}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -534,12 +532,11 @@
 
 	<target name="project-wizard-system-action-secure-template" depends="project-locate,module-locate,action-locate">
 		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
-		<property userProperty="true" name="template.extension" value="php" override="true" />
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.modules.templates}/SecureSuccess.php.tmpl">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.php">
+		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -547,7 +544,7 @@
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="TEMPLATE_NAME" value="${template.name}" />
-					<token key="TEMPLATE_EXTENSION" value="${template.extension}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -733,6 +730,7 @@
 							<token key="PROJECT_LOCATION" value="${project.directory}" />
 							<token key="PROJECT_NAME" value="${project.name}" />
 							<token key="PROJECT_PREFIX" value="${project.prefix}" />
+							<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 							<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 						</replacetokens>
 					</filterchain>
@@ -766,6 +764,7 @@
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>
@@ -787,6 +786,7 @@
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>
@@ -808,6 +808,7 @@
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
 					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>

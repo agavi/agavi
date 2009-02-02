@@ -20,7 +20,7 @@ class Default_UnavailableSuccessView extends AgaviSampleAppDefaultBaseView
 		$this->setupHtml($rd);
 
 		// set the title
-		$this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('This Application is Unavailable', 'default.ErrorActions'));
+		$this->setAttribute('_title', $this->tm->_('This Application is Unavailable', 'default.ErrorActions'));
 		
 		$this->getResponse()->setHttpStatusCode('503');
 	}

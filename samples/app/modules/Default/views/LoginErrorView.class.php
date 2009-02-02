@@ -20,7 +20,7 @@ class Default_LoginErrorView extends AgaviSampleAppDefaultBaseView
 		$this->setupHtml($rd);
 		
 		// set the title
-		$this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('Login', 'default.Login'));
+		$this->setAttribute('_title', $this->tm->_('Login', 'default.Login'));
 		
 		// set error messages from the user login method
 		if(($error = $this->getAttribute('error')) !== null) {
