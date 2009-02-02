@@ -13,16 +13,13 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_ModuleDisabledSuccessView extends AgaviSampleAppDefaultBaseView
+class Default_Widgets_HeaderSuccessView extends AgaviSampleAppDefaultBaseView
 {
+
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
+		// will automatically load "slot" layout for us
 		$this->setupHtml($rd);
-
-		// set the title
-		$this->setAttribute('_title', $this->tm->_('This Module is Disabled', 'default.ErrorActions'));
-		
-		$this->getResponse()->setHttpStatusCode('503');
 	}
 
 }

@@ -7,7 +7,7 @@ class Confidential_TopSecretSuccessView extends AgaviSampleAppConfidentialBaseVi
 		$this->setupHtml($rd);
 
 		// set the title
-		$this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('Secure Action', 'default.Login'));
+		$this->setAttribute('_title', $this->tm->_('Secure Action', 'default.Login'));
 
 	}
 

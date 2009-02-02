@@ -12,7 +12,7 @@ class Products_Product_ViewSuccessView extends AgaviSampleAppProductsBaseView
 		$this->setupHtml($rd);
 
 		// set the title
-		$this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('Congratulations!', 'default.SearchEngineSpam'));
+		$this->setAttribute('_title', $this->tm->_('Congratulations!', 'default.SearchEngineSpam'));
 	}
 
 	public function executeText(AgaviRequestDataHolder $rd)

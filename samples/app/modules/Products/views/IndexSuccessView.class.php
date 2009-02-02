@@ -7,7 +7,7 @@ class Products_IndexSuccessView extends AgaviSampleAppProductsBaseView
 		$this->setupHtml($rd);
 		
 		// set the title
-		$this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('Our Fine Products', 'default.SearchEngineSpam'));
+		$this->setAttribute('_title', $this->tm->_('Our Fine Products', 'default.SearchEngineSpam'));
 	}
 
 	public function executeText(AgaviRequestDataHolder $rd)

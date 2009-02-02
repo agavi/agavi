@@ -18,7 +18,7 @@ class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		$usr = $this->getContext()->getUser();
+		$usr = $this->us;
 		$res = $this->getResponse();
 
 		// set the autologon cookie if requested
@@ -35,7 +35,7 @@ class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 		$this->setupHtml($rd);
 
 		// set the title
-		$this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('Login Successful', 'default.Login'));
+		$this->setAttribute('_title', $this->tm->_('Login Successful', 'default.Login'));
 	}
 
 }
