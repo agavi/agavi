@@ -13,7 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_MenuSuccessView extends AgaviSampleAppDefaultBaseView
+class Default_Widgets_MenuSuccessView extends AgaviSampleAppDefaultBaseView
 {
 
 	public function executeHtml(AgaviRequestDataHolder $rd)
