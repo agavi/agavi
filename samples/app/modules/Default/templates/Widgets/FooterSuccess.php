@@ -6,5 +6,6 @@ foreach($t['locales'] as $locale): ?>
 		<a href="<?php echo $ro->gen(null, array('locale' => $locale['identifier'])); ?>" hreflang="<?php echo $locale['identifier']; ?>"<?php if($locale['identifier'] == $t['current_locale']): ?> style="font-weight:bold"<?php endif;?>><?php echo htmlspecialchars($locale['parameters']['description']); ?></a>
 <?php endforeach; ?>
 	</p>
+	<p>Powered by <?php echo $t['agavi_plug']; ?></p>
 	<p>Copyright © 2005-2009 The Agavi Project</p>
 </div>
