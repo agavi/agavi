@@ -1335,15 +1335,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						if(count($opts['callbacks']) > 0) {
 							foreach($route['callback_instances'] as $callbackInstance) {
 								$callbackInstance->onNotMatched($container);
-								
-								// one last thing we need to do: see if one of the callbacks modified the 'action' or 'module' vars inside $vars if $umap is on
-								// we then need to write those back to the container, unless they changed THERE, too, in which case the container values take precedence
-								if($umap && $oldModule == $container->getModuleName() && $vars[$ma] != $oldModule) {
-									$container->setModuleName($vars[$ma]);
-								}
-								if($umap && $oldAction == $container->getActionName() && $vars[$aa] != $oldAction) {
-									$container->setActionName($vars[$aa]);
-								}
 							}
 						}
 					}
