@@ -1019,7 +1019,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 */
 	public function escapeOutputParameter($string)
 	{
-		return $string;
+		return (string)$string;
 	}
 
 	/**
