@@ -1053,8 +1053,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$ot = null;
 		$locale = null;
 		$method = null;
+		
+		$umap = $req->getParameter('use_module_action_parameters');
 		$ma = $req->getParameter('module_accessor');
 		$aa = $req->getParameter('action_accessor');
+		
 		$requestMethod = $req->getMethod();
 
 		$routes = array();
@@ -1086,6 +1089,12 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					$match = array();
 					if($this->parseInput($route, $input, $match)) {
 						$varsBackup = $vars;
+						
+						// backup the container, must be done here already
+						if(count($opts['callbacks']) > 0) {
+							$oldContainer = $container;
+							$container = clone $container;
+						}
 						
 						$ign = array();
 						if(count($opts['ignores']) > 0) {
@@ -1127,13 +1136,17 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						if($opts['module']) {
 							$module = AgaviToolkit::expandVariables($opts['module'], $matchvals);
 							$container->setModuleName($module);
-							$vars[$ma] = $module;
+							if($umap) {
+								$vars[$ma] = $module;
+							}
 						}
 
 						if($opts['action']) {
 							$action = AgaviToolkit::expandVariables($opts['action'], $matchvals);
 							$container->setActionName($action);
-							$vars[$aa] = $action;
+							if($umap) {
+								$vars[$aa] = $action;
+							}
 						}
 
 						if($opts['output_type']) {
@@ -1167,8 +1180,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						}
 
 						if(count($opts['callbacks']) > 0) {
-							$oldContainer = $container;
-							$container = clone $container;
 							if(count($opts['ignores']) > 0) {
 								// add ignored variables to the callback vars
 								foreach($vars as $name => &$var) {
@@ -1216,15 +1227,22 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								// */
 								
 								
-								// if the callback didn't change the value execute expandVariables again since 
-								// the validator could have changed one of the values which expandVariables uses
-								if($opts['module'] && $oldModule == $container->getModuleName()) {
+								// if the callback didn't change the value, execute expandVariables again since 
+								// the callback could have changed one of the values which expandVariables uses
+								// to evaluate the contents of the attribute in question (e.g. module="${zomg}")
+								if($opts['module'] && $oldModule == $container->getModuleName() && (!$umap || $oldModule == $vars[$ma])) {
 									$module = AgaviToolkit::expandVariables($opts['module'], $expandVars);
 									$container->setModuleName($module);
+									if($umap) {
+										$vars[$ma] = $module;
+									}
 								}
-								if($opts['action'] && $oldAction == $container->getActionName()) {
+								if($opts['action'] && $oldAction == $container->getActionName() && (!$umap || $oldAction == $vars[$aa])) {
 									$action = AgaviToolkit::expandVariables($opts['action'], $expandVars);
 									$container->setActionName($action);
+									if($umap) {
+										$vars[$aa] = $action;
+									}
 								}
 								if($opts['output_type'] && $oldOutputTypeName == ($container->getOutputType() ? $container->getOutputType()->getName() : null)) {
 									$ot = AgaviToolkit::expandVariables($opts['output_type'], $expandVars);
@@ -1251,6 +1269,15 @@ abstract class AgaviRouting extends AgaviParameterHolder
 										// copy the request method to the container
 										$container->setRequestMethod($req->getMethod());
 									}
+								}
+								
+								// one last thing we need to do: see if one of the callbacks modified the 'action' or 'module' vars inside $vars if $umap is on
+								// we then need to write those back to the container, unless they changed THERE, too, in which case the container values take precedence
+								if($umap && $oldModule == $container->getModuleName() && $vars[$ma] != $oldModule) {
+									$container->setModuleName($vars[$ma]);
+								}
+								if($umap && $oldAction == $container->getActionName() && $vars[$aa] != $oldAction) {
+									$container->setActionName($vars[$aa]);
 								}
 							}
 							if(!$callbackSuccess) {
@@ -1308,6 +1335,15 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						if(count($opts['callbacks']) > 0) {
 							foreach($route['callback_instances'] as $callbackInstance) {
 								$callbackInstance->onNotMatched($container);
+								
+								// one last thing we need to do: see if one of the callbacks modified the 'action' or 'module' vars inside $vars if $umap is on
+								// we then need to write those back to the container, unless they changed THERE, too, in which case the container values take precedence
+								if($umap && $oldModule == $container->getModuleName() && $vars[$ma] != $oldModule) {
+									$container->setModuleName($vars[$ma]);
+								}
+								if($umap && $oldAction == $container->getActionName() && $vars[$aa] != $oldAction) {
+									$container->setActionName($vars[$aa]);
+								}
 							}
 						}
 					}
@@ -1318,16 +1354,18 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		// put the vars into the request
 		$reqData->setParameters($vars);
 
-		if(!isset($vars[$ma]) || !isset($vars[$aa])) {
+		if($container->getModuleName() === null || $container->getActionName() === null) {
 			// no route which supplied the required parameters matched, use 404 action
-			$reqData->setParameters(array(
-				$ma => AgaviConfig::get('actions.error_404_module'),
-				$aa => AgaviConfig::get('actions.error_404_action')
-			));
+			$container->setModuleName(AgaviConfig::get('actions.error_404_module'));
+			$container->setActionName(AgaviConfig::get('actions.error_404_action'));
+			
+			if($umap) {
+				$reqData->setParameters(array(
+					$ma => $container->getModuleName(),
+					$aa => $container->getActionName(),
+				));
+			}
 		}
-
-		$container->setModuleName($reqData->getParameter($ma));
-		$container->setActionName($reqData->getParameter($aa));
 
 		// set the list of matched route names as a request attribute
 		$req->setAttribute('matched_routes', $matchedRoutes, 'org.agavi.routing');

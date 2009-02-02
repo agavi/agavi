@@ -16,6 +16,7 @@ ADD: Optionally set 'secure' flag on session cookies automatically (#981) (David
 ADD: Add AgaviWebRequest::isHttps() convenience method (#980) (David)
 ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 
+CHG: Make populating of module and action names into request data configurable and remove overwriting behavior (#812) (David)
 CHG: Update timezone database to 2009a (#1013) (David)
 CHG: Steamline date formatting and parsing behaviors when using timezones (#964) (Dominik, David, Felix)
 CHG: Rename AgaviTranslationManager::getCurrentTimeZone() to getDefaultTimeZone() (#994) (David)
