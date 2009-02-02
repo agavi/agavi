@@ -1267,7 +1267,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								// and which was ignored in this route would take the ignored value instead of keeping the old one.
 								// And variables which have not been set in an earlier routes need to be removed again
 								foreach($opts['ignores'] as $ignore) {
-									if(array_key_exists($varsBackup[$ignore])) {
+									if(array_key_exists($ignore, $varsBackup)) {
 										$vars[$ignore] = $varsBackup[$ignore];
 									} else {
 										unset($vars[$ignore]);
