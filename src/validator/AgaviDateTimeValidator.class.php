@@ -308,6 +308,22 @@ class AgaviDateTimeValidator extends AgaviValidator
 			} else {
 				$result = $minMaxValue;
 			}
+		} elseif(strpos($minMax, '.') === false) {
+			// a strtotime compatible string does not contain a dot, so all strings with dots are assumed to be
+			// strings matching the calendar format and all others are handled with strtotime
+			$tz = $locale->getLocaleTimeZone();
+			if($tz) {
+				// set the timezone for the strtotime call to be the same as for creating the calendar
+				$oldDefaultTimezone = date_default_timezone_get();
+				date_default_timezone_set($tz);
+			}
+			// create the calendar in the requested locale/timezone
+			$result = $this->getContext()->getTranslationManager()->createCalendar($locale);
+			$result->setUnixTimestamp(strtotime($minMax));
+			if($tz) {
+				// reset the php timezone
+				date_default_timezone_set($oldDefaultTimezone);
+			}
 		} else {
 			$result = $format->parse($minMax, $locale, false);
 		}
