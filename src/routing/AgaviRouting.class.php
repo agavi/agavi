@@ -1230,14 +1230,14 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								// if the callback didn't change the value, execute expandVariables again since 
 								// the callback could have changed one of the values which expandVariables uses
 								// to evaluate the contents of the attribute in question (e.g. module="${zomg}")
-								if($opts['module'] && $oldModule == $container->getModuleName() && (!$umap || $oldModule == $vars[$ma])) {
+								if($opts['module'] && $oldModule == $container->getModuleName() && (!$umap || !array_key_exists($ma, $vars) || $oldModule == $vars[$ma])) {
 									$module = AgaviToolkit::expandVariables($opts['module'], $expandVars);
 									$container->setModuleName($module);
 									if($umap) {
 										$vars[$ma] = $module;
 									}
 								}
-								if($opts['action'] && $oldAction == $container->getActionName() && (!$umap || $oldAction == $vars[$aa])) {
+								if($opts['action'] && $oldAction == $container->getActionName() && (!$umap || !array_key_exists($aa, $vars) || $oldAction == $vars[$aa])) {
 									$action = AgaviToolkit::expandVariables($opts['action'], $expandVars);
 									$container->setActionName($action);
 									if($umap) {
@@ -1273,10 +1273,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								
 								// one last thing we need to do: see if one of the callbacks modified the 'action' or 'module' vars inside $vars if $umap is on
 								// we then need to write those back to the container, unless they changed THERE, too, in which case the container values take precedence
-								if($umap && $oldModule == $container->getModuleName() && $vars[$ma] != $oldModule) {
+								if($umap && $oldModule == $container->getModuleName() && array_key_exists($ma, $vars) && $vars[$ma] != $oldModule) {
 									$container->setModuleName($vars[$ma]);
 								}
-								if($umap && $oldAction == $container->getActionName() && $vars[$aa] != $oldAction) {
+								if($umap && $oldAction == $container->getActionName() && array_key_exists($aa, $vars) && $vars[$aa] != $oldAction) {
 									$container->setActionName($vars[$aa]);
 								}
 							}
