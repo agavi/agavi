@@ -290,15 +290,18 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 
 		$ma = $req->getParameter('module_accessor');
 		$aa = $req->getParameter('action_accessor');
+		$umap = $req->getParameter('use_module_action_parameters');
 
 		$mode = $this->getParameter('mode');
 
 		if($executedValidators == 0 && $mode == self::MODE_STRICT) {
 			// strict mode and no validators executed -> clear the parameters
-			$maParam = $parameters->getParameter($ma);
-			$aaParam = $parameters->getParameter($aa);
+			if($umap) {
+				$maParam = $parameters->getParameter($ma);
+				$aaParam = $parameters->getParameter($aa);
+			}
 			$parameters->clearAll();
-			if($req->getParameter('use_module_action_parameters')) {
+			if($umap) {
 				if($maParam) {
 					$parameters->setParameter($ma, $maParam);
 				}
@@ -313,7 +316,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			foreach($parameters->getSourceNames() as $source) {
 				$sourceItems = $parameters->getAll($source);
 				foreach(AgaviArrayPathDefinition::getFlatKeyNames($sourceItems) as $name) {
-					if(!isset($succeededArguments[$source . '/' . $name]) && ($source != AgaviRequestDataHolder::SOURCE_PARAMETERS || ($name != $ma && $name != $aa))) {
+					if(!isset($succeededArguments[$source . '/' . $name]) && (!$umap || ($source != AgaviRequestDataHolder::SOURCE_PARAMETERS || ($name != $ma && $name != $aa)))) {
 						$parameters->remove($source, $name);
 					}
 				}
