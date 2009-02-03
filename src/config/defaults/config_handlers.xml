@@ -85,13 +85,6 @@
 				<transformation>%core.agavi_dir%/config/xsl/translation.xsl</transformation>
 			</handler>
 
-			<handler pattern="%core.config_dir%/validators.xml" class="AgaviReturnArrayConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/validators.xsd</validation>
-			</handler>
-			<handler pattern="%core.system_config_dir%/validators.xml" class="AgaviReturnArrayConfigHandler">
-				<validation>%core.agavi_dir%/config/xsd/validators.xsd</validation>
-			</handler>
-
 			<handler pattern="%core.testing_dir%/config/suites.xml" class="AgaviTestSuitesConfigHandler">
 				<!-- <validation>%core.agavi_dir%/config/xsd/module.xsd</validation>-->
 				<!-- <transformation>%core.agavi_dir%/config/xsl/module.xsl</transformation> --> 
