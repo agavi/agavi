@@ -398,22 +398,26 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 * the reverse string of a routing to be generated.
 	 *
 	 * @param      string The route name(s, delimited by +) to calculate.
+	 * @param      bool   Set to true if the requested route was 'null' or 
+	 *                    'null' + 'xxx'
 	 *
 	 * @return     array A list of names of affected routes.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getAffectedRoutes($route)
+	public function getAffectedRoutes($route, &$isNullRoute = false)
 	{
 		$includedRoutes = array();
 		$excludedRoutes = array();
 		
 		if($route === null) {
 			$includedRoutes = array_reverse($this->getContext()->getRequest()->getAttribute('matched_routes', 'org.agavi.routing', array()));
+			$isNullRoute = true;
 		} elseif(strlen($route) > 0) {
 			if($route[0] == '-' || $route[0] == '+') {
 				$includedRoutes = array_reverse($this->getContext()->getRequest()->getAttribute('matched_routes', 'org.agavi.routing', array()));
+				$isNullRoute = true;
 			}
 			
 			$routeParts = preg_split('#(-|\+)#', $route, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -480,7 +484,30 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 		return $affectedRoutes;
 	}
-
+	
+	/**
+	 * Get a list of all parameter matches which where matched in execute()
+	 * in the given routes. 
+	 *
+	 * @param      array An array of route names.
+	 *
+	 * @return     array The matched parameters as name => value.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getMatchedParameters(array $routeNames)
+	{
+		$params = array();
+		foreach($routeNames as $name) {
+			if(isset($this->routes[$name])) {
+				$route = $this->routes[$name];
+				$params = array_merge($params, $route['matches']);
+			}
+		}
+		return $params;
+	}
+	
 	/**
 	 * Get a complete list of gen() options based on the given, probably
 	 * incomplete, options array, or options preset name.
@@ -504,6 +531,24 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			return array_merge($this->defaultGenOptions, $input);
 		}
 		throw new AgaviException('Undefined Routing gen() options preset "' . $input . '"');
+	}
+	
+	
+	/**
+	 * Adds the matched parameters from the 'null' routes to the given parameters
+	 * (without overwriting existing ones)
+	 * 
+	 * @param      array The route names
+	 * @param      array The parameters
+	 * 
+	 * @param      array The new parameters
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function fillGenNullParameters(array $routeNames, array $params)
+	{
+		return array_merge($this->getMatchedParameters($routeNames), $params);
 	}
 	
 	/**
@@ -953,15 +998,24 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 */
 	public function gen($route, array $params = array(), $options = array())
 	{
+		$routes = $route;
+		$isNullRoute = false;
+		$routes = $this->getAffectedRoutes($route, $isNullRoute);
+		
+		if(count($routes) == 0) {
+			return array($route, array(), $options, $params, $isNullRoute);
+		}
+		
+		if($isNullRoute) {
+			// for gen(null) and friends all matched parameters are inserted before the 
+			// supplied params are backuped
+			$params = $this->fillGenNullParameters($routes, $params);
+		}
+		
 		$params = $this->convertParametersToRoutingValues($params);
 		// we need to store the original params since we will be trying to fill the
 		// parameters up to the first user supplied parameter
 		$originalParams = $params;
-		
-		$routes = $route;
-		if(is_string($route) || $route === null) {
-			$routes = $this->getAffectedRoutes($routes);
-		}
 		
 		$assembledInformation = $this->assembleRoutes($options, $routes, $params);
 		
@@ -1003,7 +1057,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		}
 
 		$uri = str_replace($from, $to, $assembledInformation['uri']);
-		return array($this->prefix . $uri, $params, $options, $extras);
+		return array($this->prefix . $uri, $params, $options, $extras, $isNullRoute);
 	}
 	
 	
