@@ -70,6 +70,11 @@ Request
 By default, the old "module" and "action" request data parameters are not assigned or used anymore, and also do not receive special treatment by the validation system.
 To re-enable their use and availability, set the configuration parameter "use_module_action_parameters" to true for the request implementation in factories.xml.
 
+Testing
+-------
+Agavi 1.0 features an EXPERIMENTAL infrastructure for testing of applications. It supports unit tests, as well as testing fragments of the application such as Actions and Views, and also complete dispatch runs.
+This functionality will be constantly modified, improved and refactored until 1.1, so it's very likely that tests written now will not work without modifications in a future version. On the bright side, what matters is *what* you test, and not how you test it, so changing your tests later to comply with the then-stable system will be a comparatively easy effort as 90% of the work (figuring out the test logic, how and what to test, etc.) is already done.
+
 Project development environment
 -------------------------------
 Agavi 1.0 introduces a new environment for creating and managing Agavi-based projects. This environment effectively replaces the older agavi script and Phing build environment. The new environment is also based on Phing. It adds a few useful features:
