@@ -3,11 +3,10 @@
 class AgaviTimeZoneTest extends AgaviUnitTestCase
 {
 	/**
-	 * @expectedException AgaviException
+	 * @expectedException Exception
 	 */
 	public function testTicket958()
 	{
-		$this->setExpectedException('AgaviException');
 		$tm = $this->getContext()->getTranslationManager();
 		$tz = AgaviTimeZone::createCustomTimeZone($tm, '+01:00');
 	}

@@ -861,7 +861,11 @@ class AgaviTranslationManager
 	public function createTimeZone($id, $cache = true)
 	{
 		if(!isset($this->timeZoneList[$id])) {
-			return AgaviTimeZone::createCustomTimeZone($this, $id);
+			try {
+				return AgaviTimeZone::createCustomTimeZone($this, $id);
+			} catch(Exception $e) {
+				return null;
+			}
 		}
 
 		if(!isset($this->timeZoneCache[$id]) || !$cache) {

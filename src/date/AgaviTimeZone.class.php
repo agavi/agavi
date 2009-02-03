@@ -531,7 +531,7 @@ abstract class AgaviTimeZone
 				$minutes = $match[2];
 			}
 		} else {
-			return null;
+			throw new InvalidArgumentException('Zone identifier is not parseable');
 		}
 
 		$offset = $hours * 60 + $minutes;

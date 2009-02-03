@@ -18,6 +18,7 @@ ADD: Optionally set 'secure' flag on session cookies automatically (#981) (David
 ADD: Add AgaviWebRequest::isHttps() convenience method (#980) (David)
 ADD: Allow setting of session save path in AgaviSessionStorage (#979) (David)
 
+CHG: AgaviTimezone::createCustomTimeZone() should throw exceptions for unparseable TZ strings (#958) (David)
 CHG: Rewrite Routing (#448) (Dominik, David, Felix)
 CHG: Make populating of module and action names into request data configurable and remove overwriting behavior (#812) (David)
 CHG: Polish the Sample App (#998) (David)
