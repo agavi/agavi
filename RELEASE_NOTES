@@ -13,6 +13,7 @@ ATTENTION: Some bugfixes caused changes to internal behavior. Make absolutely su
 Configuration
 -------------
 A new configuration subsystem that natively deals with XML files replaces the current implementation. This has numerous advantages; for instance, Agavi now supports any number of XML Schema (including XML Schema Instance declarations), RELAX NG or Schematron files to be validated against config files or merged result documents in several different stages, can apply XSL transformations (including those declared in <?xml-stylesheet?> PIs) and has extended namespaces support that allow backwards-compatibility to old config files in future versions.
+New-style configuration handlers extending AgaviXmlConfigHandler are now given a single AgaviXmlConfigDomDocument (extends DOMDocument) instance to work on, which already holds only the relevant <configuration> blocks in the correct order. Together with other subclasses of ext/dom classes, it provides several convenience methods to ease the processing of configuration files, but of course, all capabilities of DOM, including XPath, are usable inside configuration handlers.
 Backwards compabibility requires PHP's XSL extension enabled; other than that, everything still works as usual. Old-style configuration file handlers are still supported (but deprecated), but don't support the new features explained above.
 Also, the namespaces of configuration files have been changed, with envelope namespaces (<configurations> and other elements) decoupled from the actual config content namespaces. Again, backwards compatibility is maintained, but you should upgrade your configuration files when moving to 1.0 in order to be able to fully leverage all features and make future transitions easier.
 Of note, the legacy support for configuration files with no namespace at all (just <configurations>) has been dropped completely, so your files at the very least have to be in the global 0.11 namespace (http://agavi.org/agavi/1.0/config).
@@ -113,6 +114,14 @@ Validators are not handed a "method" parameter anymore with the request method t
 SOAP
 ----
 Agavi can now automatically pack and unpack document/literal wrapped style web service requests and responses if the Controller config parameter "force_document_literal_wrapped_marshalling" is set to true. Future releases of Agavi will enhance this functionality further and add automatic detection for these service styles.
+
+Sample App
+----------
+The Sample App has been refactored to a large extent to better reflect recommended coding standards, module organization and use of models.
+
+Filters
+-------
+An AgaviTidyFilter has been added.
 
 Deprecated elements
 -------------------
