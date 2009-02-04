@@ -317,6 +317,8 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		parent::initialize($context, $parameters);
 
+		$rla = ini_get('register_long_arrays');
+
 		// very first thing to do: remove magic quotes
 		if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 			// check if we're on PHP < 5.2.8
@@ -336,7 +338,6 @@ class AgaviWebRequest extends AgaviRequest
 				);
 			}
 			
-			$rla = ini_get('register_long_arrays');
 			$_GET = self::clearMagicQuotes($_GET);
 			$_POST = self::clearMagicQuotes($_POST);
 			$_COOKIE = self::clearMagicQuotes($_COOKIE);
