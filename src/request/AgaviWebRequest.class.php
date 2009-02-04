@@ -397,13 +397,12 @@ class AgaviWebRequest extends AgaviRequest
 		// more details:
 		// http://trac.agavi.org/ticket/1019
 		// http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0417
-		list($this->requestUri, $_SERVER['REQUEST_URI'], $_SERVER['QUERY_STRING']) = str_replace(
+		list($this->requestUri, $_SERVER['REQUEST_URI']) = str_replace(
 			array(' ',   '"',   '\'',  '<',   '>',   '`',   /*'&'*/),
 			array('%20', '%22', '%27', '%3C', '%3E', '%60', /*'%26'*/),
-			array($this->requestUri, $_SERVER['REQUEST_URI'], $_SERVER['QUERY_STRING'])
+			array($this->requestUri, $_SERVER['REQUEST_URI'])
 		);
 		if($rla) {
-			$GLOBALS['HTTP_SERVER_VARS']['QUERY_STRING'] = $_SERVER['QUERY_STRING'];
 			$GLOBALS['HTTP_SERVER_VARS']['REQUEST_URI'] = $this->getRequestUri();
 		}
 		
