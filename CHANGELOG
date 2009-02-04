@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 beta8 (January ??, 2009)
 ------------------------------
 
+SEC: CVE-2009-0417: Cross-site scripting vulnerability in handling of incoming URLs (#1019) (David)
+
 ADD: AgaviController::dispatch() should accept an AgaviExecutionContainer as optional second argument (#1012) (David)
 ADD: Allow relative min and max values using strtotime syntax in AgaviDateTimeValidator (#1018) (Dominik)
 ADD: Support for arbitrary HTTP POST Content Types (#1015) (David)
