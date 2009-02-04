@@ -1,6 +1,15 @@
 AGAVI CHANGELOG (0.11.x)
 ========================
 
+0.11.6 (February 4, 2009)
+-------------------------
+
+SEC: CVE-2009-0417: Cross-site scripting vulnerability in handling of incoming URLs (#1019) (David)
+
+FIX: Content-Type and Content-Length request headers are treated incorrectly (#1017) (David)
+FIX: AgaviWebRequest HTTP PUT support ignores Content-Type header (#1014) (David)
+
+
 0.11.6 RC2 (January 29, 2009)
 -----------------------------
 

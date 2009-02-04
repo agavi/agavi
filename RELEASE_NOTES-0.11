@@ -1,6 +1,35 @@
 AGAVI RELEASE NOTES (0.11.x)
 ============================
 
+Version 0.11.6 - February 4, 2009
+=================================
+
+This maintenance release fixes a number of issues and provides several minor enhancements and additions.
+
+Most importantly, this release fixes an attack vector affecting AgaviWebRouting::gen(null) in combination with some web browsers that (in violation of RFC 3986 and earlier versions) do not urlencode certain characters in the URL when making requests to a web server, allowing attackers to craft potentially malicious URLs that lead to a possible cross-site scripting vulnerability. Current and previous versions of Microsoft Internet Explorer are known to exhibit this behavior. We'd like to thank Daniel Kubitza for advising us of this issue.
+Please see the associated ticket for details, temporary workarounds and standalone patches against previous releases:
+http://trac.agavi.org/ticket/1019
+The Common Vulnerabilities and Exposures (CVE) project has assigned the name CVE-2009-0417 to this issue. This is a candidate for inclusion in the CVE list (http://cve.mitre.org), which standardizes names for security problems.
+You can view details on the vulnerability at the following URL:
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0417
+
+As it also fixes a couple of bugs related to handling of request data and validation, upgrading is highly recommended for all users.
+
+A couple of changes are worth mentioning:
+- AgaviArraylengthValidator was added.
+- PHP 5.2.8 or later is now required in combination with magic_quotes_gpc. This is due to security reasons unrelated to the issue in the PHP 5.2.7 release. Ticket #953 explains things in detail.
+- Slot responses are now merged into the parent even if the response content is empty.
+- Several best practices have been added and improved in the sample app and the code templates, and warnings are now thrown for outdated libxml versions, all intended to make it easier for new users to dive into Agavi.
+- The timezone database was updated to version 2008i.
+- Access to global request data is now locked during AgaviAction::getDefaultViewName() execution.
+- Handling of array keys has been unified across AgaviWebRequestDataHolder sources.
+- Unvalidated request data is not available anymore in the View if the Action didn't serve the current request method.
+- New projects now generate separate exception templates for production environments, and the built-in exception templates now simply re-throw the exception instead of displaying any information if the display_errors php.ini setting is disabled.
+- 'secure' flags can optionally be set automatically on session and response cookies, and the session save path can be defined for AgaviSessionStorage through factories.xml. These measures are useful for mitigating potential attack vectors on applications.
+
+As always, CHANGELOG knows it best.
+
+
 Version 0.11.5 - October 25, 2008
 =================================
 
