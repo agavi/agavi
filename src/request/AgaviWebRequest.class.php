@@ -416,6 +416,27 @@ class AgaviWebRequest extends AgaviRequest
 			$_SERVER['REQUEST_URI'] = $this->getRequestUri();
 		}
 
+		// okay, this is really bad
+		// Internet Explorer (many versions, many OSes) seem to be sending improperly urlencoded URLs to the server, in violation of the HTTP RFC
+		// this can cause a number of problems, most notably html special chars not being escaped and potentially ending up this way in the output
+		// the result is an XSS attack vector, e.g. on AgaviWebRouting::gen(null)
+		// so we escape those. but not the ampersand, or the query string gets messed up
+		// we also encode the backtick (Suhosin does this, too), and the space character
+		// in theory, we shouldn't encode the single quote either, since it's a reserved sub-delimiter as per RFC 3986 - however, that would allow injection again in documents that use single quotes as attribute delimiters, and it's up to implementations to encode sub-delimiters if they deem it necessary
+		// great, huh?
+		// more details:
+		// http://trac.agavi.org/ticket/1018
+		// http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0417
+		list($this->requestUri, $_SERVER['REQUEST_URI'], $_SERVER['QUERY_STRING']) = str_replace(
+			array(' ',   '"',   '\'',  '<',   '>',   '`',   /*'&'*/),
+			array('%20', '%22', '%27', '%3C', '%3E', '%60', /*'%26'*/),
+			array($this->requestUri, $_SERVER['REQUEST_URI'], $_SERVER['QUERY_STRING'])
+		);
+		if($rla) {
+			$GLOBALS['HTTP_SERVER_VARS']['QUERY_STRING'] = $_SERVER['QUERY_STRING'];
+			$GLOBALS['HTTP_SERVER_VARS']['REQUEST_URI'] = $this->getRequestUri();
+		}
+		
 		// 'scheme://authority' is necessary so parse_url doesn't stumble over '://' in the request URI
 		$parts = array_merge(array('path' => '', 'query' => ''), parse_url('scheme://authority' . $this->getRequestUri()));
 		$this->urlPath = $parts['path'];

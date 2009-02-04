@@ -6,7 +6,14 @@ Version 0.11.6 - January ??, 2009
 
 This maintenance release fixes a number of issues and provides several minor enhancements and additions.
 
-As it fixes a couple of bugs related to handling of request data and validation, upgrading is highly recommended for all users.
+Most importantly, this release fixes an attack vector affecting AgaviWebRouting::gen(null) in combination with some web browsers that (in violation of RFC 3986 and earlier versions) do not urlencode certain characters in the URL when making requests to a web server, allowing attackers to craft potentially malicious URLs that lead to a possible cross-site scripting vulnerability. Current and previous versions of Microsoft Internet Explorer are known to exhibit this behavior. We'd like to thank Daniel Kubitza for advising us of this issue.
+Please see the associated ticket for details, temporary workarounds and standalone patches against previous releases:
+http://trac.agavi.org/ticket/1019
+The Common Vulnerabilities and Exposures (CVE) project has assigned the name CVE-2009-0417 to this issue. This is a candidate for inclusion in the CVE list (http://cve.mitre.org), which standardizes names for security problems.
+You can view details on the vulnerability at the following URL:
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0417
+
+As it also fixes a couple of bugs related to handling of request data and validation, upgrading is highly recommended for all users.
 
 A couple of changes are worth mentioning:
 - AgaviArraylengthValidator was added.
