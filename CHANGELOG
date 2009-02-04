@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.6 (Feburary 4, 2009)
+0.11.6 (February 4, 2009)
 -------------------------
 
 SEC: CVE-2009-0417: Cross-site scripting vulnerability in handling of incoming URLs (#1019) (David)
