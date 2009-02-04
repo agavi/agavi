@@ -299,6 +299,9 @@ class AgaviWebRouting extends AgaviRouting
 				if($isNullRoute) {
 					$params = array_merge($this->inputParameters, $params);
 				}
+				if(count($routes) == 0) {
+					$path = $route;
+				}
 
 				// we collect the default parameters from the route and make sure
 				// new parameters don't overwrite already defined parameters
