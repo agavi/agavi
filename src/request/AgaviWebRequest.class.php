@@ -425,7 +425,7 @@ class AgaviWebRequest extends AgaviRequest
 		// in theory, we shouldn't encode the single quote either, since it's a reserved sub-delimiter as per RFC 3986 - however, that would allow injection again in documents that use single quotes as attribute delimiters, and it's up to implementations to encode sub-delimiters if they deem it necessary
 		// great, huh?
 		// more details:
-		// http://trac.agavi.org/ticket/1018
+		// http://trac.agavi.org/ticket/1019
 		// http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0417
 		list($this->requestUri, $_SERVER['REQUEST_URI'], $_SERVER['QUERY_STRING']) = str_replace(
 			array(' ',   '"',   '\'',  '<',   '>',   '`',   /*'&'*/),
