@@ -2,7 +2,7 @@
 <ae:configurations
 	xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
 	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
-	parent="%core.agavi_dir%/config/defaults/validators.xml"
+	parent="%core.module_dir%/Products/config/validators.xml"
 >
 	<ae:configuration>
 		<validators>

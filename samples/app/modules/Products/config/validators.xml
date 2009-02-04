@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+	parent="%core.config_dir%/validators.xml"
+>
+	<ae:configuration>
+		
+		<validator_definitions>
+		</validator_definitions>
+		
+	</ae:configuration>
+</ae:configurations>
