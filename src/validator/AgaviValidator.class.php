@@ -409,7 +409,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$pName = $this->curBase->pushRetNew($argument)->__toString();
 			if($this->validationParameters->isValueEmpty($paramType, $pName)) {
 				if($throwError && $isRequired) {
-					$this->throwError(null, $pName);
+					$this->throwError('required', $pName);
 				}
 				$result = false;
 			}
@@ -580,7 +580,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				}
 			} else {
 				if($this->getParameter('required', true)) {
-					$this->throwError();
+					$this->throwError('required');
 					$result = $errorCode;
 				} else {
 					// we don't throw an error here because this is not an incident per se
@@ -641,7 +641,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 					return self::NOT_PROCESSED;
 				} else {
 					if($this->getParameter('required', true)) {
-						$this->throwError();
+						$this->throwError('required');
 						return self::mapErrorCode($this->getParameter('severity', 'error'));
 					} else {
 						return self::NOT_PROCESSED;
