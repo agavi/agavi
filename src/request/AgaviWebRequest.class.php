@@ -372,7 +372,7 @@ class AgaviWebRequest extends AgaviRequest
 
 		$_SERVER['SERVER_SOFTWARE'] = self::getSourceValue($sources['SERVER_SOFTWARE'], $sourceDefaults['SERVER_SOFTWARE']);
 		
-		if(isset($_SERVER['SERVER_SOFTWARE']) && !preg_match('#^Apache/\d+(\.\d+){2,}#', $_SERVER['SERVER_SOFTWARE'])) {
+		if(isset($_SERVER['SERVER_SOFTWARE']) && preg_match('#^Apache(/\d+(\.\d+)?)?\.?$#', $_SERVER['SERVER_SOFTWARE'])) {
 			throw new AgaviException(
 				"You are running the Apache HTTP Server with a 'ServerTokens' configuration directive value of 'Minor' or lower.\n" .
 				"This directive controls the amount of version information Apache exposes about itself.\n" .
