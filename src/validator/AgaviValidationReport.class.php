@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviValidationReport
+class AgaviValidationReport implements AgaviIValidationReportQuery
 {
 	/**
 	 * @var        array A List of result severities for each argument which has been validated.
@@ -281,6 +281,154 @@ class AgaviValidationReport
 	public function getValidatorResult($name)
 	{
 		return new AgaviValidationValidatorResult($this, $name);
+	}
+	
+	/**
+	 * Create a new AgaviValidationReportQuery for this report.
+	 *
+	 * @return     AgaviIValidationReportQuery
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function createQuery()
+	{
+		return new AgaviValidationReportQuery($this);
+	}
+	
+	/**
+	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
+	 * for the given argument.
+	 * 
+	 * @param      AgaviValidationArgument|string|array
+	 * 
+	 * @return     AgaviIValidationReportQuery
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function byArgument($argument)
+	{
+		return $this->createQuery()->byArgument($argument);
+	}
+	
+	/**
+	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
+	 * for the given validator.
+	 * 
+	 * @param      string|array
+	 * 
+	 * @return     AgaviIValidationReportQuery
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function byValidator($name)
+	{
+		return $this->createQuery()->byValidator($name);
+	}
+	
+	/**
+	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
+	 * for the given error name.
+	 * 
+	 * @param      string|array
+	 * 
+	 * @return     AgaviIValidationReportQuery
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function byErrorName($name)
+	{
+		return $this->createQuery()->byErrorName($name);
+	}
+	
+	/**
+	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
+	 * with the given severity or higher.
+	 * 
+	 * @param      int
+	 * 
+	 * @return     AgaviIValidationReportQuery
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function byMinSeverity($minSeverity)
+	{
+		return $this->createQuery()->byMinSeverity($minSeverity);
+	}
+	
+	/**
+	 * Retrieves all AgaviValidationError objects which match the previously set
+	 * filters.
+	 * 
+	 * @return     array
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getErrors()
+	{
+		return $this->createQuery()->getErrors();
+	}
+	
+	/**
+	 * Retrieves all error messages which match the previously set filters.
+	 * 
+	 * @return     array
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getErrorMessages()
+	{
+		return $this->createQuery()->getErrorMessages();
+	}
+	
+	/**
+	 * Retrieves all AgaviValidationArgumentResult objectss which match the 
+	 * previously set filters.
+	 * 
+	 * @return     array
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getArgumentResults()
+	{
+		return $this->createQuery()->getArgumentResults();
+	}
+	
+	/**
+	 * I Can Has Cheezburger?
+	 * 
+	 * @return     bool
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function has()
+	{
+		return $this->createQuery()->has();
+	}
+	
+	/**
+	 * Retrieves the number of incidents matching the previously set filters.
+	 * 
+	 * @return     int
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function count()
+	{
+		return $this->createQuery()->count();
 	}
 }
 
