@@ -1108,11 +1108,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$locale = null;
 		$method = null;
 		
-		$umap = $req->getParameter('use_module_action_parameters');
-		$ma = $req->getParameter('module_accessor');
-		$aa = $req->getParameter('action_accessor');
+		$umap = $rq->getParameter('use_module_action_parameters');
+		$ma = $rq->getParameter('module_accessor');
+		$aa = $rq->getParameter('action_accessor');
 		
-		$requestMethod = $req->getMethod();
+		$requestMethod = $rq->getMethod();
 
 		$routes = array();
 		// get all top level routes
@@ -1413,7 +1413,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		}
 
 		// set the list of matched route names as a request attribute
-		$req->setAttribute('matched_routes', $matchedRoutes, 'org.agavi.routing');
+		$rq->setAttribute('matched_routes', $matchedRoutes, 'org.agavi.routing');
 
 		// return a list of matched route names
 		return $container;
