@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 beta9 (February ?, 2009)
 ------------------------------
 
+CHG: Throw exception if Apache's SERVER_SOFTWARE env var contains insufficient version information (#1029) (David)
+
 FIX: Use of undefined variable $request in AgaviWebRouting::execute() (#1025) (David)
 
 
