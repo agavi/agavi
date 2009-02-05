@@ -1088,9 +1088,9 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 */
 	public function execute()
 	{
-		$req = $this->context->getRequest();
+		$rq = $this->context->getRequest();
 
-		$reqData = $req->getRequestData();
+		$rd = $rq->getRequestData();
 
 		$container = $this->context->getController()->createExecutionContainer();
 
@@ -1227,7 +1227,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								// the if is here for bc reasons, since if $opts['method'] only contains variable parts
 								// expandVariables could possibly return an empty string in which case the pre 1.0 routing
 								// didn't set the variable
-								$req->setMethod($method);
+								$rq->setMethod($method);
 								// and on the already created container, too!
 								$container->setRequestMethod($method);
 							}
@@ -1253,7 +1253,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								$oldAction = $container->getActionName();
 								$oldOutputTypeName = $container->getOutputType() ? $container->getOutputType()->getName() : null;
 								$oldLocale = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
-								$oldRequestMethod = $req->getMethod();
+								$oldRequestMethod = $rq->getMethod();
 								$oldContainerMethod = $container->getRequestMethod();
 								
 								// call onMatched on all callbacks until one of them returns false, then
@@ -1309,19 +1309,19 @@ abstract class AgaviRouting extends AgaviParameterHolder
 									}
 								}
 								if($opts['method']) {
-									if($oldRequestMethod == $req->getMethod() && $oldContainerMethod == $container->getRequestMethod()) {
+									if($oldRequestMethod == $rq->getMethod() && $oldContainerMethod == $container->getRequestMethod()) {
 										if($method = AgaviToolkit::expandVariables($opts['method'], $expandVars)) {
 											// see above for the reason of the if
-											$req->setMethod($method);
+											$rq->setMethod($method);
 											$container->setRequestMethod($method);
 										}
 									} elseif($oldContainerMethod != $container->getRequestMethod()) {
 										// copy the request method to the request (a method set on the container 
 										// in a callback always has precedence over request methods set on the request)
-										$request->setMethod($container->getRequestMethod());
-									} elseif($oldRequestMethod != $req->getMethod()) {
+										$rq->setMethod($container->getRequestMethod());
+									} elseif($oldRequestMethod != $rq->getMethod()) {
 										// copy the request method to the container
-										$container->setRequestMethod($req->getMethod());
+										$container->setRequestMethod($rq->getMethod());
 									}
 								}
 								
@@ -1397,7 +1397,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		} while(count($routeStack) > 0);
 
 		// put the vars into the request
-		$reqData->setParameters($vars);
+		$rd->setParameters($vars);
 
 		if($container->getModuleName() === null || $container->getActionName() === null) {
 			// no route which supplied the required parameters matched, use 404 action
@@ -1405,7 +1405,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			$container->setActionName(AgaviConfig::get('actions.error_404_action'));
 			
 			if($umap) {
-				$reqData->setParameters(array(
+				$rd->setParameters(array(
 					$ma => $container->getModuleName(),
 					$aa => $container->getActionName(),
 				));

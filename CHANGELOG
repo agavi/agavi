@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 beta9 (February ?, 2009)
+------------------------------
+
+FIX: Use of undefined variable $request in AgaviWebRouting::execute() (#1025) (David)
+
+
 1.0.0 beta8 (February 4, 2009)
 ------------------------------
 
