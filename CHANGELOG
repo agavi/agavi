@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.7 RC1 (February ??, 2009)
+------------------------------
+
+CHG: Throw exception if Apache's SERVER_SOFTWARE env var contains insufficient version information (#1029) (David)
+
+
 0.11.6 (February 4, 2009)
 -------------------------
 

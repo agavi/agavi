@@ -357,6 +357,7 @@ class AgaviWebRequest extends AgaviRequest
 			'SERVER_NAME' => 'SERVER_NAME',
 			'SERVER_PORT' => 'SERVER_PORT',
 			'SERVER_PROTOCOL' => 'SERVER_PROTOCOL',
+			'SERVER_SOFTWARE' => 'SERVER_SOFTWARE',
 		), (array)$this->getParameter('sources'));
 		$this->setParameter('sources', $sources);
 
@@ -367,6 +368,7 @@ class AgaviWebRequest extends AgaviRequest
 			'SERVER_NAME' => null,
 			'SERVER_PORT' => isset($parameters['sources']['SERVER_PORT']) ? null : $this->urlPort,
 			'SERVER_PROTOCOL' => isset($parameters['sources']['SERVER_PROTOCOL']) ? null : 'HTTP/1.0',
+			'SERVER_SOFTWARE' => null,
 		);
 
 		$methods = array_merge(array(
@@ -397,6 +399,25 @@ class AgaviWebRequest extends AgaviRequest
 			$this->urlHost = preg_replace('/\]\:' . preg_quote($port, '/') . '$/', '', $SERVER_NAME);
 		} else {
 			$this->urlHost = preg_replace('/\:' . preg_quote($port, '/') . '$/', '', $SERVER_NAME);
+		}
+
+		$_SERVER['SERVER_SOFTWARE'] = self::getSourceValue($sources['SERVER_SOFTWARE'], $sourceDefaults['SERVER_SOFTWARE']);
+		
+		if(isset($_SERVER['SERVER_SOFTWARE']) && !preg_match('#^Apache/\d+(\.\d+){2,}#', $_SERVER['SERVER_SOFTWARE'])) {
+			throw new AgaviException(
+				"You are running the Apache HTTP Server with a 'ServerTokens' configuration directive value of 'Minor' or lower.\n" .
+				"This directive controls the amount of version information Apache exposes about itself.\n" .
+				"Agavi needs detailed Apache version information to apply URL decoding and parsing workarounds specific to certain versions of Apache that exhibit buggy behavior.\n\n" .
+				"Please take one of the following measures to fix this problem:\n" .
+				"- raise your 'ServerTokens' level to 'Min' or higher in httpd.conf\n" .
+				"- set a static value for the request source 'SERVER_SOFTWARE' in factories.xml (for your environment)\n" .
+				"- set a value for \$_SERVER['SERVER_SOFTWARE'], e.g. in your pub/index.php\n\n" .
+				"For detailed instructions and examples on fixing this problem, especially for the factories.xml method which is recommended in case you do not have control over your server's httpd.conf, please refer to:\n" .
+				"http://trac.agavi.org/ticket/1029\n\n" .
+				"For more information on the 'ServerTokens' directive, please refer to:\n" .
+				"http://httpd.apache.org/docs/2.2/en/mod/core.html#servertokens\n\n" .
+			"For your reference, your SERVER_SOFTWARE string is currently '$_SERVER[SERVER_SOFTWARE]'."
+			);
 		}
 
 		if(isset($_SERVER['HTTP_X_REWRITE_URL']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
