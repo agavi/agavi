@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 beta9 (February ?, 2009)
 ------------------------------
 
+ADD: Allow routing callbacks to return an AgaviResponse (#1028) (David)
+
 CHG: Explicitly call onNotMatched() method on a routing callback if its onMatched() method returned false (#1027) (David)
 CHG: Restore state right after a routing callback returned false from onMatched() rather than at the end of the callback execution loop (#1026) (David)
 CHG: Throw exception if Apache's SERVER_SOFTWARE env var contains insufficient version information (#1029) (David)

@@ -1080,8 +1080,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 * Matches the input against the routing info and sets the info as request
 	 * parameter.
 	 *
-	 * @return     AgaviExecutionContainer An execution container holding all of the
-	 *                                     matched routes.
+	 * @return     mixed An AgaviExecutionContainer as a result of this execution,
+	 *                   or an AgaviResponse if a callback returned one.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -1279,7 +1279,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 									$oldRequestMethod = $rq->getMethod();
 									$oldContainerMethod = $container->getRequestMethod();
 
-									if(!$callbackInstance->onMatched($vars, $container)) {
+									$onMatched = $callbackInstance->onMatched($vars, $container);
+									if($onMatched instanceof AgaviResponse) {
+										return $onMatched;
+									}
+									if(!$onMatched) {
 										$callbackSuccess = false;
 										
 										// reset the matches array. it must be populated by the time onMatched() is called so matches can be modified in a callback
@@ -1299,7 +1303,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								
 								// always call onNotMatched if $callbackSuccess == false, even if we just called onMatched() on the same instance. this is expected behavior
 								if(!$callbackSuccess) {
-									$callbackInstance->onNotMatched($container);
+									$onNotMatched = $callbackInstance->onNotMatched($container);
+									if($onNotMatched instanceof AgaviResponse) {
+										return $onNotMatched;
+									}
 									
 									// continue with the next callback
 									continue;
@@ -1422,7 +1429,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					} else {
 						if(count($opts['callbacks']) > 0) {
 							foreach($route['callback_instances'] as $callbackInstance) {
-								$callbackInstance->onNotMatched($container);
+								$onNotMatched = $callbackInstance->onNotMatched($container);
+								if($onNotMatched instanceof AgaviResponse) {
+									return $onNotMatched;
+								}
 							}
 						}
 					}
