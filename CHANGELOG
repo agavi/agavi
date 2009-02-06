@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta9 (February ?, 2009)
 ------------------------------
 
+ADD: Implement new validation report query API (#1022) (David)
 ADD: Allow routing callbacks to return an AgaviResponse (#1028) (David)
 
 CHG: Explicitly call onNotMatched() method on a routing callback if its onMatched() method returned false (#1027) (David)
