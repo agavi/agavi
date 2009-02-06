@@ -193,7 +193,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 			if($this->errorNameFilter) {
 				$hasErrorName = false;
 				foreach($incident->getErrors() as $error) {
-					if(in_array($error->getMessageIndex(), $this->errorNameFilter)) {
+					if(in_array($error->getName(), $this->errorNameFilter)) {
 						$hasErrorName = true;
 						break;
 					}
@@ -242,7 +242,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 		$errors = array();
 		foreach($incidents as $incident) {
 			foreach($incident->getErrors() as $error) {
-				if(!$this->errorNameFilter || in_array($error->getMessageIndex(), $this->errorNameFilter)) {
+				if(!$this->errorNameFilter || in_array($error->getName(), $this->errorNameFilter)) {
 					$errors[] = $error;
 					break;
 				}
