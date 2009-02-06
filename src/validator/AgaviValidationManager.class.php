@@ -388,7 +388,13 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function getResult()
 	{
-		return $this->report->getResult();
+		$result = $this->report->getResult();
+		
+		if(null === $result) {
+			$result = AgaviValidator::NOT_PROCESSED;
+		}
+		
+		return $result;
 	}
 
 	/**
@@ -567,7 +573,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function getValidatorIncidents($validatorName, $minSeverity = null)
 	{
-		$incidents = $this->report->getValidatorResult($validatorName)->getIncidents();
+		$incidents = $this->report->byValidator($validatorName)->getIncidents();
 		
 		if($minSeverity === null) {
 			return $incidents;
@@ -596,7 +602,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 */
 	public function getFieldIncidents($fieldname, $minSeverity = null)
 	{
-		$incidents = $this->report->getArgumentResult($fieldname)->getIncidents();
+		$incidents = $this->report->byArgument($fieldname)->getIncidents();
 		
 		if($minSeverity === null) {
 			return $incidents;

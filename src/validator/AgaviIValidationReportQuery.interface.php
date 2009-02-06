@@ -31,8 +31,8 @@
 interface AgaviIValidationReportQuery
 {
 	/**
-	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
-	 * for the given argument.
+	 * Returns a new AgaviIValidationReportQuery which returns only the incidents
+	 * for the given argument (and the other existing filter rules).
 	 * 
 	 * @param      AgaviValidationArgument|string|array
 	 * 
@@ -45,7 +45,7 @@ interface AgaviIValidationReportQuery
 	
 	/**
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
-	 * for the given validator.
+	 * for the given validator (and the other existing filter rules).
 	 * 
 	 * @param      string|array
 	 * 
@@ -58,7 +58,7 @@ interface AgaviIValidationReportQuery
 	
 	/**
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
-	 * for the given error name.
+	 * for the given error name (and the other existing filter rules).
 	 * 
 	 * @param      string|array
 	 * 
@@ -71,7 +71,7 @@ interface AgaviIValidationReportQuery
 	
 	/**
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
-	 * with the given severity or higher.
+	 * of the given severity or higher (and the other existing filter rules).
 	 * 
 	 * @param      int
 	 * 
@@ -83,9 +83,9 @@ interface AgaviIValidationReportQuery
 	public function byMinSeverity($minSeverity);
 	
 	/**
-	 * Retrieves all incidents which match the previously set filters.
+	 * Retrieves all incidents which match the currently defined filter rules.
 	 * 
-	 * @return     array
+	 * @return     array An array of AgaviValidationIncident objects.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -93,9 +93,10 @@ interface AgaviIValidationReportQuery
 	public function getIncidents();
 	
 	/**
-	 * Retrieves all AgaviValidationErrors which match the previously set filters.
+	 * Retrieves all AgaviValidationError objects which match the currently
+	 * defined filter rules.
 	 * 
-	 * @return     array
+	 * @return     array An array of AgaviValidationError objects.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -103,9 +104,10 @@ interface AgaviIValidationReportQuery
 	public function getErrors();
 	
 	/**
-	 * Retrieves all error messages which match the previously set filters.
+	 * Retrieves all error messages which match the currently defined filter
+	 * rules.
 	 * 
-	 * @return     array
+	 * @return     array An array of message strings.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -113,9 +115,10 @@ interface AgaviIValidationReportQuery
 	public function getErrorMessages();
 	
 	/**
-	 * Retrieves all ArgumentResults which match the previously set filters.
+	 * Retrieves all AgaviValidationArgument objects which match the currently
+	 * defined filter rules.
 	 * 
-	 * @return     array
+	 * @return     array An array of AgaviValidationArgument objects.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -123,9 +126,11 @@ interface AgaviIValidationReportQuery
 	public function getArguments();
 	
 	/**
-	 * I Can Has Cheezburger?
+	 * Check if there are any incidents matching the currently defined filter
+	 * rules.
 	 * 
-	 * @return     bool
+	 * @return     bool Whether or not any incidents exist for the currently
+	 *                  defined filter rules.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -133,9 +138,10 @@ interface AgaviIValidationReportQuery
 	public function has();
 	
 	/**
-	 * Retrieves the number of incidents matching the previously set filters.
+	 * Get the number of incidents matching the currently defined filter rules.
 	 * 
-	 * @return     int
+	 * @return     int The number of incidents matching the currently defined
+	 *                 filter rules.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -143,9 +149,13 @@ interface AgaviIValidationReportQuery
 	public function count();
 	
 	/**
-	 * Retrieves the highest result code in the collection defined by the filters.
+	 * Retrieves the highest validation result code of the collection composed of
+	 * the currently defined filter rules.
 	 *
-	 * @return     int An AgaviValidator::* severity constant.
+	 * @return     int An AgaviValidator::* severity constant, or null if there is
+	 *                 no result for this filter combination. Please remember to
+	 *                 do a strict === comparison if you are comparing against
+	 *                 AgaviValidator::SUCCESS.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 */

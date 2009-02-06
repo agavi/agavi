@@ -56,9 +56,9 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	protected $minSeverityFilter;
 	
 	/**
-	 * Create a new AgaviValidationResultCollection
+	 * Constructor.
 	 * 
-	 * @param      AgaviValidationReport the validation report instance.
+	 * @param      AgaviValidationReport The validation report instance.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -69,8 +69,8 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
-	 * for the given argument.
+	 * Returns a new AgaviIValidationReportQuery which returns only the incidents
+	 * for the given argument (and the other existing filter rules).
 	 * 
 	 * @param      AgaviValidationArgument|string|array
 	 * 
@@ -100,7 +100,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	
 	/**
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
-	 * for the given validator.
+	 * for the given validator (and the other existing filter rules).
 	 * 
 	 * @param      string|array
 	 * 
@@ -121,7 +121,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	
 	/**
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
-	 * for the given error name.
+	 * for the given error name (and the other existing filter rules).
 	 * 
 	 * @param      string|array
 	 * 
@@ -142,7 +142,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	
 	/**
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
-	 * with the given severity or higher.
+	 * of the given severity or higher (and the other existing filter rules).
 	 * 
 	 * @param      int
 	 * 
@@ -215,9 +215,9 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Retrieves all incidents which match previously set the filters.
+	 * Retrieves all incidents which match the currently defined filter rules.
 	 * 
-	 * @return     array
+	 * @return     array An array of AgaviValidationIncident objects.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -228,9 +228,10 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Retrieves all AgaviValidationErrors which match previously set the filters.
+	 * Retrieves all AgaviValidationError objects which match the currently
+	 * defined filter rules.
 	 * 
-	 * @return     array
+	 * @return     array An array of AgaviValidationError objects.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -252,9 +253,10 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Retrieves all error messages which match previously set the filters.
+	 * Retrieves all error messages which match the currently defined filter
+	 * rules.
 	 * 
-	 * @return     array
+	 * @return     array An array of message strings.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -270,10 +272,10 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Retrieves all AgaviValdationArguments which match previously set the 
-	 * filters.
+	 * Retrieves all AgaviValidationArgument objects which match the currently
+	 * defined filter rules.
 	 * 
-	 * @return     array
+	 * @return     array An array of AgaviValidationArgument objects.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -293,9 +295,11 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * I Can Has Cheezburger?
+	 * Check if there are any incidents matching the currently defined filter
+	 * rules.
 	 * 
-	 * @return     bool
+	 * @return     bool Whether or not any incidents exist for the currently
+	 *                  defined filter rules.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -306,9 +310,10 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Retrieves the number of incidents matching the previously set filters.
+	 * Get the number of incidents matching the currently defined filter rules.
 	 * 
-	 * @return     int
+	 * @return     int The number of incidents matching the currently defined
+	 *                 filter rules.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -319,10 +324,15 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Retrieves the highest result code in the collection defined by the filters.
+	 * Retrieves the highest validation result code of the collection composed of
+	 * the currently defined filter rules.
 	 *
-	 * @return     int An AgaviValidator::* severity constant.
+	 * @return     int An AgaviValidator::* severity constant, or null if there is
+	 *                 no result for this filter combination. Please remember to
+	 *                 do a strict === comparison if you are comparing against
+	 *                 AgaviValidator::SUCCESS.
 	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 */
 	public function getResult()
@@ -336,12 +346,10 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 			$arguments[$argument->getHash()] = $argument;
 		}
 		
-		// lets start with looking at the incidents, if we find any, lets
-		// return the max result (since anything "below" an incident will have
-		// the same result as the incident looking at the incidents suffices)
-		// if there is no result in the incidents the field was either not touched
-		// at all by the validation or is stored in the argument results of the report
-		// which we search then
+		// lets start by looking at the incidents, if we find any, lets return the max result
+		// (because since anything "below" an incident will have the same result as the incident, looking at the incidents is sufficient)
+		// if there is no result in the incidents, the field was either not touched at all by validation,
+		// or is stored in the argument results of the report, which we will then search instead
 		foreach($this->getIncidents() as $incident) {
 			$results[] = $incident->getSeverity();
 		}
