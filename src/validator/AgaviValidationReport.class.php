@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviValidationReport
+class AgaviValidationReport implements AgaviIValidationReportQuery
 {
 	/**
 	 * @var        array A List of result severities for each argument which has been validated.
@@ -37,7 +37,7 @@ class AgaviValidationReport
 	/**
 	 * @var        int The highest error severity thrown by the validation run.
 	 */
-	protected $result = AgaviValidator::NOT_PROCESSED;
+	protected $result = null;
 	
 	/**
 	 * @var        array The incidents which were thrown by the validation run.
@@ -45,9 +45,11 @@ class AgaviValidationReport
 	protected $incidents = array();
 	
 	/**
-	 * Returns the final validation result.
-	 * 
-	 * @return     int The validation result (as severity)
+	 * Retrieves the highest validation result code in this report.
+	 *
+	 * @return     int An AgaviValidator::* severity constant, or null if there is
+	 *                 no result. Please remember to do a strict === comparison if
+	 *                 you are comparing against AgaviValidator::SUCCESS.
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
@@ -86,18 +88,15 @@ class AgaviValidationReport
 		// yet and adjust our result if needed (which only happens when this method
 		// is called not from a validator)
 		$severity = $incident->getSeverity();
-		if($severity > $this->result) {
+		$validator = $incident->getValidator();
+		if($severity > $this->result || null === $this->result) {
 			$this->result = $severity;
 		}
 		// store the result for the argument if it's not stored yet
 		foreach($incident->getArguments() as $argument) {
-			$argumentSeverity = $this->getAuthoritativeArgumentSeverity($argument);
-			if($argumentSeverity === null || $argumentSeverity < $severity) {
-				$this->addArgumentResult($argument, $incident->getSeverity());
-			}
+			$this->addArgumentResult($argument, $severity, $validator);
 		}
-		$name = $incident->getValidator() ? $incident->getValidator()->getName() : '';
-		$this->incidents[$name][] = $incident;
+		$this->incidents[$validator ? $validator->getName() : ''][] = $incident;
 	}
 	
 	/**
@@ -144,13 +143,32 @@ class AgaviValidationReport
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function addArgumentResult(AgaviValidationArgument $argument, $result, $validator = null)
+	public function addArgumentResult(AgaviValidationArgument $argument, $result, AgaviValidator $validator = null)
 	{
 		$this->argumentResults[$argument->getHash()][] = array(
 			'argument' => $argument,
 			'severity' => $result,
 			'validator' => $validator,
 		);
+	}
+	
+	/**
+	 * Retrieve the internal array (indexed by argument hash) of
+	 * argument/severity/validator tuples.
+	 * This method exposes an internal data structure that may change at any time.
+	 * You shouldn't have to use this method.
+	 * Don't even think about using it to harm cute little animals, or you shall
+	 * suffer the wrath of an angry god.
+	 *
+	 * @return     array An array of argument result info arrays.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getArgumentResults()
+	{
+		return $this->argumentResults;
 	}
 	
 	/**
@@ -173,9 +191,13 @@ class AgaviValidationReport
 			return null;
 		}
 
-		$severity = AgaviValidator::NOT_PROCESSED;
+		$severity = null;
+		
 		foreach($this->argumentResults[$argument->getHash()] as $result) {
 			if($validatorName === null || ($result['validator'] instanceof AgaviValidator && $result['validator']->getName() == $validatorName)) {
+				if(null === $severity) {
+					$severity = AgaviValidator::NOT_PROCESSED;
+				}
 				$severity = max($severity, $result['severity']);
 			}
 		}
@@ -250,37 +272,150 @@ class AgaviValidationReport
 	}
 	
 	/**
-	 * Returns an argument result for the given argument.
-	 * 
-	 * @param      string The name of the argument or an instance of an AgaviValidationArgument
-	 * @param      string The source. Only used when the first parameter is a string
-	 * 
-	 * @return     AgaviValidationArgumentResult
-	 * 
-	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * Create a new AgaviValidationReportQuery for this report.
+	 *
+	 * @return     AgaviIValidationReportQuery
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function getArgumentResult($nameOrArgument, $source = null)
+	public function createQuery()
 	{
-		if(!($nameOrArgument instanceof AgaviValidationArgument)) {
-			$nameOrArgument = new AgaviValidationArgument($nameOrArgument, $source);
-		}
-		return new AgaviValidationArgumentResult($this, $nameOrArgument);
+		return new AgaviValidationReportQuery($this);
 	}
 	
 	/**
-	 * Returns an validator result for the given validator.
+	 * Returns a new AgaviIValidationReportQuery which returns only the incidents
+	 * for the given argument (and the other existing filter rules).
 	 * 
-	 * @param      string The name of the validator
+	 * @param      AgaviValidationArgument|string|array
 	 * 
-	 * @return     AgaviValidationValidatorResult
+	 * @return     AgaviIValidationReportQuery
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function getValidatorResult($name)
+	public function byArgument($argument)
 	{
-		return new AgaviValidationValidatorResult($this, $name);
+		return $this->createQuery()->byArgument($argument);
+	}
+	
+	/**
+	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
+	 * for the given validator (and the other existing filter rules).
+	 * 
+	 * @param      string|array
+	 * 
+	 * @return     AgaviIValidationReportQuery
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function byValidator($name)
+	{
+		return $this->createQuery()->byValidator($name);
+	}
+	
+	/**
+	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
+	 * for the given error name (and the other existing filter rules).
+	 * 
+	 * @param      string|array
+	 * 
+	 * @return     AgaviIValidationReportQuery
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function byErrorName($name)
+	{
+		return $this->createQuery()->byErrorName($name);
+	}
+	
+	/**
+	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
+	 * of the given severity or higher (and the other existing filter rules).
+	 * 
+	 * @param      int
+	 * 
+	 * @return     AgaviIValidationReportQuery
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function byMinSeverity($minSeverity)
+	{
+		return $this->createQuery()->byMinSeverity($minSeverity);
+	}
+	
+	/**
+	 * Retrieves all AgaviValidationError objects in this report.
+	 * 
+	 * @return     array An array of AgaviValidationError objects.
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getErrors()
+	{
+		return $this->createQuery()->getErrors();
+	}
+	
+	/**
+	 * Retrieves all error messages in this report.
+	 * 
+	 * @return     array An array of message strings.
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getErrorMessages()
+	{
+		return $this->createQuery()->getErrorMessages();
+	}
+	
+	/**
+	 * Retrieves all AgaviValidationArgument objects in this report.
+	 * 
+	 * @return     array An array of AgaviValidationArgument objects.
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getArguments()
+	{
+		return $this->createQuery()->getArguments();
+	}
+	
+	/**
+	 * Check if there are any incidents matching the currently defined filter
+	 * rules.
+	 * 
+	 * @return     bool Whether or not any incidents exist in this report.
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function has()
+	{
+		return $this->createQuery()->has();
+	}
+	
+	/**
+	 * Get the number of incidents matching the currently defined filter rules.
+	 * 
+	 * @return     int The number of incidents in this report.
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function count()
+	{
+		return $this->createQuery()->count();
 	}
 }
 

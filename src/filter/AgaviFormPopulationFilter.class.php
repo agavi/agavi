@@ -397,7 +397,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					$fieldIncidents = array();
 					$multiFieldIncidents = array();
 					// grab all incidents for this field
-					foreach($vr->getArgumentResult($argument)->getIncidents() as $incident) {
+					foreach($vr->byArgument($argument)->getIncidents() as $incident) {
 						if(($incidentKey = array_search($incident, $allIncidents, true)) !== false) {
 							// does this one have more than one field?
 							// and is it really more than one parameter or file, not a cookie or header?
