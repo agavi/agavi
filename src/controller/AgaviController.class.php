@@ -203,51 +203,60 @@ class AgaviController extends AgaviParameterHolder
 				$container = $this->context->getRouting()->execute();
 			}
 			
-			// merge in any arguments given. they need to have precedence over what the routing found
-			if($arguments !== null) {
-				$rd->merge($arguments);
-			}
-			
-			// next, we have to see if the routing did anything useful, i.e. whether or not it was enabled.
-			$moduleName = $container->getModuleName();
-			$actionName = $container->getActionName();
-			if(!$moduleName) {
-				// no module has been specified; that means the routing did not run, as it would otherwise have the 404 action's module name
-				
-				// lets see if our request data has values for module and action
-				$ma = $rq->getParameter('module_accessor');
-				$aa = $rq->getParameter('action_accessor');
-				if($rd->hasParameter($ma) && $rd->hasParameter($aa)) {
-					// yup. grab those
-					$moduleName = $rd->getParameter($ma);
-					$actionName = $rd->getParameter($aa);
-				} else {
-					// nope. then its time for the default action
-					$moduleName = AgaviConfig::get('actions.default_module');
-					$actionName = AgaviConfig::get('actions.default_action');
+			if($container instanceof AgaviExecutionContainer) {
+				// merge in any arguments given. they need to have precedence over what the routing found
+				if($arguments !== null) {
+					$rd->merge($arguments);
 				}
+			
+				// next, we have to see if the routing did anything useful, i.e. whether or not it was enabled.
+				$moduleName = $container->getModuleName();
+				$actionName = $container->getActionName();
+				if(!$moduleName) {
+					// no module has been specified; that means the routing did not run, as it would otherwise have the 404 action's module name
 				
-				// so by now we hopefully have something reasonable for module and action names - let's set them on the container
-				$container->setModuleName($moduleName);
-				$container->setActionName($actionName);
+					// lets see if our request data has values for module and action
+					$ma = $rq->getParameter('module_accessor');
+					$aa = $rq->getParameter('action_accessor');
+					if($rd->hasParameter($ma) && $rd->hasParameter($aa)) {
+						// yup. grab those
+						$moduleName = $rd->getParameter($ma);
+						$actionName = $rd->getParameter($aa);
+					} else {
+						// nope. then its time for the default action
+						$moduleName = AgaviConfig::get('actions.default_module');
+						$actionName = AgaviConfig::get('actions.default_action');
+					}
+				
+					// so by now we hopefully have something reasonable for module and action names - let's set them on the container
+					$container->setModuleName($moduleName);
+					$container->setActionName($actionName);
+				}
+			
+				if(!AgaviConfig::get('core.available', false)) {
+					$container = $container->createSystemActionForwardContainer('unavailable');
+				}
+			
+				// create a new filter chain
+				$filterChain = $this->context->createInstanceFor('filter_chain');
+			
+				$this->loadFilters($filterChain, 'global');
+			
+				// register the dispatch filter
+				$filterChain->register($this->filters['dispatch']);
+			
+				// go, go, go!
+				$filterChain->execute($container);
+			
+				$response = $container->getResponse();
+			} elseif($container instanceof AgaviResponse) {
+				// the routing returned a response!
+				$response = $container;
+				// set $container to null so AgaviException::render() won't think it is a container if an exception happens later!
+				$container = null;
+			} else {
+				throw new AgaviException('AgaviRouting::execute() returned neither AgaviExecutionContainer nor AgaviResponse object.');
 			}
-			
-			if(!AgaviConfig::get('core.available', false)) {
-				$container = $container->createSystemActionForwardContainer('unavailable');
-			}
-			
-			// create a new filter chain
-			$filterChain = $this->context->createInstanceFor('filter_chain');
-			
-			$this->loadFilters($filterChain, 'global');
-			
-			// register the dispatch filter
-			$filterChain->register($this->filters['dispatch']);
-			
-			// go, go, go!
-			$filterChain->execute($container);
-			
-			$response = $container->getResponse();
 			$response->merge($this->response);
 			
 			if($this->getParameter('send_response')) {

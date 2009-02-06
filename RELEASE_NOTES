@@ -65,6 +65,9 @@ Callbacks are run in the order they are defined; once an onMatched() callback re
 
 Inside a callback's onMatched() and onNotMatched() methods it is now possible to perform any kind of modifications on the execution container directly. Specifically, it is recommended you use AgaviExecutionContainer::setModuleName() and AgaviExecutionContainer::setActionName() inside callbacks instead of modifying the request parameter array from now on, because the "module" and "action" parameters might not be available anymore depending on the setting inside the application (see "Request" below).
 The execution container instance passed to the callback now reflects the actual current state of the routing execution, so checks can be performed against values on the container, and containers can be mutated (as mentioned above). As before, developers are advised not to perform any changes on containers or request data in onMatched() methods if the method will return false.
+Agavi will now explicitly call onNotMatched() on a routing callback that returned false from onMatched().
+
+You can now return an AgaviResponse object (use AgaviContext::createInstanceFor('response') for convenience) directly from a routing callback's onMatched() or onNotMatched() method. This response will then be handled right away by the Controller, and any kind of execution will be skipped (there isn't even an Execution Container in this case).
 
 Request
 -------

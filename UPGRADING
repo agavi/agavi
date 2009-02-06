@@ -32,7 +32,8 @@ Please refer to the documentation for a full list of configuration namespaces an
 
 Routing Callbacks
 -----------------
-Routing has been changed as described in RELEASE_NOTES. If you run into trouble with your callback (this should usually only occur if you treat user parameters inside gen() in ways that do not trigger the new routing value object's __toString() method), implement AgaviIRoutingCallback to restore "hard" backwards compatibility with previous versions. You will not be able to use routing value object features in this case.
+Routing has been changed as described in RELEASE_NOTES. If you run into trouble with your callback (this should usually only occur if you treat user parameters inside gen() in ways that do not trigger the new routing value object's __toString() method), implement AgaviILegacyRoutingCallback to restore "hard" backwards compatibility with previous versions. You will not be able to use routing value object features in this case.
+It is important to note that whenever a callback's onMatched() method now returns false, the routing will explicitly call onNotMatched() again on the same callback instance. This behavior change is not configurable, and will not change even if you implement AgaviILegacyRoutingCallback. Please adjust your code accordingly.
 
 Module and Action name Request Parameters
 -----------------------------------------

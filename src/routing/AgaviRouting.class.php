@@ -1080,18 +1080,20 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 * Matches the input against the routing info and sets the info as request
 	 * parameter.
 	 *
-	 * @return     AgaviExecutionContainer An execution container holding all of the
-	 *                                     matched routes.
+	 * @return     mixed An AgaviExecutionContainer as a result of this execution,
+	 *                   or an AgaviResponse if a callback returned one.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
 	public function execute()
 	{
-		$req = $this->context->getRequest();
+		$rq = $this->context->getRequest();
 
-		$reqData = $req->getRequestData();
+		$rd = $rq->getRequestData();
 
+		$tm = $this->context->getTranslationManager();
+		
 		$container = $this->context->getController()->createExecutionContainer();
 
 		if(!$this->isEnabled()) {
@@ -1108,11 +1110,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$locale = null;
 		$method = null;
 		
-		$umap = $req->getParameter('use_module_action_parameters');
-		$ma = $req->getParameter('module_accessor');
-		$aa = $req->getParameter('action_accessor');
+		$umap = $rq->getParameter('use_module_action_parameters');
+		$ma = $rq->getParameter('module_accessor');
+		$aa = $rq->getParameter('action_accessor');
 		
-		$requestMethod = $req->getMethod();
+		$requestMethod = $rq->getMethod();
 
 		$routes = array();
 		// get all top level routes
@@ -1146,7 +1148,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						
 						// backup the container, must be done here already
 						if(count($opts['callbacks']) > 0) {
-							$oldContainer = $container;
+							$containerBackup = $container;
 							$container = clone $container;
 						}
 						
@@ -1208,17 +1210,34 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							// here no explicit check is done, since in 0.11 this is compared against null
 							// which can never be the result of expandVariables
 							$ot = AgaviToolkit::expandVariables($opts['output_type'], $matchvals);
-							$container->setOutputType($this->context->getController()->getOutputType($ot));
+							
+							// we need to wrap in try/catch here (but not further down after the callbacks have run) for BC
+							// and because it makes sense - maybe a callback checks or changes the output type name
+							try {
+								$container->setOutputType($this->context->getController()->getOutputType($ot));
+							} catch(AgaviException $e) {
+							}
 						}
 
 						if($opts['locale']) {
+							$localeBackup = $tm->getCurrentLocaleIdentifier();
+							
 							// set the locale if necessary
 							if($locale = AgaviToolkit::expandVariables($opts['locale'], $matchvals)) {
 								// the if is here for bc reasons, since if $opts['locale'] only contains variable parts
 								// expandVariables could possibly return an empty string in which case the pre 1.0 routing
 								// didn't set the variable
-								$this->context->getTranslationManager()->setLocale($locale);
+								
+								// we need to wrap in try/catch here (but not further down after the callbacks have run) for BC
+								// and because it makes sense - maybe a callback checks or changes the locale name
+								try {
+									$tm->setLocale($locale);
+								} catch(AgaviException $e) {
+								}
 							}
+						} else {
+							// unset it explicitly, so that further down, the isset() check doesn't set back a value from a previous iteration!
+							$localeBackup = null;
 						}
 
 						if($opts['method']) {
@@ -1227,7 +1246,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								// the if is here for bc reasons, since if $opts['method'] only contains variable parts
 								// expandVariables could possibly return an empty string in which case the pre 1.0 routing
 								// didn't set the variable
-								$req->setMethod($method);
+								$rq->setMethod($method);
 								// and on the already created container, too!
 								$container->setRequestMethod($method);
 							}
@@ -1247,23 +1266,50 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							}
 							$callbackSuccess = true;
 							foreach($route['callback_instances'] as $callbackInstance) {
-								// backup stuff which could be changed in the callback so we are 
-								// able to determine which values were changed in the callback
-								$oldModule = $container->getModuleName();
-								$oldAction = $container->getActionName();
-								$oldOutputTypeName = $container->getOutputType() ? $container->getOutputType()->getName() : null;
-								$oldLocale = $this->context->getTranslationManager()->getCurrentLocaleIdentifier();
-								$oldRequestMethod = $req->getMethod();
-								$oldContainerMethod = $container->getRequestMethod();
-								
-								// call onMatched on all callbacks until one of them returns false, then
-								// call onNotMatched for all following callbacks of that route
+								// call onMatched on all callbacks until one of them returns false
+								// then restore state and call onNotMatched on that same callback
+								// after that, call onNotMatched for all remaining callbacks of that route
 								if($callbackSuccess) {
-									if(!$callbackInstance->onMatched($vars, $container)) {
-										$callbackSuccess = false;
+									// backup stuff which could be changed in the callback so we are 
+									// able to determine which values were changed in the callback
+									$oldModule = $container->getModuleName();
+									$oldAction = $container->getActionName();
+									$oldOutputTypeName = $container->getOutputType() ? $container->getOutputType()->getName() : null;
+									$oldLocale = $tm->getCurrentLocaleIdentifier();
+									$oldRequestMethod = $rq->getMethod();
+									$oldContainerMethod = $container->getRequestMethod();
+
+									$onMatched = $callbackInstance->onMatched($vars, $container);
+									if($onMatched instanceof AgaviResponse) {
+										return $onMatched;
 									}
-								} else {
-									$callbackInstance->onNotMatched($container);
+									if(!$onMatched) {
+										$callbackSuccess = false;
+										
+										// reset the matches array. it must be populated by the time onMatched() is called so matches can be modified in a callback
+										$route['matches'] = array();
+										// restore the variables from the variables which were set before this route matched
+										$vars = $varsBackup;
+										// reset all relevant container data we already set in the container for this (now non matching) route
+										$container = $containerBackup;
+										// restore locale
+										if(isset($localeBackup)) {
+											$tm->setLocale($localeBackup);
+										}
+										// restore request method
+										$rq->setMethod($container->getRequestMethod());
+									}
+								}
+								
+								// always call onNotMatched if $callbackSuccess == false, even if we just called onMatched() on the same instance. this is expected behavior
+								if(!$callbackSuccess) {
+									$onNotMatched = $callbackInstance->onNotMatched($container);
+									if($onNotMatched instanceof AgaviResponse) {
+										return $onNotMatched;
+									}
+									
+									// continue with the next callback
+									continue;
 								}
 								
 								// /* ! Only use the parameters from this route for expandVariables !
@@ -1302,26 +1348,26 @@ abstract class AgaviRouting extends AgaviParameterHolder
 									$ot = AgaviToolkit::expandVariables($opts['output_type'], $expandVars);
 									$container->setOutputType($this->context->getController()->getOutputType($ot));
 								}
-								if($opts['locale'] && $oldLocale == $this->context->getTranslationManager()->getCurrentLocaleIdentifier()) {
+								if($opts['locale'] && $oldLocale == $tm->getCurrentLocaleIdentifier()) {
 									if($locale = AgaviToolkit::expandVariables($opts['locale'], $expandVars)) {
 										// see above for the reason of the if
-										$this->context->getTranslationManager()->setLocale($locale);
+										$tm->setLocale($locale);
 									}
 								}
 								if($opts['method']) {
-									if($oldRequestMethod == $req->getMethod() && $oldContainerMethod == $container->getRequestMethod()) {
+									if($oldRequestMethod == $rq->getMethod() && $oldContainerMethod == $container->getRequestMethod()) {
 										if($method = AgaviToolkit::expandVariables($opts['method'], $expandVars)) {
 											// see above for the reason of the if
-											$req->setMethod($method);
+											$rq->setMethod($method);
 											$container->setRequestMethod($method);
 										}
 									} elseif($oldContainerMethod != $container->getRequestMethod()) {
 										// copy the request method to the request (a method set on the container 
 										// in a callback always has precedence over request methods set on the request)
-										$request->setMethod($container->getRequestMethod());
-									} elseif($oldRequestMethod != $req->getMethod()) {
+										$rq->setMethod($container->getRequestMethod());
+									} elseif($oldRequestMethod != $rq->getMethod()) {
 										// copy the request method to the container
-										$container->setRequestMethod($req->getMethod());
+										$container->setRequestMethod($rq->getMethod());
 									}
 								}
 								
@@ -1335,12 +1381,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 								}
 							}
 							if(!$callbackSuccess) {
-								// reset the matches array. it must be populated by the time onMatched() is called so matches can be modified in a callback
-								$route['matches'] = array();
-								// restore the variables from the variables which were set before this route matched
-								$vars = $varsBackup;
-								// reset all relevant container data we already set in the container for this (now non matching) route
-								$container = $oldContainer;
+								// jump straight to the next route
 								continue;
 							} else {
 								// We added the ignores to the route variables so the callback receives them, so restore them from vars backup.
@@ -1388,7 +1429,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 					} else {
 						if(count($opts['callbacks']) > 0) {
 							foreach($route['callback_instances'] as $callbackInstance) {
-								$callbackInstance->onNotMatched($container);
+								$onNotMatched = $callbackInstance->onNotMatched($container);
+								if($onNotMatched instanceof AgaviResponse) {
+									return $onNotMatched;
+								}
 							}
 						}
 					}
@@ -1397,7 +1441,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		} while(count($routeStack) > 0);
 
 		// put the vars into the request
-		$reqData->setParameters($vars);
+		$rd->setParameters($vars);
 
 		if($container->getModuleName() === null || $container->getActionName() === null) {
 			// no route which supplied the required parameters matched, use 404 action
@@ -1405,7 +1449,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			$container->setActionName(AgaviConfig::get('actions.error_404_action'));
 			
 			if($umap) {
-				$reqData->setParameters(array(
+				$rd->setParameters(array(
 					$ma => $container->getModuleName(),
 					$aa => $container->getActionName(),
 				));
@@ -1413,7 +1457,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		}
 
 		// set the list of matched route names as a request attribute
-		$req->setAttribute('matched_routes', $matchedRoutes, 'org.agavi.routing');
+		$rq->setAttribute('matched_routes', $matchedRoutes, 'org.agavi.routing');
 
 		// return a list of matched route names
 		return $container;
