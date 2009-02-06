@@ -160,3 +160,5 @@ Existing "core.use_routing" directives will be used as a fallback until the dire
 - AgaviTranslationManager::getCurrentTimeZone() is now called AgaviTranslationManager::getDefaultTimeZone()
 
 - Several methods in AgaviValidationManager have been deprecated in favor of the new Report object available through AgaviValidationManager::getReport() (see above)
+
+- AgaviValidationError::getMessageIndex() and AgaviValidationError::setMessageIndex() have been renamed to getName() and setName(), respectively.
