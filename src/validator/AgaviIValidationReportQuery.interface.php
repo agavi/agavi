@@ -120,7 +120,7 @@ interface AgaviIValidationReportQuery
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function getArgumentResults();
+	public function getArguments();
 	
 	/**
 	 * I Can Has Cheezburger?

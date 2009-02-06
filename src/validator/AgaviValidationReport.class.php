@@ -153,6 +153,11 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 		);
 	}
 	
+	public function getArgumentResults()
+	{
+		return $this->argumentResults;
+	}
+	
 	/**
 	 * Will return the highest error severity for an argument. If the field was
 	 * not "touched" by a validator null is returned. Can optionally be resticted
@@ -400,9 +405,9 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function getArgumentResults()
+	public function getArguments()
 	{
-		return $this->createQuery()->getArgumentResults();
+		return $this->createQuery()->getArguments();
 	}
 	
 	/**

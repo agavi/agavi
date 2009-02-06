@@ -270,25 +270,26 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Retrieves all ArgumentResults which match previously set the filters.
+	 * Retrieves all AgaviValdationArguments which match previously set the 
+	 * filters.
 	 * 
 	 * @return     array
 	 * 
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function getArgumentResults()
+	public function getArguments()
 	{
-		$incidents = $this->getFilteredIncidents();
-		$argumentResults = array();
-		foreach($incidents as $incident) {
-			foreach($incident->getArguments() as $argument) {
+		$errors = $this->getErrors();
+		$arguments = array();
+		foreach($errors as $error) {
+			foreach($error->getArguments() as $argument) {
 				if(!$this->argumentFilter || in_array($argument, $this->argumentFilter)) {
-					$argumentResults[$argument->getHash()] = new AgaviValidationArgumentResult($this->report, $argument);
+					$arguments[$argument->getHash()] = $argument;
 				}
 			}
 		}
-		return array_values($argumentResults);
+		return array_values($arguments);
 	}
 	
 	/**
@@ -326,16 +327,68 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	 */
 	public function getResult()
 	{
+		// if a filter for error names exist the result can't be success/not processed
+		// since if you have an error name the field must have thrown an error
 		$results = array();
 		
-		foreach($this->getArgumentResults() as $argumentResult) {
-			$results[] = $argument->getSeverity();
+		$arguments = array();
+		foreach($this->getArguments() as $argument) {
+			$arguments[$argument->getHash()] = $argument;
+		}
+		
+		// lets start with looking at the incidents, if we find any, lets
+		// return the max result (since anything "below" an incident will have
+		// the same result as the incident looking at the incidents suffices)
+		// if there is no result in the incidents the field was either not touched
+		// at all by the validation or is stored in the argument results of the report
+		// which we search then
+		foreach($this->getIncidents() as $incident) {
+			$results[] = $incident->getSeverity();
 		}
 		
 		if($results) {
 			return max($results);
-		} else {
+		} elseif($this->errorNameFilter) {
 			return null;
+		} else {
+			$results = array();
+			if(count($this->argumentFilter) == 1) {
+				// retrieve the argument filter independant of the key
+				$argument = reset($this->argumentFilter);
+				if($this->validatorFilter) {
+					foreach($this->validatorFilter as $validatorName) {
+						$result = $this->report->getAuthoritativeArgumentSeverity($argument, $validatorName);
+						if($result !== null) {
+							$results[] = $result;
+						}
+					}
+				} else {
+					$result = $this->report->getAuthoritativeArgumentSeverity($argument);
+					if($result !== null) {
+						$results[] = $result;
+					}
+				}
+			} else {
+				foreach($this->report->getArgumentResults() as $argumentResult) {
+					if(
+						(!$this->argumentFilter || in_array($argumentResult['argument'], $this->argumentFilter)) &&
+						(!$this->validatorFilter || ($argumentResult['validator'] && in_array($argumentResult['validator']->getName(), $this->validatorFilter)))
+					) {
+						$results[] = $argumentResult['severity'];
+					}
+				}
+			}
+			
+			if(!$results) {
+				return null;
+			}
+			
+			$result = max($results);
+			if($this->minSeverityFilter && $result < $this->minSeverityFilter) {
+				return null;
+			} else {
+				return $result;
+			}
 		}
 	}
 }
