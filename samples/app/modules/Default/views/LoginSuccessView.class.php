@@ -18,17 +18,16 @@ class Default_LoginSuccessView extends AgaviSampleAppDefaultBaseView
 
 	public function executeHtml(AgaviRequestDataHolder $rd)
 	{
-		$usr = $this->us;
 		$res = $this->getResponse();
 
 		// set the autologon cookie if requested
 		if($rd->hasParameter('remember')) {
-			$res->setCookie('autologon[username]', $rd->getParameter('username'), 60*60*24*14);
-			$res->setCookie('autologon[password]', $usr->getPassword($rd->getParameter('username')), 60*60*24*14);
+			$res->setCookie('autologon[username]', $rd->getParameter('username'), '+14 days');
+			$res->setCookie('autologon[password]', $this->us->getPassword($rd->getParameter('username')), '+14 days');
 		}
 
-		if($usr->hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
-			$this->getResponse()->setRedirect($usr->removeAttribute('redirect', 'org.agavi.SampleApp.login'));
+		if($this->us->hasAttribute('redirect', 'org.agavi.SampleApp.login')) {
+			$this->getResponse()->setRedirect($this->us->removeAttribute('redirect', 'org.agavi.SampleApp.login'));
 			return;
 		}
 

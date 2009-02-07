@@ -21,7 +21,7 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 		try {
 			$set = $this->context->getTranslationManager()->getLocaleIdentifier($parameters['locale']);
 			// yup, worked. now lets set that as a cookie
-			$this->context->getController()->getGlobalResponse()->setCookie('locale', $parameters['locale'], 60*60*24*30);
+			$this->context->getController()->getGlobalResponse()->setCookie('locale', $parameters['locale'], '+1 month');
 			return true;
 		} catch(AgaviException $e) {
 			// uregistered or ambigious locale... uncool!
