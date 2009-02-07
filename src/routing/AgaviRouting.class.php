@@ -1275,7 +1275,11 @@ abstract class AgaviRouting extends AgaviParameterHolder
 									$oldModule = $container->getModuleName();
 									$oldAction = $container->getActionName();
 									$oldOutputTypeName = $container->getOutputType() ? $container->getOutputType()->getName() : null;
-									$oldLocale = $tm->getCurrentLocaleIdentifier();
+									if(null === $tm) {
+										$oldLocale = null;
+									} else {
+										$oldLocale = $tm->getCurrentLocaleIdentifier();
+									}
 									$oldRequestMethod = $rq->getMethod();
 									$oldContainerMethod = $container->getRequestMethod();
 

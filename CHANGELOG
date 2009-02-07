@@ -12,6 +12,7 @@ CHG: Explicitly call onNotMatched() method on a routing callback if its onMatche
 CHG: Restore state right after a routing callback returned false from onMatched() rather than at the end of the callback execution loop (#1026) (David)
 CHG: Throw exception if Apache's SERVER_SOFTWARE env var contains insufficient version information (#1029) (David)
 
+FIX: Regression: Fatal error in AgaviRouting with use_translation off (#1031) (David)
 FIX: Regression: Locale and Request Method are not restored to previous value after a matching route's callback(s) caused the match to ultimately fail (#1024) (David)
 FIX: Regression: invalid Locale or Output Type names in routes trigger premature exceptions (#1023) (David)
 FIX: Use of undefined variable $request in AgaviWebRouting::execute() (#1025) (David)
