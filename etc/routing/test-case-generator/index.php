@@ -64,6 +64,11 @@ $steps = array(
 		'input' => '/foobar',
 	),
 	array(
+		'description' => 'normal path call with slash',
+		'uri' => '/foo/bar',
+		'input' => '/foo/bar',
+	),
+	array(
 		'description' => 'normal path call with query',
 		'uri' => '/foobar?foobar',
 		'input' => '/foobar',
@@ -82,6 +87,51 @@ $steps = array(
 		'description' => 'path call with spaces',
 		'uri' => '/foo bar',
 		'input' => '/foo bar',
+	),
+	array(
+		'description' => 'path call with spaces in query',
+		'uri' => '/foobar?foo%20bar',
+		'input' => '/foobar',
+	),
+	array(
+		'description' => 'path call with spaces and spaces in query',
+		'uri' => '/foo%20bar?foo%20bar',
+		'input' => '/foo bar',
+	),
+	array(
+		'description' => 'path call with spaces and plus and spaces in query',
+		'uri' => '/foo%20bar+baz?foo%20bar+baz',
+		'input' => '/foo bar+baz',
+	),
+	array(
+		'description' => 'path call with double slashes',
+		'uri' => '/foo//bar',
+		'input' => '/foo//bar',
+	),
+	array(
+		'description' => 'path call with double slashes in query',
+		'uri' => '/foobar?foo//bar',
+		'input' => '/foobar',
+	),
+	array(
+		'description' => 'path call with double slashes and double slashes in query',
+		'uri' => '/foo//bar?foo//bar',
+		'input' => '/foo//bar',
+	),
+	array(
+		'description' => 'path call with ampersand',
+		'uri' => '/foo&bar?foobar',
+		'input' => '/foo&bar',
+	),
+	array(
+		'description' => 'path call with query with question mark',
+		'uri' => '/foobar?foo?bar',
+		'input' => '/foobar',
+	),
+	array(
+		'description' => 'path call with ampersand and query with question mark',
+		'uri' => '/foo&bar?foo?bar',
+		'input' => '/foo&bar',
 	),
 	array(
 		'description' => 'last dummy step',
@@ -113,7 +163,7 @@ if($_POST['step'] == count($steps)-1) {
 ?>
 <html>
 <head>
-<title>Agavi Routing Test, Step <?php echo $_POST['step']; ?></title>
+<title>Agavi Routing Test<?php if($_POST['step'] > 0): ?>, step <?php echo $_POST['step']; ?> of <?php echo (count($steps)-2); endif; ?></title>
 </head>
 <body>
 <form id="zeform" action="<?php echo htmlspecialchars($_POST['prefix'] . $steps[$_POST['step']+1]['uri']); ?>" method="post">
