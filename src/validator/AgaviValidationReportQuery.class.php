@@ -56,6 +56,11 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	protected $minSeverityFilter;
 	
 	/**
+	 * @var        array|int
+	 */
+	protected $maxSeverityFilter;
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param      AgaviValidationReport The validation report instance.
@@ -72,7 +77,9 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	 * Returns a new AgaviIValidationReportQuery which returns only the incidents
 	 * for the given argument (and the other existing filter rules).
 	 * 
-	 * @param      AgaviValidationArgument|string|array
+	 * @param      AgaviValidationArgument|string|array The argument instance, or
+	 *                                                  a parameter name, or an
+	 *                                                  array of these elements.
 	 * 
 	 * @return     AgaviIValidationReportQuery
 	 * 
@@ -102,7 +109,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
 	 * for the given validator (and the other existing filter rules).
 	 * 
-	 * @param      string|array
+	 * @param      string|array The name of the validator, or an array of names.
 	 * 
 	 * @return     AgaviIValidationReportQuery
 	 * 
@@ -123,7 +130,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
 	 * for the given error name (and the other existing filter rules).
 	 * 
-	 * @param      string|array
+	 * @param      string|array The name of the error, or an array of names.
 	 * 
 	 * @return     AgaviIValidationReportQuery
 	 * 
@@ -144,7 +151,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
 	 * of the given severity or higher (and the other existing filter rules).
 	 * 
-	 * @param      int
+	 * @param      int The minimum severity.
 	 * 
 	 * @return     AgaviIValidationReportQuery
 	 * 
@@ -155,6 +162,24 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	{
 		$obj = clone $this;
 		$obj->minSeverityFilter = $minSeverity;
+		return $obj;
+	}
+	
+	/**
+	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
+	 * of the given severity or lower (and the other existing filter rules).
+	 * 
+	 * @param      int The maximum severity.
+	 * 
+	 * @return     AgaviIValidationReportQuery
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function byMaxSeverity($maxSeverity)
+	{
+		$obj = clone $this;
+		$obj->maxSeverityFilter = $maxSeverity;
 		return $obj;
 	}
 	
@@ -205,6 +230,12 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 			
 			if($this->minSeverityFilter) {
 				if($incident->getSeverity() < $this->minSeverityFilter) {
+					continue;
+				}
+			}
+			
+			if($this->maxSeverityFilter) {
+				if($incident->getSeverity() > $this->maxSeverityFilter) {
 					continue;
 				}
 			}
@@ -392,7 +423,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 			}
 			
 			$result = max($results);
-			if($this->minSeverityFilter && $result < $this->minSeverityFilter) {
+			if(($this->minSeverityFilter !== null && $result < $this->minSeverityFilter) || ($this->maxSeverityFilter !== null && $result > $this->maxSeverityFilter)) {
 				return null;
 			} else {
 				return $result;

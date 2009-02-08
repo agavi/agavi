@@ -34,7 +34,9 @@ interface AgaviIValidationReportQuery
 	 * Returns a new AgaviIValidationReportQuery which returns only the incidents
 	 * for the given argument (and the other existing filter rules).
 	 * 
-	 * @param      AgaviValidationArgument|string|array
+	 * @param      AgaviValidationArgument|string|array The argument instance, or
+	 *                                                  a parameter name, or an
+	 *                                                  array of these elements.
 	 * 
 	 * @return     AgaviIValidationReportQuery
 	 * 
@@ -47,7 +49,7 @@ interface AgaviIValidationReportQuery
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
 	 * for the given validator (and the other existing filter rules).
 	 * 
-	 * @param      string|array
+	 * @param      string|array The name of the validator, or an array of names.
 	 * 
 	 * @return     AgaviIValidationReportQuery
 	 * 
@@ -60,7 +62,7 @@ interface AgaviIValidationReportQuery
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
 	 * for the given error name (and the other existing filter rules).
 	 * 
-	 * @param      string|array
+	 * @param      string|array The name of the error, or an array of names.
 	 * 
 	 * @return     AgaviIValidationReportQuery
 	 * 
@@ -73,7 +75,7 @@ interface AgaviIValidationReportQuery
 	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
 	 * of the given severity or higher (and the other existing filter rules).
 	 * 
-	 * @param      int
+	 * @param      int The minimum severity.
 	 * 
 	 * @return     AgaviIValidationReportQuery
 	 * 
@@ -81,6 +83,19 @@ interface AgaviIValidationReportQuery
 	 * @since      1.0.0
 	 */
 	public function byMinSeverity($minSeverity);
+	
+	/**
+	 * Returns a new AgaviIValidationReportQuery which contains only the incidents
+	 * of the given severity or lower (and the other existing filter rules).
+	 * 
+	 * @param      int The maximum severity.
+	 * 
+	 * @return     AgaviIValidationReportQuery
+	 * 
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function byMaxSeverity($maxSeverity);
 	
 	/**
 	 * Retrieves all incidents which match the currently defined filter rules.
