@@ -44,8 +44,23 @@ $steps = array(
 		'input' => '/',
 	),
 	array(
-		'description' => 'empty call with query args',
+		'description' => 'empty call with query arg',
 		'uri' => ($_POST['mode'] == 'rewrite' ? '/' : '') . '?foo=bar',
+		'input' => '/',
+	),
+	array(
+		'description' => 'empty call with query args',
+		'uri' => ($_POST['mode'] == 'rewrite' ? '/' : '') . '?foo=bar&bar=baz',
+		'input' => '/',
+	),
+	array(
+		'description' => 'empty call with query args and trailing ampersand',
+		'uri' => ($_POST['mode'] == 'rewrite' ? '/' : '') . '?foo=bar&bar=baz&',
+		'input' => '/',
+	),
+	array(
+		'description' => 'empty call with query args and trailing ampersands',
+		'uri' => ($_POST['mode'] == 'rewrite' ? '/' : '') . '?foo=bar&bar=baz&&',
 		'input' => '/',
 	),
 	array(
@@ -56,6 +71,26 @@ $steps = array(
 	array(
 		'description' => 'slash call',
 		'uri' => '/',
+		'input' => '/',
+	),
+	array(
+		'description' => 'slash call with query',
+		'uri' => '/?foobar',
+		'input' => '/',
+	),
+	array(
+		'description' => 'slash call with query arg',
+		'uri' => '/?foo=bar',
+		'input' => '/',
+	),
+	array(
+		'description' => 'slash call with query args',
+		'uri' => '/?foo=bar&bar=baz',
+		'input' => '/',
+	),
+	array(
+		'description' => 'slash call with empty query',
+		'uri' => '/?',
 		'input' => '/',
 	),
 	array(
@@ -74,8 +109,13 @@ $steps = array(
 		'input' => '/foobar',
 	),
 	array(
-		'description' => 'normal path call with query args',
+		'description' => 'normal path call with query arg',
 		'uri' => '/foobar?foo=bar',
+		'input' => '/foobar',
+	),
+	array(
+		'description' => 'normal path call with query args',
+		'uri' => '/foobar?foo=bar&bar=baz',
 		'input' => '/foobar',
 	),
 	array(
@@ -120,8 +160,33 @@ $steps = array(
 	),
 	array(
 		'description' => 'path call with ampersand',
+		'uri' => '/foo&bar',
+		'input' => '/foo&bar',
+	),
+	array(
+		'description' => 'path call with ampersand and query',
 		'uri' => '/foo&bar?foobar',
 		'input' => '/foo&bar',
+	),
+	array(
+		'description' => 'path call with trailing ampersand',
+		'uri' => '/foo&bar&',
+		'input' => '/foo&bar&',
+	),
+	array(
+		'description' => 'path call with trailing ampersands',
+		'uri' => '/foo&bar&&',
+		'input' => '/foo&bar&&',
+	),
+	array(
+		'description' => 'path call with trailing ampersand and query',
+		'uri' => '/foo&bar&?foobar',
+		'input' => '/foo&bar&',
+	),
+	array(
+		'description' => 'path call with trailing ampersands and query',
+		'uri' => '/foo&bar&&?foobar',
+		'input' => '/foo&bar&&',
 	),
 	array(
 		'description' => 'path call with query with question mark',
