@@ -105,6 +105,7 @@
 			<autoload name="AgaviRenderException">%core.agavi_dir%/exception/AgaviRenderException.class.php</autoload>
 			<autoload name="AgaviSecurityException">%core.agavi_dir%/exception/AgaviSecurityException.class.php</autoload>
 			<autoload name="AgaviStorageException">%core.agavi_dir%/exception/AgaviStorageException.class.php</autoload>
+			<autoload name="AgaviUncacheableException">%core.agavi_dir%/exception/AgaviUncacheableException.class.php</autoload>
 			<autoload name="AgaviValidatorException">%core.agavi_dir%/exception/AgaviValidatorException.class.php</autoload>
 			<autoload name="AgaviViewException">%core.agavi_dir%/exception/AgaviViewException.class.php</autoload>
 

@@ -105,7 +105,7 @@ AgaviController::dispatch() now accepts an Execution Container as an optional se
 
 Caching
 -------
-A new cache group source called "callback" has been added. You can use it to specify the name of a method implemented in the respective Action class. The value this callback returns is used as the group key. You can also throw an exception from the callback to prevent caching altogether. These two different abilities offer very nice caching capabilities, such as:
+A new cache group source called "callback" has been added. You can use it to specify the name of a method implemented in the respective Action class. The value this callback returns is used as the group key. You can also throw an AgaviUncacheableException from the callback to prevent caching altogether. These two different abilities offer very nice caching capabilities, such as:
 - Having a cache variant for the owner of an element, and one for everyone else
 - Enabling a cache only for users that are not logged in
 

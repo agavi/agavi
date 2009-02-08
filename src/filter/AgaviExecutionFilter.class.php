@@ -366,7 +366,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			try {
 				$groups = $this->determineGroups($config["groups"], $container);
 				$actionGroups = array_merge($groups, array(self::ACTION_CACHE_ID));
-			} catch(Exception $e) {
+			} catch(AgaviUncacheableException $e) {
 				// a group callback threw an exception. that means we're not allowed t cache
 				$isCacheable = false;
 			}

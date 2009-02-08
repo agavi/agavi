@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 beta9 (February ?, 2009)
 ------------------------------
 
+ADD: Introduce special AgaviUncacheableException for cache group callbacks (#1032) (David)
 ADD: Implement new validation report query API (#1022) (Dominik, David)
 ADD: Allow routing callbacks to return an AgaviResponse (#1028) (David)
 
