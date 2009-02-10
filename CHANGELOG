@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 0.11.7 RC1 (February ??, 2009)
 ------------------------------
 
+ADD: Allow setting of session_cache_expire(), session_cache_limiter() and session_module_name() through configuration (#1035) (David)
+
 CHG: Throw exception if Apache's SERVER_SOFTWARE env var contains insufficient version information (#1029) (David)
 
 
