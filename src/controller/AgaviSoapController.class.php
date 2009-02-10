@@ -206,8 +206,13 @@ class AgaviSoapController extends AgaviController
 	/**
 	 * Dispatch a request
 	 *
-	 * @param      AgaviRequestDataHolder A RequestDataHolder with additional
-	 *                                    request arguments.
+	 * @param      AgaviRequestDataHolder  An optional request data holder object
+	 *                                     with additional request data.
+	 * @param      AgaviExecutionContainer An optional execution container that,
+	 *                                     if given, will be executed right away,
+	 *                                     skipping routing execution.
+	 *
+	 * @return     AgaviResponse The response produced during this dispatch call.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0

@@ -185,8 +185,13 @@ class AgaviController extends AgaviParameterHolder
 	/**
 	 * Dispatch a request
 	 *
-	 * @param      AgaviRequestDataHolder A RequestDataHolder with additional
-	 *                                    request arguments.
+	 * @param      AgaviRequestDataHolder  An optional request data holder object
+	 *                                     with additional request data.
+	 * @param      AgaviExecutionContainer An optional execution container that,
+	 *                                     if given, will be executed right away,
+	 *                                     skipping routing execution.
+	 *
+	 * @return     AgaviResponse The response produced during this dispatch call.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
@@ -208,13 +213,13 @@ class AgaviController extends AgaviParameterHolder
 				if($arguments !== null) {
 					$rd->merge($arguments);
 				}
-			
+				
 				// next, we have to see if the routing did anything useful, i.e. whether or not it was enabled.
 				$moduleName = $container->getModuleName();
 				$actionName = $container->getActionName();
 				if(!$moduleName) {
 					// no module has been specified; that means the routing did not run, as it would otherwise have the 404 action's module name
-				
+					
 					// lets see if our request data has values for module and action
 					$ma = $rq->getParameter('module_accessor');
 					$aa = $rq->getParameter('action_accessor');
@@ -227,27 +232,27 @@ class AgaviController extends AgaviParameterHolder
 						$moduleName = AgaviConfig::get('actions.default_module');
 						$actionName = AgaviConfig::get('actions.default_action');
 					}
-				
+					
 					// so by now we hopefully have something reasonable for module and action names - let's set them on the container
 					$container->setModuleName($moduleName);
 					$container->setActionName($actionName);
 				}
-			
+				
 				if(!AgaviConfig::get('core.available', false)) {
 					$container = $container->createSystemActionForwardContainer('unavailable');
 				}
-			
+				
 				// create a new filter chain
 				$filterChain = $this->context->createInstanceFor('filter_chain');
-			
+				
 				$this->loadFilters($filterChain, 'global');
-			
+				
 				// register the dispatch filter
 				$filterChain->register($this->filters['dispatch']);
-			
+				
 				// go, go, go!
 				$filterChain->execute($container);
-			
+				
 				$response = $container->getResponse();
 			} elseif($container instanceof AgaviResponse) {
 				// the routing returned a response!
