@@ -51,15 +51,15 @@
 	
 	<ae:configuration context="console">
 		<routes>
-			<route pattern="^listproducts$" module="Default" action="Products.Index" />
-			<route pattern="^viewproduct(\s+{id:\d+})$" module="Default" action="Products.Product.View" />
+			<route pattern="^listproducts$" module="Products" action="Index" />
+			<route pattern="^viewproduct(\s+{id:\d+})$" module="Products" action="Product.View" />
 		</routes>
 	</ae:configuration>
 	
 	<ae:configuration context="xmlrpc">
 		<routes>
 			<!-- XMLRPC calls include the name of a remote method to call. The WebserviceRouting applies patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
-			<route pattern="^getProduct$" module="Default" action="Products.Product.View" method="read" />
+			<route pattern="^getProduct$" module="Products" action="Product.View" method="read" />
 		</routes>
 	</ae:configuration>
 	
@@ -84,7 +84,7 @@
 		</wsdl:types>
 		<routes>
 			<!-- SOAP calls include the name of a remote method to call. The WebserviceRouting compares patterns to this method name, not to the URL of the request. We set the request method to "read" here so executeRead() is run in the Action. -->
-			<route pattern="getProduct" module="Default" action="Products.Product.View" method="read">
+			<route pattern="getProduct" module="Products" action="Product.View" method="read">
 				<wsdl:input>
 					<wsdl:part name="id" type="xsd:int" />
 				</wsdl:input>
@@ -92,7 +92,7 @@
 					<wsdl:part name="product" type="tns:Product" />
 				</wsdl:output>
 			</route>
-			<route pattern="listProducts" module="Default" action="Products.Index" method="read">
+			<route pattern="listProducts" module="Products" action="Index" method="read">
 				<wsdl:output>
 					<wsdl:part name="products" type="tns:ArrayOfProducts" />
 				</wsdl:output>

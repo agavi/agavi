@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 RC1 (February ??, 2009)
+-----------------------------
+
+FIX: Regression: Sample App SOAP, XMLRPC and Console interfaces are broken (#1036) (David)
+
+
 1.0.0 beta9 (February 10, 2009)
 -------------------------------
 
