@@ -97,7 +97,7 @@
 			
 			<output_type name="wsdl">
 				<ae:parameter name="http_headers">
-					<ae:parameter name="Content-Type">text/xml; charset=UTF-8</ae:parameter>
+					<ae:parameter name="Content-Type">application/xml; charset=UTF-8</ae:parameter>
 				</ae:parameter>
 			</output_type>
 			
