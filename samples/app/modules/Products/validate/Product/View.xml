@@ -23,13 +23,13 @@
 				</validator>
 			</validator>
 
-			<validator class="AgaviSampleAppProductValidator" depends="name_given">
+			<validator name="product_id_name" class="AgaviSampleAppProductValidator" depends="name_given">
 				<argument name="id">id</argument>
 				<argument name="name">name</argument>
 				<ae:parameter name="export">product</ae:parameter>
 			</validator>
 
-			<validator class="AgaviSampleAppProductValidator" depends="name_not_given">
+			<validator name="product_id" class="AgaviSampleAppProductValidator" depends="name_not_given">
 				<argument>id</argument>
 				<ae:parameter name="export">product</ae:parameter>
 			</validator>
