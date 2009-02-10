@@ -40,7 +40,7 @@
 					<!-- but only if the URL is exactly the above, we run the "View" action -->
 					<route name=".view" pattern="^$" action=".View" />
 					<!-- example why this is reasonable: -->
-					<!-- <route name=".gallery" pattern="^/gallery$" action=".Gallery" />
+					<!-- <route name=".gallery" pattern="^/gallery$" action=".Gallery" /> -->
 					<!-- more routes! if the .View action was on the <parent> route, then ".Gallery" wouldn't work -->
 					<!-- also, /products/123456/blahblahblah would match, too, which is not good! -->
 				</route>
