@@ -36,6 +36,11 @@ class AgaviSoapController extends AgaviController
 	protected $dispatchArguments = null;
 	
 	/**
+	 * @param      AgaviExecutionContainer Specific execution container to run.
+	 */
+	protected $dispatchContainer = null;
+	
+	/**
 	 * @param      SoapClient The soap client instance we use to access WSDL info.
 	 */
 	protected $soapClient = null;
@@ -207,10 +212,12 @@ class AgaviSoapController extends AgaviController
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function dispatch(AgaviRequestDataHolder $arguments = null)
+	public function dispatch(AgaviRequestDataHolder $arguments = null, AgaviExecutionContainer $container = null)
 	{
 		// Remember The Milk... err... the arguments given.
 		$this->dispatchArguments = $arguments;
+		// and the container, too, if there was one
+		$this->dispatchContainer = $container;
 		
 		// handle the request. the aforementioned __call will be run next
 		// we use the input from the request as the argument, it contains the SOAP request
@@ -231,7 +238,7 @@ class AgaviSoapController extends AgaviController
 		try {
 			// return the content so SoapServer can send it.
 			// AgaviSoapResponse::send() does not send the content, but sets the headers on the SoapServer
-			return parent::dispatch($this->dispatchArguments);
+			return parent::dispatch($this->dispatchArguments, $this->dispatchContainer);
 		} catch(SoapFault $f) {
 			$this->response->clear();
 			$this->response->setContent($f);
