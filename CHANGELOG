@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 beta9 (February ?, 2009)
-------------------------------
+1.0.0 beta9 (February 10, 2009)
+-------------------------------
 
 ADD: Allow setting of session_cache_expire(), session_cache_limiter() and session_module_name() through configuration (#1035) (David)
 ADD: Implement a basic system for testing Agavi applications and internal components, THIS IS EXPERIMENTAL! (#1021) (Felix, David)
