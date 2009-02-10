@@ -15,29 +15,39 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviSessionStorage allows you to store persistent Agavi data in the user
- * session.
+ * AgaviSessionStorage is the interface used by Agavi to store session data from
+ * the User object in a PHP session.
  *
  * <b>Optional parameters:</b>
  *
- * # <b>auto_start</b>              - [Yes]   - Should session_start() automatically be
- *                                              called?
+ * # <b>auto_start</b>              - [true]  - Should session_start() be called
+ *                                              automatically?
+ * # <b>session_cache_limiter</b>   - []      - The session cache limiter value.
+ * # <b>session_cache_expire</b>    - []      - The expire value for the cache
+ *                                              limiter header.
+ * # <b>session_module_name</b>     - []      - The name of the session module.
+ * # <b>session_save_path</b>       - []      - The filesystem location where
+ *                                              sesssion data is stored
  * # <b>session_name</b>            - [Agavi] - The name of the session.
- * # <b>session_id</b>              - []      - Session id to set (see {@link http://www.php.net/session_id}).
- * # <b>session_cookie_lifetime</b> - []      - The lifetime of the session cookie in seconds. 0 for unlimited.
- * # <b>session_cookie_path</b>     - []      - The path to set to the session cookie.
- * # <b>session_cookie_domain</b>   - []      - The domain to set to the session cookie.
- * # <b>session_cookie_secure</b>   - []      - Whether or not the cookie should only be sent over secure connections
+ * # <b>session_id</b>              - []      - Static session ID value to set.
+ * # <b>session_cookie_lifetime</b> - []      - The session cookie lifetime (in
+ *                                              seconds, or strtotime() string).
+ * # <b>session_cookie_path</b>     - [?????] - Session cookie path (defaults to
+ *                                              base href for web requests).
+ * # <b>session_cookie_domain</b>   - []      - Session cookie domain.
+ * # <b>session_cookie_secure</b>   - []      - Whether or not session cookies
+ *                                              should be limited to HTTPS.
+ * # <b>session_cookie_domain</b>   - []      - Session cookie "HTTP-only" flag.
  *
- * All cookie parameters default to whatever PHP would otherwise use 
- * (ie. what's set in php.ini, .htaccess or elsewhere)
- * (see {@link http://www.php.net/session-set-cookie-params})
+ * All parameters default to whatever PHP would otherwise use, i.e. what's set
+ * in php.ini, .htaccess or elsewhere (see {@link http://www.php.net/session}).
  *
  * @package    agavi
  * @subpackage storage
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Veikko Mäkinen <mail@veikkomakinen.com>
+ * @author     David Zülke <david.zuelke@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -62,6 +72,18 @@ class AgaviSessionStorage extends AgaviStorage
 	 */
 	public function startup()
 	{
+		if($this->hasParameter('session_cache_expire')) {
+			session_cache_expire($this->getParameter('session_cache_expire'));
+		}
+		
+		if($this->hasParameter('session_cache_limiter')) {
+			session_cache_limiter($this->getParameter('session_cache_limiter'));
+		}
+		
+		if($this->hasParameter('session_module_name')) {
+			session_module_name($this->getParameter('session_module_name'));
+		}
+		
 		if($this->hasParameter('session_save_path')) {
 			session_save_path($this->getParameter('session_save_path'));
 		}
