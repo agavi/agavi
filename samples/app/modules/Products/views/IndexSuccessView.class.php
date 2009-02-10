@@ -31,11 +31,6 @@ class Products_IndexSuccessView extends AgaviSampleAppProductsBaseView
 	{
 		return $this->getAttribute('products');
 	}
-	// 
-	// public function executeXmlrpc(AgaviRequestDataHolder $rd)
-	// {
-	// 	return array($this->getAttribute('product_price'));
-	// }
 }
 
 ?>
