@@ -110,19 +110,11 @@ class AgaviSampleAppBaseView extends AgaviView
 		if($layoutName === null && $this->getContainer()->getParameter('is_slot', false)) {
 			$layoutName = self::DEFAULT_SLOT_LAYOUT_NAME;
 		} else {
-			// some defaults for our master template so it looks nicer
-			$locale = $this->tm->getCurrentLocale();
-			$this->setAttribute('_locale', array(
-				'language' => $locale->getLocaleLanguage(),
-				'rtl' => $locale->getCharacterOrientation() == 'right-to-left',
-			));
-			$this->setAttribute('_content_type', $this->getContainer()->getOutputType()->getParameter('http_headers[Content-Type]', 'text/html; charset=utf-8'));
-			$this->setAttribute('_base_href', $this->ro->getBaseHref());
+			// set a default title just to avoid warnings
+			$this->setAttribute('_title', '');
 		}
-		$this->loadLayout($layoutName);
 		
-		// also set a default title just to avoid warnings
-		$this->setAttribute('_title', '');
+		$this->loadLayout($layoutName);
 	}
 }
 
