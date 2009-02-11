@@ -37,7 +37,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function importStylesheet(DOMDocument $stylesheet)
+	public function importStylesheet($stylesheet)
 	{
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
@@ -77,7 +77,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function transformToDoc(DOMNode $doc)
+	public function transformToDoc($doc)
 	{
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();

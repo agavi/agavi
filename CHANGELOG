@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 RC1 (February ??, 2009)
 -----------------------------
 
+CHG: Add workaround for PHP bug 47206 (#1038) (David)
+
 FIX: Regression: AgaviSoapController::dispatch() signature is incompatible with that of AgaviController::dispatch() (#1037) (David)
 FIX: Regression: Sample App SOAP, XMLRPC and Console interfaces are broken (#1036) (David)
 
