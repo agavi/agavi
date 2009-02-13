@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:asa="http://agavi.org/sampleapp" xmlns:tns="http://agavi.org/sampleapp/types" targetNamespace="http://agavi.org/sampleapp">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
 	
 	<ae:configuration context="web">
 		<routes>
@@ -70,7 +70,7 @@
 		</routes>
 	</ae:configuration>
 	
-	<ae:configuration context="soap">
+	<ae:configuration context="soap" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:asa="http://agavi.org/sampleapp" xmlns:tns="http://agavi.org/sampleapp/types" targetNamespace="http://agavi.org/sampleapp">
 		<wsdl:types>
 			<xsd:schema xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://agavi.org/sampleapp/types">
 				<xsd:complexType name="Product">
