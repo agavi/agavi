@@ -59,6 +59,8 @@ class AgaviRegexValidator extends AgaviValidator
 			return false;
 		}
 		
+		$this->export($data);
+		
 		return true;
 	}
 }

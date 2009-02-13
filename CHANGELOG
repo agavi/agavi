@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 RC1 (February ??, 2009)
 -----------------------------
 
+ADD: Regexp Validator does not export the validated data (#1041) (Felix)
+
 CHG: Add workaround for PHP bug 47206 (#1038) (David)
 
 FIX: Identity template in _common.xsl performs verbatim copies of elements (#1040) (David)
