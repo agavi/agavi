@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.0 RC1 (February ??, 2009)
 -----------------------------
 
+ADD: Add AgaviArrayPathDefintion::flatten() method (#1042) (Dominik)
 ADD: Regexp Validator does not export the validated data (#1041) (Felix)
 
 CHG: Add workaround for PHP bug 47206 (#1038) (David)

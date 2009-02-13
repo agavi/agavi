@@ -330,6 +330,45 @@ final class AgaviArrayPathDefinition
 		}
 		return $names;
 	}
-
+	
+	/**
+	 * Returns the flattened version of an array. So the returned array 
+	 * will be one dimensional with the flattened key names as keys
+	 * and their values from the original array as values.
+	 *
+	 * This method calls itself recursivly to flatten the array.
+	 *
+	 * @param      array The array which should be flattened.
+	 * @param      string The prefix for the key names (only for internal use).
+	 *
+	 * @return     array The flattened array.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function flatten($array, $prefix = null)
+	{
+		$flatArray = array();
+		foreach($array as $key => $value) {
+			if($prefix === null) {
+				// create the top node when no prefix was given
+				if(strlen($key) == 0) {
+					// when an empty key was used at top level, create a "relative" path, so the empty string doesn't get lost
+					$name = '[' . $key . ']';
+				} else {
+					$name = $key;
+				}
+			} else {
+				$name = $prefix . '[' . $key . ']';
+			}
+			
+			if(is_array($value)) {
+				$flatArray += AgaviArrayPathDefinition::flatten($value, $name);
+			} else {
+				$flatArray[$name] = $value;
+			}
+		}
+		return $flatArray;
+	}
 }
 ?>
