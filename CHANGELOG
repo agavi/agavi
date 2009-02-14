@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Add AgaviArrayPathDefintion::flatten() method (#1042) (Dominik)
 
+CHG: Update timezone database to 2009b (#1043) (David)
 CHG: Regex validator should export the validated data (#1041) (Felix)
 CHG: Add workaround for PHP bug 47206 (#1038) (David)
 
