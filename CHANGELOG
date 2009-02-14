@@ -5,8 +5,8 @@ AGAVI CHANGELOG
 -----------------------------
 
 ADD: Add AgaviArrayPathDefintion::flatten() method (#1042) (Dominik)
-ADD: Regexp Validator does not export the validated data (#1041) (Felix)
 
+CHG: Regex validator should export the validated data (#1041) (Felix)
 CHG: Add workaround for PHP bug 47206 (#1038) (David)
 
 FIX: Identity template in _common.xsl performs verbatim copies of elements (#1040) (David)
