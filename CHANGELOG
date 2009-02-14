@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Allow setting of session_cache_expire(), session_cache_limiter() and session_module_name() through configuration (#1035) (David)
 
+CHG: Update timezone database to 2009b (#1043) (David)
 CHG: Regex validator should export the validated data (#1041) (Felix)
 CHG: Throw exception if Apache's SERVER_SOFTWARE env var contains insufficient version information (#1029) (David)
 
