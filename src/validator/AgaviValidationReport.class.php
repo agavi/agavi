@@ -255,14 +255,14 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 		$arguments = array();
 		foreach($this->argumentResults as $results) {
 			$hasInSource = false;
-			$severity = AgaviValidator::SUCCESS;
+			$severity = AgaviValidator::NOT_PROCESSED;
 			foreach($results as $result) {
 				if($source === null || $result['argument']->getSource() == $source) {
 					$hasInSource = true;
 					$severity = max($severity, $result['severity']);
 				}
 			}
-			if($hasInSource && $severity <= AgaviValidator::INFO) {
+			if($hasInSource && $severity >= AgaviValidator::SUCCESS && $severity <= AgaviValidator::INFO) {
 				$argument = $results[0]['argument'];
 				$arguments[$argument->getHash()] = $argument;
 			}
