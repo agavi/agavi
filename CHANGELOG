@@ -10,6 +10,7 @@ CHG: Update timezone database to 2009b (#1043) (David)
 CHG: Regex validator should export the validated data (#1041) (Felix)
 CHG: Add workaround for PHP bug 47206 (#1038) (David)
 
+FIX: AgaviTranslationManager::$translators and $supplementalData are not initialized as empty array (#1045) (David)
 FIX: Certain libxml versions cause some config handlers to randomly produce invalid results due to corrupt XPath result sets (#1039) (David)
 FIX: Regression: empty arguments that weren't validated remain in request data (#1044) (David)
 FIX: Identity template in _common.xsl performs verbatim copies of elements (#1040) (David)

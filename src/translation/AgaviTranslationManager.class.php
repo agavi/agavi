@@ -43,7 +43,7 @@ class AgaviTranslationManager
 	/**
 	 * @var        array An array of the translator instances for the domains.
 	 */
-	protected $translators = null;
+	protected $translators = array();
 
 	/**
 	 * @var        AgaviLocale The current locale.
@@ -94,7 +94,7 @@ class AgaviTranslationManager
 	/**
 	 * @var        array The supplemental data from the cldr
 	 */
-	protected $supplementalData;
+	protected $supplementalData = array();
 
 	/**
 	 * @var        array The list of available time zones.
