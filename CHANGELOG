@@ -10,6 +10,8 @@ CHG: Update timezone database to 2009b (#1043) (David)
 CHG: Regex validator should export the validated data (#1041) (Felix)
 CHG: Throw exception if Apache's SERVER_SOFTWARE env var contains insufficient version information (#1029) (David)
 
+FIX: AgaviTranslationManager::$translators and $supplementalData are not initialized as empty array (#1045) (David)
+
 
 0.11.6 (February 4, 2009)
 -------------------------
