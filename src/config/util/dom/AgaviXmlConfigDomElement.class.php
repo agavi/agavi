@@ -182,23 +182,32 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		$query = '';
 		$singularName = null;
 		
+		// tag our element, because older libxmls will mess things up otherwise
+		// http://trac.agavi.org/ticket/1039
+		$marker = uniqid('', true);
+		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker', $marker);
+		
 		if($pluralMagic) {
 			// we always assume that we either get plural names, or the singular of the singular is not different from the singular :)
 			$singularName = $this->singularize($name);
 			if($namespaceUri) {
-				$query = 'count(child::*[local-name() = "%2$s" and namespace-uri() = "%3$s"]) + count(child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s"])';
+				$query = 'count(child::*[local-name() = "%2$s" and namespace-uri() = "%3$s" and ../@agavi_annotations_latest:marker = "%4$s"]) + count(child::*[local-name() = "%1$s" and namespace-uri() = "%3$s" and ../@agavi_annotations_latest:marker = "%4$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s" and ../../@agavi_annotations_latest:marker = "%4$s"])';
 			} else {
-				$query = 'count(%1$s/%2$s) + count(%2$s)';
+				$query = 'count(%1$s[../@agavi_annotations_latest:marker = "%4$s"]/%2$s[../../@agavi_annotations_latest:marker = "%4$s"]) + count(%2$s[../@agavi_annotations_latest:marker = "%4$s"])';
 			}
 		} else {
 			if($namespaceUri) {
-				$query = 'count(child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"])';
+				$query = 'count(child::*[local-name() = "%1$s" and namespace-uri() = "%3$s" and ../@agavi_annotations_latest:marker = "%4$s"])';
 			} else {
-				$query = 'count(%1$s)';
+				$query = 'count(%1$s[../@agavi_annotations_latest:marker = "%4$s"])';
 			}
 		}
 		
-		return (int)$this->ownerDocument->getXpath()->evaluate(sprintf($query, $name, $singularName, $namespaceUri), $this);
+		$retval = (int)$this->ownerDocument->getXpath()->evaluate(sprintf($query, $name, $singularName, $namespaceUri, $marker), $this);
+		
+		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker');
+		
+		return $retval;
 	}
 	
 	/**
@@ -251,23 +260,31 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		$query = '';
 		$singularName = null;
 		
+		// tag our element, because libxml will mess things up otherwise
+		$marker = uniqid('', true);
+		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker', $marker);
+		
 		if($pluralMagic) {
 			// we always assume that we either get plural names, or the singular of the singular is not different from the singular :)
 			$singularName = $this->singularize($name);
 			if($namespaceUri) {
-				$query = 'child::*[local-name() = "%2$s" and namespace-uri() = "%3$s"] | child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s"]';
+				$query = 'child::*[local-name() = "%2$s" and namespace-uri() = "%3$s" and ../@agavi_annotations_latest:marker = "%4$s"] | child::*[local-name() = "%1$s" and namespace-uri() = "%3$s" and ../@agavi_annotations_latest:marker = "%4$s"]/*[local-name() = "%2$s" and namespace-uri() = "%3$s" and ../../@agavi_annotations_latest:marker = "%4$s"]';
 			} else {
-				$query = '%1$s/%2$s | %2$s';
+				$query = '%1$s[../@agavi_annotations_latest:marker = "%4$s"]/%2$s[../../@agavi_annotations_latest:marker = "%4$s"] | %2$s[../@agavi_annotations_latest:marker = "%4$s"]';
 			}
 		} else {
 			if($namespaceUri) {
-				$query = 'child::*[local-name() = "%1$s" and namespace-uri() = "%3$s"]';
+				$query = 'child::*[local-name() = "%1$s" and namespace-uri() = "%3$s" and ../@agavi_annotations_latest:marker = "%4$s"]';
 			} else {
-				$query = '%1$s';
+				$query = '%1$s[../@agavi_annotations_latest:marker = "%4$s"]';
 			}
 		}
 		
-		return $this->ownerDocument->getXpath()->query(sprintf($query, $name, $singularName, $namespaceUri), $this);
+		$retval = $this->ownerDocument->getXpath()->query(sprintf($query, $name, $singularName, $namespaceUri, $marker), $this);
+		
+		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker');
+		
+		return $retval;
 	}
 	
 	/**
@@ -312,13 +329,21 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		// if namespace uri is null, use default ns. if empty string, use no ns
 		$namespaceUri = ($namespaceUri === null ? $this->ownerDocument->getDefaultNamespaceUri() : $namespaceUri);
 		
+		// tag our element, because libxml will mess things up otherwise
+		$marker = uniqid('', true);
+		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker', $marker);
+		
 		if($namespaceUri) {
-			$query = 'self::node()[count(child::*[local-name() = "%1$s" and namespace-uri() = "%2$s"]) = 1]/*[local-name() = "%1$s" and namespace-uri() = "%2$s"]';
+			$query = 'self::node()[count(child::*[local-name() = "%1$s" and namespace-uri() = "%2$s" and ../@agavi_annotations_latest:marker = "%3$s"]) = 1]/*[local-name() = "%1$s" and namespace-uri() = "%2$s" and ../@agavi_annotations_latest:marker = "%3$s"]';
 		} else {
-			$query = 'self::node()[count(child::%1$s) = 1]/%1$s';
+			$query = 'self::node()[count(child::%1$s[../@agavi_annotations_latest:marker = "%3$s"]) = 1]/%1$s[../@agavi_annotations_latest:marker = "%3$s"]';
 		}
 		
-		return $this->ownerDocument->getXpath()->query(sprintf($query, $name, $namespaceUri), $this)->item(0);
+		$retval = $this->ownerDocument->getXpath()->query(sprintf($query, $name, $namespaceUri, $marker), $this)->item(0);
+		
+		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker');
+		
+		return $retval;
 	}
 	
 	/**
