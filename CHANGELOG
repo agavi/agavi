@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 RC1 (February ??, 2009)
+1.0.0 RC1 (February 16, 2009)
 -----------------------------
 
 ADD: Add AgaviArrayPathDefintion::flatten() method (#1042) (Dominik)
