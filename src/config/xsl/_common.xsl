@@ -55,8 +55,13 @@
 		<xsl:call-template name="_common-migrate-envelope-element" />
 	</xsl:template>
 	
-	<xsl:template match="*">
-		<xsl:copy-of select="." />
+	<!-- we need to apply templates to sub-elements, just in case someone wrapped a native agavi element and processed that with xsl, for example -->
+	<!-- so we cannot use copy-of here -->
+	<!-- node() and the copy will mean that everything is copied, even text nodes etc -->
+	<xsl:template match="node()|@*">
+		<xsl:copy>
+			<xsl:apply-templates select="node()|@*"/>
+		</xsl:copy>
 	</xsl:template>
 	
 </xsl:stylesheet>

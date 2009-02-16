@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
-	<configuration>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
+	<ae:configuration>
 
 		<system_actions>
 
@@ -57,15 +57,15 @@
 			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
 		</exception_templates>
 
-	</configuration>
+	</ae:configuration>
 
-	<configuration environment="development.*">
+	<ae:configuration environment="development.*">
 		<settings>
 			<setting name="debug">true</setting>
 		</settings>
-	</configuration>
+	</ae:configuration>
 
-	<configuration environment="production.*">
+	<ae:configuration environment="production.*">
 		<exception_templates>
 			<!-- a different exception template for production -->
 			<!-- it really doesn't do much -->
@@ -73,5 +73,5 @@
 			<!-- for the web, we want one that returns a 500 status -->
 			<exception_template context="web">%core.template_dir%/exceptions/web.php</exception_template>
 		</exception_templates>
-	</configuration>
-</configurations>
+	</ae:configuration>
+</ae:configurations>

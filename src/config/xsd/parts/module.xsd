@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/module/1.0"
+	targetNamespace="http://agavi.org/agavi/config/parts/module/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="../_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	           schemaLocation="../_envelope.xsd" />
+
+	<!-- Unfortunately XML Schema does not have the capability to restrict mixed
+	     content, so this is the best we can do. In Relax NG, the syntax would
+	     look something like:
+
+	     <choice>
+	       <ref name="envelope_1_0:parameters" />
+	       <text />
+	     </choice>
+
+	     Here we allow parameters mixed with text. This might be useful in the
+	     future anyway. -->
+	<xs:complexType name="setting" mixed="true">
+		<xs:group ref="envelope_1_0:parameters" />
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="settings">
+		<xs:sequence>
+			<xs:element name="setting" type="setting"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="module">
+		<xs:choice>
+			<xs:element name="settings" type="settings"
+			            minOccurs="0" />
+			<xs:element name="setting" type="setting"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:choice>
+		<xs:attribute name="enabled" type="types_1_0:boolean" use="required" />
+	</xs:complexType>
+
+	<xs:group name="configuration">
+		<xs:sequence>
+			<xs:element name="module" type="module" />
+		</xs:sequence>
+	</xs:group>
+
+</xs:schema>

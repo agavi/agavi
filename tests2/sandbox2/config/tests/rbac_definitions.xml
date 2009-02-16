@@ -2,7 +2,11 @@
 <configurations xmlns="http://agavi.org/agavi/1.0/config">
 	<configuration>
 		<roles>
-			<role name="administrator" />
+			<role name="administrator">
+				<permissions>
+					<permission>admin</permission>
+				</permissions>
+			</role>
 			<role name="guest">
 				<permissions>
 					<permission>photos.list</permission>

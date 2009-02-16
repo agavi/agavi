@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -167,16 +167,14 @@ class AgaviOptionParser
 					$increment = $option['arguments'];
 					$name = $optionName;
 					$handler = $option['handler'];
-				}
-				else {
+				} else {
 					foreach($option['long_names'] as $name) {
 						if(strpos($source[$i], $this->longNamePrefix . $name . $this->nameSeparator) === 0) {
 							if($option['arguments'] === 1) {
 								$arguments[] = substr($source[$i], strpos($source[$i], $this->nameSeparator) + 1);
 								$name = $optionName;
 								$handler = $options['handler'];
-							}
-							else {
+							} else {
 								throw new AgaviOptionException(
 									sprintf('Unexpected number of arguments for %s (1 given, %d expected)', $name, $option['arguments'])
 								);
@@ -187,11 +185,10 @@ class AgaviOptionParser
 			}
 			
 			if($handler === null) {
-				if (strpos($source[$i], $this->shortNamePrefix) === 0 ||
+				if(strpos($source[$i], $this->shortNamePrefix) === 0 ||
 					strpos($source[$i], $this->longNamePrefix) === 0) {
 					throw new AgaviOptionException(sprintf('Unexpected option %s', $source[$i]));
-				}
-				else {
+				} else {
 					/* Accept arguments. */
 					break;
 				}

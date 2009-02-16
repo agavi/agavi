@@ -8,8 +8,7 @@ class AgaviArrayPathDefintionTest extends AgaviPhpUnitTestCase
 	 */
 	public function testGetPartsFromPath($path, $expected, $expectedException)
 	{
-		if (!empty($expectedException))
-		{
+		if(!empty($expectedException)) {
 			$this->setExpectedException($expectedException);
 		}
 		$this->assertEquals($expected, AgaviArrayPathDefinition::getPartsFromPath($path));
@@ -81,7 +80,7 @@ class AgaviArrayPathDefintionTest extends AgaviPhpUnitTestCase
 					),
 					'absolute' => true,
 				),
-				'AgaviException',
+				'InvalidArgumentException',
 			),
 			'brokenpath-2' => array(
 				'absolute[broken]]',
@@ -92,7 +91,7 @@ class AgaviArrayPathDefintionTest extends AgaviPhpUnitTestCase
 					),
 					'absolute' => true,
 				),
-				false,
+				'InvalidArgumentException',
 			),
 			'brokenpath-3' => array(
 				'absolute[[broken]',
@@ -103,7 +102,7 @@ class AgaviArrayPathDefintionTest extends AgaviPhpUnitTestCase
 					),
 					'absolute' => true,
 				),
-				false,
+				'InvalidArgumentException',
 			),
 			
 		);

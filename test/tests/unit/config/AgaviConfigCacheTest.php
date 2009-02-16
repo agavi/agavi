@@ -107,9 +107,9 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	}
 	
 	/**
-     * @expectedException AgaviUnreadableException
-     * this does not seem to work in isolation
-     */
+	 * @expectedException AgaviUnreadableException
+	 * this does not seem to work in isolation
+	 */
 	public function testAddNonexistantConfigHandlersFile()
 	{
 		$this->setExpectedException('AgaviUnreadableException');
@@ -127,7 +127,6 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	
 	public function testCallHandlers()
 	{
-		
 		$this->markTestIncomplete();
 	}
 	
@@ -211,7 +210,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	
 	public function testTicket941()
 	{
-		if (!extension_loaded('xdebug')) {
+		if(!extension_loaded('xdebug')) {
 			$this->markTestSkipped('This test check for an infinite loop, you need xdebug as protection.');
 		}
 		

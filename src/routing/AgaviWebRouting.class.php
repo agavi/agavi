@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -277,92 +277,71 @@ class AgaviWebRouting extends AgaviRouting
 				$params = array_merge($params, array(session_name() => session_id()));
 			}
 
-			if($route === null) {
-				if($this->isEnabled()) {
-					$routes = array_reverse($req->getAttribute('matched_routes', 'org.agavi.routing'));
-					$route = join('+', $routes);
-					$routeMatches = array();
-					foreach($routes as $myRoute) {
-						$r = $this->routes[$myRoute];
-						$routeMatches = array_merge($routeMatches, $r['matches']);
-					}
-					$params = array_merge($routeMatches, $params);
+			if($this->isEnabled()) {
+				// the route exists and routing is enabled, the parent method handles it
+
+				$append = '';
+
+				list($path, $usedParams, $options, $extraParams, $isNullRoute) = parent::gen($route, $params, $options);
+				
+				if($isNullRoute) {
+					// add the incoming parameters from the request uri for gen(null) and friends
+					$extraParams = array_merge($this->inputParameters, $extraParams);
 				}
-				$params = array_merge($this->inputParameters, $params);
-			}
-
-			$routes = $this->getAffectedRoutes($route);
-
-			if(count($routes)) {
-				if($this->isEnabled()) {
-					// the route exists and routing is enabled, the parent method handles it
-
-					$append = '';
-
-					list($path, $usedParams, $options, $extraParams) = parent::gen($routes, array_merge(array_map('rawurlencode', array_filter($params, array('AgaviToolkit', 'isNotArray'))), array_filter($params, 'is_null')), $options);
-
-					$p = $params;
-					// get the parameters which are not defined in this route an append them as query string
-					foreach($usedParams as $name => $value) {
-						if(isset($p[$name]) || array_key_exists($name, $p)) {
-							unset($p[$name]);
-						}
-					}
-					
-					// decode the extra params, not all of the rest
-					array_walk_recursive($extraParams, array($this, 'rawurldecodeCallback'));
-					
-					// and do not forget those set by routing callbacks
-					$p = array_merge($p, $extraParams);
-
-					if(count($p) > 0) {
-						$append = '?' . http_build_query($p, '', $aso);
-					}
-				} else {
-					// the route exists, but we must create a normal index.php?foo=bar URL.
-
-					// we collect the default parameters from the route and make sure
-					// new parameters don't overwrite already defined parameters
-					$defaults = array();
-
-					$ma = $req->getParameter('module_accessor');
-					$aa = $req->getParameter('action_accessor');
-
-					foreach($routes as $route) {
-						if(isset($this->routes[$route])) {
-							$r = $this->routes[$route];
-							$myDefaults = array();
-
-							foreach($r['opt']['defaults'] as $key => $default) {
-								$myDefaults[$key] = $default['val'];
-							}
-							if($r['opt']['module']) {
-								$myDefaults[$ma] = $r['opt']['module'];
-							}
-							if($r['opt']['action']) {
-								$myDefaults[$aa] = $r['opt']['action'];
-							}
-
-							$defaults = array_merge($myDefaults, $defaults);
-						}
-					}
-
-					$params = array_merge($defaults, $params);
-					$route = null;
+				if(count($extraParams) > 0) {
+					$append = '?' . http_build_query($extraParams, '', $aso);
 				}
-			}
-			// the route does not exist. we generate a normal index.php?foo=bar URL.
-
-			if($route === null) {
-				$path = $_SERVER['SCRIPT_NAME'];
-				$append = '?' . http_build_query($params, '', $aso);
 			} else {
-				if(!isset($path)) {
+				// the route exists, but we must create a normal index.php?foo=bar URL.
+
+				$isNullRoute = false;
+				$routes = $this->getAffectedRoutes($route, $isNullRoute);
+				if($isNullRoute) {
+					$params = array_merge($this->inputParameters, $params);
+				}
+				if(count($routes) == 0) {
 					$path = $route;
 				}
-				if(!isset($append)) {
-					$append = '?' . http_build_query($params, '', $aso);
+
+				// we collect the default parameters from the route and make sure
+				// new parameters don't overwrite already defined parameters
+				$defaults = array();
+
+				$ma = $req->getParameter('module_accessor');
+				$aa = $req->getParameter('action_accessor');
+
+				foreach($routes as $route) {
+					if(isset($this->routes[$route])) {
+						$r = $this->routes[$route];
+						$myDefaults = array();
+
+						foreach($r['opt']['defaults'] as $key => $default) {
+							$myDefaults[$key] = $default->getValue();
+						}
+						if($r['opt']['module']) {
+							$myDefaults[$ma] = $r['opt']['module'];
+						}
+						if($r['opt']['action']) {
+							$myDefaults[$aa] = $r['opt']['action'];
+						}
+
+						$defaults = array_merge($myDefaults, $defaults);
+					}
 				}
+
+				$params = array_merge($defaults, $params);
+			}
+			
+			if(!isset($path)) {
+				// the route does not exist. we generate a normal index.php?foo=bar URL.
+				$path = $_SERVER['SCRIPT_NAME'];
+			}
+			
+			if(!isset($path)) {
+				// routing was off; the name of the route is the input
+			}
+			if(!isset($append)) {
+				$append = '?' . http_build_query($params, '', $aso);
 			}
 
 			$retval = $path . $append;

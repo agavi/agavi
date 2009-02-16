@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -206,6 +206,19 @@ class AgaviWebRequest extends AgaviRequest
 	}
 
 	/**
+	 * Whether or not HTTPS was used for this request.
+	 *
+	 * @return     bool True, if it's an HTTPS request, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      0.11.6
+	 */
+	public function isHttps()
+	{
+		return $this->getUrlScheme() == 'https';
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
@@ -273,6 +286,8 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		parent::initialize($context, $parameters);
 
+		$rla = ini_get('register_long_arrays');
+
 		// very first thing to do: remove magic quotes
 		if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 			// check if we're on PHP < 5.2.8
@@ -292,7 +307,6 @@ class AgaviWebRequest extends AgaviRequest
 				);
 			}
 			
-			$rla = ini_get('register_long_arrays');
 			$_GET = self::clearMagicQuotes($_GET);
 			$_POST = self::clearMagicQuotes($_POST);
 			$_COOKIE = self::clearMagicQuotes($_COOKIE);
@@ -312,6 +326,7 @@ class AgaviWebRequest extends AgaviRequest
 			'SERVER_NAME' => 'SERVER_NAME',
 			'SERVER_PORT' => 'SERVER_PORT',
 			'SERVER_PROTOCOL' => 'SERVER_PROTOCOL',
+			'SERVER_SOFTWARE' => 'SERVER_SOFTWARE',
 		), (array)$this->getParameter('sources'));
 		$this->setParameter('sources', $sources);
 
@@ -322,6 +337,7 @@ class AgaviWebRequest extends AgaviRequest
 			'SERVER_NAME' => null,
 			'SERVER_PORT' => isset($parameters['sources']['SERVER_PORT']) ? null : $this->urlPort,
 			'SERVER_PROTOCOL' => isset($parameters['sources']['SERVER_PROTOCOL']) ? null : 'HTTP/1.0',
+			'SERVER_SOFTWARE' => null,
 		);
 
 		$methods = array_merge(array(
@@ -354,6 +370,25 @@ class AgaviWebRequest extends AgaviRequest
 			$this->urlHost = preg_replace('/\:' . preg_quote($port, '/') . '$/', '', $SERVER_NAME);
 		}
 
+		$_SERVER['SERVER_SOFTWARE'] = self::getSourceValue($sources['SERVER_SOFTWARE'], $sourceDefaults['SERVER_SOFTWARE']);
+		
+		if(isset($_SERVER['SERVER_SOFTWARE']) && preg_match('#^Apache(/\d+(\.\d+)?)?\.?$#', $_SERVER['SERVER_SOFTWARE'])) {
+			throw new AgaviException(
+				"You are running the Apache HTTP Server with a 'ServerTokens' configuration directive value of 'Minor' or lower.\n" .
+				"This directive controls the amount of version information Apache exposes about itself.\n" .
+				"Agavi needs detailed Apache version information to apply URL decoding and parsing workarounds specific to certain versions of Apache that exhibit buggy behavior.\n\n" .
+				"Please take one of the following measures to fix this problem:\n" .
+				"- raise your 'ServerTokens' level to 'Min' or higher in httpd.conf\n" .
+				"- set a static value for the request source 'SERVER_SOFTWARE' in factories.xml (for your environment)\n" .
+				"- set a value for \$_SERVER['SERVER_SOFTWARE'], e.g. in your pub/index.php\n\n" .
+				"For detailed instructions and examples on fixing this problem, especially for the factories.xml method which is recommended in case you do not have control over your server's httpd.conf, please refer to:\n" .
+				"http://trac.agavi.org/ticket/1029\n\n" .
+				"For more information on the 'ServerTokens' directive, please refer to:\n" .
+				"http://httpd.apache.org/docs/2.2/en/mod/core.html#servertokens\n\n" .
+			"For your reference, your SERVER_SOFTWARE string is currently '$_SERVER[SERVER_SOFTWARE]'."
+			);
+		}
+
 		if(isset($_SERVER['HTTP_X_REWRITE_URL']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$this->requestUri = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -372,6 +407,26 @@ class AgaviWebRequest extends AgaviRequest
 			$_SERVER['REQUEST_URI'] = $this->getRequestUri();
 		}
 
+		// okay, this is really bad
+		// Internet Explorer (many versions, many OSes) seem to be sending improperly urlencoded URLs to the server, in violation of the HTTP RFC
+		// this can cause a number of problems, most notably html special chars not being escaped and potentially ending up this way in the output
+		// the result is an XSS attack vector, e.g. on AgaviWebRouting::gen(null)
+		// so we escape those. but not the ampersand, or the query string gets messed up
+		// we also encode the backtick (Suhosin does this, too), and the space character
+		// in theory, we shouldn't encode the single quote either, since it's a reserved sub-delimiter as per RFC 3986 - however, that would allow injection again in documents that use single quotes as attribute delimiters, and it's up to implementations to encode sub-delimiters if they deem it necessary
+		// great, huh?
+		// more details:
+		// http://trac.agavi.org/ticket/1019
+		// http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0417
+		list($this->requestUri, $_SERVER['REQUEST_URI']) = str_replace(
+			array(' ',   '"',   '\'',  '<',   '>',   '`',   /*'&'*/),
+			array('%20', '%22', '%27', '%3C', '%3E', '%60', /*'%26'*/),
+			array($this->requestUri, $_SERVER['REQUEST_URI'])
+		);
+		if($rla) {
+			$GLOBALS['HTTP_SERVER_VARS']['REQUEST_URI'] = $this->getRequestUri();
+		}
+		
 		// 'scheme://authority' is necessary so parse_url doesn't stumble over '://' in the request URI
 		$parts = array_merge(array('path' => '', 'query' => ''), parse_url('scheme://authority' . $this->getRequestUri()));
 		$this->urlPath = $parts['path'];
@@ -379,18 +434,42 @@ class AgaviWebRequest extends AgaviRequest
 		unset($parts);
 
 		if($this->getMethod() == $methods['PUT']) {
-			// PUT. We now gotta set a flag for that and populate $_FILES manually
 
-			$putFile = tempnam(AgaviConfig::get('core.cache_dir'), "PUTUpload_");
-			$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($putFile, "wb"));
+			if(isset($_SERVER['CONTENT_TYPE']) && $this->getParameter('http_put_decode_urlencoded', true) && preg_match('#^application/x-www-form-urlencoded(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])) {
+				// urlencoded data was sent, we can decode that
+				parse_str(file_get_contents('php://input'), $_POST);
+				if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+					$_POST = self::clearMagicQuotes($_POST);
+				}
+			} else {
+				// some other data via PUT. we need to populate $_FILES manually
+				$putFile = tempnam(AgaviConfig::get('core.cache_dir'), "PUTUpload_");
+				$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($putFile, "wb"));
+				fclose($handle);
+
+				$_FILES = array(
+					$this->getParameter('http_put_file_name', 'put_file') => array(
+						'name' => $putFile,
+						'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
+						'size' => $size,
+						'tmp_name' => $putFile,
+						'error' => UPLOAD_ERR_OK,
+						'is_uploaded_file' => false,
+					)
+				);
+			}
+		} elseif($this->getMethod() == $methods['POST'] && (!isset($_SERVER['CONTENT_TYPE']) || (isset($_SERVER['CONTENT_TYPE']) && !preg_match('#^(application/x-www-form-urlencoded|multipart/form-data)(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])))) {
+			// POST, but no regular urlencoded data or file upload. lets put the request payload into a file
+			$postFile = tempnam(AgaviConfig::get('core.cache_dir'), "POSTUpload_");
+			$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($postFile, "wb"));
 			fclose($handle);
 
 			$_FILES = array(
-				$this->getParameter('http_put_file_name', 'put_file') => array(
-					'name' => $putFile,
-					'type' => 'application/octet-stream',
+				$this->getParameter('http_post_file_name', 'post_file') => array(
+					'name' => $postFile,
+					'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
 					'size' => $size,
-					'tmp_name' => $putFile,
+					'tmp_name' => $postFile,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
 				)
@@ -401,6 +480,9 @@ class AgaviWebRequest extends AgaviRequest
 		foreach($_SERVER as $key => $value) {
 			if(substr($key, 0, 5) == 'HTTP_') {
 				$headers[substr($key, 5)] = $value;
+			} elseif($key == 'CONTENT_TYPE' || $key == 'CONTENT_LENGTH') {
+				// yeah, whatever, PHP...
+				$headers[$key] = $value;
 			}
 		}
 
@@ -435,7 +517,7 @@ class AgaviWebRequest extends AgaviRequest
 			}
 			
 			foreach($_SERVER as $key => $value) {
-				if(substr($key, 0, 5) == 'HTTP_') {
+				if(substr($key, 0, 5) == 'HTTP_' || $key == 'CONTENT_TYPE' || $key == 'CONTENT_LENGTH') {
 					unset($_SERVER[$key]);
 					unset($_ENV[$key]);
 					if($rla) {

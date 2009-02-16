@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
-	<configuration>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
+	<ae:configuration>
 		
 		<system_actions>
 			
@@ -43,7 +43,7 @@
 			<setting name="debug">false</setting>
 			
 			<setting name="use_database">false</setting>
-			<setting name="use_logging">true</setting>
+			<setting name="use_logging">false</setting>
 			<setting name="use_security">true</setting>
 			<setting name="use_translation">true</setting>
 		</settings>
@@ -53,19 +53,19 @@
 			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
 		</exception_templates>
 
-	</configuration>
+	</ae:configuration>
 	
-	<configuration environment="development.*">
+	<ae:configuration environment="development.*">
 		<settings>
 			<setting name="debug">true</setting>
 		</settings>
-	</configuration>
+	</ae:configuration>
 	
-	<configuration environment="testing.*">
+	<ae:configuration environment="testing.*">
 		<settings>
 			<setting name="default_context">web</setting>
 		</settings>
-	</configuration>
+	</ae:configuration>
 	
 	
-</configurations>
+</ae:configurations>

@@ -92,9 +92,88 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 	
 	public function testLoggingConfigHandler()
 	{
+		// taken from a compiled config_handlers.xml
+		$handlerInfo = array (
+			'class' => 'AgaviLoggingConfigHandler',
+			'parameters' => 
+			array (
+			),
+			'transformations' => 
+			array (
+				'single' => 
+				array (
+					0 => AgaviConfig::get('core.agavi_dir') . '/config/xsl/logging.xsl',
+				),
+				'compilation' => 
+				array (
+				),
+			),
+			'validations' => 
+			array (
+				'single' => 
+				array (
+					'transformations_before' => 
+					array (
+						'relax_ng' => 
+						array (
+						),
+						'schematron' => 
+						array (
+						),
+						'xml_schema' => 
+						array (
+						),
+					),
+					'transformations_after' => 
+					array (
+						'relax_ng' => 
+						array (
+						),
+						'schematron' => 
+						array (
+						),
+						'xml_schema' => 
+						array (
+							0 => AgaviConfig::get('core.agavi_dir') . '/config/xsd/logging.xsd',
+						),
+					),
+				),
+				'compilation' => 
+				array (
+					'transformations_before' => 
+					array (
+						'relax_ng' => 
+						array (
+						),
+						'schematron' => 
+						array (
+						),
+						'xml_schema' => 
+						array (
+						),
+					),
+					'transformations_after' => 
+					array (
+						'relax_ng' => 
+						array (
+						),
+						'schematron' => 
+						array (
+						),
+						'xml_schema' => 
+						array (
+						),
+					),
+				),
+			),
+		);
+		
 		$LCH = new AgaviLoggingConfigHandler();
-
-		$this->includeCode($LCH->execute(AgaviConfig::get('core.config_dir') . '/tests/logging.xml'));
+		// a new-style config handler
+		// it does not parse the config itself; instead, it is given a complete and merged DOM document
+		$doc = AgaviXmlConfigParser::run(AgaviConfig::get('core.config_dir') . '/tests/logging.xml', AgaviConfig::get('core.environment'), null, $handlerInfo['transformations'], $handlerInfo['validations']);
+		$LCH->initialize(null, $handlerInfo['parameters']);
+		$cfg = $this->includeCode($LCH->execute($doc));
 
 		$test1 = $this->context->getLoggerManager()->getLogger('test1');
 		$test2 = $this->context->getLoggerManager()->getLogger('test2');

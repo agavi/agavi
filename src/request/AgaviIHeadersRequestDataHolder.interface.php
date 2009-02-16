@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -29,11 +29,11 @@
  */
 interface AgaviIHeadersRequestDataHolder
 {
-	public function hasHeader($header);
+	public function hasHeader($name);
 	
-	public function isHeaderValueEmpty($header);
+	public function isHeaderValueEmpty($name);
 	
-	public function &getHeader($header, $default = null);
+	public function &getHeader($name, $default = null);
 	
 	public function &getHeaders();
 	
@@ -43,7 +43,7 @@ interface AgaviIHeadersRequestDataHolder
 	
 	public function setHeaders(array $headers);
 	
-	public function &removeHeader($header);
+	public function &removeHeader($name);
 	
 	public function clearHeaders();
 	

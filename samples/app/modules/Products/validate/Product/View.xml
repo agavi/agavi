@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+	parent="%core.module_dir%/Products/config/validators.xml"
+>
+	<ae:configuration>
+		<validators>
+
+			<!-- basics: id must be a number. not strictly necessary as the ProductValidator catches that situation, too, but it won't hurt either -->
+			<validator class="number">
+				<argument>id</argument>
+			</validator>
+
+			<!-- this validator negates the result of the inner validator, and does not throw any errors (severity="info"). -->
+			<!-- we use this information to decide whether or not to run the product validator below with or without a name as an argument -->
+			<validator class="not" severity="info" provides="name_not_given">
+				<!-- an optional name must be given -->
+				<!-- if that is the case, then our product validator is run in a mode where it validates the given name, too -->
+				<validator class="string" required="false" provides="name_given">
+					<argument>name</argument>
+					<ae:parameter name="min">1</ae:parameter>
+				</validator>
+			</validator>
+
+			<validator name="product_id_name" class="AgaviSampleAppProductValidator" depends="name_given">
+				<argument name="id">id</argument>
+				<argument name="name">name</argument>
+				<ae:parameter name="export">product</ae:parameter>
+			</validator>
+
+			<validator name="product_id" class="AgaviSampleAppProductValidator" depends="name_not_given">
+				<argument>id</argument>
+				<ae:parameter name="export">product</ae:parameter>
+			</validator>
+
+		</validators>
+	</ae:configuration>
+</ae:configurations>

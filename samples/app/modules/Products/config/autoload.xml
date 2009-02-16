@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+	<ae:configuration>
+		<autoloads>
+			<autoload name="AgaviSampleAppProductsBaseAction">%core.module_dir%/Products/lib/action/AgaviSampleAppProductsBaseAction.class.php</autoload>
+			<autoload name="AgaviSampleAppProductsBaseModel">%core.module_dir%/Products/lib/model/AgaviSampleAppProductsBaseModel.class.php</autoload>
+			<autoload name="AgaviSampleAppProductsBaseView">%core.module_dir%/Products/lib/view/AgaviSampleAppProductsBaseView.class.php</autoload>
+		</autoloads>
+	</ae:configuration>
+</ae:configurations>

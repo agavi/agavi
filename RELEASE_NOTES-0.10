@@ -1,0 +1,89 @@
+AGAVI RELEASE NOTES (0.10.x)
+============================
+
+Version 0.10.0 - December 20, 2005
+==================================
+
+The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG
+
+Core
+----
+Several changes to the system core and its structure have been made since 0.9.0. Most noticeably, the core configuration has been shifted away from configuring Controllers to configuring Contexts. Thus, factories.ini has been dropped in favor of a contexts.ini, and the way initial requests are dispatched has been altered to support the new functionality. See the samples directory to learn how to use the new structure. This very powerful new structure allows for much more flexibility than before, especially because you can define contexts and quickly change between them (for example, you could have a "development" and a "production" context with different storage settings or execution filters).
+
+Controllers may now notify registered listener classes on system shutdown. Use Controller::addShutdownListener() to add a listener that implements the ShutdownListener interface to the list of callbacks.
+
+Action and View class names now support more naming schemes for maximum efficency when using Sub-Actions. The class name for webapp/modules/Default/Yellow/Sub/MarineAction.class.php can now be any of the following: MarineAction, Default_MarineAction, Yellow_Sub_MarineAction, Default_YellowSubMarineAction. The code templates used by the "agavi" helper script now use the last naming scheme. The Agavi team recommends to use this scheme for maximum flexibility and avoiding class name collisions when using Slots or forwarding to other actions. View classes can be named accordingly (MarineInputView, Default_YellowSubMarineSuccessView etc).
+
+ExecutionFilters are now user-definable in contexts.ini. This allows developers to build and use their own execution filters and integrate caching mechanisms and other features into the system core.
+
+Models can now be implemented as singletons. The framework will auto-detect a singleton implementation if it extends SingletonModel instead of Model. Developers do not have to implement the getInstance() method, as the framework will take care of managing instances automatically.
+
+Security
+--------
+Actions may now return more than one credential the User needs to have, as well as lists of credentials out of which the User needs to have at least one. To make use of this capability, return an array of strings in your Action's getCredential() method. If you wish to specify a list of credentials and require the User to have at least one of them, use an array instead of a string. Some examples:
+return array('editor', 'tech'); // User must have "editor" and "tech" credential
+return array(array('male', 'female')); // User must have either "male" or "female" credential (or both... consider this sample a joke toolkit)
+return array('editor', array('tech', 'sports')); // only for Tech or Sports Editors. Or... you guessed it! Both.
+
+Configuration
+-------------
+A new ReturnArrayConfigHandler makes it easier to deal with home-made config files. It is able to convert keys of whatever depth to a multi-dimensional array and builds numeric arrays if you use numbers as keys:
+ [cfgsample]
+  foo.bar.one     = "yay"
+  foo.bar.two     = "hooray"
+  settings.0.name = "some"
+  settings.0.type = "thing"
+Will result in
+ array('cfgsample' => array(
+  'foo' => array(
+   'bar' => array(
+    'one' => 'yay',
+    'two' => 'hooray'
+   )
+  ),
+  'settings' => array(
+   0 => array(
+    'name' => 'some',
+    'type' => 'thing'
+   )
+  )
+ ))
+As usual, sections may be used (or not!). If you supply param.real_booleans = true, it will convert "true", "false", "yes", "no", "on" and "off" to their respective booleans. To get the contents of a config file, do
+ $config = include(ConfigHandler::checkConfig('path/to/my/config.ini'));
+As usual, you have to register the configuration file in config_handlers.ini. Use ReturnArrayConfigHandler as the handler name.
+
+Database
+--------
+As of Agavi 0.10.0, all database drivers will use "username" as the parameter name for storing the database user name. You might have to adapt your databases.ini settings accordingly if you are using a driver that previously used "user" as the parameter name.
+
+Agavi 0.10.0 ships with new drivers for AdoDB and PDO. For detailed usage information, refer to the sample databases.ini and to the documentation comments inside the database driver class files.
+
+Also, Propel is now tightly integrated with the framework. The new PropelDatabase driver allows you to benefit from on-demand loading and initialization of Propel, as well as transparent access via Creole using the same configuration file.
+After enabling the autoloading mechanism in autoload.ini and registering a propel runtime configuration file in database.ini, including and initializing Propel by hand is no longer necessary; a call to getConnection() will retrieve a Creole connection instance which uses the same connection as Propel.
+For maximum flexibility and convenience, it is strongly recommended that you add the Criteria class and all of your OM Object and Peer classes to autoload.ini. This will also guarantee maximum performance.
+Please note that this new feature requires  Propel 1.2.0 or later and Creole 1.0.3 or later to work.
+
+Logging
+-------
+Agavi 0.10.0 features a brand-new logging infrastructure. All aspects of logging are configurable via the logging.ini configuration file. Loggers handle all the logging operations and use Layouts to format messages and output them to the desired destination using Appenders. 
+
+Request
+-------
+WebRequest now supports setting and retrieving Cookies. Please note that while the parameter order of setCookie is identical to PHP's internal setcookie() method, WebRequest::setCookie() requires a lifetime to be passed in instead of an expiry date.
+
+A new HTTPSRequest (extends WebRequest) will allow developers to access HTTPS connection information. To simply detect if a connection has been secured via SSL or TLS, use the isHTTPS() method. Advanced information on certificates etc. is available through several methods; refer to the class file documentation for further reference.
+
+Session
+-------
+A CreoleSessionStorage class has been added. For usage information, refer to the class file's documentation comments.
+
+The Session ID and session cookie parameters can now be fully configured.
+
+View
+----
+A FormPHPView features various helper methods for creating form elements inside templates.
+
+An XSLView has been added.
+
+Visibility of previously internal methods in all Views have been made public and helper methods to control decorators and slots at runtime have been added to allow for more control in ExecutionFilters.
+

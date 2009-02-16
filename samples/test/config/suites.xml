@@ -4,9 +4,9 @@
 		<suites>
 			<suite name="Default">
 				<testfiles>
-					<testfile>unit/PriceFinderModelTest.php</testfile>
-					<testfile>fragment/SearchEngineSpamActionTest.php</testfile>
-					<testfile>fragment/SearchEngineSpamSuccessViewTest.php</testfile>
+					<testfile>unit/ProductFinderModelTest.php</testfile>
+					<testfile>fragment/Products/Product/ViewActionTest.php</testfile>
+					<testfile>fragment/Products/Product/ViewSuccessViewTest.php</testfile>
 					<testfile>fragment/LoginSuccessViewTest.php</testfile>
 					<testfile>flow/LoginFlowTest.php</testfile>
 				</testfiles>

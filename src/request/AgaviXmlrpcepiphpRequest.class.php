@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -58,12 +58,14 @@ class AgaviXmlrpcepiphpRequest extends AgaviWebserviceRequest
 			constant("$rdhc::SOURCE_PARAMETERS") => (array)$decoded,
 		));
 		
-		$split = explode(':', $this->invokedMethod);
-		if(count($split) == 2) {
-			$rd->setParameter($this->getParameter('module_accessor'), $split[0]);
-			$rd->setParameter($this->getParameter('action_accessor'), $split[1]);
-		} else {
-			$rd->setParameter($this->getParameter('action_accessor'), $this->invokedMethod);
+		if($this->getParameter('use_module_action_parameters')) {
+			$split = explode(':', $this->invokedMethod);
+			if(count($split) == 2) {
+				$rd->setParameter($this->getParameter('module_accessor'), $split[0]);
+				$rd->setParameter($this->getParameter('action_accessor'), $split[1]);
+			} else {
+				$rd->setParameter($this->getParameter('action_accessor'), $this->invokedMethod);
+			}
 		}
 		
 		$this->setRequestData($rd);

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -43,6 +43,44 @@ class AgaviLocale extends AgaviParameterHolder
 	 * @var        string The identifier of this locale.
 	 */
 	protected $identifier = null;
+
+	/**
+	 * Returns the locale option string containing the timezone option set 
+	 * to the timezone of this calendar.
+	 * 
+	 * @param      AgaviCalendar|DateTime|int The item to determine the timezone
+	 *                                        from
+	 * @param      string The prefix which will be applied to the timezone option
+	 *                    string. Use ';' here if you intend to use several 
+	 *                    locale options and append the result of this method
+	 *                    to your locale string.
+	 *
+	 * @return     string Returns an empty string (NOT containing the $prefix)
+	 *                    if $item is invalid or no timezone could be determined
+	 * 
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function getTimeZoneOptionString($item, $prefix = '@')
+	{
+		$tzId = '';
+		if($item instanceof AgaviCalendar) {
+			$tzId = $item->getTimeZone()->getResolvedId();
+		} elseif($item instanceof DateTime) {
+			$tzId = $item->getTimezone()->getName();
+			if(preg_match('/^[+-][0-9]+/', $tzId)) {
+				$tzId = 'GMT' . $tzId;
+			}
+		} elseif(is_int($item)) {
+			$tzId = 'UTC';
+		}
+		
+		if($tzId) {
+			return $prefix . 'timezone=' . $tzId;
+		} else {
+			return '';
+		}
+	}
 
 	/**
 	 * Initialize this Locale.

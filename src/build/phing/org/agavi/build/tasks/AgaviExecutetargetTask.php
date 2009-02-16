@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -95,8 +95,7 @@ class AgaviExecutetargetTask extends AgaviTask
 		catch(BuildException $be) {
 			if($this->exceptionsFatal) {
 				throw $be;
-			}
-			else {
+			} else {
 				$this->log('Ignoring build exception: ' . $be->getMessage(), Project::MSG_WARN);
 				$this->log('Continuing build', Project::MSG_INFO);
 			}

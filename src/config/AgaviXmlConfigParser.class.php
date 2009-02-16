@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -207,6 +207,7 @@ class AgaviXmlConfigParser
 		$isAgaviConfigFormat = true;
 		// build an array of documents (this one, and the parents)
 		$docs = array();
+		$previousPaths = array();
 		$nextPath = $path;
 		while($nextPath !== null) {
 			// run the single stage parser
@@ -224,7 +225,17 @@ class AgaviXmlConfigParser
 			// is it an Agavi <configurations> element? does it have a parent attribute? yes? good. parse that next
 			// TODO: support future namespaces
 			if($isAgaviConfigFormat && $doc->documentElement->hasAttribute('parent')) {
-				$nextPath = AgaviToolkit::literalize($doc->documentElement->getAttribute('parent'));
+				$theNextPath = AgaviToolkit::literalize($doc->documentElement->getAttribute('parent'));
+				
+				// no infinite loop plz, kthx
+				if($nextPath === $theNextPath) {
+					throw new AgaviParseException(sprintf("Agavi detected an infinite loop while processing parent configuration files of \n%s\n\nFile\n%s\nincludes itself as a parent.", $path, $theNextPath));
+				} elseif(isset($previousPaths[$theNextPath])) {
+					throw new AgaviParseException(sprintf("Agavi detected an infinite loop while processing parent configuration files of \n%s\n\nFile\n%s\nhas previously been included by\n%s", $path, $theNextPath, $previousPaths[$theNextPath]));
+				} else {
+					$previousPaths[$theNextPath] = $nextPath;
+					$nextPath = $theNextPath;
+				}
 			} else {
 				$nextPath = null;
 			}
@@ -696,18 +707,28 @@ class AgaviXmlConfigParser
 			return;
 		}
 		
+		$errors = array();
+		
 		foreach($validationInfo as $type => $files) {
-			switch($type) {
-				case self::VALIDATION_TYPE_XMLSCHEMA:
-					self::validateXmlschema($document, (array) $files);
-					break;
-				case self::VALIDATION_TYPE_RELAXNG:
-					self::validateRelaxng($document, (array) $files);
-					break;
-				case self::VALIDATION_TYPE_SCHEMATRON:
-					self::validateSchematron($document, $environment, $context, (array) $files);
-					break;
+			try {
+				switch($type) {
+					case self::VALIDATION_TYPE_XMLSCHEMA:
+						self::validateXmlschema($document, (array) $files);
+						break;
+					case self::VALIDATION_TYPE_RELAXNG:
+						self::validateRelaxng($document, (array) $files);
+						break;
+					case self::VALIDATION_TYPE_SCHEMATRON:
+						self::validateSchematron($document, $environment, $context, (array) $files);
+						break;
+				}
+			} catch(AgaviParseException $e) {
+				$errors[] = $e->getMessage();
 			}
+		}
+		
+		if($errors) {
+			throw new AgaviParseException(sprintf('Validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, implode("\n\n", $errors)));
 		}
 	}
 
@@ -794,7 +815,7 @@ class AgaviXmlConfigParser
 			try {
 				@$document->schemaValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: %s', $document->documentURI, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()));
 			}
 		}
 	}
@@ -815,7 +836,7 @@ class AgaviXmlConfigParser
 			try {
 				@$document->schemaValidateSource($validationSource);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed: ' . "\n\n%s", $document->documentURI, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()));
 			}
 		}
 	}
@@ -841,7 +862,7 @@ class AgaviXmlConfigParser
 			try {
 				@$document->relaxNGValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed: ' . "\n\n%s", $document->documentURI, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()));
 			}
 		}
 	}
@@ -894,19 +915,31 @@ class AgaviXmlConfigParser
 			try {
 				$result = $schematron->transform($sch);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: %s', $document->documentURI, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Transformation failed: %s', $document->documentURI, $e->getMessage()));
 			}
 			
 			// validation ran okay, now we need to look at the result document to see if there are errors
 			$xpath = $result->getXpath();
 			$xpath->registerNamespace('svrl', self::NAMESPACE_SVRL_ISO);
 			
-			$results = $xpath->query('//svrl:failed-assert | //svrl:successful-report');
+			$results = $xpath->query('/svrl:schematron-output/svrl:failed-assert/svrl:text');
 			if($results->length) {
-				// TODO: grab error info from <svrl:failed-assert> and <svrl:successful-report> elements. note that the child <svrl:text> element is optional. also, the <sch:pattern> can have a "name" attribute, but that value never occurs in an SVRL result...
-				$errors = array();
+				$errors = array('Failed assertions:');
 				
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed due to the following error%s:' . "\n\n%s", $document->documentURI, count($errors) > 1 ? 's' : '', implode("\n", $errors)));
+				foreach($results as $result) {
+					$errors[] = $result->nodeValue;
+				}
+				
+				$results = $xpath->query('/svrl:schematron-output/svrl:successful-report/svrl:text');
+				if($results->length) {
+					$errors[] = '';
+					$errors[] = 'Successful reports:';
+					foreach($results as $result) {
+						$errors[] = $result->nodeValue;
+					}
+				}
+				
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, implode("\n", $errors)));
 			}
 		}
 	}

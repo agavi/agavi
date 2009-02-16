@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -34,6 +34,7 @@ class AgaviWriteconfigurationTask extends AgaviTask
 	protected $file = null;
 	protected $path = null;
 	protected $value = null;
+	protected $namespace = null;
 	
 	/**
 	 * Sets the file to modify.
@@ -64,6 +65,15 @@ class AgaviWriteconfigurationTask extends AgaviTask
 	{
 		$this->value = $value;
 	}
+
+	/**
+	 * Sets the document namespace for this task.
+	 *
+	 * @param      string The document namespace.
+	 */
+	public function setNamespace($namespace) {
+		$this->namespace = $namespace;
+	}
 	
 	/**
 	 * Executes this task.
@@ -85,7 +95,10 @@ class AgaviWriteconfigurationTask extends AgaviTask
 		$document->load($this->file->getAbsolutePath());
 		
 		$path = new DOMXPath($document);
-		$path->registerNamespace('agavi', $document->documentElement->namespaceURI);
+		$path->registerNamespace('envelope', 'http://agavi.org/agavi/config/global/envelope/1.0');
+		if($this->namespace !== null) {
+			$path->registerNamespace('document', $this->namespace);
+		}
 		
 		$entries = $path->query($this->path);
 		foreach($entries as $entry) {

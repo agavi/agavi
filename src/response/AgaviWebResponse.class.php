@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -153,6 +153,13 @@ class AgaviWebResponse extends AgaviResponse
 	{
 		parent::initialize($context, $parameters);
 		
+		$request = $context->getRequest();
+		
+		// if 'cookie_secure' is set, and null, then we need to set whatever AgaviWebRequest::isHttps() returns
+		if(array_key_exists('cookie_secure', $parameters) && $parameters['cookie_secure'] === null) {
+			$parameters['cookie_secure'] = $request->isHttps();
+		}
+		
 		$this->setParameters(array(
 			'cookie_lifetime' => isset($parameters['cookie_lifetime']) ? $parameters['cookie_lifetime'] : 0,
 			'cookie_path'     => isset($parameters['cookie_path'])     ? $parameters['cookie_path']     : null,
@@ -161,7 +168,7 @@ class AgaviWebResponse extends AgaviResponse
 			'cookie_httponly' => isset($parameters['cookie_httponly']) ? $parameters['cookie_httponly'] : false,
 		));
 		
-		switch($context->getRequest()->getProtocol()) {
+		switch($request->getProtocol()) {
 			case 'HTTP/1.1':
 				$this->httpStatusCodes = $this->http11StatusCodes;
 				break;
@@ -194,7 +201,7 @@ class AgaviWebResponse extends AgaviResponse
 			}
 			$this->setHttpHeader('Location', $location);
 			$this->setHttpStatusCode($this->redirect['code']);
-			if($this->getParameter('send_content_length', true) && !$this->hasHttpHeader('Content-Length')) {
+			if($this->getParameter('send_content_length', true) && !$this->hasHttpHeader('Content-Length') && !$this->getParameter('send_redirect_content', false)) {
 				$this->setHttpHeader('Content-Length', 0);
 			}
 		}
@@ -235,6 +242,19 @@ class AgaviWebResponse extends AgaviResponse
 		$this->httpHeaders = array();
 		$this->cookies = array();
 		$this->redirect = null;
+	}
+	
+	/**
+	 * Check whether or not some content is set.
+	 *
+	 * @return     bool If any content is set, false otherwise.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      0.11.6
+	 */
+	public function hasContent()
+	{
+		return $this->content !== null && $this->content !== '';
 	}
 	
 	/**

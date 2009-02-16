@@ -53,7 +53,7 @@ class DatabaseConfigHandlerTest extends ConfigHandlerTestBase
 			)
 		);
 
-		$this->includeCode($c= $DBCH->execute($document));
+		$this->includeCode($c = $DBCH->execute($document));
 
 		$this->assertType('DCHTestDatabase', $this->databases['test1']);
 		$params_ex = array(
