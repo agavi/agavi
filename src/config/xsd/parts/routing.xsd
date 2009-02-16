@@ -96,7 +96,7 @@
 			<xs:group ref="callbacks" />
 		</xs:sequence>
 		<xs:attribute name="name" type="route_name" />
-		<xs:attribute name="pattern" type="xs:string" use="required" />
+		<xs:attribute name="pattern" type="xs:string" />
 		<xs:attribute name="imply" type="xs:string" />
 		<xs:attribute name="cut" type="xs:string" />
 		<xs:attribute name="stop" type="xs:string" />
