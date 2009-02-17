@@ -99,7 +99,7 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 	protected function parseRoutes(AgaviRouting $routing, $routes, $parent = null)
 	{
 		foreach($routes as $route) {
-			$pattern = $route->getAttribute('pattern', '');
+			$pattern = $route->getAttribute('pattern');
 			$opts = array();
 			if($route->hasAttribute('imply'))					$opts['imply']				= AgaviToolkit::literalize($route->getAttribute('imply'));
 			if($route->hasAttribute('cut'))						$opts['cut']					= AgaviToolkit::literalize($route->getAttribute('cut'));

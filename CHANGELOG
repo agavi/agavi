@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 RC2 (February ??, 2008)
+-----------------------------
+
+CHG: Make route patterns mandatory again (#1047) (David)
+
+
 1.0.0 RC1 (February 16, 2009)
 -----------------------------
 
