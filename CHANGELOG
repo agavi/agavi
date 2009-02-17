@@ -6,6 +6,8 @@ AGAVI CHANGELOG
 
 CHG: Make route patterns mandatory again (#1047) (David)
 
+FIX: Default View code template sets wrong title attribute (#1048) (David)
+
 
 1.0.0 RC1 (February 16, 2009)
 -----------------------------
