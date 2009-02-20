@@ -5,6 +5,9 @@
 			<!-- this shows the welcome page after creating a project. you should remove it along with the entire "Welcome" module and the pub/welcome/ directory -->
 			<route pattern="" module="Welcome" action="Index" />
 			
+			<!-- default action for "/" -->
+			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
+			
 			<!-- an example for a CRUD-style set of routes -->
 			<route name="products" pattern="^/products" module="Products">
 				<!-- do not put the action into the parent route, because that one is not anchored at the end of the pattern! -->
@@ -25,9 +28,6 @@
 					</route>
 				</route>
 			</route>
-			
-			<!-- default action for "/" -->
-			<route pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</ae:configuration>
 </ae:configurations>
