@@ -264,7 +264,6 @@
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" override="true" />
 		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" override="true" />
 		<property name="templates.directory.pub" value="pub" override="true" />
-		<property name="templates.directory.pub.web" value="${templates.directory.pub}/web" override="true" />
 		<property name="templates.directory.templates" value="templates" override="true" />
 		<property name="templates.directory.defaults" value="defaults" override="true" />
 		<property name="templates.directory.defaults.app" value="${templates.directory.defaults}/app" override="true" />
@@ -607,7 +606,7 @@
 
 	<target name="project-wizard" description="Creates a project and corresponding default actions, views, and templates">
 		<agavi.execute-target name="project-create" />
-		<agavi.execute-target name="public-web-create" />
+		<agavi.execute-target name="public-create" />
 
 		<agavi.execute-target name="project-wizard-defaults" />
 
@@ -688,7 +687,6 @@
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" override="true" />
 		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" override="true" />
 		<property name="templates.directory.pub" value="pub" override="true" />
-		<property name="templates.directory.pub.web" value="${templates.directory.pub}/web" override="true" />
 		<property name="templates.directory.templates" value="templates" override="true" />
 		<property name="templates.directory.defaults" value="defaults" override="true" />
 		<property name="templates.directory.defaults.app" value="${templates.directory.defaults}/app" override="true" />
@@ -822,6 +820,18 @@
 					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>
+		</copy>
+		
+		<!-- Copy the stuff for pub/ to dev/pub, without modifications. -->
+		<agavi.select-path property="template.path" path="${templates.directory.pub}">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<copy todir="${project.directory}/${project.directory.dev.pub}">
+			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl$" to="\1/\2\3" />
+			<fileset dir="${template.path}">
+				<include name="**/*.tmpl" />
+			</fileset>
 		</copy>
 	</target>
 
@@ -976,24 +986,20 @@
 
 	<!--
 	  Public directory targets.
+	  This copies from dev/pub/, mind you!
 	  -->
 
-	<target name="public-web-create" depends="project-locate" description="Creates a Web structure for the public directory">
-		<agavi.select-path property="template.path" path="${templates.directory.pub.web}">
-			<from path="${templates.directory}" />
-			<from path="${agavi.directory.src.build.templates}" />
-		</agavi.select-path>
-
-		<agavi.input property="target.public-web-create.create-htaccess" message="Should a configured .htaccess file be generated" promptCharacter="?" default="n" failIfEmpty="true" ignoreIfSet="true" />
+	<target name="public-create" depends="project-locate" description="Creates a structure for the public directory">
+		<agavi.input property="target.public-create.create-htaccess" message="Should an Apache .htaccess file with rewrite rules be generated (y, n)" promptCharacter="?" default="n" failIfEmpty="true" ignoreIfSet="true" />
 		<if>
 			<or>
-				<equals arg1="${target.public-web-create.create-htaccess}" arg2="yes" trim="true" casesensitive="false" />
-				<equals arg1="${target.public-web-create.create-htaccess}" arg2="y" trim="true" casesensitive="false" />
-				<equals arg1="${target.public-web-create.create-htaccess}" arg2="true" trim="true" casesensitive="false" />
+				<equals arg1="${target.public-create.create-htaccess}" arg2="yes" trim="true" casesensitive="false" />
+				<equals arg1="${target.public-create.create-htaccess}" arg2="y" trim="true" casesensitive="false" />
+				<equals arg1="${target.public-create.create-htaccess}" arg2="true" trim="true" casesensitive="false" />
 			</or>
 			<then>
-				<agavi.input property="public.base" message="Document-root relative path to the Agavi index.php script" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-				<copy tofile="${project.directory}/${project.directory.pub}/.htaccess" file="${template.path}/dot.htaccess.tmpl.conditional">
+				<agavi.input property="public.base" message="Document-root relative path to '${project.directory}/${project.directory.pub}/'" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+				<copy tofile="${project.directory}/${project.directory.pub}/.htaccess" file="${project.directory}/${project.directory.dev.pub}/.htaccess">
 					<filterchain>
 						<replacetokens begintoken="%%" endtoken="%%">
 							<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -1007,24 +1013,18 @@
 		</if>
 
 		<copy todir="${project.directory}/${project.directory.pub}">
-			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl(?!\.conditional)$" to="\1/\2\3" />
-			<fileset dir="${template.path}">
-				<include name="**/*.tmpl" />
+			<mapper type="regexp" from="^(?!\.htaccess).+" to="\0" />
+			<fileset dir="${project.directory}/${project.directory.dev.pub}">
+				<include name="**/*" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="PUBLIC_BASE" value="${public.base}" />
 				</replacetokens>
 			</filterchain>
-		</copy>
-		<!-- Copy the same stuff to dev/pub, but without modifications. -->
-		<copy todir="${project.directory}/${project.directory.dev.pub}">
-			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl(?!\.conditional)$" to="\1/\2\3" />
-			<fileset dir="${template.path}">
-				<include name="**/*.tmpl" />
-			</fileset>
 		</copy>
 	</target>
 
