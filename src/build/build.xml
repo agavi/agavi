@@ -979,14 +979,35 @@
 	  -->
 
 	<target name="public-web-create" depends="project-locate" description="Creates a Web structure for the public directory">
-		<agavi.input property="public.base" message="Document-root relative path to the Agavi index.php script" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-
 		<agavi.select-path property="template.path" path="${templates.directory.pub.web}">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
+
+		<agavi.input property="target.public-web-create.create-htaccess" message="Should a configured .htaccess file be generated" promptCharacter="?" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<if>
+			<or>
+				<equals arg1="${target.public-web-create.create-htaccess}" arg2="yes" trim="true" casesensitive="false" />
+				<equals arg1="${target.public-web-create.create-htaccess}" arg2="y" trim="true" casesensitive="false" />
+				<equals arg1="${target.public-web-create.create-htaccess}" arg2="true" trim="true" casesensitive="false" />
+			</or>
+			<then>
+				<agavi.input property="public.base" message="Document-root relative path to the Agavi index.php script" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+				<copy tofile="${project.directory}/${project.directory.pub}/.htaccess" file="${template.path}/dot.htaccess.tmpl.conditional">
+					<filterchain>
+						<replacetokens begintoken="%%" endtoken="%%">
+							<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
+							<token key="PROJECT_LOCATION" value="${project.directory}" />
+							<token key="PROJECT_PREFIX" value="${project.prefix}" />
+							<token key="PUBLIC_BASE" value="${public.base}" />
+						</replacetokens>
+					</filterchain>
+				</copy>
+			</then>
+		</if>
+
 		<copy todir="${project.directory}/${project.directory.pub}">
-			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl" to="\1/\2\3" />
+			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl(?!\.conditional)$" to="\1/\2\3" />
 			<fileset dir="${template.path}">
 				<include name="**/*.tmpl" />
 			</fileset>
@@ -995,13 +1016,12 @@
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
-					<token key="PUBLIC_BASE" value="${public.base}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
 		<!-- Copy the same stuff to dev/pub, but without modifications. -->
 		<copy todir="${project.directory}/${project.directory.dev.pub}">
-			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl" to="\1/\2\3" />
+			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl(?!\.conditional)$" to="\1/\2\3" />
 			<fileset dir="${template.path}">
 				<include name="**/*.tmpl" />
 			</fileset>
