@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Allow passing of an explicit Validation Report object to Form Population Filter (#1050) (David)
 
+CHG: Improve best practices in generated projects (#1049) (David, Noah)
 CHG: Make route patterns mandatory again (#1047) (David)
 
 FIX: Default View code template sets wrong title attribute (#1048) (David)
