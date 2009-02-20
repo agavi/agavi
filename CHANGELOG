@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 RC2 (February ??, 2008)
 -----------------------------
 
+ADD: Allow passing of an explicit Validation Report object to Form Population Filter (#1050) (David)
+
 CHG: Make route patterns mandatory again (#1047) (David)
 
 FIX: Default View code template sets wrong title attribute (#1048) (David)

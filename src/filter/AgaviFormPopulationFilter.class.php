@@ -84,8 +84,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$rq = $this->getContext()->getRequest();
 
-		$vr = $container->getValidationManager()->getReport();
-
 		$cfg = $rq->getAttributes('org.agavi.filter.FormPopulationFilter');
 
 		$ot = $response->getOutputType();
@@ -121,6 +119,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$rurl = $cfg['force_request_url'];
 		} else {
 			$rurl = $rq->getUrl();
+		}
+
+		if(isset($cfg['validation_report']) && $cfg['validation_report'] instanceof AgaviValidationReport) {
+			$vr = $cfg['validation_report'];
+		} else {
+			$vr = $container->getValidationManager()->getReport();
 		}
 
 		$errorMessageRules = array();
