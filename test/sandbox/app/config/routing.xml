@@ -102,6 +102,8 @@
 				</route>
 			</route>
 			
+			<route name="ticket_1051" pattern="^/ticket_1051$" callback="Ticket1051RoutingCallback" />
+			
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</configuration>

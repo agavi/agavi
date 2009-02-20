@@ -693,6 +693,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		
 		return array(
 			'uri' => $uri,
+			'options' => $options,
 			'user_parameters' => $params,
 			'available_parameters' => $availableParams,
 			'matched_parameters' => $matchedParams,
@@ -1018,6 +1019,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$originalParams = $params;
 		
 		$assembledInformation = $this->assembleRoutes($options, $routes, $params);
+		
+		$options = $assembledInformation['options'];
 		
 		$params = $assembledInformation['user_parameters'];
 		
