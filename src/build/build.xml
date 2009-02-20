@@ -990,7 +990,7 @@
 	  -->
 
 	<target name="public-create" depends="project-locate" description="Creates a structure for the public directory">
-		<agavi.input property="target.public-create.create-htaccess" message="Should an Apache .htaccess file with rewrite rules be generated (y, n)" promptCharacter="?" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="target.public-create.create-htaccess" message="Should an Apache .htaccess file with rewrite rules be generated (y/n)" promptCharacter="?" default="n" failIfEmpty="true" ignoreIfSet="true" />
 		<if>
 			<or>
 				<equals arg1="${target.public-create.create-htaccess}" arg2="yes" trim="true" casesensitive="false" />
@@ -998,7 +998,7 @@
 				<equals arg1="${target.public-create.create-htaccess}" arg2="true" trim="true" casesensitive="false" />
 			</or>
 			<then>
-				<agavi.input property="public.base" message="Document-root relative path to '${project.directory}/${project.directory.pub}/'" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+				<agavi.input property="public.base" message="Document-root-relative path to '${project.directory}/${project.directory.pub}/'" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 				<copy tofile="${project.directory}/${project.directory.pub}/.htaccess" file="${project.directory}/${project.directory.dev.pub}/.htaccess">
 					<filterchain>
 						<replacetokens begintoken="%%" endtoken="%%">
