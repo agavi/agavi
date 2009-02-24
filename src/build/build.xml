@@ -990,6 +990,8 @@
 	  -->
 
 	<target name="public-create" depends="project-locate" description="Creates a structure for the public directory">
+		<agavi.input property="public.environment" message="Name of the environment to bootstrap in dispatcher scripts" default="development" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		
 		<agavi.input property="target.public-create.create-htaccess" message="Should an Apache .htaccess file with rewrite rules be generated (y/n)" promptCharacter="?" default="n" failIfEmpty="true" ignoreIfSet="true" />
 		<if>
 			<or>
@@ -1006,6 +1008,7 @@
 							<token key="PROJECT_LOCATION" value="${project.directory}" />
 							<token key="PROJECT_PREFIX" value="${project.prefix}" />
 							<token key="PUBLIC_BASE" value="${public.base}" />
+							<token key="PUBLIC_ENVIRONMENT" value="${public.environment}" />
 						</replacetokens>
 					</filterchain>
 				</copy>
@@ -1023,6 +1026,7 @@
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="PUBLIC_BASE" value="${public.base}" />
+					<token key="PUBLIC_ENVIRONMENT" value="${public.environment}" />
 				</replacetokens>
 			</filterchain>
 		</copy>

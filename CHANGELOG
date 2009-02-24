@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.0 (February ??, 2009)
 -------------------------
 
+ADD: Project configuration system's public-create should ask for the environment to bootstrap (#1053) (David)
+
 FIX: Project configuration system script does not accept multiple property definitions (#1052) (Noah)
 
 
