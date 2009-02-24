@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.0 (February ??, 2009)
+-------------------------
+
+FIX: Project configuration system script does not accept multiple property definitions (#1052) (Noah)
+
+
 1.0.0 RC2 (February 23, 2008)
 -----------------------------
 
