@@ -6,6 +6,8 @@ AGAVI CHANGELOG
 
 ADD: Project configuration system's public-create should ask for the environment to bootstrap (#1053) (David)
 
+CHG: AgaviReturnArrayConfigHandler should throw exception if config file is not in legacy 0.11 XML namespace (#1054) (David)
+
 FIX: Project configuration system script does not accept multiple property definitions (#1052) (Noah)
 
 
