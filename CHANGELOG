@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.0 (February ??, 2009)
+1.0.0 (February 25, 2009)
 -------------------------
 
 ADD: Project configuration system's public-create should ask for the environment to bootstrap (#1053) (David)
