@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.1 RC1 (March ??, 2009)
+--------------------------
+
+FIX: Execution filter may run into fatal error if no caching rules are defined for an output type, and the action is cached (#1055) (David)
+
+
 1.0.0 (February 25, 2009)
 -------------------------
 

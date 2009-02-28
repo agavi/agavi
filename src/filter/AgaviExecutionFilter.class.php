@@ -502,8 +502,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						// no. that means we must run the action again!
 						$isActionCached = false;
 						
-						// notify our callback so it can remove the lock on the view
-						$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_USELESS, $viewGroups, $config);
+						if($isCacheable) {
+							// notify our callback so it can remove the lock that's on the view
+							// but only if we're still marked as cacheable (if not, then that means the OT is not cacheable, so there wouldn't be a $viewGroups)
+							$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_USELESS, $viewGroups, $config);
+						}
 						// notify our callback so it can prevent the stampede that follows
 						$this->startedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_USELESS, $actionGroups, $config);
 						
