@@ -131,10 +131,10 @@ class AgaviController extends AgaviParameterHolder
 	/**
 	 * Initialize a module and load its autoload, module config etc.
 	 *
-	 * @param      string  The name of the module to initialize
+	 * @param      string The name of the module to initialize.
 	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0
+	 * @since      1.0.0
 	 */
 	public function initializeModule($moduleName)
 	{
