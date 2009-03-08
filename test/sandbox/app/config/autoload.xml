@@ -26,6 +26,9 @@
 		<autoload name="TestTicket698RoutingCallback">%core.app_dir%/../../lib/routing/TestTicket698RoutingCallback.class.php</autoload>
 		<autoload name="Ticket1051RoutingCallback">%core.app_dir%/../../lib/routing/Ticket1051RoutingCallback.class.php</autoload>
 		<autoload name="GenObjectRoutingCallback">%core.app_dir%/../../lib/routing/GenObjectRoutingCallback.class.php</autoload>
+		<autoload name="GenObjectRoutingCallback">%core.app_dir%/../../lib/routing/GenObjectRoutingCallback.class.php</autoload>
+		<autoload name="GenSetExtraParamRoutingCallback">%core.app_dir%/../../lib/routing/GenSetExtraParamRoutingCallback.class.php</autoload>
+		<autoload name="GenSetExtraParamRoutingValueRoutingCallback">%core.app_dir%/../../lib/routing/GenSetExtraParamRoutingValueRoutingCallback.class.php</autoload>
 		
 		<autoload name="AgaviTestingConfigCache">%core.app_dir%/../../lib/config/AgaviTestingConfigCache.class.php</autoload>
 		
