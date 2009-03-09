@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 1.0.1 RC1 (March ??, 2009)
 --------------------------
 
-FIX: Regression: if extra parameters are changed by AgaviRoutingCallback::onGenerate() the change doesn't have any effect (#1057) (Dominik)
+FIX: Regression: changes to extra parameters in AgaviRoutingCallback::onGenerate() have no effect (#1057) (Dominik)
 FIX: Regression: extra parameters added by AgaviRoutingCallback::onGenerate() are not added to routing string as e.g. query params (#1056) (Dominik)
 FIX: Execution filter may run into fatal error if no caching rules are defined for an output type, and the action is cached (#1055) (David)
 
