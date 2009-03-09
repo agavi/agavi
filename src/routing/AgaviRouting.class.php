@@ -612,7 +612,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						if(!$callbackInstance->onGenerate($defaultsCopy, $paramsCopy, $options)) {
 							continue 2;
 						}
-						// find all params that were changed by the callback
+						// find all params changed in the callback, but ignore unset() parameters since they will be filled in at a later stage (and doing something the them would prevent default values being inserted after unset()tting of a parameter)
 						$diff = array();
 						foreach($paramsCopy as $key => $value) {
 							if(!array_key_exists($key, $changedParamsCopy) || $changedParamsCopy[$key] !== $value) {
@@ -626,7 +626,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						if(!$callbackInstance->onGenerate($myDefaults, $params, $options)) {
 							continue 2;
 						}
-						// find all params changed in the callback
+						// find all params changed in the callback, but ignore unset() parameters since they will be filled in at a later stage (and doing something the them would prevent default values being inserted after unset()tting of a parameter)
 						$diff = array();
 						foreach($params as $key => $value) {
 							if(!array_key_exists($key, $paramsCopy) || $paramsCopy[$key] !== $value) {
@@ -1030,8 +1030,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$finalParams = $this->removeMatchingDefaults($options, $finalParams, $assembledInformation['available_parameters'], $assembledInformation['optional_parameters'], $assembledInformation['default_parameters']);
 		$finalParams = $this->updatePrefixAndPostfix($finalParams, $assembledInformation['default_parameters']);
 
-		// remember the params that are not in any pattern (could be extra query params, for example, set by a callback)
-		$extras = array_diff_key($originalParams, $finalParams);
+		// remember the params that are not in any pattern (could be extra query params, for example, set by a callback), use the parameter state after the callbacks have been run and defaults have been inserted. We also need to take originalParams into account for the case that a value was unset in a callback (which requires us to restore the old value). The array_merge is safe for this task since everything changed, etc appears in $params and overwrites the values from $originalParams
+		$extras = array_diff_key(array_merge($originalParams, $params), $finalParams);
 		// but since the values are expected as plain values and not routing values, convert the routing values back to 
 		// 'plain' values
 		foreach($extras as &$extra) {
