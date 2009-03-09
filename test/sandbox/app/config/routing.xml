@@ -53,6 +53,9 @@
 				<route name=".gen_set_extra_param" pattern="^/foo$" callback="GenSetExtraParamRoutingCallback" />
 				<route name=".gen_set_extra_param_routing_value" pattern="^/foo$" callback="GenSetExtraParamRoutingValueRoutingCallback" />
 				
+				<route name=".gen_change_extra_param" pattern="^/foo$" callback="GenChangeExtraParamRoutingCallback" />
+				<route name=".gen_change_extra_param_routing_value" pattern="^/foo$" callback="GenChangeExtraParamRoutingValueRoutingCallback" />
+				
 				<route name=".gen_expect_incoming_parameter_is_encoded_and_can_be_decoded" pattern="^/(string:\s+)" callback="GenDecodeParameterCallback" />
 				
 				<route name=".ticket_695" pattern="foo" source="bar" callback="TestTicket695RoutingCallback" />

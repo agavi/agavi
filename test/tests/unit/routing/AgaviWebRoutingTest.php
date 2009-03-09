@@ -205,6 +205,15 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('/callbacks/foo?id=12345', $url);
 	}
 	
+	public function testGenWithCallbackChangeExtraParam()
+	{
+		$url = $this->routing->gen('callbacks.gen_change_extra_param', array('extra' => 'extra data'));
+		$this->assertEquals('/callbacks/foo?extra=callback+data', $url);
+		$url = $this->routing->gen('callbacks.gen_change_extra_param_routing_value', array('extra' => 'extra data'));
+		$this->assertEquals('/callbacks/foo?extra=callback+data', $url);
+	}
+	
+	
 	public function testGenShortestPossibleUrl()
 	{
 		$url = $this->routing->gen('gen_shortest_possible_url', array(), array('omit_defaults' => true));

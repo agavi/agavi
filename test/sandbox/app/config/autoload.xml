@@ -29,6 +29,8 @@
 		<autoload name="GenObjectRoutingCallback">%core.app_dir%/../../lib/routing/GenObjectRoutingCallback.class.php</autoload>
 		<autoload name="GenSetExtraParamRoutingCallback">%core.app_dir%/../../lib/routing/GenSetExtraParamRoutingCallback.class.php</autoload>
 		<autoload name="GenSetExtraParamRoutingValueRoutingCallback">%core.app_dir%/../../lib/routing/GenSetExtraParamRoutingValueRoutingCallback.class.php</autoload>
+		<autoload name="GenChangeExtraParamRoutingCallback">%core.app_dir%/../../lib/routing/GenChangeExtraParamRoutingCallback.class.php</autoload>
+		<autoload name="GenChangeExtraParamRoutingValueRoutingCallback">%core.app_dir%/../../lib/routing/GenChangeExtraParamRoutingValueRoutingCallback.class.php</autoload>
 		
 		<autoload name="AgaviTestingConfigCache">%core.app_dir%/../../lib/config/AgaviTestingConfigCache.class.php</autoload>
 		
