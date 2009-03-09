@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.1 RC1 (March ??, 2009)
 --------------------------
 
+CHG: Update to PHPUnit 3.4.0beta1 (#1058) (David)
+
 FIX: Regression: changes to extra parameters in AgaviRoutingCallback::onGenerate() have no effect (#1057) (Dominik)
 FIX: Regression: extra parameters added by AgaviRoutingCallback::onGenerate() are not added to routing string as e.g. query params (#1056) (Dominik)
 FIX: Execution filter may run into fatal error if no caching rules are defined for an output type, and the action is cached (#1055) (David)
