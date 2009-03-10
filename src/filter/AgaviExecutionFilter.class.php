@@ -271,6 +271,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			case 'callback':
 				$val = $container->getActionInstance()->$name();
 				break;
+			case 'configuration_directive':
+				$val = AgaviConfig::get($name);
+				break;
 			case 'constant':
 				$val = constant($name);
 				break;
