@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.1 RC1 (March ??, 2009)
 --------------------------
 
+CHG: Generated WSDLs should not have namespace attribute on soap:body elements if service is document/literal (#1061) (David)
 CHG: Update to PHPUnit 3.4.0beta1 (#1058) (David)
 
 FIX: Form Population Filter inserts markup container for validation errors even if there are no messages to insert (#1060) (David)
