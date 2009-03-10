@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -118,9 +118,10 @@ final class AgaviToolkit
 	{
 		$equalAmount = 0;
 		$base = '';
-		for($i = 0; isset($baseString[$i]) && isset($compString[$i]) && $baseString[$i] == $compString[$i]; ++$i) {
+		$maxEqualAmount = min(strlen($baseString), strlen($compString));
+		for($i = 0; ($i < $maxEqualAmount) && $baseString[$i] == $compString[$i]; ++$i) {
 			$base .= $baseString[$i];
-			$equalAmount = $i;
+			$equalAmount = $i + 1;
 		}
 		return $base;
 	}
@@ -442,6 +443,52 @@ final class AgaviToolkit
 	public static function uniqid($prefix = '')
 	{
 		return uniqid($prefix, true);
+	}
+	
+	/**
+	 * returns the canonical name for a dot-separated view, action, modelname
+	 *
+	 * calling this function twice or more on a name still yields the right result
+	 *
+	 * @param      string the name
+	 * @return     string the canonical name
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 * 
+	 */
+	public static function canonicalName($name)
+	{
+		return str_replace('.', '/', $name);
+	}
+	
+	/**
+	 * Evaluates a given AgaviConfig per-module directive using the given info.
+	 *
+	 * @param      string The name of the module
+	 * @param      string The relevant name fragment of the directive
+	 * @param      array  The variables to expand in the directive value.
+	 *
+	 * @return     string The final value
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function evaluateModuleDirective($moduleName, $directiveNameFragment, $variables = array())
+	{
+		return AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(
+				AgaviConfig::get(
+					sprintf(
+						'modules.%s.%s',
+						strtolower($moduleName),
+						$directiveNameFragment
+					)
+				)
+			),
+			$variables
+		);
+		
 	}
 }
 

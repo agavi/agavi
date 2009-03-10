@@ -4,7 +4,10 @@
 		<handlers>
 			<handler pattern="%core.config_dir%/tests/importtest.xml" class="ImportTestHandler" />
 			<handler pattern="%core.config_dir%/tests/importtest_once.xml" class="ImportTestOnceHandler" />
-			<handler pattern="%core.config_dir%/tests/routing_*.xml" class="AgaviRoutingConfigHandler" />
+			<handler pattern="%core.config_dir%/tests/routing_*.xml" class="AgaviRoutingConfigHandler">
+				<validation>%core.agavi_dir%/config/xsd/routing.xsd</validation>
+				<transformation>%core.agavi_dir%/config/xsl/routing.xsl</transformation>
+			</handler>
 		</handlers>
 	</configuration>
 </configurations>

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -28,44 +28,52 @@
  * @version    $Id$
  */
 
-/**
- * Build a list of parameters passed to a method. Example:
- * array([object AgaviFilter], 'baz' => array(1, 2), 'log' => [resource stream])
- *
- * @param      array An (associative) array of variables.
- *
- * @return     string A string, possibly formatted using HTML "em" tags.
- *
- * @author     David Zülke <dz@bitxtender.com>
- * @since      0.11.0
- */
-function buildParamList($params)
-{
-	$retval = array();
-	foreach($params as $key => $param) {
-		if(is_string($key)) {
-			$key = htmlspecialchars(var_export($key, true) . ' => ');
-		} else {
-			$key = '';
+if(!function_exists('buildParamList')) {
+	/**
+	 * Build a list of parameters passed to a method. Example:
+	 * array([object AgaviFilter], 'baz' => array(1, 2), 'log' => [resource stream])
+	 *
+	 * @param      array An (associative) array of variables.
+	 *
+	 * @return     string A string, possibly formatted using HTML "em" tags.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	function buildParamList($params)
+	{
+		$retval = array();
+		foreach($params as $key => $param) {
+			if(is_string($key)) {
+				$key = htmlspecialchars(var_export($key, true) . ' => ');
+			} else {
+				$key = '';
+			}
+			switch(gettype($param)) {
+				case 'array':
+					$retval[] = $key . 'array(' . buildParamList($param) . ')';
+					break;
+				case 'object':
+					$retval[] = $key . '[object <em>' . get_class($param) . '</em>]';
+					break;
+				case 'resource':
+					$retval[] = $key . '[resource <em>' . htmlspecialchars(get_resource_type($param)) . '</em>]';
+					break;
+				case 'string':
+					$retval[] = $key . htmlspecialchars(var_export(strlen($param) > 51 ? substr_replace($param, ' … ', 25, -25) : $param, true));
+					break;
+				default:
+					$retval[] = $key . htmlspecialchars(var_export($param, true));
+			}
 		}
-		switch(gettype($param)) {
-			case 'array':
-				$retval[] = $key . 'array(' . buildParamList($param) . ')';
-				break;
-			case 'object':
-				$retval[] = $key . '[object <em>' . get_class($param) . '</em>]';
-				break;
-			case 'resource':
-				$retval[] = $key . '[resource <em>' . htmlspecialchars(get_resource_type($param)) . '</em>]';
-				break;
-			case 'string':
-				$retval[] = $key . htmlspecialchars(var_export(strlen($param) > 51 ? substr_replace($param, ' … ', 25, -25) : $param, true));
-				break;
-			default:
-				$retval[] = $key . htmlspecialchars(var_export($param, true));
-		}
+		return implode(', ', $retval);
 	}
-	return implode(', ', $retval);
+}
+
+// we're not supposed to display errors
+// let's throw the exception so it shows up in error logs
+if(!ini_get('display_errors')) {
+	throw $e;
 }
 
 $svg = false;
@@ -617,9 +625,12 @@ foreach($lines as $key => &$line) {
 	if((strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) && strpos($line, '<span') !== false) {
 		$line .= '</span>';
 	}
-	if(strpos($line, ' ', 20) == 29) {
-		$line = substr_replace($line, '&#160;', 29, 1);
-	}
+	// Whoever figures out what the point of this is gets a free Agavi t-shirt shipped right to his doorstep.
+	// It shall be left here, commented out, to serve as a reminder for any programmer to comment their code properly.
+	// http://trac.agavi.org/ticket/1009 is the associated ticket, patiently waiting for an explanation.
+	// if(strpos($line, ' ', 20) == 29) {
+	// 	$line = substr_replace($line, '&#160;', 29, 1);
+	// }
 	echo $line;
 ?></code></li>
 <?php } ?></ol><?php else: // no info about origin file ?><em>unknown</em><?php endif; ?></li>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/testing/suites/1.0">
+	<ae:configuration>
+		<suites>
+			<suite name="Default">
+				<testfiles>
+					<testfile>unit/ProductFinderModelTest.php</testfile>
+					<testfile>fragment/Products/Product/ViewActionTest.php</testfile>
+					<testfile>fragment/Products/Product/ViewSuccessViewTest.php</testfile>
+					<testfile>fragment/LoginSuccessViewTest.php</testfile>
+					<testfile>flow/LoginFlowTest.php</testfile>
+				</testfiles>
+			</suite>
+		</suites>
+	</ae:configuration>
+</ae:configurations>

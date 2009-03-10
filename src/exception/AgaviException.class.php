@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -43,16 +43,37 @@ class AgaviException extends Exception
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
+	 *
+	 * @deprecated Superseded by AgaviException::render()
 	 */
 	public static function printStackTrace(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)
 	{
+		return self::render($e, $context, $container);
+	}
+	
+	/**
+	 * Pretty-print this exception using a template.
+	 *
+	 * @param      Exception     The original exception.
+	 * @param      AgaviContext  The context instance.
+	 * @param      AgaviResponse The response instance.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.0.0
+	 */
+	public static function render(Exception $e, AgaviContext $context = null, AgaviExecutionContainer $container = null)
+	{
+		// exit code is 70, EX_SOFTWARE, according to /usr/include/sysexits.h: http://cvs.opensolaris.org/source/xref/on/usr/src/head/sysexits.h
+		// nice touch: an exception template can change this value :)
+		$exitCode = 70;
+		
 		// discard any previous output waiting in the buffer
 		while(@ob_end_clean());
 		
 		if($container !== null && $container->getOutputType() !== null && $container->getOutputType()->getExceptionTemplate() !== null) { 
 			// an exception template was defined for the container's output type
 			include($container->getOutputType()->getExceptionTemplate()); 
-			exit;
+			exit($exitCode);
 		}
 		
 		if($context !== null && $context->getController() !== null) {
@@ -60,7 +81,7 @@ class AgaviException extends Exception
 				// check if an exception template was defined for the default output type
 				if($context->getController()->getOutputType()->getExceptionTemplate() !== null) {
 					include($context->getController()->getOutputType()->getExceptionTemplate());
-					exit;
+					exit($exitCode);
 				}
 			} catch(Exception $e2) {
 				unset($e2);
@@ -70,14 +91,14 @@ class AgaviException extends Exception
 		if($context !== null && AgaviConfig::get('exception.templates.' . $context->getName()) !== null) {
 			// a template was set for this context
 			include(AgaviConfig::get('exception.templates.' . $context->getName()));
-			exit;
+			exit($exitCode);
 		}
 		
 		// include default exception template
 		include(AgaviConfig::get('exception.default_template'));
 		
 		// bail out
-		exit;
+		exit($exitCode);
 	}
 }
 

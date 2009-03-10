@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -35,6 +35,9 @@ class AgaviStringtoarrayTransform extends AgaviTransform
 	 * Sets the delimiter.
 	 *
 	 * @param      string The delimiter for parsing the input string.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setDelimiter($delimiter)
 	{
@@ -45,6 +48,9 @@ class AgaviStringtoarrayTransform extends AgaviTransform
 	 * Transforms an input string to an array.
 	 *
 	 * @return     array The transformed array.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function transform()
 	{
@@ -55,7 +61,7 @@ class AgaviStringtoarrayTransform extends AgaviTransform
 		}
 		
 		$delimiter = preg_quote($this->delimiter, '#');
-		$pattern = sprintf('#(?:(?P<unquoted>[^"\'%s].+)|\'(?P<single_quoted>(?:\\\\\'|[^\'])+)\'|"(?P<double_quoted>(?:\\\\"|[^"])+)")(?=%s|$)#U',
+		$pattern = sprintf('#(?:(?P<unquoted>[^"\'%s].+)|\'(?P<single_quoted>(?:\\\\\'|[^\'])+)\'|"(?P<double_quoted>(?:\\\\"|[^"])+)")(?=[%s]|$)#U',
 			$delimiter, $delimiter);
 		
 		$matches = array();
@@ -67,11 +73,9 @@ class AgaviStringtoarrayTransform extends AgaviTransform
 			 * Watch it. */
 			if(!empty($match['double_quoted'])) {
 				$result[] = str_replace('\\"', '"', $match['double_quoted']);
-			}
-			elseif(!empty($match['single_quoted'])) {
+			} elseif(!empty($match['single_quoted'])) {
 				$result[] = str_replace('\\\'', '\'', $match['single_quoted']);
-			}
-			else {
+			} else {
 				$result[] = $match['unquoted'];
 			}
 		}

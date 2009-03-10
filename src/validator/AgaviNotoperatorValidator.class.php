@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -33,7 +33,7 @@
  *
  * @version    $Id$
  */
-class AgaviNotOperatorValidator extends AgaviOperatorValidator
+class AgaviNotoperatorValidator extends AgaviOperatorValidator
 {
 	/**
 	 * Checks if operator has more then one child validator.
@@ -60,8 +60,26 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated 1.0.0
 	 */
 	public function addFieldResult($validator, $fieldname, $result)
+	{
+		// prevent reporting of any child validators
+	}
+
+	/**
+	 * Adds a intermediate result of an validator for the given argument
+	 *
+	 * @param      AgaviValidationArgument The argument
+	 * @param      int                     The arguments result.
+	 * @param      AgaviValidator          The validator (if the error was caused
+	 *                                     inside a validator).
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function addArgumentResult(AgaviValidationArgument $argument, $result, $validator = null)
 	{
 		// prevent reporting of any child validators
 	}
@@ -103,7 +121,7 @@ class AgaviNotOperatorValidator extends AgaviOperatorValidator
 			// lets mark the fields of the child validator all as successful
 			$affectedFields = $child->getFullArgumentNames();
 			foreach($affectedFields as $field) {
-				parent::addFieldResult($this, $field, AgaviValidator::SUCCESS);
+				parent::addArgumentResult(new AgaviValidationArgument($field, $this->getParameter('source')), AgaviValidator::SUCCESS, $this);
 			}
 			return true;
 		}

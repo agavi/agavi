@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -28,13 +28,14 @@
  *
  * @version    $Id$
  */
-class AgaviCachingConfigHandler extends AgaviConfigHandler
+class AgaviCachingConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/caching/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -47,37 +48,37 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
-
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'caching');
+		
 		$cachings = array();
-
-		foreach($configurations as $cfg) {
-			if(!isset($cfg->cachings)) {
+		
+		foreach($document->getConfigurationElements() as $cfg) {
+			if(!$cfg->has('cachings')) {
 				continue;
 			}
 			
-			foreach($cfg->cachings as $caching) {
+			foreach($cfg->get('cachings') as $caching) {
 				$groups = array();
-				if(isset($caching->groups)) {
-					foreach($caching->groups as $group) {
+				if($caching->has('groups')) {
+					foreach($caching->get('groups') as $group) {
 						$groups[] = array('name' => $group->getValue(), 'source' => $group->getAttribute('source', 'string'), 'namespace' => $group->getAttribute('namespace')) ;
 					}
 				}
 				
 				$actionAttributes = array();
-				if(isset($caching->action_attributes)) {
-					foreach($caching->action_attributes as $actionAttribute) {
+				if($caching->has('action_attributes')) {
+					foreach($caching->get('action_attributes') as $actionAttribute) {
 						$actionAttributes[] = $actionAttribute->getValue();
 					}
 				}
 				
 				$views = null;
-				if(isset($caching->views)) {
+				if($caching->has('views')) {
 					$views = array();
-					foreach($caching->views as $view) {
+					foreach($caching->get('views') as $view) {
 						if($view->hasAttribute('module')) {
 							$views[] = array('module' => $view->getAttribute('module'), 'view' => $view->getValue());
 						} else {
@@ -87,17 +88,17 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 				}
 				
 				$outputTypes = array();
-				if(isset($caching->output_types)) {
-					foreach($caching->output_types as $outputType) {
+				if($caching->has('output_types')) {
+					foreach($caching->get('output_types') as $outputType) {
 						$layers = null;
-						if(isset($outputType->layers)) {
+						if($outputType->has('layers')) {
 							$layers = array();
-							foreach($outputType->layers as $layer) {
+							foreach($outputType->get('layers') as $layer) {
 								$include = AgaviToolkit::literalize($layer->getAttribute('include', 'true'));
-								if((isset($layer->slots) && !$layer->hasAttribute('include')) || !$include) {
+								if(($layer->has('slots') && !$layer->hasAttribute('include')) || !$include) {
 									$slots = array();
-									if(isset($layer->slots)) {
-										foreach($layer->slots as $slot) {
+									if($layer->has('slots')) {
+										foreach($layer->get('slots') as $slot) {
 											$slots[] = $slot->getValue();
 										}
 									}
@@ -109,22 +110,22 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 						}
 						
 						$templateVariables = array();
-						if(isset($outputType->template_variables)) {
-							foreach($outputType->template_variables as $templateVariable) {
+						if($outputType->has('template_variables')) {
+							foreach($outputType->get('template_variables') as $templateVariable) {
 								$templateVariables[] = $templateVariable->getValue();
 							}
 						}
 						
 						$requestAttributes = array();
-						if(isset($outputType->request_attributes)) {
-							foreach($outputType->request_attributes as $requestAttribute) {
+						if($outputType->has('request_attributes')) {
+							foreach($outputType->get('request_attributes') as $requestAttribute) {
 								$requestAttributes[] = array('name' => $requestAttribute->getValue(), 'namespace' => $requestAttribute->getAttribute('namespace'));
 							}
 						}
 						
 						$requestAttributeNamespaces = array();
-						if(isset($outputType->request_attribute_namespaces)) {
-							foreach($outputType->request_attribute_namespaces as $requestAttributeNamespace) {
+						if($outputType->has('request_attribute_namespaces')) {
+							foreach($outputType->get('request_attribute_namespaces') as $requestAttributeNamespace) {
 								$requestAttributeNamespaces[] = $requestAttributeNamespace->getValue();
 							}
 						}
@@ -168,9 +169,22 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 			'		foreach($config["views"] as &$view) {',
 			'			if(!is_array($view)) {',
 			'				if($view === null) {',
-			'					$view = array("module" => null, "name" => null);',
+			'					$view = array(',
+			'						"module" => null,',
+			'						"name" => null',
+			'					);',
 			'				} else {',
-			'					$view = array("module" => $moduleName, "name" => ($view === null ? $view : $actionName . $view));',
+			'					$view = array(',
+			'						"module" => $moduleName,',
+			'						"name" => AgaviToolkit::evaluateModuleDirective(',
+			'							$moduleName,',
+			'							"agavi.view.name",',
+			'							array(',
+			'								"actionName" => $actionName,',
+			'								"viewName" => $view,',
+			'							)',
+			'						)',
+			'					);',
 			'				}',
 			'			}',
 			'		}',
@@ -178,7 +192,7 @@ class AgaviCachingConfigHandler extends AgaviConfigHandler
 			'}',
 		);
 		
-		return $this->generate($code);
+		return $this->generate($code, $document->documentURI);
 	}
 }
 

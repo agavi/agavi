@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:autoload_1_0="http://agavi.org/agavi/config/parts/autoload/1.0"
+	ns="http://agavi.org/agavi/config/parts/autoload/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	
+	<include href="_common.rng" />
+	
+	<define name="content-configuration" combine="interleave">
+		<choice>
+			<optional>
+				<element name="autoloads">
+					<ref name="content-autoloads" />
+				</element>
+			</optional>
+			<zeroOrMore>
+				<element name="autoload">
+					<ref name="content-autoload" />
+				</element>
+			</zeroOrMore>
+		</choice>
+	</define>
+	
+	<define name="content-autoload">
+		<attribute name="name">
+			<ref name="data-identifier" />
+		</attribute>
+		<data type="string" />
+	</define>
+	
+	<define name="content-autoloads">
+		<zeroOrMore>
+			<element name="autoload">
+				<ref name="content-autoload" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+</grammar>

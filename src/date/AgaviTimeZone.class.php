@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -30,6 +30,11 @@
  */
 abstract class AgaviTimeZone
 {
+	/**
+	 * The identifier of a custom timezone
+	 */
+	const CUSTOM = 'Custom';
+	
 	/**
 	 * The translation manager instance.
 	 *
@@ -82,7 +87,10 @@ abstract class AgaviTimeZone
 	}
 
 	/**
-	 * TODO: document the overloads
+	 * Overloaded.
+	 * 
+	 * @see        AgaviTimeZone::getOffsetIIIIII()
+	 * @see        AgaviTimeZone::getOffsetIIIIIII()
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -287,7 +295,7 @@ abstract class AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function getDisplayName($daylight = null, $style = null, $locale = null)
+	public function getDisplayName($daylight = null, $style = null, AgaviLocale $locale = null)
 	{
 		if($daylight === null) {
 			$daylight = false;
@@ -380,7 +388,7 @@ abstract class AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function hasSameRules($other)
+	public function hasSameRules(AgaviTimeZone $other)
 	{
 		return ($this->getRawOffset() == $other->getRawOffset() && 
 						$this->useDaylightTime() == $other->useDaylightTime());
@@ -523,7 +531,7 @@ abstract class AgaviTimeZone
 				$minutes = $match[2];
 			}
 		} else {
-			return null;
+			throw new InvalidArgumentException('Zone identifier is not parseable');
 		}
 
 		$offset = $hours * 60 + $minutes;
@@ -531,7 +539,7 @@ abstract class AgaviTimeZone
 		if($negative)
 			$offset = -$offset;
 
-		return new AgaviSimpleTimeZone($tm, $offset * 60000.0, 'Custom');
+		return new AgaviSimpleTimeZone($tm, $offset * 60000.0, self::CUSTOM);
 	}
 
 	/**
@@ -548,7 +556,7 @@ abstract class AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function __is_equal($that) {
+	public function __is_equal(AgaviTimeZone $that) {
 		return get_class($this) == get_class($that) && $this->getId() == $that->getId();
 	}
 
@@ -565,7 +573,7 @@ abstract class AgaviTimeZone
 	 * @author     The ICU Project
 	 * @since      0.11.0
 	 */
-	public function __is_not_equal($that) {
+	public function __is_not_equal(AgaviTimeZone $that) {
 		return get_class($this) != get_class($that) || $this->getId() != $that->getId();
 	}
 

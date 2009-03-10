@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -84,8 +84,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$rq = $this->getContext()->getRequest();
 
-		$vm = $container->getValidationManager();
-
 		$cfg = $rq->getAttributes('org.agavi.filter.FormPopulationFilter');
 
 		$ot = $response->getOutputType();
@@ -109,7 +107,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$cfg['skip'] = null;
 		}
 		if($cfg['skip'] !== null && count($cfg['skip'])) {
-			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip']))) . ')/';
+			$skip = '/(\A' . str_replace('\[\]', '\[[^\]]*\]', implode('|\A', array_map('preg_quote', $cfg['skip'], array_fill(0, count($cfg['skip']), '/')))) . ')/';
 		}
 
 		if($cfg['force_request_uri'] !== false) {
@@ -121,6 +119,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$rurl = $cfg['force_request_url'];
 		} else {
 			$rurl = $rq->getUrl();
+		}
+
+		if(isset($cfg['validation_report']) && $cfg['validation_report'] instanceof AgaviValidationReport) {
+			$vr = $cfg['validation_report'];
+		} else {
+			$vr = $container->getValidationManager()->getReport();
 		}
 
 		$errorMessageRules = array();
@@ -191,6 +195,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$m = new $mc($lmsg, $cfg['logging_severity']);
 				$lm->log($m, $cfg['logging_logger']);
 			}
+			
+			// all in all, that didn't go so well. let's see if we should just silently abort instead of throwin an exception
+			if($cfg['ignore_parse_errors']) {
+				return;
+			}
+			
 			throw new AgaviParseException($emsg);
 		}
 
@@ -256,7 +266,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		}
 
 		// an array of all validation incidents; errors inserted for fields or multiple fields will be removed in here
-		$allIncidents = $vm->getIncidents();
+		$allIncidents = $vr->getIncidents();
 
 		foreach($forms as $form) {
 			if($populate instanceof AgaviParameterHolder) {
@@ -287,11 +297,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$remember = array();
 
 			// build the XPath query
-			$query = sprintf('descendant::%1$stextarea[@name] | descendant::%1$sselect[@name] | descendant::%1$sinput[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file"', $this->xmlnsPrefix);
-			if($cfg['include_hidden_inputs']) {
-				$query .= ' or @type="hidden"';
-			}
-			$query .= ')]';
+			$query = sprintf('descendant::%1$stextarea[@name] | descendant::%1$sselect[@name] | descendant::%1$sbutton[@name and @type="submit"] | descendant::%1$sinput[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file" or @type="submit" %2$s)]', $this->xmlnsPrefix, $cfg['include_hidden_inputs'] ? 'or @type="hidden"' : '');
 			foreach($this->xpath->query($query, $form) as $element) {
 
 				$pname = $name = $element->getAttribute('name');
@@ -349,8 +355,15 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					continue;
 				}
 
+				$argument = new AgaviValidationArgument(
+					$pname,
+					($element->nodeName == 'input' && $element->getAttribute('type') == 'file')
+						? AgaviWebRequestDataHolder::SOURCE_FILES
+						: AgaviRequestDataHolder::SOURCE_PARAMETERS
+				);
+				
 				// there's an error with the element's name in the request? good. let's give the baby a class!
-				if($vm->isFieldFailed($pname)) {
+				if($vr->getAuthoritativeArgumentSeverity($argument) > AgaviValidator::SILENT) {
 					// a collection of all elements that need an error class
 					$errorClassElements = array();
 					// the element itself of course
@@ -387,9 +400,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					// up next: the error messages
 					$fieldIncidents = array();
 					$multiFieldIncidents = array();
-					foreach($vm->getFieldIncidents($pname) as $incident) {
+					// grab all incidents for this field
+					foreach($vr->byArgument($argument)->getIncidents() as $incident) {
 						if(($incidentKey = array_search($incident, $allIncidents, true)) !== false) {
-							if(count($incident->getFields()) > 1) {
+							// does this one have more than one field?
+							// and is it really more than one parameter or file, not a cookie or header?
+							$incidentArgumentCount = 0;
+							$incidentArguments = $incident->getArguments();
+							foreach($incidentArguments as $incidentArgument) {
+								if(in_array($incidentArgument->getSource(), array(AgaviWebRequestDataHolder::SOURCE_FILES, AgaviRequestDataHolder::SOURCE_PARAMETERS))) {
+									$incidentArgumentCount++;
+								}
+							}
+							if($incidentArgumentCount > 1) {
 								$multiFieldIncidents[] = $incident;
 							} else {
 								$fieldIncidents[] = $incident;
@@ -408,6 +431,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 				}
 
+				// FPF only handles "normal" values, as file inputs cannot be re-populated, so getParameter() with no source-specific stuff is fine here
 				$value = $p->getParameter($pname);
 
 				if(is_array($value) && !($element->nodeName == 'select' || $checkValue)) {
@@ -493,6 +517,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 
 			// now output the remaining incidents
+			// might include errors for cookies, headers and whatnot, but that is okay
 			if($this->insertErrorMessages($form, $errorMessageRules, $allIncidents)) {
 				$allIncidents = array();
 			}
@@ -627,16 +652,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	 */
 	protected function insertErrorMessages(DOMElement $element, array $rules, array $incidents)
 	{
-		if(!count($incidents)) {
-			// nothing to do here
-			return true;
-		}
-
 		$errorMessages = array();
 		foreach($incidents as $incident) {
+			if($incident->getSeverity() <= AgaviValidator::SILENT) {
+				continue;
+			}
 			foreach($incident->getErrors() as $error) {
 				$errorMessages[] = $error->getMessage();
 			}
+		}
+
+		if(!$errorMessages) {
+			// nothing to do here
+			return true;
 		}
 
 		$luie = libxml_use_internal_errors(true);
@@ -755,20 +783,24 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 			foreach($errorElements as $errorElement) {
 				foreach($targets as $target) {
+					// in case the target yielded more than one location, we need to clone the element
+					// because the document fragment node will be corrupted after an insert
+					$clonedErrorElement = $errorElement->cloneNode(true);
+					
 					if($errorLocation == 'before') {
-						$target->parentNode->insertBefore($errorElement, $target);
+						$target->parentNode->insertBefore($clonedErrorElement, $target);
 					} elseif($errorLocation == 'after') {
 						// check if there is a following sibling, then insert before that one
 						// if not, append to parent
 						if($target->nextSibling) {
-							$target->parentNode->insertBefore($errorElement, $target->nextSibling);
+							$target->parentNode->insertBefore($clonedErrorElement, $target->nextSibling);
 						} else {
-							$target->parentNode->appendChild($errorElement);
+							$target->parentNode->appendChild($clonedErrorElement);
 						}
 					} elseif($errorLocation == 'replace') {
-						$target->parentNode->replaceChild($errorElement, $target);
+						$target->parentNode->replaceChild($clonedErrorElement, $target);
 					} else {
-						$target->appendChild($errorElement);
+						$target->appendChild($clonedErrorElement);
 					}
 				}
 			}
@@ -895,6 +927,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			'field_error_messages'       => array(),
 			'multi_field_error_messages' => array(),
 
+			'ignore_parse_errors'        => false,
 			'log_parse_errors'           => true,
 			'logging_severity'           => AgaviLogger::FATAL,
 			'logging_logger'             => null,

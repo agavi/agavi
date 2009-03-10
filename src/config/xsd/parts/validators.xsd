@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+	targetNamespace="http://agavi.org/agavi/config/parts/validators/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="../_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	           schemaLocation="../_envelope.xsd" />
+
+	<xs:simpleType name="severity">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="info" />
+			<xs:enumeration value="silent" />
+			<xs:enumeration value="none" />
+			<xs:enumeration value="notice" />
+			<xs:enumeration value="error" />
+			<xs:enumeration value="critical" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Arguments -->
+
+	<xs:complexType name="argument">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="types_1_0:non_empty_string" use="optional" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="arguments">
+		<xs:sequence>
+			<xs:element name="argument" type="argument"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="base" type="xs:string" use="optional" />
+	</xs:complexType>
+
+	<xs:group name="arguments">
+		<xs:choice>
+			<xs:element name="arguments" type="arguments"
+			            minOccurs="0" />
+			<xs:element name="argument" type="argument"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+
+	<!-- Errors -->
+
+	<xs:complexType name="error">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="for" type="types_1_0:non_empty_string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="errors">
+		<xs:sequence>
+			<xs:element name="error" type="error"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="errors">
+		<xs:choice>
+			<xs:element name="errors" type="errors"
+			            minOccurs="0" />
+			<xs:element name="error" type="error"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+
+	<xs:complexType name="validator">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:group ref="envelope_1_0:parameters" />
+			<xs:group ref="arguments"
+			          minOccurs="0"/>
+			<xs:group ref="errors"
+			          minOccurs="0"/>
+			<xs:group ref="validators"
+			          minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="affects" type="xs:string" />
+		<xs:attribute name="class" type="xs:string" />
+		<xs:attribute name="depends" type="xs:string" />
+		<xs:attribute name="export" type="xs:string" />
+		<xs:attribute name="method" type="xs:string" />
+		<xs:attribute name="provides" type="xs:string" />
+		<xs:attribute name="required" type="types_1_0:boolean" />
+		<xs:attribute name="severity" type="severity" />
+		<xs:attribute name="source" type="xs:string" />
+		<xs:attribute name="translation_domain" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="validators">
+		<xs:sequence>
+			<xs:element name="validator" type="validator"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="method" type="xs:string" />
+		<xs:attribute name="severity" type="severity" />
+	</xs:complexType>
+
+	<xs:group name="validators">
+		<xs:choice>
+			<xs:element name="validators" type="validators"
+			            minOccurs="0" />
+			<xs:element name="validator" type="validator"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+
+	<xs:complexType name="validator_definition">
+		<xs:sequence>
+			<xs:group ref="envelope_1_0:parameters" />
+		</xs:sequence>
+		<xs:attribute name="name" type="types_1_0:non_empty_string" use="required" />
+		<xs:attribute name="class" type="types_1_0:identifier" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="validator_definitions">
+		<xs:sequence>
+			<xs:element name="validator_definition" type="validator_definition"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="validator_definitions">
+		<xs:choice>
+			<xs:element name="validator_definitions" type="validator_definitions"
+			            minOccurs="0" />
+			<xs:element name="validator_definition" type="validator_definition"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+
+
+	<xs:group name="configuration">
+		<xs:sequence>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded" >
+				<xs:group ref="validators"
+						minOccurs="0" maxOccurs="unbounded" />
+				<xs:group ref="validator_definitions"
+						minOccurs="0" />
+			</xs:sequence>
+		</xs:sequence>
+	</xs:group>
+
+</xs:schema>

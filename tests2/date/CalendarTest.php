@@ -80,10 +80,9 @@ class CalendarTest extends BaseCalendarTest
 		return 'UNKNOWN_FIELD';
 	}
 
-/**
- * Test various API methods for API completeness.
- */
-
+	/**
+	 * Test various API methods for API completeness.
+	 */
 	public function testGenericAPI()
 	{
 		/*
@@ -120,41 +119,37 @@ class CalendarTest extends BaseCalendarTest
 
 		$cal->roll(AgaviDateDefinitions::SECOND, true);
 
-		$this->assertFalse(!($eq=$cal->equals($cal2)) || ($b4=$cal->before($cal2)) || ($af=$cal->after($cal2)), sprintf("equals[%s]/before[%s]/after[%s] failed after roll 1 second [should be T/F/F]", $eq?'T':'F', $b4?'T':'F', $af?'T':'F'));
+		$this->assertFalse(!($eq = $cal->equals($cal2)) || ($b4 = $cal->before($cal2)) || ($af = $cal->after($cal2)), sprintf("equals[%s]/before[%s]/after[%s] failed after roll 1 second [should be T/F/F]", $eq ? 'T' : 'F', $b4 ? 'T' : 'F', $af ? 'T' : 'F'));
 
 		// Roll back to January
 		$cal->roll(AgaviDateDefinitions::MONTH, (int)(1 + AgaviDateDefinitions::DECEMBER - $cal->get(AgaviDateDefinitions::MONTH)));
 
 		$this->assertFalse($cal->equals($cal2) || $cal2->before($cal) || $cal->after($cal2), 'equals/before/after failed after rollback to January');
 
-		for($i = 0; $i < 2; ++$i)
-		{
+		for($i = 0; $i < 2; ++$i) {
 			$lenient = ( $i > 0 );
 			$cal->setLenient($lenient);
 			$this->assertEquals($lenient, $cal->isLenient(), 'setLenient/isLenient failed');
 			// Later: Check for lenient behavior
 		}
 
-		for($i = AgaviDateDefinitions::SUNDAY; $i <= AgaviDateDefinitions::SATURDAY; ++$i)
-		{
+		for($i = AgaviDateDefinitions::SUNDAY; $i <= AgaviDateDefinitions::SATURDAY; ++$i) {
 			$cal->setFirstDayOfWeek($i);
 			$this->assertEquals($i, $cal->getFirstDayOfWeek(), 'set/getFirstDayOfWeek failed');
 		}
 
-		for($i = 1; $i <= 7; ++$i)
-		{
+		for($i = 1; $i <= 7; ++$i) {
 			$cal->setMinimalDaysInFirstWeek($i);
 			$this->assertEquals($i, $cal->getMinimalDaysInFirstWeek(), 'set/getFirstDayOfWeek failed');
 		}
 
-		for($i = 0; $i < AgaviDateDefinitions::FIELD_COUNT; ++$i)
-		{
+		for($i = 0; $i < AgaviDateDefinitions::FIELD_COUNT; ++$i) {
 			$this->assertEquals($cal->getMinimum($i), $cal->getGreatestMinimum($i), 'getMinimum doesn\'t match getGreatestMinimum for field ' . $i);
 			$this->assertFalse($cal->getLeastMaximum($i) > $cal->getMaximum($i), 'getLeastMaximum larger than getMaximum for field ' . $i);
 			$this->assertFalse($cal->getMinimum($i) >= $cal->getMaximum($i), 'getMinimum not less than getMaximum for field ' . $i);
 		}
 
-		$cal->adoptTimeZone($this->tm->getCurrentTimeZone());
+		$cal->adoptTimeZone($this->tm->getDefaultTimeZone());
 		$cal->clear();
 		$cal->set2(1984, 5, 24);
 		$this->assertEquals($this->date(84, 5, 24), $cal->getTime(), 'AgaviCalendarCalendar::set(3 args) failed');
@@ -169,8 +164,7 @@ class CalendarTest extends BaseCalendarTest
 
 		$cal->getTime();
 
-		for($i = 0; $i < AgaviDateDefinitions::FIELD_COUNT; ++$i)
-		{
+		for($i = 0; $i < AgaviDateDefinitions::FIELD_COUNT; ++$i) {
 			switch($i) {
 				case AgaviDateDefinitions::YEAR: case AgaviDateDefinitions::MONTH: case AgaviDateDefinitions::DATE:
 				case AgaviDateDefinitions::HOUR_OF_DAY: case AgaviDateDefinitions::MINUTE: case AgaviDateDefinitions::SECOND:
@@ -184,10 +178,10 @@ class CalendarTest extends BaseCalendarTest
 			$this->assertFalse($cal->_isSet($i), 'AgaviCalendar::clear/isSet failed ' + $this->fieldName($i));
 		}
 
-
-return;
-// TODO: enable again
-// TODO: there is no api for this currently
+		return;
+		// TODO: enable again
+		// TODO: there is no api for this currently
+		
 		$cal = AgaviCalendar::createInstance(AgaviTimeZone::createDefault(), AgaviLocale::getEnglish());
 
 		$cal = AgaviCalendar::createInstance($zone, AgaviLocale::getEnglish());
@@ -214,10 +208,10 @@ return;
 		$this->assertFalse($gc2->__is_not_equal($gc) || !($gc2->__is_equal($gc)), 'AgaviGregorianCalendar assignment/operator==/operator!= failed');
 	}
 
-/**
- * This test confirms the correct behavior of add when incrementing
- * through subsequent days.
- */
+	/**
+	 * This test confirms the correct behavior of add when incrementing
+	 * through subsequent days.
+	 */
 	public function testRog()
 	{
 		$gc = $this->tm->createCalendar();
@@ -681,7 +675,7 @@ return;
 	public function testEpochStartFields()
 	{
 		$EPOCH_FIELDS = array(1, 1970, 0, 1, 1, 1, 1, 5, 1, 0, 0, 0, 0, 0, 0, - 28800000, 0);
-		$z = $this->tm->getCurrentTimeZone();
+		$z = $this->tm->getDefaultTimeZone();
 		$c = $this->tm->createCalendar();
 		$d = - $z->getRawOffset();
 		$gc = $this->tm->createCalendar();
@@ -1028,7 +1022,7 @@ return;
 		*/
 
 		// Roll the DOW_LOCAL within week 52
-		for($i=27; $i<=33; ++$i) {
+		for($i = 27; $i <= 33; ++$i) {
 			for($amount = -7; $amount <= 7; ++$amount) {
 				$str = "roll(";
 				$cal->set(1999, AgaviDateDefinitions::DECEMBER, $i);

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -118,6 +118,11 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 		// since we're not an abstraction layer, we copy the connection
 		// to the resource
 		$this->resource =& $this->connection;
+		
+		
+		foreach((array)$this->getParameter('init_queries') as $query) {
+			pg_query($this->connection, $query);
+		}
 	}
 
 	/**

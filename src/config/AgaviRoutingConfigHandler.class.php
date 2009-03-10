@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -21,6 +21,7 @@
  * @subpackage config
  *
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     David Zülke <david.zuelke@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -28,8 +29,10 @@
  *
  * @version    $Id$
  */
-class AgaviRoutingConfigHandler extends AgaviConfigHandler
+class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/routing/1.0';
+	
 	/**
 	 * @var        array Stores the generated names of unnamed routes.
 	 */
@@ -38,8 +41,7 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string Name of the executing context (if any).
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
@@ -50,35 +52,37 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 	 *                                        improperly formatted.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.11.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		$routing = AgaviContext::getInstance($context)->getRouting();
-
-		if($context == null) {
-			$context = '';
-		}
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'routing');
+		
+		$routing = AgaviContext::getInstance($this->context)->getRouting();
 
 		// reset the stored route names
 		$this->unnamedRoutes = array();
-
-		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, true, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
 
 		// clear the routing
 		$routing->importRoutes(array());
 		$data = array();
 		
-		foreach($configurations as $cfg) {
-			if(isset($cfg->routes)) {
-				$this->parseRoutes($routing, $cfg->routes);
+		foreach($document->getConfigurationElements() as $cfg) {
+			if($cfg->has('routes')) {
+				$this->parseRoutes($routing, $cfg->get('routes'));
 			}
 		}
 
-		$code = '$this->importRoutes(' . var_export($routing->exportRoutes(), true) . ');';
-
-		return $this->generate($code);
+		// we cannot do this:
+		// $code = '$this->importRoutes(unserialize(' . var_export(serialize($routing->exportRoutes()), true) . '));';
+		// return $this->generate($code, $document->documentURI);
+		// because var_export() incorrectly escapes null-byte sequences as \000, which results in a corrupted string, and unserialize() doesn't like corrupted strings
+		// this was fixed in PHP 5.2.6, but we're compatible with 5.2.0+
+		// see http://bugs.php.net/bug.php?id=37262 and http://bugs.php.net/bug.php?id=42272
+		
+		return serialize($routing->exportRoutes());
 	}
 
 	/**
@@ -86,8 +90,8 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 	 * information and creates the routes in the given routing.
 	 *
 	 * @param      AgaviRouting The routing instance to create the routes in.
-	 * @param      array A possibly nested array of AgaviConfigValueHolders.
-	 * @param      string The name of the parent route (if any).
+	 * @param      mixed        The "roles" node (element or node list)
+	 * @param      string       The name of the parent route (if any).
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -101,7 +105,6 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 			if($route->hasAttribute('cut'))						$opts['cut']					= AgaviToolkit::literalize($route->getAttribute('cut'));
 			if($route->hasAttribute('stop'))					$opts['stop']					= AgaviToolkit::literalize($route->getAttribute('stop'));
 			if($route->hasAttribute('name'))					$opts['name']					= $route->getAttribute('name');
-			if($route->hasAttribute('callback'))			$opts['callback']			= $route->getAttribute('callback');
 			if($route->hasAttribute('source'))				$opts['source']				= $route->getAttribute('source');
 			if($route->hasAttribute('constraint'))		$opts['constraint']		= array_map('trim', explode(' ', trim($route->getAttribute('constraint'))));
 			// values which will be set when the route matched
@@ -111,21 +114,29 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 			if($route->hasAttribute('module'))				$opts['module']				= AgaviToolkit::literalize($route->getAttribute('module'));
 			if($route->hasAttribute('output_type'))		$opts['output_type']	= AgaviToolkit::literalize($route->getAttribute('output_type'));
 
-			if($route->hasChildren('ignores')) {
-				foreach($route->ignores as $ignore) {
+			if($route->has('ignores')) {
+				foreach($route->get('ignores') as $ignore) {
 					$opts['ignores'][] = $ignore->getValue();
 				}
 			}
 
-			if($route->hasChildren('defaults')) {
-				foreach($route->defaults as $default) {
+			if($route->has('defaults')) {
+				foreach($route->get('defaults') as $default) {
 					$opts['defaults'][$default->getAttribute('for')] = $default->getValue();
 				}
 			}
 
-			if($route->hasChildren('parameters')) {
-				$opts['parameters'] = $this->getItemParameters($route);
+			if($route->has('callbacks')) {
+				$opts['callbacks'] = array();
+				foreach($route->get('callbacks') as $callback) {
+					$opts['callbacks'][] = array(
+						'class' => $callback->getAttribute('class'),
+						'parameters' => $callback->getAgaviParameters(),
+					);
+				}
 			}
+
+			$opts['parameters'] = $route->getAgaviParameters();
 
 			if(isset($opts['name']) && $parent) {
 				// don't overwrite $parent since it's used later
@@ -156,8 +167,8 @@ class AgaviRoutingConfigHandler extends AgaviConfigHandler
 			if(!isset($opts['name']) || $opts['name'] !== $name) {
 				$this->unnamedRoutes[$name] = true;
 			}
-			if($route->hasChildren('routes')) {
-				$this->parseRoutes($routing, $route->routes, $name);
+			if($route->has('routes')) {
+				$this->parseRoutes($routing, $route->get('routes'), $name);
 			}
 		}
 	}

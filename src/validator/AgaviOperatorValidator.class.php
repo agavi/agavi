@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -37,11 +37,6 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 */
 	protected $children = array();
 
-	/**
-	 * @var        array The errors of the child validators.
-	 */
-	protected $errors = array();
-	
 	/**
 	 * @var        int The highest error severity in the container.
 	 */
@@ -89,11 +84,31 @@ abstract class AgaviOperatorValidator extends AgaviValidator implements AgaviIVa
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated 1.0.0
 	 */
 	public function addFieldResult($validator, $fieldname, $result)
 	{
 		if($this->parentContainer !== null) {
 			return $this->parentContainer->addFieldResult($validator, $fieldname, $result);
+		}
+	}
+
+	/**
+	 * Adds a intermediate result of an validator for the given argument
+	 *
+	 * @param      AgaviValidationArgument The argument
+	 * @param      int                     The arguments result.
+	 * @param      AgaviValidator          The validator (if the error was caused
+	 *                                     inside a validator).
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function addArgumentResult(AgaviValidationArgument $argument, $result, $validator = null)
+	{
+		if($this->parentContainer !== null) {
+			return $this->parentContainer->addArgumentResult($argument, $result, $validator);
 		}
 	}
 

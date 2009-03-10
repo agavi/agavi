@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -34,6 +34,11 @@ class AgaviSoapController extends AgaviController
 	 * @param      AgaviRequestDataHolder Additional request data for later use.
 	 */
 	protected $dispatchArguments = null;
+	
+	/**
+	 * @param      AgaviExecutionContainer Specific execution container to run.
+	 */
+	protected $dispatchContainer = null;
 	
 	/**
 	 * @param      SoapClient The soap client instance we use to access WSDL info.
@@ -100,8 +105,21 @@ class AgaviSoapController extends AgaviController
 		// get the name of the class to use for handling soap calls, defaults to Agavi's "AgaviSoapControllerCallHandler"
 		$soapHandlerClass = $this->getParameter('soap_handler_class', 'AgaviSoapControllerCallHandler');
 		
+		// force client's soap version to be the same as the server's
 		if(isset($soapServerOptions['soap_version'])) {
 			$soapClientOptions['soap_version'] = $soapServerOptions['soap_version'];
+		}
+		
+		// force client's cache_wsdl setting to be the same as the server's
+		if(isset($soapServerOptions['cache_wsdl'])) {
+			// and cast it to an int
+			$soapServerOptions['cache_wsdl'] = (int)$soapServerOptions['cache_wsdl'];
+			$soapClientOptions['cache_wsdl'] = $soapServerOptions['cache_wsdl'];
+		}
+		
+		if(isset($soapServerOptions['features'])) {
+			// cast this to an int
+			$soapServerOptions['features'] = (int)$soapServerOptions['features'];
 		}
 		
 		// create a client, so we can grab the functions and types defined in the wsdl (not possible from the server, duh)
@@ -188,16 +206,23 @@ class AgaviSoapController extends AgaviController
 	/**
 	 * Dispatch a request
 	 *
-	 * @param      AgaviRequestDataHolder A RequestDataHolder with additional
-	 *                                    request arguments.
+	 * @param      AgaviRequestDataHolder  An optional request data holder object
+	 *                                     with additional request data.
+	 * @param      AgaviExecutionContainer An optional execution container that,
+	 *                                     if given, will be executed right away,
+	 *                                     skipping routing execution.
+	 *
+	 * @return     AgaviResponse The response produced during this dispatch call.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function dispatch(AgaviRequestDataHolder $arguments = null)
+	public function dispatch(AgaviRequestDataHolder $arguments = null, AgaviExecutionContainer $container = null)
 	{
 		// Remember The Milk... err... the arguments given.
 		$this->dispatchArguments = $arguments;
+		// and the container, too, if there was one
+		$this->dispatchContainer = $container;
 		
 		// handle the request. the aforementioned __call will be run next
 		// we use the input from the request as the argument, it contains the SOAP request
@@ -218,7 +243,7 @@ class AgaviSoapController extends AgaviController
 		try {
 			// return the content so SoapServer can send it.
 			// AgaviSoapResponse::send() does not send the content, but sets the headers on the SoapServer
-			return parent::dispatch($this->dispatchArguments);
+			return parent::dispatch($this->dispatchArguments, $this->dispatchContainer);
 		} catch(SoapFault $f) {
 			$this->response->clear();
 			$this->response->setContent($f);

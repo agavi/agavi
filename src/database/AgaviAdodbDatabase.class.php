@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -46,9 +46,9 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @deprecated To be removed in Agavi 1.1
- *
  * @since      0.10.0
+ *
+ * @deprecated To be removed in Agavi 1.1
  *
  * @version    $Id$
  */
@@ -117,8 +117,7 @@ class AgaviAdodbDatabase extends AgaviDatabase
 			// connect to our lovely database ;-)
 			if(isset($dsn) && $dsn != "") {
 				$this->connection = &ADONewConnection($dsn);
-			}
-			else  {
+			} else {
 				// set our flags
 				$persistent = $this->getParameter('persistent', false);
 					
@@ -139,6 +138,10 @@ class AgaviAdodbDatabase extends AgaviDatabase
 			// directly! so beware that this will break when AdoDB is ported to PHP5 and _connectionID will be
 			// declared as private. hopefully the developers will add an accessor function :-/
 			$this->resource = $this->connection->_connectionID;
+			
+			foreach((array)$this->getParameter('init_queries') as $query) {
+				$this->connection->execute($query);
+			}
 		} catch(ADODB_Exception $e) {
 			// the connection's foobar'd
 			throw new AgaviDatabaseException($e->getMessage());

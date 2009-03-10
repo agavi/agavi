@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/logging/1.0"
+	targetNamespace="http://agavi.org/agavi/config/parts/logging/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="../_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	           schemaLocation="../_envelope.xsd" />
+
+	<!-- Logger appenders -->
+
+	<xs:simpleType name="logger_appender">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+
+	<xs:complexType name="logger_appenders">
+		<xs:sequence>
+			<xs:element name="appender" type="logger_appender" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="logger_appenders">
+		<xs:choice>
+			<xs:element name="appenders" type="logger_appenders" minOccurs="0" />
+			<xs:element name="appender" type="logger_appender" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+
+	<!-- Loggers -->
+
+	<xs:complexType name="logger">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:group ref="envelope_1_0:parameters" />
+			<xs:group ref="logger_appenders" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="class" type="types_1_0:identifier" />
+		<xs:attribute name="level" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="loggers">
+		<xs:sequence>
+			<xs:element name="logger" type="logger"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="default" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:group name="loggers">
+		<xs:choice>
+			<xs:element name="loggers" type="loggers"
+			            minOccurs="0" />
+			<xs:element name="logger" type="logger"
+			            minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+
+	<!-- Appenders -->
+
+	<xs:complexType name="appender">
+		<xs:sequence>
+			<xs:group ref="envelope_1_0:parameters" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="class" type="types_1_0:identifier" />
+		<xs:attribute name="layout" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="appenders">
+		<xs:sequence>
+			<xs:element name="appender" type="appender"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="appenders">
+		<xs:choice>
+			<xs:element name="appenders" type="appenders"
+			            minOccurs="0" />
+			<xs:element name="appender" type="appender"
+			            minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+
+	<!-- Layouts -->
+
+	<xs:complexType name="layout">
+		<xs:sequence>
+			<xs:group ref="envelope_1_0:parameters" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="class" type="types_1_0:identifier" />
+	</xs:complexType>
+
+	<xs:complexType name="layouts">
+		<xs:sequence>
+			<xs:element name="layout" type="layout"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="layouts">
+		<xs:choice>
+			<xs:element name="layouts" type="layouts"
+			            minOccurs="0" />
+			<xs:element name="layout" type="layout"
+			            minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+
+	<xs:group name="configuration">
+		<xs:sequence>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded" >
+				<xs:group ref="loggers"
+				          minOccurs="0" />
+				<xs:group ref="appenders"
+				          minOccurs="0" />
+				<xs:group ref="layouts"
+				          minOccurs="0" />
+			</xs:sequence>
+		</xs:sequence>
+	</xs:group>
+
+</xs:schema>

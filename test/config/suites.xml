@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/testing/suites/1.0">
+	<ae:configuration>
+		<suites>
+			<suite name="Context">
+				<testfiles>
+					<testfile>unit/context/AgaviContextTest.php</testfile>
+				</testfiles>				
+			</suite>
+			<suite name="Config">
+				<testfiles>
+					<testfile>unit/config/AgaviConfigCacheTest.php</testfile>
+				</testfiles>
+			</suite>
+			<suite name="Date">
+				<testfiles>
+					<testfile>unit/date/AgaviTimezoneTest.php</testfile>
+					<testfile>unit/date/AgaviDateFormatTest.php</testfile>
+				</testfiles>
+			</suite>
+			<suite name="Routing">
+				<testfiles>
+					<testfile>unit/routing/AgaviRoutingTest.php</testfile>
+					<testfile>unit/routing/AgaviWebRoutingTest.php</testfile>
+					<testfile>unit/routing/Ticket1051Test.php</testfile>
+				</testfiles>
+			</suite>
+			<suite name="Request">
+				<testfiles>
+					<testfile>unit/request/AgaviWebRequestDataHolderParameterTest.php</testfile>
+					<testfile>unit/request/AgaviWebRequestDataHolderHeaderTest.php</testfile>
+					<testfile>unit/request/AgaviWebRequestDataHolderCookieTest.php</testfile>
+				</testfiles>
+			</suite>
+			<suite name="Testing">
+				<testfiles>
+					<testfile>unit/testing/AgaviPhpUnitTestCaseTest.php</testfile>
+				</testfiles>
+			</suite>
+			<suite name="Translation">
+				<testfiles>
+					<testfile>unit/translation/AgaviTranslationManagerTest.php</testfile>
+					<testfile>unit/translation/AgaviLocaleTest.php</testfile>
+				</testfiles>
+			</suite>
+			<suite name="Util">
+				<testfiles>
+					<testfile>unit/util/AgaviToolkitTest.php</testfile>
+					<testfile>unit/util/AgaviParameterHolderTest.php</testfile>
+					<testfile>unit/util/AgaviArrayPathDefinitionTest.php</testfile>
+				</testfiles>
+			</suite>
+		</suites>
+	</ae:configuration>
+</ae:configurations>

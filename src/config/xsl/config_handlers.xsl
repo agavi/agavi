@@ -12,7 +12,7 @@
 	<xsl:variable name="config_handlers_1_0" select="'http://agavi.org/agavi/config/parts/config_handlers/1.0'" />
 	
 	<!-- pre-1.0 backwards compatibility for 1.0 -->
-	<!-- non-"envelope" elements are copied to the 1.0 factories namespace -->
+	<!-- non-"envelope" elements are copied to the 1.0 config_handlers namespace -->
 	<xsl:template match="envelope_0_11:*">
 		<xsl:element name="{local-name()}" namespace="{$config_handlers_1_0}">
 			<xsl:copy-of select="@*" />
@@ -23,7 +23,7 @@
 	<xsl:template match="envelope_0_11:handler[@validate]">
 		<xsl:element name="{local-name()}" namespace="{$config_handlers_1_0}">
 			<xsl:copy-of select="@*[local-name() != 'validate']" />
-			<config_handlers_1_0:validation>
+			<config_handlers_1_0:validation for="single" step="transformations_before">
 				<xsl:value-of select="@validate" />
 			</config_handlers_1_0:validation>
 			<xsl:apply-templates />

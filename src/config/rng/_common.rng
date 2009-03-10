@@ -62,18 +62,16 @@
 			</attribute>
 		</optional>
 		<choice>
-			<interleave>
-				<zeroOrMore>
-					<element name="parameter">
-						<ref name="_common-content-parameter" />
-					</element>
-				</zeroOrMore>
-				<zeroOrMore>
-					<element name="parameters">
-						<ref name="_common-content-parameters" />
-					</element>
-				</zeroOrMore>
-			</interleave>
+			<zeroOrMore>
+				<element name="parameter">
+					<ref name="_common-content-parameter" />
+				</element>
+			</zeroOrMore>
+			<optional>
+				<element name="parameters">
+					<ref name="_common-content-parameters" />
+				</element>
+			</optional>
 			<text />
 		</choice>
 	</define>
@@ -87,34 +85,45 @@
 	</define>
 	
 	<define name="content-parameters">
-		<interleave>
+		<choice>
 			<zeroOrMore>
 				<element name="parameter">
 					<ref name="_common-content-parameter" />
 				</element>
 			</zeroOrMore>
-			<zeroOrMore>
+			<optional>
 				<element name="parameters">
 					<ref name="_common-content-parameters" />
 				</element>
-			</zeroOrMore>
-		</interleave>
+			</optional>
+		</choice>
 	</define>
 	
 	<!-- Data -->
 	
 	<define name="data-list-environment">
 		<list>
-			<data type="string" />
+			<oneOrMore>
+				<data type="string" />
+			</oneOrMore>
 		</list>
 	</define>
 	
 	<define name="data-list-context">
 		<list>
-			<data type="string" />
+			<oneOrMore>
+				<data type="string" />
+			</oneOrMore>
 		</list>
 	</define>
 	
+	<define name="data-non-empty-string">
+		<data type="string">
+			<param name="minLength">1</param>
+		</data>
+	</define>
+	
+	<!-- TODO: rename to 'data-php-identifier'? we might have 'data-locale-identifier' and whatnot -->
 	<define name="data-identifier">
 		<data type="string">
 			<param name="pattern">[_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]+</param>
@@ -123,6 +132,12 @@
 	
 	<define name="data-matched">
 		<data type="boolean" />
+	</define>
+	
+	<define name="data-boolean">
+		<data type="string">
+			<param name="pattern">([tT][rR][uU][eE]|[fF][aA][lL][sS][eE]|[yY][eE][sS]|[nN][oO]|[oO][nN]|[oO][fF][fF])</param>
+		</data>
 	</define>
 	
 	<!-- External definitions -->

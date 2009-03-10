@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/translation/1.0"
+	targetNamespace="http://agavi.org/agavi/config/parts/translation/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="../_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	           schemaLocation="../_envelope.xsd" />
+
+	<xs:complexType name="filters">
+		<xs:sequence>
+			<xs:element name="filter" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="translator_implementation">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:group ref="envelope_1_0:parameters" />
+			<xs:element name="filters" type="filters" minOccurs="0" />
+		</xs:sequence>
+		<xs:attribute name="class" type="types_1_0:identifier" />
+	</xs:complexType>
+
+	<xs:complexType name="formatter">
+		<xs:complexContent>
+			<xs:extension base="translator_implementation">
+				<xs:attribute name="translation_domain" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="_translators">
+		<xs:sequence>
+			<xs:element name="translator" type="translator"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="_translators">
+		<xs:choice>
+			<xs:element name="translators" type="_translators"
+			            minOccurs="0" />
+			<xs:element name="translator" type="translator"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+
+	<xs:complexType name="translator">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="message_translator" type="translator_implementation"
+			            minOccurs="0" />
+			<xs:element name="number_formatter" type="formatter"
+			            minOccurs="0" />
+			<xs:element name="currency_formatter" type="formatter"
+			            minOccurs="0" />
+			<xs:element name="date_formatter" type="formatter"
+			            minOccurs="0" />
+			<xs:group ref="_translators" />
+		</xs:sequence>
+		<xs:attribute name="domain" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="translators">
+		<xs:sequence>
+			<xs:element name="translator" type="translator" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="default_domain" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="available_locale">
+		<xs:sequence>
+			<xs:group ref="envelope_1_0:parameters" />
+		</xs:sequence>
+		<xs:attribute name="identifier" type="xs:string" use="required" />
+		<xs:attribute name="ldml_file" type="xs:string" />
+		<xs:attribute name="fallback" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="available_locales">
+		<xs:sequence>
+			<xs:element name="available_locale" type="available_locale" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="default_locale" type="xs:string" />
+		<xs:attribute name="default_timezone" type="xs:string" />
+	</xs:complexType>
+
+	<xs:group name="configuration">
+		<xs:all>
+			<xs:element name="translators" type="translators"
+			            minOccurs="0"/>
+			<xs:element name="available_locales" type="available_locales"
+			            minOccurs="0"/>
+		</xs:all>
+	</xs:group>
+
+</xs:schema>

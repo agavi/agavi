@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -49,6 +49,12 @@ class AgaviNumberValidator extends AgaviValidator
 	protected function validate()
 	{
 		$value =& $this->getData($this->getArgument());
+
+		if(!is_scalar($value)) {
+			// non scalar values would cause notices
+			$this->throwError();
+			return false;
+		}
 
 		$hasExtraChars = false;
 
@@ -103,12 +109,12 @@ class AgaviNumberValidator extends AgaviValidator
 
 		}
 
-		if($this->hasParameter('min') and $value < $this->getParameter('min')) {
+		if($this->hasParameter('min') && $value < $this->getParameter('min')) {
 			$this->throwError('min');
 			return false;
 		}
 
-		if($this->hasParameter('max') and $value > $this->getParameter('max')) {
+		if($this->hasParameter('max') && $value > $this->getParameter('max')) {
 			$this->throwError('max');
 			return false;
 		}

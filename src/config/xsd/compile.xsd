@@ -1,32 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://agavi.org/agavi/1.0/config" targetNamespace="http://agavi.org/agavi/1.0/config" elementFormDefault="qualified">
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:compile_1_0="http://agavi.org/agavi/config/parts/compile/1.0"
+	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
 
-  <xs:include schemaLocation="default_tags.xsd"/>  
+	<xs:import namespace="http://agavi.org/agavi/config/parts/compile/1.0"
+	           schemaLocation="parts/compile.xsd" />
 
-  <xs:complexType name="configuration">
-    <xs:complexContent>
-      <xs:extension base="base_configuration">
-        <xs:group ref="compiles" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:redefine schemaLocation="_envelope.xsd">
 
-  <xs:group name="compiles">
-    <xs:choice>
-      <xs:element name="compiles" type="compiles" minOccurs="0" />
-      <xs:element name="compile" type="compile" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:choice>
-  </xs:group>
+		<xs:complexType name="configuration">
+			<xs:complexContent>
+				<xs:extension base="configuration">
+					<xs:group ref="compile_1_0:configuration" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
 
-  <xs:complexType name="compiles">
-    <xs:sequence>
-      <xs:element name="compile" type="compile" maxOccurs="unbounded" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="compile">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
+	</xs:redefine>
+
 </xs:schema>

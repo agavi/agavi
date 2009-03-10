@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -119,8 +119,6 @@ abstract class AgaviView
 		$this->container = $container;
 
 		$this->context = $container->getContext();
-
-		$this->response = $container->getResponse();
 	}
 
 	/**
@@ -349,6 +347,8 @@ abstract class AgaviView
 		}
 		$container = $this->container->createExecutionContainer($moduleName, $actionName, $arguments, $outputType, $requestMethod);
 		$container->setParameter('is_slot', true);
+		// just in case it was carried over by AgaviContainer::createExecutionContainer()
+		$container->removeParameter('is_forward');
 		return $container;
 	}
 

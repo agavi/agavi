@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -409,7 +409,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$pName = $this->curBase->pushRetNew($argument)->__toString();
 			if($this->validationParameters->isValueEmpty($paramType, $pName)) {
 				if($throwError && $isRequired) {
-					$this->throwError(null, $pName);
+					$this->throwError('required', $pName);
 				}
 				$result = false;
 			}
@@ -490,6 +490,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$this->incident = new AgaviValidationIncident($this, self::mapErrorCode($this->getParameter('severity', 'error')));
 		}
 
+		foreach($affectedArguments as &$argument) {
+			$argument = new AgaviValidationArgument($argument, $this->getParameter('source'));
+		}
+		
 		if($error !== null || count($affectedArguments) != 0) {
 			// don't throw empty error messages without affected fields
 			$this->incident->addError(new AgaviValidationError($error, $index, $affectedArguments));
@@ -534,10 +538,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			if(is_array($value)) {
 				// for arrays all child elements need to be marked as not processed
 				foreach(AgaviArrayPathDefinition::getFlatKeyNames($value) as $keyName) {
-					$this->parentContainer->addFieldResult($this, $cp->pushRetNew($keyName)->__toString(), AgaviValidator::NOT_PROCESSED);
+					$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->pushRetNew($keyName)->__toString(), $this->getParameter('source')), AgaviValidator::SUCCESS, $this);
 				}
 			}
-			$this->parentContainer->addFieldResult($this, $cp->__toString(), AgaviValidator::NOT_PROCESSED);
+			$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->__toString(), $this->getParameter('source')), AgaviValidator::SUCCESS, $this);
 		}
 	}
 
@@ -561,7 +565,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			// we have an empty base so we do the actual validation
 			if($this->getDependencyManager() && (count($this->getParameter('depends')) > 0 && !$this->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase))) {
 				// dependencies not met, exit with success
-				return self::SUCCESS;
+				return self::NOT_PROCESSED;
 			}
 
 			$this->affectedArguments = $this->getFullArgumentNames();
@@ -576,7 +580,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 				}
 			} else {
 				if($this->getParameter('required', true)) {
-					$this->throwError();
+					$this->throwError('required');
 					$result = $errorCode;
 				} else {
 					// we don't throw an error here because this is not an incident per se
@@ -586,10 +590,8 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			}
 
 			if($this->parentContainer !== null) {
-				if($result != self::NOT_PROCESSED) {
-					foreach($this->affectedArguments as $fieldname) {
-						$this->parentContainer->addFieldResult($this, $fieldname, $result);
-					}
+				foreach($this->affectedArguments as $fieldname) {
+					$this->parentContainer->addArgumentResult(new AgaviValidationArgument($fieldname, $this->getParameter('source')), $result, $this);
 				}
 
 				if($this->incident) {
@@ -629,18 +631,26 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			// if the names array is empty this means we need to throw an error since
 			// this means the input doesn't exist
 			if(count($names) == 0) {
-				if($this->getParameter('required', true)) {
-					$this->throwError();
-					return self::mapErrorCode($this->getParameter('severity', 'error'));
-				} else {
+				if($this->getDependencyManager() && (count($this->getParameter('depends')) > 0 && !$this->getDependencyManager()->checkDependencies($this->getParameter('depends'), $this->curBase))) {
+					// since the dependencies are only ever checked if the base gets empty (which happens when
+					// the validation is about to validate an argument), but we are already bailing out in an earlier
+					// stage, lets do the dependency check so the validator doesn't accidently return an error even
+					// if it's dependencies aren't met
 					return self::NOT_PROCESSED;
+				} else {
+					if($this->getParameter('required', true)) {
+						$this->throwError('required');
+						return self::mapErrorCode($this->getParameter('severity', 'error'));
+					} else {
+						return self::NOT_PROCESSED;
+					}
 				}
 			}
 
 			// throw the wildcard away
 			$base->shift();
 
-			$ret = self::SUCCESS;
+			$ret = self::NOT_PROCESSED;
 
 			// validate in every name defined in the request
 			foreach($names as $name) {
@@ -741,7 +751,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$array = $this->validationParameters->getAll($paramType);
 		$names = $this->curBase->getValue($array, array());
 
-		return array_keys($names);
+		return is_array($names) ? array_keys($names) : array();
 	}
 
 	/**

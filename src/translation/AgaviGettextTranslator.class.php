@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -43,6 +43,11 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	 * @var        array The data for each domain
 	 */
 	protected $domainData = array();
+	
+	/**
+	 * @var        string The locale identifier of the current locale
+	 */
+	protected $locale = null;
 
 	/**
 	 * @var        string The name of the plural form function
@@ -236,10 +241,53 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			if(preg_match('#nplurals=\d+;\s+plural=(.*)$#D', $pf, $match)) {
 				$funcCode = $match[1];
 				$validOpChars = array(' ', 'n', '!', '&', '|', '<', '>', '(', ')', '?', ':', ';', '=', '+', '*', '/', '%', '-');
-				if(preg_match('#[^\d' . preg_quote(implode('', $validOpChars)) . ']#', $funcCode, $errorMatch)) {
+				if(preg_match('#[^\d' . preg_quote(implode('', $validOpChars), '#') . ']#', $funcCode, $errorMatch)) {
 					throw new AgaviException('Illegal character ' . $errorMatch[0] . ' in plural form ' . $funcCode);
 				}
-
+				
+				// add parenthesis around all ternary expressions. This is done 
+				// to make the ternary operator (?) have precende over the delimiter (:)
+				// This will transform 
+				// "a ? 1 : b ? c ? 3 : 4 : 2" to "(a ? 1 : (b ? (c ? 3 : 4) : 2))" and
+				// "a ? b ? c ? d ? 5 : 4 : 3 : 2 : 1" to "(a ? (b ? (c ? (d ? 5 : 4) : 3) : 2) : 1)"
+				// "a ? b ? c ? 4 : 3 : d ? 5 : 2 : 1" to "(a ? (b ? (c ? 4 : 3) : (d ? 5 : 2)) : 1)"
+				// "a ? b ? c ? 4 : 3 : d ? 5 : e ? 6 : 2 : 1" to "(a ? (b ? (c ? 4 : 3) : (d ? 5 : (e ? 6 : 2))) : 1)"
+				
+				$funcCode = rtrim($funcCode, ';');
+				$parts = preg_split('#(\?|\:)#', $funcCode, -1, PREG_SPLIT_DELIM_CAPTURE);
+				$parenthesisCount = 0;
+				$unclosedParenthesisCount = 0;
+				$firstParenthesis = true;
+				$funcCode = '';
+				for($i = 0, $c = count($parts); $i < $c; ++$i) {
+					$lastPart = $i > 0 ? $parts[$i - 1] : null;
+					$part = $parts[$i];
+					$nextPart = $i + 1 < $c ? $parts[$i + 1] : null;
+					if($nextPart == '?') {
+						if($lastPart == ':') {
+							// keep track of parenthesis which need to be closed 
+							// directly after this ternary expression
+							++$unclosedParenthesisCount;
+							--$parenthesisCount;
+						}
+						$funcCode .= ' (' . $part;
+						++$parenthesisCount;
+					} elseif($lastPart == ':') {
+						$funcCode .= $part . ') ';
+						if($unclosedParenthesisCount > 0) {
+							$funcCode .= str_repeat(')', $unclosedParenthesisCount);
+							$unclosedParenthesisCount = 0;
+						}
+						--$parenthesisCount;
+					} else {
+						$funcCode .= $part;
+					}
+				}
+				if($parenthesisCount > 0) {
+					// add the missing top level parenthesis
+					$funcCode .= str_repeat(')', $parenthesisCount);
+				}
+				$funcCode .= ';';
 				$funcCode = 'return ' . str_replace('n', '$n', $funcCode);
 				$this->pluralFormFunc = create_function('$n', $funcCode);
 			}

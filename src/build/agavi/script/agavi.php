@@ -3,7 +3,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,15 +14,31 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * Command-line script for the build system.
+ *
+ * @package    agavi
+ * @subpackage build
+ *
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
+ * @since      1.0.0
+ *
+ * @version    $Id$
+ */
+
+define('BUILD_DIRECTORY', realpath(dirname(__FILE__) . '/../..'));
+define('START_DIRECTORY', getcwd());
+define('MIN_PHING_VERSION', '2.3.1');
+
 require('phing/Phing.php');
 
 require(dirname(__FILE__) . '/../build.php');
 AgaviBuild::bootstrap();
 
 require(dirname(__FILE__) . '/AgaviOptionParser.class.php');
-
-define('BUILD_DIRECTORY', realpath(dirname(__FILE__) . '/../..'));
-define('START_DIRECTORY', getcwd());
 
 $GLOBALS['OUTPUT'] = new OutputStream(fopen('php://stdout', 'w'));
 $GLOBALS['ERROR'] = new OutputStream(fopen('php://stderr', 'w'));
@@ -33,14 +49,27 @@ try {
 	Phing::startup();
 	
 	Phing::setProperty('phing.home', getenv('PHING_HOME'));
+	
+	try {
+		if(!version_compare(preg_replace('/^Phing(?:\s*version)?\s*([0-9\.]+)/i', '$1', Phing::getPhingVersion()), MIN_PHING_VERSION, 'ge')) {
+			$GLOBALS['ERROR']->write(sprintf('Error: Phing version %s or later required', MIN_PHING_VERSION) . PHP_EOL);
+			exit(1);
+		}
+	} catch(Exception $e) {
+		$GLOBALS['ERROR']->write(sprintf('Error: Phing version could not be determined; Phing %s or later required', MIN_PHING_VERSION) . PHP_EOL);
+		$GLOBALS['ERROR']->write(sprintf('Error: Phing version could not be determined; Phing %s or later required', MIN_PHING_VERSION) . PHP_EOL);
+		exit(1);
+	}
 } catch(Exception $e) {
-	$GLOBALS['OUTPUT']->write($e->getMessage() . PHP_EOL);
+	$GLOBALS['ERROR']->write($e->getMessage() . PHP_EOL);
 	exit(1);
 }
 
+
 $GLOBALS['PROPERTIES'] = array();
 $GLOBALS['SHOW_LIST'] = false;
-$GLOBALS['LOGGER'] = 'AgaviProxyBuildLogger';
+$GLOBALS['VERBOSE'] = false;
+$GLOBALS['LOGGER'] = 'phing.listener.AnsiColorLogger';
 $GLOBALS['BUILD'] = new PhingFile(BUILD_DIRECTORY . '/build.xml');
 
 /* Define parser callbacks. */
@@ -51,10 +80,11 @@ function input_help_display()
 	$GLOBALS['OUTPUT']->write('  -h -? --help                     Displays the help for this utility' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  -v --version                     Displays relevant version information' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  -l --list --targets              Displays the list of available targets' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  -D --define <property> <value>   Defines a build property' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  -D --define <property> <value>   Defines a configuration property' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  --verbose                        Provides more verbose configuration information' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  --agavi-source-directory <path>  Sets the Agavi source directory to <path>' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  --include-path <path>            Appends <path> to the PHP include path' . PHP_EOL);
-	$GLOBALS['OUTPUT']->write('  --logger <class>                 Sets the build logger class to <class>' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  --logger <class>                 Sets the configuration logger class to <class>' . PHP_EOL);
 }
 
 function input_help(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
@@ -65,7 +95,7 @@ function input_help(AgaviOptionParser $parser, $name, $arguments, $scriptArgumen
 
 function input_version(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
 {
-	$GLOBALS['OUTPUT']->write('Agavi build system, script version $Id$' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('Agavi project configuration system, script version $Id$' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write(Phing::getPhingVersion() . PHP_EOL);
 	exit(0);
 }
@@ -81,6 +111,11 @@ function input_define(AgaviOptionParser $parser, $name, $arguments, $scriptArgum
 	$value = $arguments[1];
 	
 	$GLOBALS['PROPERTIES'][$name] = $value;
+}
+
+function input_verbose(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
+{
+	$GLOBALS['VERBOSE'] = true;
 }
 
 function input_agavi_source_directory(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
@@ -112,6 +147,7 @@ $parser->addOption('help', array('h', '?'), array('help'), 'input_help');
 $parser->addOption('version', array('v'), array('version'), 'input_version');
 $parser->addOption('list', array('l'), array('list', 'targets'), 'input_list');
 $parser->addOption('define', array('D'), array('define'), 'input_define', 2);
+$parser->addOption('verbose', array(), array('verbose'), 'input_verbose');
 $parser->addOption('agavi_source_directory', array(), array('agavi-source-directory'), 'input_agavi_source_directory', 1);
 $parser->addOption('include_path', array(), array('include-path'), 'input_include_path', 1);
 $parser->addOption('logger', array(), array('logger'), 'input_logger', 1);
@@ -217,11 +253,27 @@ $GLOBALS['PROPERTIES']['project.directory'] = $GLOBALS['PROJECT_DIRECTORY'];
 try {
 	$project = new Project();
 	
-	if(!class_exists($GLOBALS['LOGGER'])) {
-		Phing::import($GLOBALS['LOGGER']);
+	// hax for Mac OS X 10.5 Leopard, where "dim" ANSI colors are broken...
+	if(
+		PHP_OS == 'Darwin' && 
+		(
+			(isset($_SERVER['TERM_PROGRAM']) && $_SERVER['TERM_PROGRAM'] == 'Apple_Terminal') ||
+			(isset($_ENV['TERM_PROGRAM']) && $_ENV['TERM_PROGRAM'] == 'Apple_Terminal')
+		) &&
+		version_compare(preg_replace('/.*ProductVersion:\s*([0-9\.]+).*/s', '$1', shell_exec('sw_vers')), '10.5', 'ge') && 
+		!Phing::getProperty('phing.logger.defaults')
+	) {
+		Phing::setProperty('phing.logger.defaults', new PhingFile(BUILD_DIRECTORY . '/agavi/phing/ansicolorlogger_osxleopard.properties'));
 	}
-	$logger = new $GLOBALS['LOGGER']();
-	$logger->setMessageOutputLevel(Project::MSG_INFO);
+	// hax for Windows, which doesn't support ANSI colors at all
+	elseif(stripos(PHP_OS, 'Win') === 0) {
+		$GLOBALS['LOGGER'] = 'phing.listener.DefaultLogger';
+	}
+	
+	$GLOBALS['LOGGER'] = Phing::import($GLOBALS['LOGGER']);
+	
+	$logger = new AgaviProxyBuildLogger(new $GLOBALS['LOGGER']());
+	$logger->setMessageOutputLevel($GLOBALS['VERBOSE'] ? Project::MSG_VERBOSE : Project::MSG_INFO);
 	$logger->setOutputStream($GLOBALS['OUTPUT']);
 	$logger->setErrorStream($GLOBALS['ERROR']);
 	

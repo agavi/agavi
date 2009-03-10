@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -24,12 +24,12 @@ class AgaviPackageTask extends Task
 	
 	public function main()
 	{
-		if (!@require_once('PEAR/PackageFileManager2.php')) {
+		if(!@require_once('PEAR/PackageFileManager2.php')) {
 			throw new BuildException('Requires PEAR_PackageFileManager >=1.6.0a1');
 		}
 		require_once('PEAR/Exception.php');
 		PEAR::setErrorHandling(PEAR_ERROR_CALLBACK,'PEAR_ErrorToPEAR_Exception');
-		if (!$this->dir || !file_exists($this->dir)) {
+		if(!$this->dir || !file_exists($this->dir)) {
 			throw new BuildException('Build dir is not defined or does not exist.');
 		}
 		
@@ -98,6 +98,7 @@ EOD;
 		$p2->setPackage('agavi');
 		$p2->addMaintainer('lead', 'david', 'David Zülke', 'david.zuelke@bitextender.com');
 		$p2->addMaintainer('developer', 'dominik', 'Dominik del Bondio', 'dominik.del.bondio@bitextender.com');
+		$p2->addMaintainer('developer', 'felix', 'Felix Gilcher', 'felix.gilcher@bitextender.com');
 		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'nfontes@cynigram.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
@@ -107,7 +108,7 @@ EOD;
 		$p2->setAPIStability('stable');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
-		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes.\n\nFor installation instructions, consult INSTALL. Information on how to migrate existing Agavi 0.11.x applications can be found in UPGRADING.");
+		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes.\n\nFor installation instructions, consult INSTALL. Information on how to migrate applications written using previous releases can be found in UPGRADING.");
 		
 		// this must be the most stupid syntax I've ever seen.
 		$p2->addRelease();
@@ -120,11 +121,11 @@ EOD;
 		$p2->addInstallAs('bin/agavi-dist', 'agavi');
 		$p2->addIgnoreToRelease('bin/agavi.bat-dist');
 		
-		$p2->addPackageDepWithChannel( 'required', 'phing', 'pear.phing.info', '2.2.0');
+		$p2->addPackageDepWithChannel('required', 'phing', 'pear.phing.info', '2.3.1');
 		
 		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
 		
-		$p2->setPhpDep('5.1.3');
+		$p2->setPhpDep('5.2.0');
 		
 		$p2->addExtensionDep('required', 'dom');
 		$p2->addExtensionDep('required', 'libxml');

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -78,13 +78,7 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 		$this->layer = $layer;
 		$this->attributes =& $attributes;
 		$this->slots =& $slots;
-		$this->moreAssigns = array();
-		foreach($moreAssigns as $moreAssignName => &$moreAssign) {
-			if(isset($this->moreAssignNames[$moreAssignName])) {
-				$moreAssignName = $this->moreAssignNames[$moreAssignName];
-			}
-			$this->moreAssigns[$moreAssignName] =& $moreAssign;
-		}
+		$this->moreAssigns =& self::buildMoreAssigns($moreAssigns, $this->moreAssignNames);
 		unset($layer, $attributes, $slots, $moreAssigns);
 		
 		if($this->extractVars) {
@@ -100,7 +94,7 @@ class AgaviPhpRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 		}
 		unset($name, $getter);
 		
-		extract($this->moreAssigns, EXTR_REFS);
+		extract($this->moreAssigns, EXTR_REFS | EXTR_PREFIX_INVALID, '_');
 		
 		ob_start();
 		

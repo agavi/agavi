@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:autoload_1_0="http://agavi.org/agavi/config/parts/filters/1.0"
+	ns="http://agavi.org/agavi/config/parts/filters/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	
+	<include href="_common.rng" />
+	
+	<define name="content-configuration" combine="interleave">
+		<optional>
+			<attribute name="context">
+				<ref name="data-list-context" />
+			</attribute>
+		</optional>
+		<choice>
+			<optional>
+				<element name="filters">
+					<ref name="content-filters" />
+				</element>
+			</optional>
+			<zeroOrMore>
+				<element name="filter">
+					<ref name="content-filter" />
+				</element>
+			</zeroOrMore>
+		</choice>
+	</define>
+	
+	<define name="content-filter">
+		<optional>
+			<attribute name="class">
+				<ref name="data-identifier" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="enabled">
+				<ref name="data-boolean" />
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="name">
+				<ref name="data-non-empty-string" />
+			</attribute>
+		</optional>
+		<ref name="content-parameters" />
+	</define>
+	
+	<define name="content-filters">
+		<zeroOrMore>
+			<element name="filter">
+				<ref name="content-filter" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+</grammar>

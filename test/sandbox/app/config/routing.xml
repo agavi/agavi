@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+		<routes>
+			<route name="user_logged_in" pattern="^1$" source="user[authenticated]" module="Auth" action="LoggedIn" />
+			<route name="server" pattern="^foo$" source="_SERVER[routing_test]" module="Server" action="Matched" />
+			<route name="testingsource" pattern="^foo$" source="testingsource[bar]" module="TestingSource" action="Matched" />
+			<route name="with_param" pattern="^/withparam/(number:\d+)$" module="TestWithParam" action="MatchedParam" />
+			<route name="with_two_params" pattern="^/withmultipleparams/(number:\d+)/(string:\w+)$" module="TestWithParam" action="MatchedMultipleParams" />
+			<route name="gen_shortest_possible_url" pattern="^/gen_shortest_possible_url(/{param1:\d+})?(/{param2:\d+})?(/{param3:\d+})?">
+				<default for="param1">/{1}</default>
+				<default for="param2">/{2}</default>
+				<default for="param3">/{3}</default>
+			</route>
+			<route name="with_prefix_and_postfix" pattern="^/with_prefix_and_postfix(/{param:.*})" module="TestPrefixPostfix" action="Matched">
+				<default for="param">/{default}</default>
+			</route>
+			<route name="with_prefix_and_postfix_auto_detected" pattern="^/with_prefix_and_postfix(/myprefix/{param:.*}/my-postfix)" module="TestPrefixPostfix" action="Matched" />
+			<route name="callbacks" pattern="^/callbacks" module="Callback">
+				<route name=".nonmatching_callback" pattern="^/nonmatching_callback$" callback="NonMatchingRoutingCallback" action="NonMatching" />
+				<route name=".matching_callback" pattern="^/matching_callback$" callback="MatchingRoutingCallback" action="Matching" />
+				<route name=".on_not_matched" pattern="^/on_not_matched">
+					<route name=".callback" pattern="^/callback$" callback="OnNotMatchedRoutingCallback" action="NonMatching" />
+				</route>
+				<route name=".on_not_matched_stopper" pattern="^/stopper" action="Stopper" />
+				<route name=".gen_with_param" pattern="^/(number:\d+)" callback="GenWithParamRoutingCallback" />
+				<route name=".gen_with_unescaped_param" pattern="^/(number:\d+)" callback="GenWithUnescapedParamRoutingCallback" />
+				<route name=".gen_unset_route_param" pattern="^/(number:\d+)" callback="GenUnsetRouteParamRoutingCallback" />
+				<route name=".gen_unset_route_param_with_default" pattern="^/(number:\d+)" callback="GenUnsetRouteParamRoutingCallback">
+					<default for="number">23</default>
+				</route>
+				<route name=".gen_unset_route_optional_param" pattern="^/optional/(number:\d+)?" callback="GenUnsetRouteParamRoutingCallback" />
+				<route name=".gen_unset_route_optional_param_with_default" pattern="^/optional/(number:\d+)?" callback="GenUnsetRouteParamRoutingCallback">
+					<default for="number">23</default>
+				</route>
+				<route name=".gen_unset_extra_param" pattern="^/(number:\d+)" callback="GenUnsetExtraParamRoutingCallback" />
+				
+				<route name=".gen_nullify_route_param" pattern="^/(number:\d+)" callback="GenNullifyRouteParamRoutingCallback" />
+				<route name=".gen_nullify_route_param_with_default" pattern="^/(number:\d+)" callback="GenNullifyRouteParamRoutingCallback">
+					<default for="number">23</default>
+				</route>
+				<route name=".gen_nullify_route_param_with_optional_default" pattern="^/optional/(number:\d+)?" callback="GenNullifyRouteParamRoutingCallback">
+					<default for="number">23</default>
+				</route>
+				<route name=".gen_nullify_extra_param" pattern="^/(number:\d+)" callback="GenNullifyExtraParamRoutingCallback" />
+				
+				<route name=".gen_set_prefix_and_postfix" pattern="^/({number:\d+}/)" callback="GenSetPrefixAndPostfixRoutingCallback" />
+				<route name=".gen_set_prefix_and_postfix_without_default" pattern="^/(number:\d+)" callback="GenSetPrefixAndPostfixRoutingCallback" />
+				<route name=".gen_set_prefix_and_postfix_into_route" pattern="^/({number:\d+}/)" callback="GenSetPrefixAndPostfixIntoRouteRoutingCallback">
+					<default for="number">{23}/</default>
+				</route>
+				
+				<route name=".gen_set_extra_param" pattern="^/foo$" callback="GenSetExtraParamRoutingCallback" />
+				<route name=".gen_set_extra_param_routing_value" pattern="^/foo$" callback="GenSetExtraParamRoutingValueRoutingCallback" />
+				
+				<route name=".gen_change_extra_param" pattern="^/foo$" callback="GenChangeExtraParamRoutingCallback" />
+				<route name=".gen_change_extra_param_routing_value" pattern="^/foo$" callback="GenChangeExtraParamRoutingValueRoutingCallback" />
+				
+				<route name=".gen_expect_incoming_parameter_is_encoded_and_can_be_decoded" pattern="^/(string:\s+)" callback="GenDecodeParameterCallback" />
+				
+				<route name=".ticket_695" pattern="foo" source="bar" callback="TestTicket695RoutingCallback" />
+				
+				<route name=".object" pattern="^/foo/(value:.+)$" callback="GenObjectRoutingCallback" />
+			</route>
+			
+			<route name="test_ticket_277" pattern="/test_ticket_277" module="%actions.login_module%" action="%actions.login_action%">
+				<defaults>
+					<default for="foo">bar</default>
+				</defaults>
+			</route>
+			
+			
+			<route name="test_ticket_437" pattern="^/test_ticket_437/(default:\d+)?$" module="Portal" action="Index">
+				<default for="default">0</default>
+			</route>
+						
+			<route name="test_ticket_444" pattern="^/test_ticket_444/(term:[^/]+)/({page:\d+}/)?$">
+			  <default for="page">{1}/</default>
+			</route>
+			
+			<route name="test_ticket_444_sample2" pattern="^/test_ticket_444_sample2/(name:[^/]+)" module="Blog">
+				<route name=".index" pattern="^/$" action="Index" />
+				<route name=".entry" pattern="^/(id:\d+).html$" action="Entry" />
+				<route name=".archive" pattern="^/({year:20\d{2}})/({month:\d{2}/})?({day:\d{2}/})?" action="Archive">
+					<default for="year">2007</default>
+					<default for="month">{1}/</default>
+					<default for="day">{1}/</default>
+				</route>
+			</route>
+			<route name="test_ticket_444_sample2_external" pattern="^/test_ticket_444_sample2_external/(name:[^/]+)/$"/>
+			
+			<route name="test_ticket_464" pattern="^/test_ticket_464(/{type:[^/]+})?(/{page:\d+})?$" module="Portal" action='Index'>
+				<default for="type">/{0}</default>
+				<default for="page">/{1}</default>
+			</route>
+			
+			<route name="test_ticket_713" pattern="^/test_ticket_713(/{zomg:(zomg|lol)})?" module="Default" action="Index" callback="TestTicket713RoutingCallback">
+			  <default for="zomg">/{zomg}</default>
+			</route>
+			
+			<route name="test_ticket_609" pattern="^/test_ticket_609(/{page:\d+})?(/{order:(name|date)})?(/{set:(DESC|ASC)})?$" />
+			
+			<route name="test_ticket_698" pattern="^/test_ticket_698/(overwritten_by_callback:\w+)?$" module="Portal" action="Index" callback="TestTicket698RoutingCallback" />
+			
+			<route name="test_ticket_764" pattern="^/test_ticket_764" module="Default" action="Foo">
+				<route pattern="^/dummy">
+					<route name=".child" pattern="^/child" action=".Bar" />
+				</route>
+			</route>
+			
+			<route name="ticket_1051" pattern="^/ticket_1051$" callback="Ticket1051RoutingCallback" />
+			
+			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
+		</routes>
+	</configuration>
+</configurations>

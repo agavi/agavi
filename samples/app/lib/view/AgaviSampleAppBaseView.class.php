@@ -26,6 +26,36 @@ class AgaviSampleAppBaseView extends AgaviView
 	
 	const DEFAULT_SLOT_LAYOUT_NAME = 'slot';
 	
+	/**
+	 * @var        AgaviRouting
+	 */
+	protected $ro;
+	
+	/**
+	 * @var        AgaviRequest
+	 */
+	protected $rq;
+	
+	/**
+	 * @var        AgaviTranslationManager
+	 */
+	protected $tm;
+	
+	/**
+	 * @var        AgaviUser
+	 */
+	protected $us;
+	
+	public function initialize(AgaviExecutionContainer $container)
+	{
+		parent::initialize($container);
+		
+		$this->ro = $this->getContext()->getRouting();
+		$this->rq = $this->getContext()->getRequest();
+		$this->tm = $this->getContext()->getTranslationManager();
+		$this->us = $this->getContext()->getUser();
+	}
+	
 	public final function execute(AgaviRequestDataHolder $rd)
 	{
 		throw new AgaviViewException(sprintf(
@@ -79,11 +109,12 @@ class AgaviSampleAppBaseView extends AgaviView
 	{
 		if($layoutName === null && $this->getContainer()->getParameter('is_slot', false)) {
 			$layoutName = self::DEFAULT_SLOT_LAYOUT_NAME;
+		} else {
+			// set a default title just to avoid warnings
+			$this->setAttribute('_title', '');
 		}
-		$this->loadLayout($layoutName);
 		
-		// also set a default title just to avoid warnings
-		$this->setAttribute('title', '');
+		$this->loadLayout($layoutName);
 	}
 }
 

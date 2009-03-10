@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -21,7 +21,7 @@
  * @package    agavi
  * @subpackage config
  *
- * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     David Zülke <david.zuelke@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -29,67 +29,77 @@
  *
  * @version    $Id$
  */
-class AgaviModuleConfigHandler extends AgaviConfigHandler
+class AgaviModuleConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/module/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
-	 *                                             file does not exist or is not
-	 *                                             readable.
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.9.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
-
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'module');
+		
+		// remember the config file path
+		$config = $document->documentURI;
+		
+		$enabled = false;
+		$prefix = 'modules.${moduleName}.';
 		$data = array();
-		foreach($configurations as $cfg) {
-			$authors = array();
-			if(isset($cfg->authors)) {
-				foreach($cfg->authors as $author) {
-					if($author->hasAttribute('email')) {
-						$authors[$author->getAttribute('email')] = $author->getValue();
-					} else {
-						$authors[] = $author->getValue();
+		
+		// loop over <configuration> elements
+		foreach($document->getConfigurationElements() as $configuration) {
+			$module = $configuration->getChild('module');
+			if(!$module) {
+				continue;
+			}
+			
+			// enabled flag is treated separately
+			$enabled = (bool) AgaviToolkit::literalize($module->getAttribute('enabled'));
+			
+			// loop over <setting> elements; there can be many of them
+			foreach($module->get('settings') as $setting) {
+				$localPrefix = $prefix;
+				
+				// let's see if this buddy has a <settings> parent with valuable information
+				if($setting->parentNode->localName == 'settings') {
+					if($setting->parentNode->hasAttribute('prefix')) {
+						$localPrefix = $setting->parentNode->getAttribute('prefix');
 					}
 				}
-			}
-
-			$name = strtolower($cfg->name->getValue());
-			$prefix = 'modules.' . $name . '.';
-			$data[$prefix . 'enabled']     = AgaviToolkit::literalize($cfg->enabled->getValue());
-			if(isset($cfg->title)) {
-				$data[$prefix . 'title']       = $cfg->title->getValue();
-			}
-			if(isset($cfg->version)) {
-				$data[$prefix . 'version']     = $cfg->version->getValue();
-			}
-			$data[$prefix . 'authors']     = $authors;
-			if(isset($cfg->homepage)) {
-				$data[$prefix . 'homepage']    = $cfg->homepage->getValue();
-			}
-			if(isset($cfg->update_url)) {
-				$data[$prefix . 'update_url']  = $cfg->update_url->getValue();
-			}
-			if(isset($cfg->description)) {
-				$data[$prefix . 'description'] = $cfg->description->getValue();
+				
+				$settingName = $localPrefix . $setting->getAttribute('name');
+				if($setting->hasAgaviParameters()) {
+					$data[$settingName] = $setting->getAgaviParameters();
+				} else {
+					$data[$settingName] = AgaviToolkit::literalize($setting->getValue());
+				}
 			}
 		}
-
-		$code = 'AgaviConfig::fromArray(' . var_export($data, true) . ');';
-
-		return $this->generate($code);
+		
+		$code = array();
+		$code[] = '$lcModuleName = strtolower($moduleName);';
+		$code[] = 'AgaviConfig::set(AgaviToolkit::expandVariables(' . var_export($prefix . 'enabled', true) . ', array(\'moduleName\' => $lcModuleName)), ' . var_export($enabled, true) . ', true, true);';
+		if(count($data)) {
+			$code[] = '$moduleConfig = ' . var_export($data, true) . ';';
+			$code[] = '$moduleConfigKeys = array_keys($moduleConfig);';
+			$code[] = 'foreach($moduleConfigKeys as &$value) $value = AgaviToolkit::expandVariables($value, array(\'moduleName\' => $lcModuleName));';
+			$code[] = '$moduleConfig = array_combine($moduleConfigKeys, $moduleConfig);';
+			$code[] = 'AgaviConfig::fromArray($moduleConfig);';
+		}
+		
+		return $this->generate($code, $config);
 	}
 }
 

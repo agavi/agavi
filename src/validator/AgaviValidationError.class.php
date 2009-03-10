@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -35,14 +35,14 @@ class AgaviValidationError
 	protected $message = null;
 
 	/**
-	 * @var        string The index of the message.
+	 * @var        string The name of the message.
 	 */
-	protected $messageIndex = null;
+	protected $name = null;
 
 	/**
 	 * @var        array The fields this error affects.
 	 */
-	protected $fields = array();
+	protected $arguments = array();
 
 	/**
 	 * @var        AgaviValidationIncident The incident in which this error 
@@ -54,17 +54,36 @@ class AgaviValidationError
 	 * Constructor
 	 *
 	 * @param      string The message of this error.
-	 * @param      string The index of the message.
-	 * @param      array The fields affected by this error.
+	 * @param      string The name of the message.
+	 * @param      array The arguments affected by this error.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct($message, $messageIdx, array $fields)
+	public function __construct($message, $name, array $arguments)
 	{
 		$this->message = $message;
-		$this->messageIndex = $messageIdx;
-		$this->fields = $fields;
+		$this->name = $name;
+		foreach($arguments as $argument) {
+			if(!($argument instanceof AgaviValidationArgument)) {
+				$argument = new AgaviValidationArgument($argument);
+			}
+			$this->arguments[$argument->getHash()] = $argument;
+		}
+	}
+
+	/**
+	 * Sets the name of this error.
+	 *
+	 * @param      string The error name.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
 	}
 
 	/**
@@ -74,10 +93,26 @@ class AgaviValidationError
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated Superseded by setName()
 	 */
 	public function setMessageIndex($messageIndex)
 	{
-		$this->messageIndex = $messageIndex;
+		$this->setName($messageIndex);
+	}
+
+	/**
+	 * Retrieves the name of this error.
+	 *
+	 * @return     string The error name.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getName()
+	{
+		return $this->name;
 	}
 
 	/**
@@ -87,10 +122,12 @@ class AgaviValidationError
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
+	 *
+	 * @deprecated Superseded by getName()
 	 */
 	public function getMessageIndex()
 	{
-		return $this->messageIndex;
+		return $this->getName();
 	}
 
 	/**
@@ -146,6 +183,34 @@ class AgaviValidationError
 	}
 
 	/**
+	 * Retrieves the arguments which caused this error.
+	 *
+	 * @return     array An array of AgaviValidationArgument.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function getArguments()
+	{
+		return $this->arguments;
+	}
+
+	/**
+	 * Checks if this error was caused for the given argument
+	 *
+	 * @param      AgaviValidationArgument The argument.
+	 *
+	 * @return     bool The result.
+	 *
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function hasArgument(AgaviValidationArgument $argument)
+	{
+		return isset($this->arguments[$argument->getHash()]);
+	}
+	
+	/**
 	 * Retrieves the fields which caused this error.
 	 *
 	 * @return     array An array of field names.
@@ -155,7 +220,11 @@ class AgaviValidationError
 	 */
 	public function getFields()
 	{
-		return $this->fields;
+		$fields = array();
+		foreach($this->arguments as $argument) {
+			$fields[] = $argument->getName();
+		}
+		return $fields;
 	}
 
 	/**
@@ -170,7 +239,7 @@ class AgaviValidationError
 	 */
 	public function hasField($fieldname)
 	{
-		return in_array($fieldname, $this->fields);
+		return $this->hasArgument(new AgaviValidationArgument($fieldname));
 	}
 
 }

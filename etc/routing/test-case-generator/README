@@ -1,0 +1,70 @@
+Agavi Routing Input Test Case Generator
+=======================================
+This script can be used to make test cases for web servers, rewrite engines etc. and various combinations of request paths, query strings and so forth.
+These test cases can then be used in Agavi to make sure the routing is compatible with the web server in question.
+
+To use it, put testcase.php into a directory on your web server, call it index.php, set up index.php as a directory index script, and run it once with, and once without rewrites enabled.
+You need to click the appropriate button, of course, and you need to switch off rewrites in the server for the "norewrite" run - clicking the button is not enough.
+
+The script will automatically gather data in various steps, and at the end of the run, it will present you with a PHP file for download that contains a complete routing test data set. You can submit this to a developer asking you for it.
+
+Usually, you will be asked to run this four times:
+- on the document root, with rewrites
+- on the document root, without rewrites
+- in a subdirectory, with rewrites
+- in a subdirectory, without rewrites
+
+
+Apache Rewrite Rules (.htaccess)
+--------------------------------
+DirectoryIndex index.php
+Options -MultiViews -Indexes +FollowSymLinks
+
+<IfDefine APACHE2>
+AcceptPathInfo On
+</IfDefine>
+
+<IfModule mod_rewrite.c>
+# enable rewrite engine
+RewriteEngine On
+
+# ********** THIS IS THE ONLY SETTING YOU SHOULD HAVE TO CHANGE **********
+RewriteBase /URL/PATH/TO/DIR/WHERE/index.php/RESIDES/
+# e.g. RewriteBase /~dzuelke/_projects/agavi/trunk/etc/routing/
+# usually just "/" if your application's pub dir is the document root
+
+# if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
+RewriteRule ^$ index.php?/ [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) index.php?/$1 [QSA,L]
+</IfModule>
+
+
+Apache Rewrite Rules (vhost config)
+-----------------------------------
+# if requested url does not exist (i.e. it's likely an agavi route), pass it as path info to index.php
+RewriteRule ^/$ /URL/PATH/TO/index.php?/ [QSA,L]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+RewriteRule ^/(.*)$ /URL/PATH/TO/index.php?/$1 [QSA,L]
+</IfModule>
+
+
+lighttpd Rewrite Rules
+----------------------
+url.rewrite-once = ( 
+  "^/~dzuelke/Code/oss/agavi/branches/1.0/etc/routing/([^?]*)(?:\?(.*))?$" => "/~dzuelke/Code/oss/agavi/branches/1.0/etc/routing/index.php?/$1&$2"
+)
+
+
+nginx Rewrite Rules
+-------------------
+rewrite ^/([^?]*)$ /index.php?/$1 last;
+
+
+Microsoft IIS + ISAPIRewrite Rules
+----------------------------------
+UriMatchPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+UriFormatPrefix /users/cbrown/projects/win-a-baseball-match/pub/
+RewriteRule ([^?]*)(?:\?(.*))? index.php?/$1&$2 [L]

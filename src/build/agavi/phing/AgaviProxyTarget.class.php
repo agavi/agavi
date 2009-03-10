@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -30,9 +30,7 @@
 class AgaviProxyTarget extends Target
 {
 	/**
-	 * The proxied target.
-	 *
-	 * @var        Target
+	 * @var        Target The proxied target.
 	 */
 	protected $target;
 	
@@ -40,6 +38,9 @@ class AgaviProxyTarget extends Target
 	 * Sets the proxied target.
 	 *
 	 * @param      Target The target to proxy.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setTarget(Target $target)
 	{
@@ -50,6 +51,9 @@ class AgaviProxyTarget extends Target
 	 * Gets the proxied target.
 	 *
 	 * @return     Target The proxied target.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function getTarget()
 	{
@@ -60,6 +64,9 @@ class AgaviProxyTarget extends Target
 	 * Proxies task adding.
 	 *
 	 * @param      Task The task that is being added.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function addTask(Task $task)
 	{
@@ -74,6 +81,9 @@ class AgaviProxyTarget extends Target
 	 * Proxies datatype adding.
 	 *
 	 * @param      DataType The datatype that is being added.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function addDataType($type)
 	{
@@ -87,6 +97,9 @@ class AgaviProxyTarget extends Target
 	 * Proxies if-conditional adding.
 	 *
 	 * @param      string The condition.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setIf($property)
 	{
@@ -100,6 +113,9 @@ class AgaviProxyTarget extends Target
 	 * Proxies unless-conditional adding.
 	 *
 	 * @param      string The condition.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setUnless($property)
 	{
@@ -111,6 +127,9 @@ class AgaviProxyTarget extends Target
 	
 	/**
 	 * Executes this target.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function main()
 	{

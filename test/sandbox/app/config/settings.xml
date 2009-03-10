@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations xmlns="http://agavi.org/agavi/1.0/config">
+	<configuration>
+
+		<system_actions>
+
+			<system_action name="default">
+				<module>Default</module>
+				<action>Index</action>
+			</system_action>
+
+			<system_action name="error_404">
+				<module>Default</module>
+				<action>Error404</action>
+			</system_action>
+
+			<system_action name="unavailable">
+				<module>Default</module>
+				<action>Unavailable</action>
+			</system_action>
+
+			<system_action name="module_disabled">
+				<module>Default</module>
+				<action>ModuleDisabled</action>
+			</system_action>
+
+			<system_action name="secure">
+				<module>Default</module>
+				<action>Secure</action>
+			</system_action>
+
+			<system_action name="login">
+				<module>Default</module>
+				<action>Login</action>
+			</system_action>
+
+		</system_actions>
+
+		<settings>
+			<setting name="app_name">sandbox</setting>
+
+			<setting name="available">true</setting>
+			<setting name="debug">false</setting>
+
+			<setting name="use_database">false</setting>
+			<setting name="use_logging">false</setting>
+			<setting name="use_security">true</setting>
+			<setting name="use_translation">true</setting>
+		</settings>
+
+		<exception_templates>
+			<exception_template>%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
+			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
+		</exception_templates>
+
+	</configuration>
+
+	<configuration environment="testing.*">
+		<settings>
+			<setting name="default_context">web</setting>
+			<setting name="debug">true</setting>
+		</settings>
+	</configuration>
+
+</configurations>

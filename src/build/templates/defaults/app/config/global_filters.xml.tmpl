@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/filters/1.0">
+
+	<!-- this section is only for web contexts -->
+	<ae:configuration context="web">
+		<filters>
+
+			<filter name="FormPopulationFilter" class="AgaviFormPopulationFilter">
+				
+				<!-- only run for request method "write" (=POST on web) by default (can be changed at runtime, of course) -->
+				<!-- if you omit this, it will never run -->
+				<ae:parameter name="methods">
+					<ae:parameter>write</ae:parameter>
+				</ae:parameter>
+				
+				<!-- only run for output type "html" (so it doesn't break on, say, JSON data) -->
+				<!-- if you omit this, it will run for all output types -->
+				<ae:parameter name="output_types">
+					<ae:parameter>html</ae:parameter>
+				</ae:parameter>
+				
+				<!-- error message insertion rules -->
+				<!-- they are run in sequence; once the first one matched, execution stops -->
+				<!--
+					errors that belong to more than one field (e.g. date validator) can be handled using "multi_field_error_messages"
+					"normal" errors are handled through "field_error_messages"
+					errors that yield no match and those that have no corresponding field are inserted using rules defined in "error_messages".
+				-->
+				
+				<!--
+					for all field error messages.
+				-->
+				<ae:parameter name="field_error_messages">
+					<!-- ${htmlnsPrefix} is either empty (for HTML) or something like "html:" for XHTML documents with xmlns="..." notation. Always use this, makes your code more bullet proof. XPath needs the namespaces when the document is namespaced -->
+					
+					<!-- all input fields that are not checkboxes or radios, and all textareas -->
+					<ae:parameter name="self::${htmlnsPrefix}input[not(@type='checkbox' or @type='radio')] | self::${htmlnsPrefix}textarea">
+						<!-- if this rule matched, then the node found by the rule is our starting point for inserting the error message(s). -->
+						
+						<!-- can be any of "before", "after" or "child" (to insert as prev, next sibling or last child) -->
+						<ae:parameter name="location">after</ae:parameter>
+						<!-- a container groups all errors for one element. ${errorMessages} is a string containing all errors (see below) -->
+						<ae:parameter name="container"><![CDATA[<div class="errors">${errorMessages}</div>]]></ae:parameter>
+						<!-- this defines the HTML for each individual error message; those are then put into the container. ${errorMessage} is the error message string -->
+						<ae:parameter name="markup"><![CDATA[<p class="error">${errorMessage}</p>]]></ae:parameter>
+					</ae:parameter>
+					
+					<!-- all other inputs - note how we select the parent element and insert ourselves as last child of it -->
+					<ae:parameter name="parent::*">
+						<ae:parameter name="location">child</ae:parameter>
+						<ae:parameter name="container"><![CDATA[<div class="errors">${errorMessages}</div>]]></ae:parameter>
+						<ae:parameter name="markup"><![CDATA[<p class="error">${errorMessage}</p>]]></ae:parameter>
+					</ae:parameter>
+				</ae:parameter>
+				
+				<!--
+				<ae:parameter name="multi_field_error_messages">
+				</ae:parameter>
+				-->
+				
+				<!-- everything that did not match any of the rules above, or errors that do not belong to a field -->
+				<ae:parameter name="error_messages">
+					<!-- insert before the element -->
+					<!-- that can be an input, or a form, if the error does not belong to a field or didn't match anywhere else -->
+					<ae:parameter name="self::*">
+						<ae:parameter name="location">before</ae:parameter>
+						<!-- no container here! we just insert paragraph elements -->
+						<ae:parameter name="markup"><![CDATA[<p class="error">${errorMessage}</p>]]></ae:parameter>
+					</ae:parameter>
+				</ae:parameter>
+				
+			</filter>
+
+			<!-- <filter name="TidyFilter" class="AgaviTidyFilter">
+				<ae:parameter name="tidy_options">
+					<ae:parameter name="output-xhtml">true</ae:parameter>
+					<ae:parameter name="numeric-entities">true</ae:parameter>
+				</ae:parameter>
+				<ae:parameter name="tidy_encoding">utf8</ae:parameter>
+			</filter> -->
+
+		</filters>
+
+	</ae:configuration>
+
+</ae:configurations>

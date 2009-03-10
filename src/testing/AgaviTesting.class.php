@@ -1,64 +1,45 @@
 <?php
 
+// +---------------------------------------------------------------------------+
+// | This file is part of the Agavi package.                                   |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// |                                                                           |
+// | For the full copyright and license information, please view the LICENSE   |
+// | file that was distributed with this source code. You can also view the    |
+// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
+// |   vi: set noexpandtab:                                                    |
+// |   Local Variables:                                                        |
+// |   indent-tabs-mode: t                                                     |
+// |   End:                                                                    |
+// +---------------------------------------------------------------------------+
+
+
+/**
+ * Main framework class used for autoloading and initial bootstrapping of the 
+ * Agavi testing environment
+ * 
+ * @package    agavi
+ * @subpackage testing
+ *
+ * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+ * @copyright  The Agavi Project
+ *
+ * @since      1.0.0
+ *
+ * @version    $Id$
+ */
 class AgaviTesting
 {
-	/**
-	 * @var        array An assoc array of classes and files used for autoloading.
-	 */
-	public static $autoloads = array(
-		'AgaviActionTestCase'    => 'testing/AgaviActionTestCase.class.php',
-		'AgaviFlowTestCase'      => 'testing/AgaviFlowTestCase.class.php',
-		'AgaviFlowTestSuite'     => 'testing/AgaviFlowTestSuite.class.php',
-		'AgaviFragmentTestCase'  => 'testing/AgaviFragmentTestCase.class.php',
-		'AgaviFragmentTestSuite' => 'testing/AgaviFragmentTestSuite.class.php',
-		'AgaviIFlowTestCase'     => 'testing/AgaviIFlowTestCase.interface.php',
-		'AgaviIFragmentTestCase' => 'testing/AgaviIFragmentTestCase.interface.php',
-		'AgaviIRemoteTestCase'   => 'testing/AgaviIRemoteTestCase.interface.php',
-		'AgaviITestCase'         => 'testing/AgaviITestCase.interface.php',
-		'AgaviIUnitTestCase'     => 'testing/AgaviIUnitTestCase.interface.php',
-		'AgaviModelTestCase'     => 'testing/AgaviModelTestCase.class.php',
-		'AgaviSeleniumTestCase'  => 'testing/AgaviSeleniumTestCase.class.php',
-		'AgaviTestSuite'         => 'testing/AgaviTestSuite.class.php',
-		'AgaviUnitTestCase'      => 'testing/AgaviUnitTestCase.class.php',
-		'AgaviUnitTestSuite'     => 'testing/AgaviUnitTestSuite.class.php',
-		'AgaviViewTestCase'      => 'testing/AgaviViewTestCase.class.php',
-	);
-
-	/**
-	 * Handles autoloading of classes
-	 *
-	 * @param      string A class name.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public static function __autoload($class)
-	{
-		if(isset(self::$autoloads[$class])) {
-			// class exists, let's include it
-			require(AgaviConfig::get('core.agavi_dir') . '/' . self::$autoloads[$class]);
-		}
-
-		/*
-			If the class doesn't exist in autoload.xml there's not a lot we can do. Because
-			PHP's class_exists resorts to __autoload we cannot throw exceptions
-			for this might break some 3rd party lib autoloading mechanism.
-		*/
-	}
-
 	/**
 	 * Startup the Agavi core
 	 *
 	 * @param      string environment the environment to use for this session.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
+	 * @author     Felix Gilcher <felix.gilcher@exozet.com>
+	 * @since      1.0.0
 	 */
 	public static function bootstrap($environment = null)
 	{
-		// set up our __autoload
-		spl_autoload_register(array('AgaviTesting', '__autoload'));
-
 		if($environment === null) {
 			// no env given? let's read one from testing.environment
 			$environment = AgaviConfig::get('testing.environment');
@@ -75,16 +56,234 @@ class AgaviTesting
 		// finally set the env to what we're really using now.
 		AgaviConfig::set('testing.environment', $environment, true, true);
 		
-		$_ENV['AGAVI'] = AgaviConfig::toArray();
+		// bootstrap the framework for autoload, config handlers etc.
+		Agavi::bootstrap($environment);
+		
+		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
+		
+		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
+	}
+
+	public static function dispatch($arguments = array())
+	{		
+		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
+		
+		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.testing_dir').'/config/suites.xml');
+		$master_suite = new AgaviTestSuite('Master');
+		
+		if(!empty($arguments['include-suite'])) {
+			
+			$names = explode(',', $arguments['include-suite']);
+			unset($arguments['include-suite']);
+			
+			foreach($names as $name) {
+				if(empty($suites[$name])) {
+					throw new InvalidArgumentException(sprintf('Invalid suite name %1$s.', $name));
+				}
+
+				$master_suite->addTest(self::createSuite($name, $suites[$name]));		
+			}
+				
+		} else {
+			$excludes = array();
+			if(!empty($arguments['exclude-suite'])) {
+				$excludes = explode(',', $arguments['exclude-suite']);
+				unset($arguments['exclude-suite']);
+			}
+			foreach($suites as $name => $suite) {
+				if(!in_array($name, $excludes)) {
+					$master_suite->addTest(self::createSuite($name, $suite));	
+				}
+			}
+		}
+		
+		$runner = new PHPUnit_TextUI_TestRunner();
+		$runner->doRun($master_suite, $arguments);
 	}
 	
-	public function dispatch()
+	protected static function createSuite($name, $suite) 
 	{
-		$suite = new PHPUnit_Framework_TestSuite();
+		$s = new $suite['class']($name);
+		foreach($suite['testfiles'] as $file) {
+			$s->addTestFile('tests/'.$file);
+		}
+		return $s;
+	}
+	
+	/**
+	 * Handles the commandline arguments passed.
+	 * 
+	 * @return     array the commandline arguments
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function processCommandlineOptions()
+	{
+		$longOptions = array(
+			'coverage-html=',
+			'coverage-clover=',
+			'coverage-source=',
+			'coverage-xml=',
+			'report=',
+			'environment=',
+			'help',
+			'log-graphviz=',
+			'log-json=',
+			'log-metrics=',
+			'log-pmd=',
+			'log-tap=',
+			'log-xml=',
+			'include-suite=',
+			'exclude-suite=',
+		);
 		
-		// TODO: read test suites from xml or so
+		try {
+			$options = PHPUnit_Util_Getopt::getopt(
+				$_SERVER['argv'],
+				'd:',
+				$longOptions
+			);
+		} catch(RuntimeException $e) {
+			PHPUnit_TextUI_TestRunner::showError($e->getMessage());
+		}
 		
-		$runner = PHPUnit_TextUI_TestRunner::run($suite);
+		$arguments = array(); 
+		
+		foreach($options[0] as $option) {
+			switch($option[0]) {
+				case '--coverage-clover':
+				case '--coverage-xml': 
+					if(self::checkCodeCoverageDeps()) {
+						$arguments['coverageClover'] = $option[1];
+					}
+					break;
+				
+				case '--coverage-source': 
+					if(self::checkCodeCoverageDeps()) {
+						$arguments['coverageSource'] = $option[1];
+					}
+					break;
+				
+				case '--coverage-html':
+				case '--report': 
+					if(self::checkCodeCoverageDeps()) {
+						$arguments['reportDirectory'] = $option[1];
+					}
+					break;
+				
+				case '--environment':
+					$arguments['environment'] = $option[1];
+					break;
+				
+				case '--help':
+					self::showHelp();
+					exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
+					break;
+				
+				case '--log-json':
+					$arguments['jsonLogfile'] = $option[1];
+					break;
+				
+				case '--log-graphviz':
+					if(PHPUnit_Util_Filesystem::fileExistsInIncludePath('Image/GraphViz.php')) {
+						$arguments['graphvizLogfile'] = $option[1];
+					} else {
+						throw new AgaviException('The Image_GraphViz package is not installed.');
+					}
+					break;
+				
+				case '--log-tap':
+					$arguments['tapLogfile'] = $option[1];
+					break;
+				
+				case '--log-xml':
+					$arguments['xmlLogfile'] = $option[1];
+				break;
+				
+				case '--log-pmd':
+					if(self::checkCodeCoverageDeps()) {
+						$arguments['pmdXML'] = $option[1];
+					}
+					break;
+				
+				case '--log-metrics':
+					if(self::checkCodeCoverageDeps()) {
+						$arguments['metricsXML'] = $option[1];
+					}
+					break;
+				
+				case '--include-suite':
+					$arguments['include-suite'] = $option[1];
+					break;
+				
+				case '--exclude-suite':
+					$arguments['exclude-suite'] = $option[1];
+					break;
+			}
+		}
+		
+		return $arguments;
+	}
+	
+	/**
+	 * Checks whether all dependencies for writing code coverage information
+	 * are met. 
+	 * 
+	 * @return     true if all deps are met
+	 * @throws     AgaviExecption if a dependency is missing
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected static function checkCodeCoverageDeps()
+	{
+		if(extension_loaded('tokenizer') && extension_loaded('xdebug')) {
+			return true;
+		} else {
+			if(!extension_loaded('tokenizer')) {
+				throw new AgaviException('The tokenizer extension is not loaded.');
+			} else {
+				throw new AgaviException('The Xdebug extension is not loaded.');
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * shows the help for the commandline call
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected static function showHelp()
+	{
+		PHPUnit_TextUI_TestRunner::printVersionString();
+
+		print <<<EOT
+Usage: run-tests.php [switches]
+
+  --environment <envname>  use environment named <envname> to run the tests. Defaults to "testing".
+
+  --log-graphviz <file>    Log test execution in GraphViz markup.
+  --log-json <file>        Log test execution in JSON format.
+  --log-tap <file>         Log test execution in TAP format to file.
+  --log-xml <file>         Log test execution in XML format to file.
+  --log-metrics <file>     Write metrics report in XML format.
+  --log-pmd <file>         Write violations report in PMD XML format.
+
+  --coverage-html <dir>    Generate code coverage report in HTML format.
+  --coverage-clover <file> Write code coverage data in Clover XML format.
+  --coverage-source <dir>  Write code coverage / source data in XML format.
+
+  --include-suite <suites> run only suites named <suite>, accepts a list of suites, comma separated.
+  --exclude-suite <suites> run all but suites named <suite>, accepts a list of suites, comma separated.
+
+  --help                   Prints this usage information.
+
+
+EOT;
 	}
 }
 

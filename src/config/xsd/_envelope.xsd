@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns:annotations_1_0="http://agavi.org/agavi/config/global/annotations/1.0"
+	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/global/annotations/1.0"
+	           schemaLocation="_annotations.xsd" />
+
+	<xs:complexType name="sandbox">
+		<xs:sequence>
+			<xs:any namespace="##any" processContents="lax"
+			        minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="configuration">
+		<xs:attributeGroup ref="annotations_1_0:match" />
+		<xs:attributeGroup ref="types_1_0:environments" />
+		<xs:anyAttribute namespace="##any" processContents="lax" />
+	</xs:complexType>
+
+	<xs:complexType name="configurations">
+		<xs:sequence>
+			<xs:any namespace="##other" processContents="lax"
+			        minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="sandbox" type="envelope_1_0:sandbox"
+			            minOccurs="0" maxOccurs="1" />
+			<xs:element name="configuration" type="envelope_1_0:configuration"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="parent" type="xs:string" use="optional" />
+		<xs:anyAttribute namespace="##any" processContents="lax" />
+	</xs:complexType>
+
+	<xs:complexType name="parameter" mixed="true">
+		<xs:group ref="envelope_1_0:parameters" />
+		<xs:attribute name="name" type="xs:string" use="optional" />
+	</xs:complexType>
+
+	<xs:complexType name="parameters">
+		<xs:sequence>
+			<xs:element name="parameter" type="envelope_1_0:parameter"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="parameters">
+		<xs:choice>
+			<xs:element name="parameters" type="envelope_1_0:parameters"
+			            minOccurs="0" maxOccurs="1" />
+			<xs:element name="parameter" type="envelope_1_0:parameter"
+			            minOccurs="0" maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+
+	<xs:element name="configurations" type="envelope_1_0:configurations" />
+
+</xs:schema>

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -29,8 +29,14 @@
  */
 class AgaviProxyProject extends Project
 {
+	/**
+	 * @var        Project The Phing Project instance to be proxied.
+	 */
 	protected $proxied = null;
 	
+	/**
+	 * @var        array A List of properties to set on the proxy.
+	 */
 	protected static $protectedProperties = array(
 		'phing.file',
 		'basedir'
@@ -40,6 +46,9 @@ class AgaviProxyProject extends Project
 	 * Creates a new proxied project.
 	 *
 	 * @param      Project The project to proxy.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function __construct(Project $proxied)
 	{
@@ -82,10 +91,12 @@ class AgaviProxyProject extends Project
 	
 	/**
 	 * Initializes this project.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function init()
 	{
-		
 	}
 	
 	/**
@@ -95,6 +106,9 @@ class AgaviProxyProject extends Project
 	 * @param      string The name of the property.
 	 *
 	 * @return     bool True if the property is protected, false otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public static function isPropertyProtected($property)
 	{
@@ -106,6 +120,9 @@ class AgaviProxyProject extends Project
 	 *
 	 * @param      string The name of the property.
 	 * @param      mixed The value of the property.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setProperty($name, $value)
 	{
@@ -134,6 +151,9 @@ class AgaviProxyProject extends Project
 	 *
 	 * @param      string The name of the property.
 	 * @param      mixed The value of the property.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setUserProperty($name, $value)
 	{
@@ -148,6 +168,9 @@ class AgaviProxyProject extends Project
 	 *
 	 * @param      string The name of the property.
 	 * @param      mixed The value of the property.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setInheritedProperty($name, $value)
 	{
@@ -164,6 +187,9 @@ class AgaviProxyProject extends Project
 	 * @param      string The name of the task.
 	 * @param      string The name of the class.
 	 * @param      string The classpath to use when resolving the class.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function addTaskDefinition($name, $class, $classpath = null)
 	{
@@ -178,6 +204,9 @@ class AgaviProxyProject extends Project
 	 * @param      string The name of the task.
 	 * @param      string The name of the class.
 	 * @param      string The classpath to use when resolving the class.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function addDataTypeDefinition($name, $class, $classpath = null)
 	{
@@ -190,6 +219,9 @@ class AgaviProxyProject extends Project
 	 * underlying project.
 	 *
 	 * @param      BuildListener The build listener to add.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function addBuildListener(BuildListener $listener)
 	{

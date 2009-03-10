@@ -24,8 +24,36 @@ class DatabaseConfigHandlerTest extends ConfigHandlerTestBase
 	public function testDatabaseConfigHandler()
 	{
 		$DBCH = new AgaviDatabaseConfigHandler();
+		
+		$document = AgaviXmlConfigParser::run(
+			AgaviConfig::get('core.config_dir') . '/tests/databases.xml',
+			'',
+			'',
+			array(
+				AgaviXmlConfigParser::STAGE_SINGLE => array(
+					AgaviConfig::get('core.agavi_dir') . '/config/xsl/databases.xsl',
+				),
+				AgaviXmlConfigParser::STAGE_COMPILATION => array(
+				),
+			),
+			array(
+				AgaviXmlConfigParser::STAGE_SINGLE => array(
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(
+					),
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array(
+						AgaviXmlConfigParser::VALIDATION_TYPE_RELAXNG => array(
+							AgaviConfig::get('core.agavi_dir') . '/config/rng/databases.rng',
+						),
+					),
+				),
+				AgaviXmlConfigParser::STAGE_COMPILATION => array(
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_BEFORE => array(),
+					AgaviXmlConfigParser::STEP_TRANSFORMATIONS_AFTER => array()
+				),
+			)
+		);
 
-		$this->includeCode($c= $DBCH->execute(AgaviConfig::get('core.config_dir') . '/tests/databases.xml'));
+		$this->includeCode($c = $DBCH->execute($document));
 
 		$this->assertType('DCHTestDatabase', $this->databases['test1']);
 		$params_ex = array(

@@ -1,0 +1,19 @@
+DirectoryIndex index.php
+Options -MultiViews -Indexes +FollowSymLinks
+
+<IfDefine APACHE2>
+	AcceptPathInfo On
+</IfDefine>
+
+<IfModule rewrite_module>
+	RewriteEngine On
+	RewriteBase %%PUBLIC_BASE%%
+
+	# If the requested URL does not exist (it's likely an agavi route),
+	# pass it as path info to index.php, the Agavi dispatch script.
+	RewriteRule ^$ index.php?/ [QSA,L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule (.*) index.php?/$1 [QSA,L]
+</IfModule>
+

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -28,7 +28,6 @@
  *
  * @version    $Id$
  */
-
 class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 {
 	/**
@@ -39,7 +38,13 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 	 */
 	public function execute($config, $context = null)
 	{
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
+		$parsed = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser);
+		if(!isset($parsed->configurations)) {
+			$error = 'Configuration file "%s" is not in the Agavi 0.11 legacy namespace (http://agavi.org/agavi/1.0/config) and/or does not contain a <configurations> element as root node.';
+			$error = sprintf($error, $config);
+			throw new AgaviConfigurationException($error);
+		}
+		$configurations = $this->orderConfigurations($parsed->configurations, AgaviConfig::get('core.environment'), $context);
 		$data = array();
 		foreach($configurations as $cfg) {
 			$data = array_merge($data, $this->convertToArray($cfg, true));
@@ -48,7 +53,7 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 		// compile data
 		$code = 'return ' . var_export($data, true) . ';';
 
-		return $this->generate($code);
+		return $this->generate($code, $config);
 	}
 
 	/**

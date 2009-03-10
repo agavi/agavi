@@ -114,7 +114,7 @@ class FactoryConfigHandlerTest extends ConfigHandlerTestBase
 		AgaviConfig::set('core.use_database', true);
 		AgaviConfig::set('core.use_logging', true);
 		AgaviConfig::set('core.use_security', true);
-		$this->includeCode($c= $FCH->execute(AgaviConfig::get('core.config_dir') . '/tests/factories.xml'));
+		$this->includeCode($c = $FCH->execute(AgaviConfig::get('core.config_dir') . '/tests/factories.xml'));
 
 
 		// Action stack

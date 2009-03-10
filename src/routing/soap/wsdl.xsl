@@ -12,8 +12,32 @@ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
 xmlns="http://schemas.xmlsoap.org/wsdl/"
 >
 	<xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes" />
-	<xsl:variable name="tns" select="name(/agavi_envelope:configurations/namespace::*[.=../@targetNamespace])" />
-	<xsl:variable name="targetNamespace" select="/agavi_envelope:configurations/@targetNamespace" />
+	<!-- define the target namespace -->
+	<xsl:variable name="targetNamespace">
+		<xsl:choose>
+			<!-- is there a specific one on ze <configuration> element? -->
+			<xsl:when test="/agavi_envelope:configurations/agavi_envelope:configuration[@agavi_annotations:matched and @targetNamespace]/@targetNamespace">
+				<!-- take that one -->
+				<xsl:value-of select="/agavi_envelope:configurations/agavi_envelope:configuration[@agavi_annotations:matched and @targetNamespace][1]/@targetNamespace" />
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- there is none, take the one from the root element -->
+				<xsl:value-of select="/agavi_envelope:configurations/@targetNamespace" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+	<xsl:variable name="tns">
+		<xsl:choose>
+			<!-- take the namespace prefix from a <configuration> element (or <configurations>, namespace::* does that for us) that also has a corresponding targetNamespace set on it -->
+			<xsl:when test="/agavi_envelope:configurations/agavi_envelope:configuration[@agavi_annotations:matched and @targetNamespace and namespace::*[.=../@targetNamespace]]">
+				<xsl:value-of select="name(/agavi_envelope:configurations/agavi_envelope:configuration[@agavi_annotations:matched and @targetNamespace and namespace::*[.=../@targetNamespace]][1]/namespace::*[.=../@targetNamespace])" />
+			</xsl:when>
+			<!-- otherwise, take the namespace prefix from <configurations>, assuming that the targetNamespace is defined there, too -->
+			<xsl:otherwise>
+				<xsl:value-of select="name(/agavi_envelope:configurations/namespace::*[.=../@targetNamespace])" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
 	<xsl:variable name="request_postfix" select="'Request'" />
 	<xsl:variable name="request_headers_postfix" select="'RequestHeaders'" />
 	<xsl:variable name="response_postfix" select="'Response'" />
@@ -21,11 +45,23 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 	<xsl:variable name="fault_postfix" select="'Fault'" />
 	<xsl:template match="/agavi_envelope:configurations">
 		<wsdl:definitions name="Dummy">
+			<!-- copy namespace nodes -->
 			<xsl:copy-of select="namespace::*"/>
+			<!-- copy per-context namespace nodes -->
+			<xsl:copy-of select="agavi_envelope:configuration[@agavi_annotations:matched]/namespace::*"/>
 			<!-- copy targetNamespace -->
-			<xsl:copy-of select="@targetNamespace" />
-			<!-- copy type defs -->
-			<xsl:apply-templates select="wsdl:types | wsdl:message" />
+			<xsl:attribute name="targetNamespace"><xsl:value-of select="$targetNamespace" /></xsl:attribute>
+			<!-- copy type defs (global and per-context) -->
+			<wsdl:types>
+				<xsl:copy-of select="wsdl:types/@*" />
+				<xsl:copy-of select="agavi_envelope:configuration[@agavi_annotations:matched]/wsdl:types/@*" />
+				<xsl:copy-of select="wsdl:types/node()" />
+				<xsl:copy-of select="agavi_envelope:configuration[@agavi_annotations:matched]/wsdl:types/node()" />
+			</wsdl:types>
+			<!-- copy message defs -->
+			<xsl:copy-of select="wsdl:message" />
+			<!-- copy per-context message defs -->
+			<xsl:copy-of select="agavi_envelope:configuration[@agavi_annotations:matched]/wsdl:message" />
 			<!-- all the rest -->
 			<xsl:apply-templates select="agavi_envelope:configuration[.//agavi_routing:route//wsdl:* | .//agavi_routing:route//soap:*]" />
 		</wsdl:definitions>
@@ -162,11 +198,6 @@ xmlns="http://schemas.xmlsoap.org/wsdl/"
 					<xsl:copy-of select="soap:fault/@encodingStyle | soap:fault/@name | soap:fault/@namespace | soap:fault/@use" />
 				</xsl:if>
 			</soap:fault>
-		</xsl:copy>
-	</xsl:template>
-	<xsl:template match="/agavi_envelope:configurations/wsdl:types | /agavi_envelope:configurations/agavi_envelope:configuration[@agavi_annotations:matched]/wsdl:types | /agavi_envelope:configurations/wsdl:message | /agavi_envelope:configurations/agavi_envelope:configuration[@agavi_annotations:matched]/wsdl:message">
-		<xsl:copy>
-			<xsl:copy-of select="node() | @*" />
 		</xsl:copy>
 	</xsl:template>
 </xsl:stylesheet>

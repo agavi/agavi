@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -52,6 +52,24 @@ class AgaviFileTemplateLayer extends AgaviStreamTemplateLayer
 			'check' => true,
 			'targets' => $targets,
 		), $parameters));
+	}
+	
+	/**
+	 * Initialize the layer.
+	 *
+	 * Will try and figure out an alternative default for "directory".
+	 *
+	 * @param      AgaviContext The current Context instance.
+	 * @param      array        An array of initialization parameters.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function initialize(AgaviContext $context, array $parameters = array())
+	{
+		$this->setParameter('directory', AgaviToolkit::evaluateModuleDirective(isset($parameters['module']) ? $parameters['module'] : '', 'agavi.template.directory'));
+		
+		parent::initialize($context, $parameters);
 	}
 	
 	/**

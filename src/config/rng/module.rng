@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar
+	xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:module-1.0="http://agavi.org/agavi/config/parts/module/1.0"
+	ns="http://agavi.org/agavi/config/parts/module/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+>
+	
+	<include href="_common.rng" />
+	
+	<define name="content-configuration" combine="interleave">
+		<element name="module">
+			<ref name="content-module" />
+		</element>
+	</define>
+	
+	<define name="content-module">
+		<attribute name="enabled">
+			<ref name="data-boolean" />
+		</attribute>
+		<ref name="content-settings" />
+	</define>
+	
+	<define name="content-settings">
+		<choice>
+			<zeroOrMore>
+				<element name="settings">
+					<ref name="module-content-settings" />
+				</element>
+			</zeroOrMore>
+			<zeroOrMore>
+				<element name="setting">
+					<ref name="module-content-setting" />
+				</element>
+			</zeroOrMore>
+		</choice>
+	</define>
+	
+	<define name="module-content-settings">
+		<optional>
+			<attribute name="prefix" />
+		</optional>
+		<zeroOrMore>
+			<element name="setting">
+				<ref name="module-content-setting" />
+			</element>
+		</zeroOrMore>
+	</define>
+	
+	<define name="module-content-setting">
+		<attribute name="name" />
+		<choice>
+			<ref name="content-parameters" />
+			<text />
+		</choice>
+	</define>
+	
+</grammar>

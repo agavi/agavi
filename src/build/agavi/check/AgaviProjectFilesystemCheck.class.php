@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -30,14 +30,12 @@
 class AgaviProjectFilesystemCheck extends AgaviFilesystemCheck
 {
 	/**
-	 * @var        string The relative path to the project application
-	 *                    directory.
+	 * @var        string The relative path to the project application directory.
 	 */
 	protected $appDirectory = 'app';
 	
 	/**
-	 * @var        string The relative path to the project public
-	 *                    directory.
+	 * @var        string The relative path to the project public directory.
 	 */
 	protected $pubDirectory = 'pub';
 
@@ -45,6 +43,9 @@ class AgaviProjectFilesystemCheck extends AgaviFilesystemCheck
 	 * Sets the application directory.
 	 *
 	 * @param      string The application directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setAppDirectory($appDirectory)
 	{
@@ -55,6 +56,9 @@ class AgaviProjectFilesystemCheck extends AgaviFilesystemCheck
 	 * Gets the application directory.
 	 *
 	 * @return     string The application directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function getAppDirectory()
 	{
@@ -65,6 +69,9 @@ class AgaviProjectFilesystemCheck extends AgaviFilesystemCheck
 	 * Sets the public directory.
 	 *
 	 * @param      string The public directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function setPubDirectory($pubDirectory)
 	{
@@ -75,6 +82,9 @@ class AgaviProjectFilesystemCheck extends AgaviFilesystemCheck
 	 * Gets the public directory.
 	 *
 	 * @return     string The public directory.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function getPubDirectory()
 	{
@@ -85,6 +95,9 @@ class AgaviProjectFilesystemCheck extends AgaviFilesystemCheck
 	 * Determines whether a given directory is a valid Agavi project.
 	 *
 	 * @return     bool True if the directory is valid; false otherwise.
+	 *
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @since      1.0.0
 	 */
 	public function check()
 	{

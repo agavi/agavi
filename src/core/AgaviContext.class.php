@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -34,7 +34,7 @@
  *
  * @version    $Id$
  */
-final class AgaviContext
+class AgaviContext
 {
 	/**
 	 * @var        string The name of the Context.
@@ -121,7 +121,7 @@ final class AgaviContext
 	}
 
 	/**
-	 * Constuctor method, intentionally made private so the context cannot be
+	 * Constuctor method, intentionally made protected so the context cannot be
 	 * created directly.
 	 *
 	 * @param      string The name of this context.
@@ -130,7 +130,7 @@ final class AgaviContext
 	 * @author     Mike Vincent <mike@agavi.org>
 	 * @since      0.9.0
 	 */
-	private function __construct($name)
+	protected function __construct($name)
 	{
 		$this->name = $name;
 	}
@@ -165,6 +165,30 @@ final class AgaviContext
 		if(isset($this->factories[$for])) {
 			return $this->factories[$for];
 		}
+	}
+
+	/**
+	 * Factory for frequently used classes from factories.xml
+	 *
+	 * @param      string The factory identifier.
+	 *
+	 * @return     mixed An instance, already initialized with parameters.
+	 *
+	 * @throws     AgaviException If no such identifier exists.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function createInstanceFor($for)
+	{
+		$info = $this->getFactoryInfo($for);
+		if(null === $info) {
+			throw new AgaviException(sprintf('No factory info for "%s"', $for));
+		}
+		
+		$class = new $info['class']();
+		$class->initialize($this, $info['parameters']);
+		return $class;
 	}
 
 	/**
@@ -245,13 +269,13 @@ final class AgaviContext
 			}
 			$profile = strtolower($profile);
 			if(!isset(self::$instances[$profile])) {
-				$class = __CLASS__;
+				$class = AgaviConfig::get('core.context_implementation', __CLASS__);
 				self::$instances[$profile] = new $class($profile);
 				self::$instances[$profile]->initialize();
 			}
 			return self::$instances[$profile];
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e);
+			AgaviException::render($e);
 		}
 	}
 	
@@ -282,7 +306,7 @@ final class AgaviContext
 		try {
 			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $this->name));
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e, $this);
+			AgaviException::render($e, $this);
 		}
 		
 		register_shutdown_function(array($this, 'shutdown'));
@@ -319,7 +343,10 @@ final class AgaviContext
 	 */
 	public function getModel($modelName, $moduleName = null, array $parameters = null)
 	{
-		$class = $modelName . 'Model';
+		$origModelName = $modelName;
+		$modelName = AgaviToolkit::canonicalName($modelName);
+		$class = str_replace('/', '_', $modelName) . 'Model';
+		$file = null;
 		$rc = null;
 		
 		if($moduleName === null) {
@@ -328,65 +355,36 @@ final class AgaviContext
 			if(!class_exists($class)) {
 				// it's not there. the hunt is on
 				$file = AgaviConfig::get('core.model_dir') . '/' . $modelName . 'Model.class.php';
-				if(is_readable($file)) {
-					require($file);
-				} else {
-					// nothing so far. our last chance: the model name, without a "Model" postfix
-					if(!class_exists($modelName)) {
-						throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
-					} else {
-						$class = $modelName;
-						$rc = new ReflectionClass($class);
-						if(!$rc->implementsInterface('AgaviIModel')) {
-							throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
-						}
-					}
-				}
 			}
 		} else {
+			try {
+				$this->controller->initializeModule($moduleName);
+			} catch(AgaviDisabledModuleException $e) {
+				// swallow, this will load the modules autoload but throw an exception 
+				// if the module is disabled.
+			}
 			// module model
 			// alternative name
-			$moduleClass = $moduleName . '_' . $class;
-			$moduleModelName = $moduleName . '_' . $modelName;
+			$class = $moduleName . '_' . $class;
 			// let's try to autoload the baby
-			if(!class_exists($moduleClass) && !class_exists($class)) {
+			if(!class_exists($class)) {
 				// it's not there. the hunt is on
 				$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName . 'Model.class.php';
-				if(is_readable($file)) {
-					require($file);
-					if(class_exists($moduleClass, false)) {
-						$class = $moduleClass;
-					}
-				} else {
-					// nothing so far. our last chance: the model name, without a "Model" postfix
-					if(!class_exists($moduleModelName) && !class_exists($modelName)) {
-						throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
-					} else {
-						// it was autolaoded, which one is it?
-						if(class_exists($moduleModelName, false)) {
-							$class = $moduleModelName;
-						} else {
-							$class = $modelName;
-						}
-						$rc = new ReflectionClass($class);
-						if(!$rc->implementsInterface('AgaviIModel')) {
-							throw new AgaviAutoloadException("Couldn't find class for Model " . $modelName);
-						}
-					}
-				}
-			} else {
-				// it was autoloaded, which one is it?
-				if(class_exists($moduleClass, false)) {
-					$class = $moduleClass;
-				}
 			}
+		}
+
+		if(null !== $file && is_readable($file)) {
+			require($file);
+		}
+
+		if(!class_exists($class)) {
+			// it's not there. 
+			throw new AgaviAutoloadException("Couldn't find class for Model " . $origModelName);
 		}
 		
 		// so if we're here, we found something, right? good.
 		
-		if(!$rc) {
-			$rc = new ReflectionClass($class);
-		}
+		$rc = new ReflectionClass($class);
 		
 		if($rc->implementsInterface('AgaviISingletonModel')) {
 			// it's a singleton

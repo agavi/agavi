@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -24,6 +24,7 @@
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -31,66 +32,67 @@
  *
  * @version    $Id$
  */
-class AgaviDatabaseConfigHandler extends AgaviConfigHandler
+class AgaviDatabaseConfigHandler extends AgaviXmlConfigHandler
 {
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/databases/1.0';
+	
 	/**
 	 * Execute this configuration handler.
 	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
 	 *
 	 * @return     string Data to be written to a cache file.
 	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
-	 *                                             file does not exist or is not
-	 *                                             readable.
 	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
 	 *                                        improperly formatted.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      0.9.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		// parse the config file
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
-
+		// set up our default namespace
+		$document->setDefaultNamespace(self::XML_NAMESPACE, 'databases');
+		
 		$databases = array();
 		$default = null;
-		foreach($configurations as $cfg) {
-			if(!isset($cfg->databases)) {
+		foreach($document->getConfigurationElements() as $configuration) {
+			if(!$configuration->has('databases')) {
 				continue;
 			}
 			
+			$databasesElement = $configuration->getChild('databases');
+			
 			// make sure we have a default database exists
-			if(!$cfg->databases->hasAttribute('default') && $default === null) {
+			if(!$databasesElement->hasAttribute('default') && $default === null) {
 				// missing default database
 				$error = 'Configuration file "%s" must specify a default database configuration';
-				$error = sprintf($error, $config);
+				$error = sprintf($error, $document->documentURI);
 
 				throw new AgaviParseException($error);
 			}
-			$default = $cfg->databases->getAttribute('default');
+			$default = $databasesElement->getAttribute('default');
 
 			// let's do our fancy work
-			foreach($cfg->databases as $db) {
-				$name = $db->getAttribute('name');
+			foreach($configuration->get('databases') as $database) {
+				$name = $database->getAttribute('name');
 
 				if(!isset($databases[$name])) {
-					$databases[$name] = array('params' => array());
+					$databases[$name] = array('parameters' => array());
 
-					if(!$db->hasAttribute('class')) {
+					if(!$database->hasAttribute('class')) {
 						$error = 'Configuration file "%s" specifies database "%s" with missing class key';
-						$error = sprintf($error, $config, $name);
+						$error = sprintf($error, $document->documentURI, $name);
 
 						throw new AgaviParseException($error);
 					}
 				}
 
-				$databases[$name]['class'] = $db->hasAttribute('class') ? $db->getAttribute('class') : $databases[$name]['class'];
+				$databases[$name]['class'] = $database->hasAttribute('class') ? $database->getAttribute('class') : $databases[$name]['class'];
 
-				$databases[$name]['params'] = $this->getItemParameters($db, $databases[$name]['params']);
+				$databases[$name]['parameters'] = $database->getAgaviParameters($databases[$name]['parameters']);
 			}
 		}
 
@@ -98,21 +100,20 @@ class AgaviDatabaseConfigHandler extends AgaviConfigHandler
 
 		foreach($databases as $name => $db) {
 			// append new data
-			$tmp = "\$database = new %s();\n" .
-							"\$database->initialize(\$this, %s);\n" .
-							"\$this->databases[%s] = \$database;";
-			$data[] = sprintf($tmp, $db['class'], var_export($db['params'], true), var_export($name, true));
+			$data[] = sprintf('$database = new %s();', $db['class']);
+			$data[] = sprintf('$this->databases[%s] = $database;', var_export($name, true));
+			$data[] = sprintf('$database->initialize($this, %s);', var_export($db['parameters'], true));
 		}
 
 		if(!isset($databases[$default])) {
 			$error = 'Configuration file "%s" specifies undefined default database "%s".';
-			$error = sprintf($error, $config, $default);
+			$error = sprintf($error, $document->documentURI, $default);
 			throw new AgaviConfigurationException($error);
 		}
 
 		$data[] = sprintf("\$this->defaultDatabaseName = %s;", var_export($default, true));
 
-		return $this->generate($data);
+		return $this->generate($data, $document->documentURI);
 	}
 }
 

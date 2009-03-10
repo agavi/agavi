@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2008 the Agavi Project.                                |
+// | Copyright (c) 2005-2009 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -75,29 +75,6 @@ class AgaviController extends AgaviParameterHolder
 	private $requestData = null;
 	
 	/**
-	 * Indicates whether or not a module has a specific action.
-	 *
-	 * @param      string A module name.
-	 * @param      string An action name.
-	 *
-	 * @return     string The actual name of the action (might be modified).
-	 *
-	 * @throws     AgaviControllerException if the action could not be found.
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.11.0
-	 */
-	public function resolveAction($moduleName, $actionName)
-	{
-		$actionName = str_replace('.', '/', $actionName);
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
-		if(is_readable($file) && substr($actionName, 0, 1) !== '/') {
-			return $actionName;
-		}
-		throw new AgaviControllerException(sprintf('Action "%s" in Module "%s" could not be found.', $actionName, $moduleName));
-	}
-	
-	/**
 	 * Increment the execution counter.
 	 * Will throw an exception if the maximum amount of runs is exceeded.
 	 *
@@ -136,9 +113,7 @@ class AgaviController extends AgaviParameterHolder
 	public function createExecutionContainer($moduleName = null, $actionName = null, AgaviRequestDataHolder $arguments = null, $outputType = null, $requestMethod = null)
 	{
 		// create a new execution container
-		$ecfi = $this->context->getFactoryInfo('execution_container');
-		$container = new $ecfi['class']();
-		$container->initialize($this->context, $ecfi['parameters']);
+		$container = $this->context->createInstanceFor('execution_container');
 		$container->setModuleName($moduleName);
 		$container->setActionName($actionName);
 		$container->setRequestData($this->requestData);
@@ -154,96 +129,139 @@ class AgaviController extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Initialize a module and load its autoload, module config etc.
+	 *
+	 * @param      string The name of the module to initialize.
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function initializeModule($moduleName)
+	{
+		$lowerModuleName = strtolower($moduleName);
+		
+		if(null === AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {
+			// set some defaults first
+			AgaviConfig::fromArray(array(
+				'modules.' . $lowerModuleName . '.agavi.action.path' => '%core.module_dir%/${moduleName}/actions/${actionName}Action.class.php',
+				'modules.' . $lowerModuleName . '.agavi.cache.path' => '%core.module_dir%/${moduleName}/cache/${actionName}.xml',
+				'modules.' . $lowerModuleName . '.agavi.template.directory' => '%core.module_dir%/${module}/templates',
+				'modules.' . $lowerModuleName . '.agavi.validate.path' => '%core.module_dir%/${moduleName}/validate/${actionName}.xml',
+				'modules.' . $lowerModuleName . '.agavi.view.path' => '%core.module_dir%/${moduleName}/views/${viewName}View.class.php',
+				'modules.' . $lowerModuleName . '.agavi.view.name' => '${actionName}${viewName}',
+			));
+			// include the module configuration
+			// loaded only once due to the way load() (former import()) works
+			if(is_readable(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml')) {
+				include_once(AgaviConfigCache::checkConfig(AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml'));
+			} else {
+				AgaviConfig::set('modules.' . $lowerModuleName . '.enabled', true);
+			}
+			
+			$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
+			if(is_readable($moduleAutoload)) {
+				Agavi::$autoloads = array_merge(Agavi::$autoloads, include(AgaviConfigCache::checkConfig($moduleAutoload)));
+			}
+			
+			if(AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {
+				$moduleConfigHandlers = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/config_handlers.xml';
+				if(is_readable($moduleConfigHandlers)) {
+					AgaviConfigCache::addConfigHandlersFile($moduleConfigHandlers);
+				}
+			}
+		}
+		
+		if(!AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {
+			throw new AgaviDisabledModuleException(sprintf('The module "%1$s" is disabled.', $moduleName));
+		}
+		
+		// check for a module config.php
+		$moduleConfig = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config.php';
+		if(is_readable($moduleConfig)) {
+			require_once($moduleConfig);
+		}
+	}
+	
+	/**
 	 * Dispatch a request
 	 *
-	 * @param      AgaviRequestDataHolder A RequestDataHolder with additional
-	 *                                    request arguments.
+	 * @param      AgaviRequestDataHolder  An optional request data holder object
+	 *                                     with additional request data.
+	 * @param      AgaviExecutionContainer An optional execution container that,
+	 *                                     if given, will be executed right away,
+	 *                                     skipping routing execution.
+	 *
+	 * @return     AgaviResponse The response produced during this dispatch call.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function dispatch(AgaviRequestDataHolder $arguments = null)
+	public function dispatch(AgaviRequestDataHolder $arguments = null, AgaviExecutionContainer $container = null)
 	{
-		$container = null;
-		
 		try {
 			
 			$rq = $this->context->getRequest();
 			$rd = $rq->getRequestData();
 			
-			// match routes and assign returned initial execution container
-			$container = $this->context->getRouting()->execute();
-			
-			// merge in any arguments given. they need to have precedence over what the routing found
-			if($arguments !== null) {
-				$rd->merge($arguments);
+			if($container === null) {
+				// match routes and assign returned initial execution container
+				$container = $this->context->getRouting()->execute();
 			}
 			
-			// next, we have to see if the routing did anything useful, i.e. whether or not it was enabled.
-			$moduleName = $container->getModuleName();
-			$actionName = $container->getActionName();
-			if(!$moduleName) {
-				// no module has been specified; that means the routing did not run, as it would otherwise have the 404 action's module name
-				
-				// lets see if our request data has values for module and action
-				$ma = $rq->getParameter('module_accessor');
-				$aa = $rq->getParameter('action_accessor');
-				if($rd->hasParameter($ma) && $rd->hasParameter($aa)) {
-					// yup. grab those
-					$moduleName = $rd->getParameter($ma);
-					$actionName = $rd->getParameter($aa);
-				} else {
-					// nope. then its time for the default action
-					$moduleName = AgaviConfig::get('actions.default_module');
-					$actionName = AgaviConfig::get('actions.default_action');
+			if($container instanceof AgaviExecutionContainer) {
+				// merge in any arguments given. they need to have precedence over what the routing found
+				if($arguments !== null) {
+					$rd->merge($arguments);
 				}
 				
-				// so by now we hopefully have something reasonable for module and action names - let's set them on the container
-				$container->setModuleName($moduleName);
-				$container->setActionName($actionName);
-			}
-			
-			if(!AgaviConfig::get('core.available', false)) {
-				// application is unavailable
-				$forwardInfoData = array(
-					'requested_module' => $moduleName,
-					'requested_action' => $actionName,
-				);
-				$forwardInfoNamespace = 'org.agavi.controller.forwards.unavailable';
-				
-				$moduleName = AgaviConfig::get('actions.unavailable_module');
-				$actionName = AgaviConfig::get('actions.unavailable_action');
-				
-				try {
-					$actionName = $controller->resolveAction($moduleName, $actionName);
-				} catch(AgaviControllerException $e) {
-					$error = 'Invalid configuration settings: actions.unavailable_module "%s", actions.unavailable_action "%s"';
-					$error = sprintf($error, $moduleName, $actionName);
-					throw new AgaviConfigurationException($error);
+				// next, we have to see if the routing did anything useful, i.e. whether or not it was enabled.
+				$moduleName = $container->getModuleName();
+				$actionName = $container->getActionName();
+				if(!$moduleName) {
+					// no module has been specified; that means the routing did not run, as it would otherwise have the 404 action's module name
+					
+					// lets see if our request data has values for module and action
+					$ma = $rq->getParameter('module_accessor');
+					$aa = $rq->getParameter('action_accessor');
+					if($rd->hasParameter($ma) && $rd->hasParameter($aa)) {
+						// yup. grab those
+						$moduleName = $rd->getParameter($ma);
+						$actionName = $rd->getParameter($aa);
+					} else {
+						// nope. then its time for the default action
+						$moduleName = AgaviConfig::get('actions.default_module');
+						$actionName = AgaviConfig::get('actions.default_action');
+					}
+					
+					// so by now we hopefully have something reasonable for module and action names - let's set them on the container
+					$container->setModuleName($moduleName);
+					$container->setActionName($actionName);
 				}
 				
-				// make a new container
-				$container = $container->createExecutionContainer($moduleName, $actionName);
+				if(!AgaviConfig::get('core.available', false)) {
+					$container = $container->createSystemActionForwardContainer('unavailable');
+				}
 				
-				$container->setAttributes($forwardInfoData, $forwardInfoNamespace);
-				// legacy
-				$rq->setAttributes($forwardInfoData, $forwardInfoNamespace);
+				// create a new filter chain
+				$filterChain = $this->context->createInstanceFor('filter_chain');
+				
+				$this->loadFilters($filterChain, 'global');
+				
+				// register the dispatch filter
+				$filterChain->register($this->filters['dispatch']);
+				
+				// go, go, go!
+				$filterChain->execute($container);
+				
+				$response = $container->getResponse();
+			} elseif($container instanceof AgaviResponse) {
+				// the routing returned a response!
+				$response = $container;
+				// set $container to null so AgaviException::render() won't think it is a container if an exception happens later!
+				$container = null;
+			} else {
+				throw new AgaviException('AgaviRouting::execute() returned neither AgaviExecutionContainer nor AgaviResponse object.');
 			}
-			
-			// create a new filter chain
-			$fcfi = $this->context->getFactoryInfo('filter_chain');
-			$filterChain = new $fcfi['class']();
-			$filterChain->initialize($this->context, $fcfi['parameters']);
-			
-			$this->loadFilters($filterChain, 'global');
-			
-			// register the dispatch filter
-			$filterChain->register($this->filters['dispatch']);
-			
-			// go, go, go!
-			$filterChain->execute($container);
-			
-			$response = $container->getResponse();
 			$response->merge($this->response);
 			
 			if($this->getParameter('send_response')) {
@@ -253,7 +271,7 @@ class AgaviController extends AgaviParameterHolder
 			return $response;
 			
 		} catch(Exception $e) {
-			AgaviException::printStackTrace($e, $this->context, $container);
+			AgaviException::render($e, $this->context, $container);
 		}
 	}
 	
@@ -270,14 +288,52 @@ class AgaviController extends AgaviParameterHolder
 		return $this->response;
 	}
 	
+	
+	/**
+	 * Indicates whether or not a module has a specific action file.
+	 * 
+	 * Please note that this is only a cursory check and does not 
+	 * check whether the file actually contains the proper class
+	 *
+	 * @param      string A module name.
+	 * @param      string An action name.
+	 *
+	 * @return     mixed  the path to the action file if the action file 
+	 *                    exists and is readable, false in any other case
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function checkActionFile($moduleName, $actionName)
+	{
+		$this->initializeModule($moduleName);
+		
+		$actionName = AgaviToolkit::canonicalName($actionName);
+		$file = AgaviToolkit::evaluateModuleDirective(
+			$moduleName,
+			'agavi.action.path',
+			array(
+				'moduleName' => $moduleName,
+				'actionName' => $actionName,
+			)
+		);
+		
+		if(is_readable($file) && substr($actionName, 0, 1) !== '/') {
+			return $file;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Retrieve an Action implementation instance.
 	 *
 	 * @param      string A module name.
 	 * @param      string An action name.
 	 *
-	 * @return     AgaviAction An Action implementation instance, if the action 
-	 *                         exists, otherwise null.
+	 * @return     AgaviAction An Action implementation instance
+	 *
+	 * @throws     AgaviException if the action could not be found.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
@@ -286,47 +342,25 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function createActionInstance($moduleName, $actionName)
 	{
-		static $loaded = array();
+		$this->initializeModule($moduleName);
 		
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/actions/' . $actionName . 'Action.class.php';
-
-		if(!isset($loaded[$file])) {
-			if(!is_readable($file)) {
+		$actionName = AgaviToolkit::canonicalName($actionName);
+		$longActionName = str_replace('/', '_', $actionName);
+		
+		$class = $moduleName . '_' . $longActionName . 'Action';
+		
+		if(!class_exists($class)) {
+			if(false !== ($file = $this->checkActionFile($moduleName, $actionName))) {
+				require($file);
+			} else {
 				throw new AgaviException('Could not find file for Action "' . $actionName . '" in module "' . $moduleName . '"');
 			}
-			require($file);
-			$loaded[$file] = true;
-
-			$longActionName = $actionName;
-
-			// Nested action check?
-			$position = strrpos($actionName, '/');
-			if($position > -1) {
-				$longActionName = str_replace('/', '_', $actionName);
-				$actionName = substr($actionName, $position + 1);
-			}
-
-			if(class_exists($moduleName . '_' . $longActionName . 'Action', false)) {
-				$class = $moduleName . '_' . $longActionName . 'Action';
-			} elseif(class_exists($moduleName . '_' . $actionName . 'Action', false)) {
-				$class = $moduleName . '_' . $actionName . 'Action';
-			} elseif(class_exists($longActionName . 'Action', false)) {
-				$class = $longActionName . 'Action';
-			} elseif(class_exists($actionName . 'Action', false)) {
-				$class = $actionName . 'Action';
-			} else {
+			
+			if(!class_exists($class, false)) {
 				throw new AgaviException('Could not find Action "' . $longActionName . '" for module "' . $moduleName . '"');
 			}
-			
-			$loaded[$file] = $class;
-		} else {
-			$class = $loaded[$file];
-			
-			if($loaded[$file] === true) {
-				throw new AgaviException('Could not find Action "' . $actionName . '" for module "' . $moduleName . '"');
-			}
-		}
-
+		} 
+		
 		return new $class();
 	}
 
@@ -343,14 +377,53 @@ class AgaviController extends AgaviParameterHolder
 		return $this->context;
 	}
 
+
+	
+	/**
+	 * Indicates whether or not a module has a specific view file.
+	 * 
+	 * Please note that this is only a cursory check and does not 
+	 * check whether the file actually contains the proper class
+	 *
+	 * @param      string A module name.
+	 * @param      string A view name.
+	 *
+	 * @return     mixed  the path to the view file if the view file 
+	 *                    exists and is readable, false in any other case
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public function checkViewFile($moduleName, $viewName)
+	{
+		$this->initializeModule($moduleName);
+		
+		$viewName = AgaviToolkit::canonicalName($viewName);
+		$file = AgaviToolkit::evaluateModuleDirective(
+			$moduleName,
+			'agavi.view.path',
+			array(
+				'moduleName' => $moduleName,
+				'viewName' => $viewName,
+			)
+		);
+		
+		if(is_readable($file) && substr($viewName, 0, 1) !== '/') {
+			return $file;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Retrieve a View implementation instance.
 	 *
 	 * @param      string A module name.
 	 * @param      string A view name.
 	 *
-	 * @return     AgaviView A View implementation instance, if the model exists,
-	 *                       otherwise null.
+	 * @return     AgaviView A View implementation instance,
+	 *
+	 * @throws     AgaviException if the view could not be found.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Mike Vincent <mike@agavi.org>
@@ -359,47 +432,31 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function createViewInstance($moduleName, $viewName)
 	{
-		static $loaded;
+		try {
+			$this->initializeModule($moduleName);
+		} catch(AgaviDisabledModuleException $e) {
+			// views from disabled modules should be usable by definition
+			// swallow
+		}
 		
-		$viewName = str_replace('.', '/', $viewName);
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
-
-		if(!isset($loaded[$file])) {
-			if(!is_readable($file)) {
+		$viewName = AgaviToolkit::canonicalName($viewName);
+		$longViewName = str_replace('/', '_', $viewName);
+		
+		$class = $moduleName . '_' . $longViewName . 'View';
+		
+		if(!class_exists($class)) {
+			
+			if(false !== ($file = $this->checkViewFile($moduleName, $viewName))) {
+				require($file);
+			} else {
 				throw new AgaviException('Could not find file for View "' . $viewName . '" in module "' . $moduleName . '"');
 			}
-			require($file);
-			$loaded[$file] = true;
 			
-			$longViewName = $viewName;
-
-			$position = strrpos($viewName, '/');
-			if($position > -1) {
-				$longViewName = str_replace('/', '_', $viewName);
-				$viewName = substr($viewName, $position + 1);
-			}
-
-			if(class_exists($moduleName . '_' . $longViewName . 'View', false)) {
-				$class = $moduleName . '_' . $longViewName . 'View';
-			} elseif(class_exists($moduleName . '_' . $viewName . 'View', false)) {
-				$class = $moduleName . '_' . $viewName . 'View';
-			} elseif(class_exists($longViewName . 'View', false)) {
-				$class = $longViewName . 'View';
-			} elseif(class_exists($viewName . 'View', false)) {
-				$class = $viewName . 'View';
-			} else {
+			if(!class_exists($class, false)) {
 				throw new AgaviException('Could not find View "' . $longViewName . '" for module "' . $moduleName . '"');
 			}
-			
-			$loaded[$file] = $class;
-		} else {
-			$class = $loaded[$file];
-			
-			if($class === true) {
-				throw new AgaviException('Could not find View "' . $viewName . '" for module "' . $moduleName . '"');
-			}
-		}
-
+		} 
+		
 		return new $class();
 	}
 
@@ -433,26 +490,18 @@ class AgaviController extends AgaviParameterHolder
 		
 		$this->setParameters($parameters);
 		
-		$rfi = $context->getFactoryInfo('response');
-		$this->response = new $rfi["class"](); 
-		$this->response->initialize($context, $rfi["parameters"]);
+		$this->response = $this->context->createInstanceFor('response');
 		
 		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
 		require(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
 		
 		if(AgaviConfig::get('core.use_security', false)) {
-			$sffi = $this->context->getFactoryInfo('security_filter');
-			$this->filters['security'] = new $sffi['class']();
-			$this->filters['security']->initialize($this->context, $sffi['parameters']);
+			$this->filters['security'] = $this->context->createInstanceFor('security_filter');
 		}
 		
-		$dffi = $this->context->getFactoryInfo('dispatch_filter');
-		$this->filters['dispatch'] = new $dffi['class']();
-		$this->filters['dispatch']->initialize($this->context, $dffi['parameters']);
+		$this->filters['dispatch'] = $this->context->createInstanceFor('dispatch_filter');
 		
-		$effi = $this->context->getFactoryInfo('execution_filter');
-		$this->filters['execution'] = new $effi['class']();
-		$this->filters['execution']->initialize($this->context, $effi['parameters']);
+		$this->filters['execution'] = $this->context->createInstanceFor('execution_filter');
 	}
 	
 	/**
@@ -583,7 +632,7 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function viewExists($moduleName, $viewName)
 	{
-		$viewName = str_replace('.', '/', $viewName);
+		$viewName = AgaviToolkit::canonicalName($viewName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
 		return is_readable($file);
 	}

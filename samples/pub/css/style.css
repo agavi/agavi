@@ -1,0 +1,128 @@
+body {
+	background-color: #FFFFFF;
+	color:            #000000;
+	font-family:      arial, helvetica, sans-serif;
+	font-size:        76%;
+	font-style:       normal;
+	font-weight:      normal;
+	margin:           0;
+}
+
+#content {
+	margin-left:  200px;
+	margin-right: 15px;
+}
+
+html[dir=rtl] #content {
+	margin-left:  15px;
+	margin-right: 200px;
+}
+
+h1 {
+	display:          block;
+	background-color: #EAEAEA;
+	border-bottom:    solid 1px #505050;
+	color:            #505050;
+	font-family:      arial, helvetica, sans-serif;
+	font-size:        2.0em;
+	letter-spacing:   0.03em;
+	margin:           0 0 0.5em 0;
+	padding:          0.3em 0.4em
+}
+
+#footer {
+	clear:      both;
+	border-top: solid 1px #AAAAAA;
+	color:      #666;
+	margin-top: 1em;
+	text-align: center;
+}
+
+#footer a {
+	color:         #666;
+}
+
+#menu {
+	border: solid 1px #505050;
+	float:  left;
+	margin: 0 1em 1em 1em;
+	width:  14em;
+}
+
+html[dir=rtl] #menu {
+	float: right;
+}
+
+#menu a {
+	background-color: #EAEAEA;
+	color:            #000000;
+	display:          block;
+	padding:          0.5em;
+	text-decoration:  none;
+}
+
+#menu a:hover {
+	background-color: #505050;
+	color:            #FFFFFF;
+}
+
+#menu h3 {
+	background-color: #750000;
+	color:            #FFFFFF;
+	font-size:        1.3em;
+	margin:           0;
+	padding:          0.3em 0.5em;
+}
+
+#menu li {
+	background-color: #909090;
+	height:           1%;
+	list-style-type:  none;
+	margin:           0;
+	padding:          0;
+}
+
+#menu ul {
+	margin:  0;
+	padding: 0;
+}
+
+/* IE Windows hack */
+
+* html #content {
+	margin-left: 197px;
+}
+
+* html #menu {
+	margin-left: 8px;
+}
+
+* html #menu li {
+	margin-bottom: -5px;
+}
+
+input.error, textarea.error {
+	background-color: #FFE0E0;
+}
+
+label.error {
+	color: #D00;
+}
+
+p.error {
+	padding:          0.5em;
+	border:           2px solid #D66;
+	background-color: #FFF0F0;
+	color:            #D00;
+}
+
+p.runin {
+	float:            right;
+	padding:          0.3em 0.5em;
+	border:           1px solid #DDD;
+	background-color: #FFF;
+}
+
+html[dir=rtl] p.runin {
+	float: left;
+}
