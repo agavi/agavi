@@ -652,11 +652,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	 */
 	protected function insertErrorMessages(DOMElement $element, array $rules, array $incidents)
 	{
-		if(!count($incidents)) {
-			// nothing to do here
-			return true;
-		}
-
 		$errorMessages = array();
 		foreach($incidents as $incident) {
 			if($incident->getSeverity() <= AgaviValidator::SILENT) {
@@ -665,6 +660,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			foreach($incident->getErrors() as $error) {
 				$errorMessages[] = $error->getMessage();
 			}
+		}
+
+		if(!$errorMessages) {
+			// nothing to do here
+			return true;
 		}
 
 		$luie = libxml_use_internal_errors(true);
