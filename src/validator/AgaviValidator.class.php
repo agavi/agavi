@@ -20,7 +20,7 @@
  *   'name'       name of validator
  *   'base'       base path for validation of arrays
  *   'arguments'  an array of input parameter keys to validate
- *   'export'     destination for exportet data
+ *   'export'     destination for exported data
  *   'depends'    list of dependencies needed by the validator
  *   'provides'   list of dependencies the validator provides after success
  *   'severity'   error severity in case of failure
@@ -81,7 +81,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	const ERROR = 400;
 
 	/**
-	 * validation error severty (validator failed and validation process will
+	 * validation error severity (validator failed and validation process will
 	 * be aborted)
 	 */
 	const CRITICAL = 500;

@@ -31,7 +31,7 @@
 class AgaviSecureWebRequest extends AgaviWebRequest {
 
 	/**
-	 * Check wether or not the current request is over a secure connection
+	 * Check whether or not the current request is over a secure connection
 	 * (HTTPS)
 	 *
 	 * @return     bool true if HTTPS is on, false otherwise

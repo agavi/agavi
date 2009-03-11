@@ -261,7 +261,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	/**
 	 * Check if any slots have been set.
 	 *
-	 * @return     bool true if any slots are defined, falseotherwise.
+	 * @return     bool true if any slots are defined, false otherwise.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0

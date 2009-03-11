@@ -268,7 +268,7 @@ class AgaviDecimalFormatter
 								$numberState = 'inFraction';
 							} else {
 								// when the user has a pattern like 0##0 the 2 ## are mandatory too
-								// (basicly everything after the first 0 is mandatory, so take care here)
+								// (basically everything after the first 0 is mandatory, so take care here)
 								if($minShowedIntegrals > 0) {
 									++$minShowedIntegrals;
 								} elseif($c == '0') {
@@ -617,7 +617,7 @@ class AgaviDecimalFormatter
 	 * @param      bool An out value indicating whether there were additional 
 	 *                  characters after the matched number.
 	 *
-	 * @return     mixed The result if parsing was successfull or false when the 
+	 * @return     mixed The result if parsing was successful or false when the 
 	 *                   input was no number.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>

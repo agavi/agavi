@@ -16,7 +16,7 @@
 /**
  * AgaviIsNotEmptyValidator verifies a parameter is not empty
  * 
- * The content of the input value is not varified in any manner, it is only
+ * The content of the input value is not verified in any manner, it is only
  * checked if the input value exists and is not empty. It lets the data holder
  * implementation decide what is regarded as empty.
  *

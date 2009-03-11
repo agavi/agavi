@@ -56,7 +56,7 @@ class AgaviXoroperatorValidator extends AgaviOperatorValidator
 	 * Validates the operator by returning the by XORing the results of the child
 	 * validators.
 	 * 
-	 * @return     bool True if exactly one child validator succeded.
+	 * @return     bool True if exactly one child validator succeeded.
 	 * 
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @author     Ross Lawley <ross.lawley@gmail.com>

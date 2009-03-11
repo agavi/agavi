@@ -46,7 +46,7 @@ class AgaviValidationError
 
 	/**
 	 * @var        AgaviValidationIncident The incident in which this error 
-	 *                                     occured.
+	 *                                     occurred.
 	 */
 	protected $incident = null;
 

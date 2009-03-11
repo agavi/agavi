@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * A container used for each action execution that holds neecessary information,
+ * A container used for each action execution that holds necessary information,
  * such as the output type, the response etc.
  *
  * @package    agavi

@@ -243,7 +243,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	/**
 	 * Starts the validation process.
 	 *
-	 * @param      AgaviRequestDataHolder The datawhich should be validated.
+	 * @param      AgaviRequestDataHolder The data which should be validated.
 	 *
 	 * @return     bool true, if validation succeeded.
 	 *
@@ -501,7 +501,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	}
 
 	/**
-	 * Checks if any incidents occured Returns all fields which succeeded in the 
+	 * Checks if any incidents occurred Returns all fields which succeeded in the 
 	 * validation. Includes fields which were not processed (happens when the 
 	 * field is "not set" and the validator is not required)
 	 *
@@ -530,7 +530,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	}
 
 	/**
-	 * Returns all incidents which happened during the execution of the validaion.
+	 * Returns all incidents which happened during the execution of the validation.
 	 *
 	 * @param      int The minimum severity a returned incident needs to have.
 	 *
