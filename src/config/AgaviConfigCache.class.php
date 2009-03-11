@@ -115,7 +115,7 @@ class AgaviConfigCache
 	}
 	
 	/**
-	 * Fet the handler information for the given filename.
+	 * Fetch the handler information for the given filename.
 	 * 
 	 * @param        string The name of the config file (partial path).
 	 * 
@@ -294,7 +294,7 @@ class AgaviConfigCache
 		}
 
 		// replace unfriendly filename characters with an underscore and postfix the name with a php extension
-		// see http://trac.agavi.org/wiki/RFCs/Ticket932 for an explantion how cache names are constructed
+		// see http://trac.agavi.org/wiki/RFCs/Ticket932 for an explanation how cache names are constructed
 		$cacheName = sprintf(
 			'%1$s_%2$s.php',
 			preg_replace(

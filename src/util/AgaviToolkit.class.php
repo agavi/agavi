@@ -339,7 +339,7 @@ final class AgaviToolkit
 	}
 
 	/**
-	 * This function takes the numerator and divides it thru the denominator while
+	 * This function takes the numerator and divides it through the denominator while
 	 * storing the remainder and returning the quotient.
 	 *
 	 * @param      float The numerator.

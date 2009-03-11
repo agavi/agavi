@@ -50,7 +50,7 @@ abstract class AgaviConfigHandler extends AgaviBaseConfigHandler implements Agav
 	/**
 	 * Retrieve the parameter node values of the given item's parameters element.
 	 *
-	 * @param      ConfigValueHolder The node that contains a parameters chiild.
+	 * @param      ConfigValueHolder The node that contains a parameters child.
 	 * @param      array             As associative array of parameters that will
 	 *                               be overwritten if appropriate.
 	 * @param      boolean           Whether or not values should be literalized.

@@ -564,7 +564,7 @@ class AgaviTimeZoneDataParser
 		} elseif($dateDef['type'] == 'last') {
 			$daysInMonth = AgaviCalendarGrego::monthLength($year, $month);
 			$cal->set(AgaviDateDefinitions::DATE, $daysInMonth);
-			// loop backwards until we found the last occurance of the day
+			// loop backwards until we found the last occurrence of the day
 			while($cal->get(AgaviDateDefinitions::DAY_OF_WEEK) != $dateDef['day']) {
 				$cal->roll(AgaviDateDefinitions::DATE, -1);
 			}
@@ -778,7 +778,7 @@ class AgaviTimeZoneDataParser
 
 		$month = $this->getMonthFromAbbr($ruleColumns[4]);
 		if(!is_numeric($month)) {
-			throw new Exception('Unkown month "'.$month.'" in rule ' . $name);
+			throw new Exception('Unknown month "'.$month.'" in rule ' . $name);
 		}
 
 		$on = $ruleColumns[5];
@@ -787,14 +787,14 @@ class AgaviTimeZoneDataParser
 		} elseif(preg_match('!^last(.*)$!', $on, $match)) {
 			$day = $this->getDayFromAbbr($match[1]);
 			if(!is_numeric($day)) {
-				throw new Exception('Unkown day "'.$day.'" in rule ' . $name);
+				throw new Exception('Unknown day "'.$day.'" in rule ' . $name);
 			}
 
 			$on = array('type' => 'last', 'date' => null, 'day' => $day);
 		} elseif(preg_match('!^([a-z]+)(\>\=|\<\=)([0-9]+)$!i', $on, $match)) {
 			$day = $this->getDayFromAbbr($match[1]);
 			if(!is_numeric($day)) {
-				throw new Exception('Unkown day "'.$day.'" in rule ' . $name);
+				throw new Exception('Unknown day "'.$day.'" in rule ' . $name);
 			}
 
 			$on = array('type' => $match[2], 'date' => $match[3], 'day' => $day);
@@ -955,9 +955,9 @@ class AgaviTimeZoneDataParser
 	}
 
 	/**
-	 * Determines the month definition from an abbrevation.
+	 * Determines the month definition from an abbreviation.
 	 *
-	 * @param      string The abbrevated month.
+	 * @param      string The abbreviated month.
 	 *
 	 * @return     int The definition of this month from AgaviDateDefinitions.
 	 *
@@ -979,9 +979,9 @@ class AgaviTimeZoneDataParser
 	}
 
 	/**
-	 * Determines the day definition from an abbrevation.
+	 * Determines the day definition from an abbreviation.
 	 *
-	 * @param      string The abbrevated day.
+	 * @param      string The abbreviated day.
 	 *
 	 * @return     int The definition of this day from AgaviDateDefinitions.
 	 *

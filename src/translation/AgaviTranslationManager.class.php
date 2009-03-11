@@ -203,7 +203,7 @@ class AgaviTranslationManager
 		$this->currentLocaleIdentifier = $this->getLocaleIdentifier($identifier);
 		$givenData = AgaviLocale::parseLocaleIdentifier($identifier);
 		$actualData = AgaviLocale::parseLocaleIdentifier($this->currentLocaleIdentifier);
-		// construct the given name from the locale from the closest match and the options that were given to the requested locale identifer
+		// construct the given name from the locale from the closest match and the options that were given to the requested locale identifier
 		$this->givenLocaleIdentifier = $actualData['locale_str'] . $givenData['option_str'];
 	}
 
@@ -492,7 +492,7 @@ class AgaviTranslationManager
 
 	/**
 	 * Returns the translators for a given domain and type. The domain can contain
-	 * any extra parts which will be ignored. Will return null when no tanslator 
+	 * any extra parts which will be ignored. Will return null when no translator 
 	 * is defined.
 	 *
 	 * @param      string The domain.
@@ -612,7 +612,7 @@ class AgaviTranslationManager
 	public function getLocaleIdentifier($identifier)
 	{
 		// if a locale with the given identifier doesn't exist try to find the closest
-		// match or bail out on no match or an ambigious match
+		// match or bail out on no match or an ambiguous match
 		if(isset($this->availableLocales[$identifier])) {
 			return $identifier;
 		}
@@ -650,7 +650,7 @@ class AgaviTranslationManager
 				foreach($matchingLocales as $matchedLocale) {
 					$matchedNames[] = $matchedLocale['identifier'];
 				}
-				throw new AgaviException('Specified ambigious locale identifier ' . $identifier . ' which has matches: ' . implode(', ', $matchedNames));
+				throw new AgaviException('Specified ambiguous locale identifier ' . $identifier . ' which has matches: ' . implode(', ', $matchedNames));
 		}
 		
 		return $availableLocale['identifier'];
@@ -801,7 +801,7 @@ class AgaviTranslationManager
 	 * @param      bool   Will receive whether the territory has multiple 
 	 *                    time zones
 	 *
-	 * @return     string The territory identifer or null.
+	 * @return     string The territory identifier or null.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -954,7 +954,7 @@ class AgaviTranslationManager
 				// when a datetime object is created with an timezone offset like in '2005-02-21 00:00:00+01:00'
 				// php falsely returns the name of the current default timezone as the name of the datetimes timezone
 				// but luckily timezone abbreviation (T) is GMT name (GMT-0200) of the timezone
-				// to not accidently report dates which are really in the default timezone the name is explictly checked
+				// to not accidentally report dates which are really in the default timezone the name is explicitly checked
 				if($tzName == date_default_timezone_get()) {
 					$abbr = $time->format('T');
 					if(preg_match('/^GMT[+-]\d{4}$/', $abbr)) {

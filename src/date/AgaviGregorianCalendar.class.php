@@ -775,7 +775,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 			// with 8 AD.  Before 8 AD the spacing is irregular; every 3 years
 			// from 45 BC to 9 BC, and then none until 8 AD.  However, we don't
 			// implement this historical detail; instead, we implement the
-			// computatinally cleaner proleptic calendar, which assumes
+			// computationally cleaner proleptic calendar, which assumes
 			// consistent 4-year cycles throughout time.
 			$isLeap = (($eyear & 0x3) == 0); // equiv. to (eyear%4 == 0)
 
@@ -1075,7 +1075,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 
 	/**
 	 * @var        int Default value that indicates the defaultCenturyStartYear is
-	 *                 unitialized
+	 *                 uninitialized
 	 */
 	private static $fgSystemDefaultCenturyYear = -1;
 

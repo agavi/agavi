@@ -35,7 +35,7 @@
 class AgaviAndoperatorValidator extends AgaviOperatorValidator
 {
 	/**
-	 * Validates the operator by executing the child valdators.
+	 * Validates the operator by executing the child validators.
 	 * 
 	 * @return     bool True if all child validators resulted successful.
 	 * 

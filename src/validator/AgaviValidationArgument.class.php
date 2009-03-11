@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviValidationArgument is a tupel of argument name and source that specifies 
+ * AgaviValidationArgument is a tuple of argument name and source that specifies 
  * the argument to validate.
  *
  * @package    agavi

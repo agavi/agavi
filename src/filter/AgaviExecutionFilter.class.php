@@ -65,7 +65,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * action that's currently run, and in checkCache check for those and return
 	 * an old, stale cache until the flag is gone.
 	 *
-	 * @param      int   The type of the event that occured. See CACHE_CALLBACK_*
+	 * @param      int   The type of the event that occurred. See CACHE_CALLBACK_*
 	 *                   constants.
 	 * @param      array The groups.
 	 * @param      array The caching configuration.
@@ -83,7 +83,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *
 	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
 	 *
-	 * @param      int   The type of the event that occured. See CACHE_CALLBACK_*
+	 * @param      int   The type of the event that occurred. See CACHE_CALLBACK_*
 	 *                   constants.
 	 * @param      array The groups.
 	 * @param      array The caching configuration.
@@ -101,7 +101,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *
 	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
 	 *
-	 * @param      int   The type of the event that occured. See CACHE_CALLBACK_*
+	 * @param      int   The type of the event that occurred. See CACHE_CALLBACK_*
 	 *                   constants.
 	 * @param      array The groups.
 	 * @param      array The caching configuration.
