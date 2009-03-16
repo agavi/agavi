@@ -108,6 +108,7 @@ class AgaviSoapControllerCallHandler
 		
 		// call doDispatch on the controller
 		$response = $ct->doDispatch();
+		$responseContent = $response->getContent();
 		
 		// repack the document/literal wrapped content if required
 		if($ct->getParameter('force_document_literal_wrapped_marshalling', false)) {
@@ -115,21 +116,31 @@ class AgaviSoapControllerCallHandler
 			// struct methodNameResponse {
 			//   typeName returnValueName;
 			// }
-			$returnName = null;
-			foreach($ct->getSoapClient()->__getTypes() as $type) {
-				if(preg_match('/^struct ' . preg_quote($returnType, '/') . ' {\s+\w+\s(\w+);\s+}/m', $type, $matches)) {
-					$returnName = $matches[1];
-					break;
+			// it may also be empty, depending on the definition (if the request/response has a void input/output):
+			// struct deleteEverything {
+			// }
+			
+			// do not wrap soap faults
+			if(!($responseContent instanceof SoapFault)) {
+				$originalResponseContent = $responseContent;
+				$wrapperFound = false;
+				foreach($ct->getSoapClient()->__getTypes() as $type) {
+					if($originalResponseContent !== null && preg_match('/^struct ' . preg_quote($returnType, '/') . ' {\s+\w+\s(\w+);\s+}/m', $type, $matches)) {
+						$wrapperFound = true;
+						$returnName = $matches[1];
+						$responseContent = new stdClass();
+						$responseContent->$returnName = $originalResponseContent;
+						break;
+					} elseif($originalResponseContent === null && preg_match('/^struct ' . preg_quote($returnType, '/') . ' {\s*}/m', $type, $matches)) {
+						$wrapperFound = true;
+						$responseContent = new stdClass();
+						break;
+					}
+				}
+				if(!$wrapperFound) {
+					$responseContent = new SoapFault('Server', 'Failed to marshal document/literal wrapped response: no suitable type found.');
 				}
 			}
-			if($returnName === null) {
-				$responseContent = new SoapFault('Server', 'Failed to marshal document/literal wrapped response: no suitable type found.');
-			} else {
-				$responseContent = new stdClass();
-				$responseContent->$returnName = $response->getContent();
-			}
-		} else {
-			$responseContent = $response->getContent();
 		}
 		
 		// return the content. that's an array, or a float, or whatever, and PHP's SOAP extension will handle the response envelope creation, sending etc for us
