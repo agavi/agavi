@@ -80,6 +80,11 @@
 				<transformation for="compilation">%core.agavi_dir%/routing/soap/wsdl.xsl</transformation>
 			</handler>
 
+			<handler pattern="%core.config_dir%/storages.xml" class="AgaviStorageConfigHandler">
+				<validation>%core.agavi_dir%/config/xsd/storages.xsd</validation>
+				<transformation>%core.agavi_dir%/config/xsl/storages.xsl</transformation>
+			</handler>
+
 			<handler pattern="%core.config_dir%/translation.xml" class="AgaviTranslationConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/translation.xsd</validation>
 				<transformation>%core.agavi_dir%/config/xsl/translation.xsl</transformation>

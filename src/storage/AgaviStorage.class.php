@@ -81,6 +81,19 @@ abstract class AgaviStorage extends AgaviParameterHolder
 	}
 
 	/**
+	 * Retrieve the name of this storage.
+	 *
+	 * @return     string The name of the storage.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
 	 * Read data from this storage.
 	 *
 	 * The preferred format for a key is directory style so naming conflicts can

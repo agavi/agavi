@@ -432,6 +432,8 @@ class AgaviWebRequest extends AgaviRequest
 		$this->urlPath = $parts['path'];
 		$this->urlQuery = $parts['query'];
 		unset($parts);
+		
+		$_SERVER['CONTENT_TYPE'] = 'application/json';
 
 		if($this->getMethod() == $methods['PUT']) {
 
@@ -459,9 +461,14 @@ class AgaviWebRequest extends AgaviRequest
 				);
 			}
 		} elseif($this->getMethod() == $methods['POST'] && (!isset($_SERVER['CONTENT_TYPE']) || (isset($_SERVER['CONTENT_TYPE']) && !preg_match('#^(application/x-www-form-urlencoded|multipart/form-data)(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])))) {
+			
+			$x = fopen('php://memory', 'wb');
+			fwrite($x, json_encode(array('username' => 'Chuck Norris', 'password' => 'kicker', 'zomg' => array(123), 'lol' => array('cats' => 'boats'))));
+			rewind($x);
 			// POST, but no regular urlencoded data or file upload. lets put the request payload into a file
 			$postFile = tempnam(AgaviConfig::get('core.cache_dir'), "POSTUpload_");
-			$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($postFile, "wb"));
+			$size = stream_copy_to_stream($x, $handle = fopen($postFile, "wb"));
+			// $size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($postFile, "wb"));
 			fclose($handle);
 
 			$_FILES = array(

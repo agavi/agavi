@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/storages/1.1"
+	targetNamespace="http://agavi.org/agavi/config/parts/storages/1.1"
+	elementFormDefault="qualified"
+	version="$Id$">
+
+	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
+	           schemaLocation="../_types.xsd" />
+	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	           schemaLocation="../_envelope.xsd" />
+
+	<xs:complexType name="storage">
+		<xs:sequence>
+			<xs:group ref="envelope_1_0:parameters" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="class" type="types_1_0:identifier" />
+	</xs:complexType>
+
+	<xs:complexType name="storages">
+		<xs:sequence>
+			<xs:element name="storage" type="storage"
+			            maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="default" type="xs:string" />
+	</xs:complexType>
+
+	<xs:group name="configuration">
+		<xs:choice>
+			<xs:element name="storages" type="storages"
+			            minOccurs="0" />
+			<xs:element name="storage" type="storage"
+			            minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+
+</xs:schema>

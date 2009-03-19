@@ -31,6 +31,7 @@
 			<autoload name="AgaviReturnArrayConfigHandler">%core.agavi_dir%/config/AgaviReturnArrayConfigHandler.class.php</autoload>
 			<autoload name="AgaviRoutingConfigHandler">%core.agavi_dir%/config/AgaviRoutingConfigHandler.class.php</autoload>
 			<autoload name="AgaviSettingConfigHandler">%core.agavi_dir%/config/AgaviSettingConfigHandler.class.php</autoload>
+			<autoload name="AgaviStorageConfigHandler">%core.agavi_dir%/config/AgaviStorageConfigHandler.class.php</autoload>
 			<autoload name="AgaviTranslationConfigHandler">%core.agavi_dir%/config/AgaviTranslationConfigHandler.class.php</autoload>
 			<autoload name="AgaviTestSuitesConfigHandler">%core.agavi_dir%/config/AgaviTestSuitesConfigHandler.class.php</autoload>
 			<autoload name="AgaviValidatorConfigHandler">%core.agavi_dir%/config/AgaviValidatorConfigHandler.class.php</autoload>
@@ -198,12 +199,14 @@
 
 			<!-- agavi/storage -->
 			<autoload name="AgaviCreoleSessionStorage">%core.agavi_dir%/storage/AgaviCreoleSessionStorage.class.php</autoload>
+			<autoload name="AgaviILegacyStorage">%core.agavi_dir%/storage/AgaviILegacyStorage.interface.php</autoload>
 			<autoload name="AgaviMysqlSessionStorage">%core.agavi_dir%/storage/AgaviMysqlSessionStorage.class.php</autoload>
 			<autoload name="AgaviNullStorage">%core.agavi_dir%/storage/AgaviNullStorage.class.php</autoload>
 			<autoload name="AgaviPdoSessionStorage">%core.agavi_dir%/storage/AgaviPdoSessionStorage.class.php</autoload>
 			<autoload name="AgaviPostgresqlSessionStorage">%core.agavi_dir%/storage/AgaviPostgresqlSessionStorage.class.php</autoload>
 			<autoload name="AgaviSessionStorage">%core.agavi_dir%/storage/AgaviSessionStorage.class.php</autoload>
 			<autoload name="AgaviStorage">%core.agavi_dir%/storage/AgaviStorage.class.php</autoload>
+			<autoload name="AgaviStorageManager">%core.agavi_dir%/storage/AgaviStorageManager.class.php</autoload>
 
 			<!-- agavi/translation -->
 			<autoload name="AgaviBasicTranslator">%core.agavi_dir%/translation/AgaviBasicTranslator.class.php</autoload>
