@@ -531,7 +531,19 @@ abstract class AgaviValidator extends AgaviParameterHolder
 		$paramType = $this->getParameter('source');
 
 		$array =& $this->validationParameters->getAll($paramType);
-		$cp = $this->curBase->pushRetNew($name);
+		$currentParts = $this->curBase->getParts();
+		
+		if(count($currentParts) > 0 && strpos($name, '%') !== false) {
+			// this is a validator which actually has a base (<arguments base="xx">) set
+			// and the export name contains sprintf syntax
+			$name = vsprintf($name, $currentParts);
+		}
+		// CAUTION
+		// we had a feature here during development that would allow [] at the end to append values to an array
+		// that would, however, mean that we have to cast the value to an array, and, either way, a user would be able to manipulate the keys
+		// example: we export to foo[], and the user supplies ?foo[28] in the URL. that means our export will be in foo[29]. foo[28] will be removed by the validation, but the keys are still potentially harmful
+		// that's why we decided to remove this again
+		$cp = new AgaviVirtualArrayPath($name);
 		$cp->setValue($array, $value);
 		if($this->parentContainer !== null) {
 			// make sure the parameter doesn't get removed by the validation manager
