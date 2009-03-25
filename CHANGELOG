@@ -11,6 +11,7 @@ CHG: Generated WSDLs should not have namespace attribute on soap:body elements i
 CHG: Regex validator should export the validated data (#1041) (Felix)
 CHG: Throw exception if Apache's SERVER_SOFTWARE env var contains insufficient version information (#1029) (David)
 
+FIX: Fatal error in AgaviArrayPathDefinition::setValue() in combination with arrays (#1075) (David)
 FIX: Race conditions in AgaviConfigCache::writeCacheFile() may produce corrupt files (#1072) (Dominik)
 FIX: Form Population Filter inserts markup container for validation errors even if there are no messages to insert (#1060) (David)
 FIX: AgaviTranslationManager::$translators and $supplementalData are not initialized as empty array (#1045) (David)

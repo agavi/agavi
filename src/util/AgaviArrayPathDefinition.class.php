@@ -204,7 +204,7 @@ final class AgaviArrayPathDefinition
 				if(is_array($a) && is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && (isset($a[(int)$part]) || array_key_exists((int)$part, $a))) {
 					$part = (int)$part;
 				}
-				if(!isset($a[$part]) || (is_array($a) && !(isset($a[$part]) || array_key_exists($part, $a)))) {
+				if(!isset($a[$part]) || !is_array($a[$part]) || (is_array($a) && !(isset($a[$part]) || array_key_exists($part, $a)))) {
 					$a[$part] = array();
 				}
 				$a = &$a[$part];
