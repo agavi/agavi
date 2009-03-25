@@ -327,11 +327,16 @@ final class AgaviConfigCache
 	{
 		$perms = fileperms(AgaviConfig::get('core.cache_dir')) ^ 0x4000;
 
-		$flags = LOCK_EX | (($append) ? FILE_APPEND : 0);
+		$cacheDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR;
 
-		AgaviToolkit::mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR, $perms);
+		AgaviToolkit::mkdir($cacheDir, $perms);
 
-		if(@file_put_contents($cache, $data, $flags) === false) {
+		if($append && is_readable($cache)) {
+			$data = file_get_contents($cache) . $data;
+		}
+
+		$tmpName = tempnam($cacheDir, basename($cache));
+		if(@file_put_contents($tmpName, $data) === false) {
 			// cannot write cache file
 			$error = 'Failed to write cache file "%s" generated from ' . 'configuration file "%s".';
 			$error .= "\n\n Please make sure the directory \"%s\" is writeable by the web server.";
@@ -339,6 +344,13 @@ final class AgaviConfigCache
 
 			throw new AgaviCacheException($error);
 		} else {
+			// with php < 5.2.6 on win32 renaming to an already existing file doesn't work, but copy does
+			// so we simply assume that when rename() fails that we are on win32 and try to use copy()
+			if(!@rename($tmpName, $cache)) {
+				if(copy($tmpName, $cache)) {
+					unlink($tmpName);
+				}
+			}
 			chmod($cache, $perms);
 		}
 	}
