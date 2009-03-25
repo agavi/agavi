@@ -6,11 +6,13 @@ AGAVI CHANGELOG
 
 ADD: Allow setting of session_cache_expire(), session_cache_limiter() and session_module_name() through configuration (#1035) (David)
 
+CHG: Allow control over exporting behavior in combination with argument bases (#1074) (David)
 CHG: Update timezone database to 2009d (#1070) (David)
 CHG: Generated WSDLs should not have namespace attribute on soap:body elements if service is document/literal (#1061) (David)
 CHG: Regex validator should export the validated data (#1041) (Felix)
 CHG: Throw exception if Apache's SERVER_SOFTWARE env var contains insufficient version information (#1029) (David)
 
+FIX: Exporting parameters from validators with an argument base causes fatal error (#1073) (David)
 FIX: Fatal error in AgaviArrayPathDefinition::setValue() in combination with arrays (#1075) (David)
 FIX: Race conditions in AgaviConfigCache::writeCacheFile() may produce corrupt files (#1072) (Dominik)
 FIX: Form Population Filter inserts markup container for validation errors even if there are no messages to insert (#1060) (David)
