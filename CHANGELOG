@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Allow configuration directives as caching group values (#1059) (David)
 
+CHG: Harmonize handling of dots and slashes in action, view and model names (#1071) (David)
 CHG: Update timezone database to 2009d (#1070) (David)
 CHG: Generated WSDLs should not have namespace attribute on soap:body elements if service is document/literal (#1061) (David)
 CHG: Update to PHPUnit 3.4.0beta1 (#1058) (David)
