@@ -446,16 +446,15 @@ final class AgaviToolkit
 	}
 	
 	/**
-	 * returns the canonical name for a dot-separated view, action, modelname
+	 * Returns the canonical name for a dot-separated view/action/model name.
+	 * This method is idempotent.
 	 *
-	 * calling this function twice or more on a name still yields the right result
+	 * @param      string The view/action/model name.
 	 *
-	 * @param      string the name
-	 * @return     string the canonical name
+	 * @return     string The canonical name.
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
-	 * 
 	 */
 	public static function canonicalName($name)
 	{
