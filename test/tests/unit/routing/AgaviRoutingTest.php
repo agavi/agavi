@@ -212,7 +212,7 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 		$this->routing->setInput('/test_ticket_764/dummy/child');
 		$container = $this->routing->execute();
 		$this->assertEquals('Default', $container->getModuleName());
-		$this->assertEquals('Foo.Bar', $container->getActionName());
+		$this->assertEquals('Foo/Bar', $container->getActionName());
 	}
 }
 
