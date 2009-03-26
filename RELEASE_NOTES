@@ -4,7 +4,7 @@ AGAVI RELEASE NOTES
 Version 0.11.7 - March 26, 2009
 ===============================
 
-This maintenance release fixes a numer of issues over Agavi 0.11.6.
+This maintenance release fixes a number of issues over Agavi 0.11.6.
 
 The following are worth mentioning:
 - Most notable, a race condition in configuration file compilation was fixed that could lead to corrupt compiled files on disk.
