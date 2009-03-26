@@ -31,8 +31,8 @@ AgaviConfig::set('agavi.name', 'Agavi');
 
 AgaviConfig::set('agavi.major_version', '0');
 AgaviConfig::set('agavi.minor_version', '11');
-AgaviConfig::set('agavi.micro_version', '7');
-// AgaviConfig::set('agavi.status', '');
+AgaviConfig::set('agavi.micro_version', '8');
+AgaviConfig::set('agavi.status', 'dev');
 AgaviConfig::set('agavi.branch', '0.11');
 
 AgaviConfig::set('agavi.version',
