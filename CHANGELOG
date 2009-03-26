@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.1 RC2 (April ??, 2009)
+--------------------------
+
+CHG: Pass current execution container to caching callbacks in execution filter (#1079) (David)
+
+
 1.0.1 RC1 (March 26, 2009)
 --------------------------
 
