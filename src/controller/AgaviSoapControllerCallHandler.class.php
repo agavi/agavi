@@ -125,13 +125,41 @@ class AgaviSoapControllerCallHandler
 				$originalResponseContent = $responseContent;
 				$wrapperFound = false;
 				foreach($ct->getSoapClient()->__getTypes() as $type) {
-					if($originalResponseContent !== null && preg_match('/^struct ' . preg_quote($returnType, '/') . ' {\s+\w+\s(\w+);\s+}/m', $type, $matches)) {
-						$wrapperFound = true;
-						$returnName = $matches[1];
+					if($originalResponseContent !== null && preg_match('/^struct ' . preg_quote($returnType, '/') . ' \{\s*(.+)\s*\}$/s', $type, $matches)) {
+						// next: extract all the return value part names (usually just one)
+						$returnPartCount = preg_match_all('/^\s*(?P<type>\w+) (?P<name>\w+);$/m', $matches[1], $returnParts);
+						
+						// we convert the response content to an array if it's exactly one return part
+						// so the code further down works without additional checks
+						// a check like !is_array() would be wrong as the return value might be an array itself already (e.g. for a list of objects)
+						if($returnPartCount == 1) {
+							$originalResponseContent = array($originalResponseContent);
+						}
+						
 						$responseContent = new stdClass();
-						$responseContent->$returnName = $originalResponseContent;
+						
+						// it *should* be an array with return parts as keys, but doesn't have to be (first because PHP allows this, and second because we do this a couple of lines above)
+						// so we need to iterate by hand and check for named key first, numeric offset second
+						for($i = 0; $i < $returnPartCount; $i++) {
+							$returnPartName = $returnParts['name'][$i];
+							
+							if(array_key_exists($returnPartName, $originalResponseContent)) {
+								$returnPartValue = $originalResponseContent[$returnPartName];
+							} elseif(array_key_exists($i, $originalResponseContent)) {
+								$returnPartValue = $originalResponseContent[$i];
+							} else {
+								// nothing found
+								// that means the response was invalid or something... we should bail out here, so $wrapperFound won't be true and the next type is tried
+								continue 2;
+							}
+							
+							$responseContent->$returnPartName = $returnPartValue;
+						}
+						
+						// we set $wrapperFound only now
+						$wrapperFound = true;
 						break;
-					} elseif($originalResponseContent === null && preg_match('/^struct ' . preg_quote($returnType, '/') . ' {\s*}/m', $type, $matches)) {
+					} elseif($originalResponseContent === null && preg_match('/^struct ' . preg_quote($returnType, '/') . ' \{\s*\}$/s', $type, $matches)) {
 						$wrapperFound = true;
 						$responseContent = new stdClass();
 						break;
