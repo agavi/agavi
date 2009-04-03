@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+0.11.8 (April ??, 2009)
+-----------------------
+
+FIX: Memory leak in AgaviTranslationManager::getLocaleIdentifier() (#1083) (David)
+
+
 0.11.7 (March 26, 2009)
 -----------------------
 

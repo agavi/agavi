@@ -87,6 +87,11 @@ class AgaviTranslationManager
 	protected $localeCache = array();
 
 	/**
+	 * @var        array A cache for locale identifiers resolved from a string.
+	 */
+	protected $localeIdentifierCache = array();
+
+	/**
 	 * @var        array A cache for the data of the available locales.
 	 */
 	protected $localeDataCache = array();
@@ -619,6 +624,11 @@ class AgaviTranslationManager
 		}
 
 		$idData = AgaviLocale::parseLocaleIdentifier($identifier);
+		
+		if(isset($this->localeIdentifierCache[$identifier])) {
+			return $this->localeIdentifierCache[$identifier];
+		}
+		
 		$comparisons = array();
 		if($idData['language']) {
 			$comparisons[] = sprintf('%s == $a["identifierData"]["language"]', var_export($idData['language'], true));
@@ -654,7 +664,7 @@ class AgaviTranslationManager
 				throw new AgaviException('Specified ambiguous locale identifier ' . $identifier . ' which has matches: ' . implode(', ', $matchedNames));
 		}
 		
-		return $availableLocale['identifier'];
+		return $this->localeIdentifierCache[$identifier] = $availableLocale['identifier'];
 	}
 
 	/**
