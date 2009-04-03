@@ -392,7 +392,7 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 		} else {
 			$results = array();
 			if(count($this->argumentFilter) == 1) {
-				// retrieve the argument filter independant of the key
+				// retrieve the argument filter independent of the key
 				$argument = reset($this->argumentFilter);
 				if($this->validatorFilter) {
 					foreach($this->validatorFilter as $validatorName) {

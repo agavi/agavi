@@ -61,7 +61,7 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 	 * @param      array        An associative array of initialization parameters.
 	 *
 	 * @return     bool true, if initialization completes successfully,
-	 *                  othwerwise false.
+	 *                  otherwise false.
 	 *
 	 * @throws     <b>AgaviInitializationException</b> If an error occurs while
 	 *                                                 initializing this Storage.

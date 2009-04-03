@@ -100,7 +100,7 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Checks if any incidents occured Returns all arguments which succeeded 
+	 * Checks if any incidents occurred Returns all arguments which succeeded 
 	 * in the validation. Includes arguments which were not processed (happens
 	 *  when the argument is "not set" and the validator is not required)
 	 *
@@ -173,7 +173,7 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 	
 	/**
 	 * Will return the highest error severity for an argument. If the field was
-	 * not "touched" by a validator null is returned. Can optionally be resticted
+	 * not "touched" by a validator null is returned. Can optionally be restricted
 	 * to the severity of just one specific validator.
 	 *
 	 * @param      AgaviValidationArgument The argument.

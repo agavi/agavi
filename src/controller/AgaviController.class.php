@@ -573,8 +573,8 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function modelExists($moduleName, $modelName)
 	{
+		$modelName = AgaviToolkit::canonicalName($modelName);
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/models/' . $modelName .	'Model.class.php';
-
 		return is_readable($file);
 	}
 
@@ -591,7 +591,6 @@ class AgaviController extends AgaviParameterHolder
 	public function moduleExists($moduleName)
 	{
 		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/module.xml';
-
 		return is_readable($file);
 	}
 
@@ -620,6 +619,22 @@ class AgaviController extends AgaviParameterHolder
 	}
 
 	/**
+	 * Indicates whether or not a module has a specific action.
+	 *
+	 * @param      string A module name.
+	 * @param      string A view name.
+	 *
+	 * @return     bool true, if the action exists, otherwise false.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.1
+	 */
+	public function actionExists($moduleName, $actionName)
+	{
+		return $this->checkActionFile($moduleName, $actionName) !== false;
+	}
+
+	/**
 	 * Indicates whether or not a module has a specific view.
 	 *
 	 * @param      string A module name.
@@ -632,9 +647,7 @@ class AgaviController extends AgaviParameterHolder
 	 */
 	public function viewExists($moduleName, $viewName)
 	{
-		$viewName = AgaviToolkit::canonicalName($viewName);
-		$file = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/views/' . $viewName . 'View.class.php';
-		return is_readable($file);
+		return $this->checkViewFile($moduleName, $viewName) !== false;
 	}
 	
 	/**

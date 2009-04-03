@@ -113,7 +113,7 @@ class AgaviConfigValueHolder implements ArrayAccess, IteratorAggregate
 			}
 
 			// check if the requested node was specified using the plural version
-			// and create a "virtual" node which reflects the non existant plural node
+			// and create a "virtual" node which reflects the non existent plural node
 			$singularName = $tagNameStart . AgaviInflector::singularize($tagName);
 			if($this->hasChildren($singularName)) {
 

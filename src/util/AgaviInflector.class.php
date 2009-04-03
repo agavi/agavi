@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviInflector allows you to singularize or pluralize an english word
+ * AgaviInflector allows you to singularize or pluralize an English word
  *
  * @package    agavi
  * @subpackage util
@@ -60,7 +60,7 @@ final class AgaviInflector
 	);
 
 	/**
-	 * @var        array plurar => singular mapping
+	 * @var        array plural => singular mapping
 	 */
 	protected static $pluralMatches = array(
 		'/cookies$/i' => 'cookie',

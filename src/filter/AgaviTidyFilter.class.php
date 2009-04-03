@@ -70,7 +70,7 @@ class AgaviTidyFilter extends AgaviFilter implements AgaviIGlobalFilter
 		$tidy->cleanRepair();
 		
 		if($tidy->getStatus()) {
-			// warning or error occured
+			// warning or error occurred
 			$emsg = sprintf(
 				'Tidy Filter encountered the following problems while parsing and cleaning the document: ' . "\n\n%s",
 				$tidy->errorBuffer
@@ -84,7 +84,7 @@ class AgaviTidyFilter extends AgaviFilter implements AgaviIGlobalFilter
 				$lm->log($m, $cfg['logging_logger']);
 			}
 			
-			// all in all, that didn't go so well. let's see if we should just silently abort instead of throwin an exception
+			// all in all, that didn't go so well. let's see if we should just silently abort instead of throwing an exception
 			if(!$cfg['ignore_errors']) {
 				throw new AgaviParseException($emsg);
 			}

@@ -75,7 +75,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	}
 
 	/**
-	 * Retrieve this request's method.
+	 * Retrieve this requests method.
 	 *
 	 * @return     string The request method name
 	 *
