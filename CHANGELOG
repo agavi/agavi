@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 CHG: Pass current execution container to caching callbacks in execution filter (#1079) (David)
 
+FIX: Memory leak in AgaviTranslationManager::getLocaleIdentifier() (#1083) (David)
 FIX: SOAP support's document/literal wrapped marshalling cannot handle multi-part return values (#1081) (David)
 
 
