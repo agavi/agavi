@@ -121,7 +121,7 @@ class AgaviContext
 	}
 
 	/**
-	 * Constuctor method, intentionally made protected so the context cannot be
+	 * Constructor method, intentionally made protected so the context cannot be
 	 * created directly.
 	 *
 	 * @param      string The name of this context.

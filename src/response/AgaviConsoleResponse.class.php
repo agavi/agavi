@@ -84,7 +84,7 @@ class AgaviConsoleResponse extends AgaviResponse
 	/**
 	 * Check if a redirect is set. Not implemented here.
 	 *
-	 * @return     bool true, if a redirect is set, otherwise falsae
+	 * @return     bool true, if a redirect is set, otherwise false
 	 *
 	 * @throws     BadMethodCallException
 	 *
@@ -164,7 +164,7 @@ class AgaviConsoleResponse extends AgaviResponse
 	}
 	
 	/**
-	 * Clear all reponse data.
+	 * Clear all response data.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0

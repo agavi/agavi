@@ -1,12 +1,32 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.1 RC1 (March ??, 2009)
+1.0.1 RC2 (April ??, 2009)
 --------------------------
 
-CHG: Generated WSDLs should not have namespace attribute on soap:body elements if service is document/literal (#1061) (David)
-CHG: Update to PHPUnit 3.4.0beta1 (#1058) (David)
+CHG: Pass current execution container to caching callbacks in execution filter (#1079) (David)
 
+FIX: Memory leak in AgaviTranslationManager::getLocaleIdentifier() (#1083) (David)
+FIX: SOAP support's document/literal wrapped marshalling cannot handle multi-part return values (#1081) (David)
+
+
+1.0.1 RC1 (March 26, 2009)
+--------------------------
+
+ADD: Allow configuration directives as caching group values (#1059) (David)
+
+CHG: Update to PHPUnit 3.4.0beta2 (#1076) (David)
+CHG: Allow control over exporting behavior in combination with argument bases (#1074) (Dominik, David)
+CHG: Harmonize handling of dots and slashes in action, view and model names (#1071) (David)
+CHG: Update timezone database to 2009d (#1070) (David)
+CHG: Generated WSDLs should not have namespace attribute on soap:body elements if service is document/literal (#1061) (David)
+
+FIX: Exporting parameters from validators with an argument base causes fatal error (#1073) (David, Dominik)
+FIX: Fatal error in AgaviArrayPathDefinition::setValue() in combination with arrays (#1075) (David)
+FIX: Race conditions in AgaviConfigCache::writeCacheFile() may produce corrupt files (#1072) (Dominik)
+FIX: Build templates for ProjectBaseView and output_types.xml use different name for slot layout (#1067) (Noah)
+FIX: SOAP support's document/literal wrapped marshalling cannot handle certain empty structs (#1065) (David)
+FIX: SOAP support's document/literal wrapped marshalling incorrectly wraps SoapFault objects (#1064) (David)
 FIX: Form Population Filter inserts markup container for validation errors even if there are no messages to insert (#1060) (David)
 FIX: Regression: changes to extra parameters in AgaviRoutingCallback::onGenerate() have no effect (#1057) (Dominik)
 FIX: Regression: extra parameters added by AgaviRoutingCallback::onGenerate() are not added to routing string as e.g. query params (#1056) (Dominik)

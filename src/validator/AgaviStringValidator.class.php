@@ -22,6 +22,7 @@
  *   'min_error' error message when string is shorter then 'min'
  *   'max'       string should be at most this long
  *   'max_error' error message when string is longer then 'max'
+ *   'trim'      trim whitespace before length checks
  *
  * @package    agavi
  * @subpackage validator

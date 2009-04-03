@@ -339,7 +339,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			}
 		}
 
-		// direct childs/parents with the same name arent caught by the above check
+		// direct childs/parents with the same name aren't caught by the above check
 		if($routeName == $parent) {
 			throw new AgaviException('The route ' . $routeName . ' specifies a child route with the same name');
 		}
@@ -1631,7 +1631,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 						if(!$rxName) {
 							$myRx = $rxPrefix . $rxInner . $rxPostfix;
-							// if the entire regular expression doesn't contain any regular expression character we can savely append it to the reverseStr
+							// if the entire regular expression doesn't contain any regular expression character we can safely append it to the reverseStr
 							//if(strlen($myRx) == strcspn($myRx, $rxChars)) {
 							if(strpbrk($myRx, $rxChars) === false) {
 								$reverseStr .= $myRx;

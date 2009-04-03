@@ -158,7 +158,7 @@ class AgaviValidationIncident
 	}
 
 	/**
-	 * Retrieves a list of all errorneus arguments of this incident.
+	 * Retrieves a list of all erroneous arguments of this incident.
 	 *
 	 * @return     array An array of AgaviValidationArgument.
 	 *

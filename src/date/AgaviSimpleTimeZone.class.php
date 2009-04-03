@@ -148,7 +148,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * TranslationManager->createTimeZone() to create a TimeZone instead of 
 	 * creating a SimpleTimeZone directly with this constructor.
 	 * <P>
-	 * Various types of daylight-savings time rules can be specfied by using 
+	 * Various types of daylight-savings time rules can be specified by using 
 	 * different values for startDay and startDayOfWeek and endDay and 
 	 * endDayOfWeek.  For a complete explanation of how these parameters work, 
 	 * see the documentation for setStartRule().
@@ -192,7 +192,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * TimeZone.createInstance() to create a TimeZone instead of creating a
 	 * SimpleTimeZone directly with this constructor.
 	 * <P>
-	 * Various types of daylight-savings time rules can be specfied by using 
+	 * Various types of daylight-savings time rules can be specified by using 
 	 * different values for startDay and startDayOfWeek and endDay and 
 	 * endDayOfWeek. For a complete explanation of how these parameters work, see
 	 * the documentation for setStartRule().
@@ -238,7 +238,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 * TimeZone.createInstance() to create a TimeZone instead of creating a
 	 * SimpleTimeZone directly with this constructor.
 	 * <P>
-	 * Various types of daylight-savings time rules can be specfied by using 
+	 * Various types of daylight-savings time rules can be specified by using 
 	 * different values for startDay and startDayOfWeek and endDay and 
 	 * endDayOfWeek. For a complete explanation of how these parameters work, see 
 	 * the documentation for setStartRule().
@@ -364,7 +364,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *       (e.g., (-2, 0) is the next-to-last day of the month).
 	 *   </li>
 	 *   <li>If dayOfWeek is negative and dayOfWeekInMonth is positive, they 
-	 *       specify the first specified day of the week on or after the specfied 
+	 *       specify the first specified day of the week on or after the specified 
 	 *       day of the month. (e.g., (15, -SUNDAY) is the first Sunday after the 
 	 *       15th of the month [or the 15th itself if the 15th is a Sunday].)
 	 *   </li>
@@ -421,7 +421,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 *       (e.g., (-2, 0) is the next-to-last day of the month).
 	 *   </li>
 	 *   <li>If dayOfWeek is negative and dayOfWeekInMonth is positive, they 
-	 *       specify the first specified day of the week on or after the specfied 
+	 *       specify the first specified day of the week on or after the specified 
 	 *       day of the month. (e.g., (15, -SUNDAY) is the first Sunday after the 
 	 *       15th of the month [or the 15th itself if the 15th is a Sunday].)
 	 *   </li>
@@ -1125,7 +1125,7 @@ return true;
 			$dayOfWeek = 1 + ($dayOfWeek % 7); // dayOfWeek is one-based
 			if($dayOfMonth > $monthLen) {
 				$dayOfMonth = 1;
-				/* When incrementing the month, it is desirible to overflow
+				/* When incrementing the month, it is desirable to overflow
 				 * from DECEMBER to DECEMBER+1, since we use the result to
 				 * compare against a real month. Wraparound of the value
 				 * leads to bug 4173604. */

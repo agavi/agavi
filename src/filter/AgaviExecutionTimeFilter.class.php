@@ -23,7 +23,7 @@
  *
  * # <b>comment</b> - [Yes] - Should we add an HTML comment to the end of each
  *                            output with the execution time?
- * # <b>replace</b> - [No] - If this exists, every occurance of the value in the
+ * # <b>replace</b> - [No] - If this exists, every occurrence of the value in the
  *                           client response will be replaced by the execution
  *                           time.
  *

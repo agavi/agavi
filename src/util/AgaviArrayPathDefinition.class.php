@@ -77,7 +77,7 @@ final class AgaviArrayPathDefinition
 	 *                          divided into its individual parts.
 	 * @param      array The array we should operate on.
 	 *
-	 * @return     mixed The previosly stored value.
+	 * @return     mixed The previously stored value.
 	 *
 	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
 	 * @since      0.11.0
@@ -204,7 +204,7 @@ final class AgaviArrayPathDefinition
 				if(is_array($a) && is_numeric($part) && strpos($part, '.') === false && strpos($part, ',') === false && (isset($a[(int)$part]) || array_key_exists((int)$part, $a))) {
 					$part = (int)$part;
 				}
-				if(!isset($a[$part]) || (is_array($a) && !(isset($a[$part]) || array_key_exists($part, $a)))) {
+				if(!isset($a[$part]) || !is_array($a[$part]) || (is_array($a) && !(isset($a[$part]) || array_key_exists($part, $a)))) {
 					$a[$part] = array();
 				}
 				$a = &$a[$part];
@@ -243,7 +243,7 @@ final class AgaviArrayPathDefinition
 			foreach(str_split($path) as $c) {
 				// this is the fastest way to loop over an string
 				switch($state) {
-					// the order is signifacant for performance
+					// the order is significant for performance
 					case 2:
 						// match all characters between []
 						if($c == ']') {
@@ -296,7 +296,7 @@ final class AgaviArrayPathDefinition
 	/**
 	 * Returns the flat key names of an array.
 	 *
-	 * This method calls itself recursivly to flatten the keys.
+	 * This method calls itself recursively to flatten the keys.
 	 *
 	 * @param      array The array which keys should be returned.
 	 * @param      string The prefix for the name (only for internal use).
@@ -336,7 +336,7 @@ final class AgaviArrayPathDefinition
 	 * will be one dimensional with the flattened key names as keys
 	 * and their values from the original array as values.
 	 *
-	 * This method calls itself recursivly to flatten the array.
+	 * This method calls itself recursively to flatten the array.
 	 *
 	 * @param      array The array which should be flattened.
 	 * @param      string The prefix for the key names (only for internal use).

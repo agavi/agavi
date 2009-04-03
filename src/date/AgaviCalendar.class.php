@@ -971,7 +971,7 @@ abstract class AgaviCalendar
 		if($targetMs instanceof AgaviCalendar) {
 			$targetMs = (float) $targetMs->getTimeInMillis();
 		}
-		// Always add from the start millis.  This accomodates
+		// Always add from the start millis.  This accommodates
 		// operations like adding years from February 29, 2000 up to
 		// February 29, 2004.  If 1, 1, 1, 1 is added to the year
 		// field, the DOM gets pinned to 28 and stays there, giving an
@@ -1792,7 +1792,7 @@ abstract class AgaviCalendar
 		// fields computed by handleComputeFields().
 		$this->computeWeekFields();
 
-		// Compute time-related fields.  These are indepent of the date and
+		// Compute time-related fields.  These are independent of the date and
 		// of the subclass algorithm.  They depend only on the local zone
 		// wall milliseconds in day.
 		$this->fFields[AgaviDateDefinitions::MILLISECONDS_IN_DAY] = $millisInDay;

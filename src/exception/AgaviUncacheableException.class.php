@@ -15,7 +15,7 @@
 
 /**
  * AgaviUncacheableException can be thrown by cache group callbacks to signal to
- * the framework's excecution filter that no caching should occur.
+ * the framework's execution filter that no caching should occur.
  *
  * @package    agavi
  * @subpackage exception

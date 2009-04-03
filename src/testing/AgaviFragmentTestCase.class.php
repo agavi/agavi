@@ -126,7 +126,7 @@ abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements Aga
 	 */
 	protected function normalizeViewName($shortName)
 	{
-		if($shortName != AgaviView::NONE) {
+		if($shortName !== AgaviView::NONE) {
 			$shortName = AgaviToolkit::evaluateModuleDirective(
 				$this->moduleName,
 				'agavi.view.name',
@@ -135,6 +135,7 @@ abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements Aga
 					'viewName' => $shortName,
 				)
 			);
+			$shortName = AgaviToolkit::canonicalName($shortName);
 		}
 		
 		return $shortName;
