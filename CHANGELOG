@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.1 RC2 (April ??, 2009)
 --------------------------
 
+CHG: Allow omission of empty argument tag when using arguments base (#1085) (David)
 CHG: Pass current execution container to caching callbacks in execution filter (#1079) (David)
 
 FIX: Memory leak in AgaviTranslationManager::getLocaleIdentifier() (#1083) (David)
