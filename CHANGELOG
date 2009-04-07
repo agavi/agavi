@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 CHG: Allow omission of empty argument tag when using arguments base (#1085) (David)
 CHG: Pass current execution container to caching callbacks in execution filter (#1079) (David)
 
+FIX: Arrays that failed validation are not purged from request data (#1084) (David)
 FIX: Memory leak in AgaviTranslationManager::getLocaleIdentifier() (#1083) (David)
 FIX: SOAP support's document/literal wrapped marshalling cannot handle multi-part return values (#1081) (David)
 
