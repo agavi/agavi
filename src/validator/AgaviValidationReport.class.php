@@ -239,13 +239,11 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Returns all arguments which succeeded in the validation. Includes 
-	 * arguments which were not processed (happens when the argument is 
-	 * "not set" and the validator is not required)
+	 * Returns all arguments which validated successfully.
 	 *
-	 * @param      string The source for which the fields should be returned.
+	 * @param      string Optional source name to limit the list of arguments to.
 	 *
-	 * @return     array An array of AgaviValidationArguments.
+	 * @return     array An array of AgaviValidationArgument objects.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
