@@ -308,6 +308,16 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 
 		if($mode == self::MODE_STRICT || ($executedValidators > 0 && $mode == self::MODE_CONDITIONAL)) {
 			foreach($parameters->getSourceNames() as $source) {
+				// first, we explicitly unset failed arguments
+				// the primary purpose of this is to make sure that arrays that failed validation themselves (e.g. due to array length validation, or due to use of operator validators with an argument base) are removed
+				// that's of course only necessary if validation failed
+				$failedArguments = $this->getFailedFields(null, $source);
+				foreach($failedArguments as $argument) {
+					$parameters->remove($source, $argument);
+				}
+				
+				// next, we remove all arguments from the request data that are not in the list of succeeded arguments
+				// this will also remove any arguments that didn't have validation rules defined
 				$asf = array_flip($this->getSucceededFields($source));
 				$sourceItems = $parameters->getAll($source);
 				foreach(AgaviArrayPathDefinition::getFlatKeyNames($sourceItems) as $name) {
@@ -658,20 +668,37 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	 * Returns all failed fields (this are all fields including those with 
 	 * severity none and notice).
 	 *
-	 * @return     array The names of the fields.
-	 * @param      int The minimum severity a field needs to have.
+	 * @param      int    The optional minimum severity a field needs to have.
+	 * @param      string The optional name of a source.
 	 *
+	 * @return     array The names of the fields.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function getFailedFields($minSeverity = null)
+	public function getFailedFields($minSeverity = null, $source = AgaviRequestDataHolder::SOURCE_PARAMETERS)
 	{
-		$fields = array();
-		foreach($this->getIncidents($minSeverity) as $incident) {
-			$fields = array_merge($fields, $incident->getFields());
+		if($minSeverity === null) {
+			$minSeverity = AgaviValidator::SILENT;
+		}
+		
+		$names = array();
+		foreach($this->fieldResults as $name => $results) {
+			$hasInSource = false;
+			$ec = AgaviValidator::SUCCESS;
+			foreach($results as $result) {
+				if($result[0]->getParameter('source') == $source) {
+					$hasInSource = true;
+					$ec = max($ec, $result[1]);
+				}
+			}
+			if($hasInSource && $ec >= AgaviValidator::SILENT) {
+				$names[] = $name;
+			}
 		}
 
-		return array_values(array_unique($fields));
+		return $names;
 	}
 
 	/**
