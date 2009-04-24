@@ -421,7 +421,7 @@ TODO: is_equal doesn't work yet
 															array('id' =>"EAT", 'offset' =>  180, 'daylight' => false),
 															array('id' =>"MET", 'offset' =>  60, 'daylight' => true), // updated 12/3/99 aliu
 															array('id' =>"NET", 'offset' =>  240, 'daylight' => true), // updated 12/3/99 aliu
-															array('id' =>"PLT", 'offset' =>  300, 'daylight' => false), // updated Aug 2003 aliu
+															array('id' =>"PLT", 'offset' =>  300, 'daylight' => true), // updated Aug 2003 aliu
 															array('id' =>"IST", 'offset' =>  330, 'daylight' => false),
 															array('id' =>"BST", 'offset' =>  360, 'daylight' => false),
 															array('id' =>"VST", 'offset' =>  420, 'daylight' => false),
