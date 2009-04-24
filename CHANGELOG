@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.1 RC2 (April ??, 2009)
 --------------------------
 
+CHG: Harden workaround for PHP bug 47206 (#1092) (David)
 CHG: Return removed namespace from AgaviAttributeHolder::removeAttributeNamespace() (#1088) (David)
 CHG: Update timezone database to 2009f (#1086) (David)
 CHG: Allow omission of empty argument tag when using arguments base (#1085) (David)
