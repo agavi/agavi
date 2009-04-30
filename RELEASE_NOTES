@@ -11,12 +11,12 @@ The following are worth mentioning:
 - Arrays that failed validation are now always purged correctly from request data.
 - Exporting values from validators with argument bases is now possible, and it's possible to control the exact use of keys in the process.
 - Caching callbacks in the Execution Filter are now passed the current Execution Container as last argument.
-- The bundled Timezone database was updated to version 2009f.
 - It's now possible to set session_cache_expire(), session_cache_limiter() and session_module_name() through configuration.
 - Support for document/literal wrapped style SOAP services has been improved.
 - Two regressions related to AgaviRoutingCallback::onGenerate() have been fixed.
 - A memory leak in AgaviTranslationManager::getLocaleIdentifier() was fixed.
 - Handling of slashes and dots in Action, View and Model names has been unified - slashes are now always used internally.
+- The bundled Timezone database was updated to version 2009g.
 - Several other minor fixes and enhancements.
 
 As usual, please check the CHANGELOG for a complete list of changes.
