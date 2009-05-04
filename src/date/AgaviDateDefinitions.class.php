@@ -16,6 +16,10 @@
 /**
  * Field definitions for the AgaviCalendar and day of week and months constants
  *
+ * Based on ICU:
+ *  icu/trunk/source/i18n/ucal.h              r19775
+ *  icu/trunk/source/i18n/unicode/calendar.h  r20375
+ * 
  * @package    agavi
  * @subpackage date
  *

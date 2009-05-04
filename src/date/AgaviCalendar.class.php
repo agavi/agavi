@@ -14,7 +14,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- *
+ * Ported from ICU:
+ *  icu/trunk/source/i18n/calendar.cpp        r22016
+ *  icu/trunk/source/i18n/unicode/calendar.h  r22265
  *
  * @package    agavi
  * @subpackage date
@@ -2917,7 +2919,7 @@ abstract class AgaviCalendar
 	/**
 	 * Return the extended year on the Gregorian calendar as computed by
 	 * <code>computeGregorianFields()</code>.
-	 * @see #computeGregorianFields
+	 * @see        AgaviCalendar::computeGregorianFields
 	 * @internal
 	 *
 	 * @return     int The gregorian year
@@ -2934,7 +2936,7 @@ abstract class AgaviCalendar
 	/**
 	 * Return the month (0-based) on the Gregorian calendar as computed by
 	 * <code>computeGregorianFields()</code>.
-	 * @see #computeGregorianFields
+	 * @see        AgaviCalendar::computeGregorianFields
 	 * @internal
 	 *
 	 * @return     int The gregorian month
@@ -3308,6 +3310,7 @@ abstract class AgaviCalendar
 	/**
 	 * @var        int The Gregorian year, as computed by computeGregorianFields()
 	 *                 and returned by getGregorianYear().
+	 * @see        AgaviCalendar::computeGregorianFields
 	 */
 	private $fGregorianYear;
 
@@ -3315,6 +3318,7 @@ abstract class AgaviCalendar
 	 * @var        int The Gregorian month, as computed by
 	 *                 computeGregorianFields() and returned by
 	 *                 getGregorianMonth().
+	 * @see        AgaviCalendar::computeGregorianFields
 	 */
 	private $fGregorianMonth;
 
@@ -3322,6 +3326,7 @@ abstract class AgaviCalendar
 	 * @var        int The Gregorian day of the year, as computed by
 	 *                 computeGregorianFields() and returned by
 	 *                 getGregorianDayOfYear().
+	 * @see        AgaviCalendar::computeGregorianFields
 	 */
 	private $fGregorianDayOfYear;
 
@@ -3329,6 +3334,7 @@ abstract class AgaviCalendar
 	 * @var        int The Gregorian day of the month, as computed by
 	 *                 computeGregorianFields() and returned by
 	 *                 getGregorianDayOfMonth().
+	 * @see        AgaviCalendar::computeGregorianFields
 	 */
 	private $fGregorianDayOfMonth;
 
