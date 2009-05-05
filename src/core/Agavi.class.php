@@ -90,19 +90,6 @@ final class Agavi
 		spl_autoload_register(array('Agavi', '__autoload'));
 
 		try {
-			// required classes for this file and ConfigCache to run
-			require(AgaviConfig::get('core.agavi_dir') . '/util/AgaviInflector.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/util/AgaviVirtualArrayPath.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/util/AgaviParameterHolder.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/config/AgaviConfigCache.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviException.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviAutoloadException.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviCacheException.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviConfigurationException.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviUnreadableException.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/exception/AgaviParseException.class.php');
-			require(AgaviConfig::get('core.agavi_dir') . '/util/AgaviToolkit.class.php');
-
 			if($environment === null) {
 				// no env given? let's read one from core.environment
 				$environment = AgaviConfig::get('core.environment');
