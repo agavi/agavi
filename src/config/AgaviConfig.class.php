@@ -119,7 +119,7 @@ final class AgaviConfig
 	 *
 	 * @param      string The name of the configuration directive.
 	 *
-	 * @return     bool true, if removed successfuly, false otherwise.
+	 * @return     bool true, if removed successfully, false otherwise.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0

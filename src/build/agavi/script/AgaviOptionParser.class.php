@@ -193,8 +193,11 @@ class AgaviOptionParser
 					break;
 				}
 			}
-			
-			$this->passedOptions[$name] = array(
+
+			$this->passedOptions[$name] = isset($this->passedOptions[$name])
+				? $this->passedOptions[$name]
+				: array();
+			$this->passedOptions[$name][] = array(
 				'source' => $source[$i],
 				'arguments' => $arguments,
 				'handler' => $handler
@@ -207,8 +210,10 @@ class AgaviOptionParser
 			$this->passedArguments[] = $source[$i];
 		}
 		
-		foreach($this->passedOptions as $name => $option) {
-			call_user_func($option['handler'], $this, $name, $option['arguments'], $this->passedArguments);
+		foreach($this->passedOptions as $name => $options) {
+			foreach($options as $option) {
+				call_user_func($option['handler'], $this, $name, $option['arguments'], $this->passedArguments);
+			}
 		}
 	}
 	

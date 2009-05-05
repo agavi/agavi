@@ -109,6 +109,9 @@
 	<property name="project.directory.app.lib" value="${project.directory.app}/lib" />
 	<property name="project.directory.app.log" value="${project.directory.app}/log" />
 	<property name="project.directory.app.templates" value="${project.directory.app}/templates" />
+	<property name="project.directory.dev" value="dev" />
+	<property name="project.directory.dev.pub" value="${project.directory.dev}/pub" />
+	<property name="project.directory.libs" value="libs" />
 	<property name="project.directory.pub" value="pub" />
 
 	<!-- Ensure we can reach the Agavi directory. -->
@@ -261,7 +264,6 @@
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" override="true" />
 		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" override="true" />
 		<property name="templates.directory.pub" value="pub" override="true" />
-		<property name="templates.directory.pub.web" value="${templates.directory.pub}/web" override="true" />
 		<property name="templates.directory.templates" value="templates" override="true" />
 		<property name="templates.directory.defaults" value="defaults" override="true" />
 		<property name="templates.directory.defaults.app" value="${templates.directory.defaults}/app" override="true" />
@@ -338,9 +340,13 @@
 		</copy>
 	</target>
 
-	<target name="project-wizard-welcome" depends="project-locate,module-locate">
+	<target name="project-wizard-welcome" depends="project-locate">
 		<!-- Fuck this, man, fuck this. -->
-		<property userProperty="true" name="action.name" value="Welcome" override="true" />
+		
+		<property userProperty="true" name="module.name" value="Welcome" override="true" />
+		<agavi.execute-target name="module-create" />
+		
+		<property userProperty="true" name="action.name" value="Index" override="true" />
 		<agavi.execute-target name="action-create" />
 
 		<property userProperty="true" name="view.name" value="Success" override="true" />
@@ -371,7 +377,7 @@
 					<token key="PROJECT_NAME" value="${project.name}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
-                                        <token key="TEMPLATES_LOCATION" value="${templates.directory}" />
+					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -600,7 +606,7 @@
 
 	<target name="project-wizard" description="Creates a project and corresponding default actions, views, and templates">
 		<agavi.execute-target name="project-create" />
-		<agavi.execute-target name="public-web-create" />
+		<agavi.execute-target name="public-create" />
 
 		<agavi.execute-target name="project-wizard-defaults" />
 
@@ -681,7 +687,6 @@
 		<property name="templates.directory.app.lib.view" value="${templates.directory.app.lib}/view" override="true" />
 		<property name="templates.directory.app.lib.model" value="${templates.directory.app.lib}/model" override="true" />
 		<property name="templates.directory.pub" value="pub" override="true" />
-		<property name="templates.directory.pub.web" value="${templates.directory.pub}/web" override="true" />
 		<property name="templates.directory.templates" value="templates" override="true" />
 		<property name="templates.directory.defaults" value="defaults" override="true" />
 		<property name="templates.directory.defaults.app" value="${templates.directory.defaults}/app" override="true" />
@@ -747,6 +752,9 @@
 		<mkdir dir="${project.directory}/${project.directory.app.lib}" />
 		<mkdir dir="${project.directory}/${project.directory.app.log}" />
 		<mkdir dir="${project.directory}/${project.directory.app.templates}" />
+		<mkdir dir="${project.directory}/${project.directory.dev}" />
+		<mkdir dir="${project.directory}/${project.directory.dev.pub}" />
+		<mkdir dir="${project.directory}/${project.directory.libs}" />
 		<mkdir dir="${project.directory}/${project.directory.pub}" />
 
 		<chmod file="${project.directory}/${project.directory.app.cache}" mode="0777" />
@@ -813,6 +821,18 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
+		
+		<!-- Copy the stuff for pub/ to dev/pub, without modifications. -->
+		<agavi.select-path property="template.path" path="${templates.directory.pub}">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<copy todir="${project.directory}/${project.directory.dev.pub}">
+			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl$" to="\1/\2\3" />
+			<fileset dir="${template.path}">
+				<include name="**/*.tmpl" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="project-cache-remove" depends="project-locate" description="Removes the contents of a project's filesystem cache">
@@ -852,7 +872,7 @@
 
 	<!--
 	  Project model targets.
-		-->
+	  -->
 
 	<target name="project-model-locate" depends="project-locate">
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
@@ -911,7 +931,7 @@
 
 	<!--
 	  Project template targets.
-		-->
+	  -->
 
 	<target name="project-template-locate" depends="project-locate">
 		<agavi.input property="template.name" message="Template name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
@@ -966,19 +986,39 @@
 
 	<!--
 	  Public directory targets.
+	  This copies from dev/pub/, mind you!
 	  -->
 
-	<target name="public-web-create" depends="project-locate" description="Creates a Web structure for the public directory">
-		<agavi.input property="public.base" message="Document-root relative path to the Agavi index.php script" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+	<target name="public-create" depends="project-locate" description="Creates a structure for the public directory">
+		<agavi.input property="public.environment" message="Name of the environment to bootstrap in dispatcher scripts" default="development" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		
+		<agavi.input property="target.public-create.create-htaccess" message="Should an Apache .htaccess file with rewrite rules be generated (y/n)" promptCharacter="?" default="n" failIfEmpty="true" ignoreIfSet="true" />
+		<if>
+			<or>
+				<equals arg1="${target.public-create.create-htaccess}" arg2="yes" trim="true" casesensitive="false" />
+				<equals arg1="${target.public-create.create-htaccess}" arg2="y" trim="true" casesensitive="false" />
+				<equals arg1="${target.public-create.create-htaccess}" arg2="true" trim="true" casesensitive="false" />
+			</or>
+			<then>
+				<agavi.input property="public.base" message="Document-root-relative path to '${project.directory}/${project.directory.pub}/'" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+				<copy tofile="${project.directory}/${project.directory.pub}/.htaccess" file="${project.directory}/${project.directory.dev.pub}/.htaccess">
+					<filterchain>
+						<replacetokens begintoken="%%" endtoken="%%">
+							<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
+							<token key="PROJECT_LOCATION" value="${project.directory}" />
+							<token key="PROJECT_PREFIX" value="${project.prefix}" />
+							<token key="PUBLIC_BASE" value="${public.base}" />
+							<token key="PUBLIC_ENVIRONMENT" value="${public.environment}" />
+						</replacetokens>
+					</filterchain>
+				</copy>
+			</then>
+		</if>
 
-		<agavi.select-path property="template.path" path="${templates.directory.pub.web}">
-			<from path="${templates.directory}" />
-			<from path="${agavi.directory.src.build.templates}" />
-		</agavi.select-path>
 		<copy todir="${project.directory}/${project.directory.pub}">
-			<mapper type="regexp" from="^(.+[\\\/])?(?:dot(\.))?(.+)\.tmpl" to="\1/\2\3" />
-			<fileset dir="${template.path}">
-				<include name="**/*.tmpl" />
+			<mapper type="regexp" from="^(?!\.htaccess).+" to="\0" />
+			<fileset dir="${project.directory}/${project.directory.dev.pub}">
+				<include name="**/*" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
@@ -986,14 +1026,15 @@
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="PUBLIC_BASE" value="${public.base}" />
+					<token key="PUBLIC_ENVIRONMENT" value="${public.environment}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
 	</target>
 
 	<!--
-    Module targets.
-    -->
+	  Module targets.
+	  -->
 
 	<target name="module-list" depends="project-locate" description="Displays all modules in a project">
 		<agavi.display-modules path="${project.directory}" />

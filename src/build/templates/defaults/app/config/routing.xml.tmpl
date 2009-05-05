@@ -2,8 +2,11 @@
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
 	<ae:configuration>
 		<routes>
-			<!-- this shows the welcome page after creating a project. remove it once you're done admiring its shininess. -->
-			<route pattern="" module="%actions.default_module%" action="Welcome" />
+			<!-- this shows the welcome page after creating a project. you should remove it along with the entire "Welcome" module and the pub/welcome/ directory -->
+			<route pattern="" module="Welcome" action="Index" />
+			
+			<!-- default action for "/" -->
+			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 			
 			<!-- an example for a CRUD-style set of routes -->
 			<route name="products" pattern="^/products" module="Products">
@@ -25,9 +28,6 @@
 					</route>
 				</route>
 			</route>
-			
-			<!-- default action for "/" -->
-			<route pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
 	</ae:configuration>
 </ae:configurations>

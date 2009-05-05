@@ -46,7 +46,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	protected $context = null;
 
 	/**
-	 * @var        AgaviValidationReport The report container storing the valiation results.
+	 * @var        AgaviValidationReport The report container storing the validation results.
 	 */
 	protected $report = null;
 
@@ -247,7 +247,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	/**
 	 * Starts the validation process.
 	 *
-	 * @param      AgaviRequestDataHolder The datawhich should be validated.
+	 * @param      AgaviRequestDataHolder The data which should be validated.
 	 *
 	 * @return     bool true, if validation succeeded.
 	 *
@@ -312,6 +312,17 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		}
 
 		if($mode == self::MODE_STRICT || ($executedValidators > 0 && $mode == self::MODE_CONDITIONAL)) {
+			
+			// first, we explicitly unset failed arguments
+			// the primary purpose of this is to make sure that arrays that failed validation themselves (e.g. due to array length validation, or due to use of operator validators with an argument base) are removed
+			// that's of course only necessary if validation failed
+			$failedArguments = $this->report->getFailedArguments();
+			foreach($failedArguments as $argument) {
+				$parameters->remove($argument->getSource(), $argument->getName());
+			}
+			
+			// next, we remove all arguments from the request data that are not in the list of succeeded arguments
+			// this will also remove any arguments that didn't have validation rules defined
 			$succeededArguments = $this->report->getSucceededArguments();
 			foreach($parameters->getSourceNames() as $source) {
 				$sourceItems = $parameters->getAll($source);
@@ -513,7 +524,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	}
 	
 	/**
-	 * Checks if any incidents occured Returns all fields which succeeded in the 
+	 * Checks if any incidents occurred Returns all fields which succeeded in the 
 	 * validation. Includes fields which were not processed (happens when the 
 	 * field is "not set" and the validator is not required)
 	 *
@@ -532,7 +543,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	}
 
 	/**
-	 * Returns all incidents which happened during the execution of the validaion.
+	 * Returns all incidents which happened during the execution of the validation.
 	 *
 	 * @param      int The minimum severity a returned incident needs to have.
 	 *

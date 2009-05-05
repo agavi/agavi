@@ -617,7 +617,7 @@ class AgaviDateFormat
 
 	/**
 	 * Parses a string into an calendar object. Note that this doesn't fallback to
-	 * the english locale.
+	 * the English locale.
 	 *
 	 * @param      string The string containing the date.
 	 * @param      mixed The locale name or instance which should be used for
@@ -761,7 +761,7 @@ class AgaviDateFormat
 
 				$datePos += $numberLen;
 				// since the month is 0-indexed in the calendar and 1-indexed in the
-				// cldr we need to substract 1 from the month
+				// cldr we need to subtract 1 from the month
 				if($dateField == AgaviDateDefinitions::MONTH && $number > 0) {
 					$number -= 1;
 				} elseif($dateField == AgaviDateDefinitions::HOUR_OF_DAY && $token[0] == AgaviDateFormat::T_HOUR_1_24 && $number == 24) {
@@ -1005,7 +1005,7 @@ class AgaviDateFormat
 	 * current offset.
 	 *
 	 * @param      string The string to be matched in.
-	 * @param      array  The possibilites which can match.
+	 * @param      array  The possibilities which can match.
 	 * @param      int    The offset to match at in the input string.
 	 * @param      mixed  The key of the possibilities entry that matched.
 	 *

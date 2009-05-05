@@ -1,0 +1,186 @@
+AGAVI RELEASE NOTES
+===================
+
+Version 1.0.1 - May 1, 2009
+===========================
+
+This maintenance release fixes a number of issues over Agavi 1.0.0 and brings a couple of minor enhancements.
+
+The following are worth mentioning:
+- Most notable, a race condition in configuration file compilation was fixed that could lead to corrupt compiled files on disk.
+- Arrays that failed validation are now always purged correctly from request data.
+- Exporting values from validators with argument bases is now possible, and it's possible to control the exact use of keys in the process.
+- Caching callbacks in the Execution Filter are now passed the current Execution Container as last argument.
+- It's now possible to set session_cache_expire(), session_cache_limiter() and session_module_name() through configuration.
+- Support for document/literal wrapped style SOAP services has been improved.
+- Two regressions related to AgaviRoutingCallback::onGenerate() have been fixed.
+- A memory leak in AgaviTranslationManager::getLocaleIdentifier() was fixed.
+- Handling of slashes and dots in Action, View and Model names has been unified - slashes are now always used internally.
+- The bundled Timezone database was updated to version 2009g.
+- Several other minor fixes and enhancements.
+
+As usual, please check the CHANGELOG for a complete list of changes.
+
+
+Version 1.0.0 - Feburary 25, 2009
+=================================
+
+The following is a brief summary of the most important changes in this release. For a full list of new features, changes and bugfixes, please refer to the CHANGELOG.
+
+Also, please pay special attention to the list of deprecated elements at the end of this description.
+
+ATTENTION: Some bugfixes caused changes to internal behavior. Make absolutely sure that your application is ready for an upgrade to 1.0 by reading the UPGRADING document.
+
+Configuration
+-------------
+A new configuration subsystem that natively deals with XML files replaces the current implementation. This has numerous advantages; for instance, Agavi now supports any number of XML Schema (including XML Schema Instance declarations), RELAX NG or Schematron files to be validated against config files or merged result documents in several different stages, can apply XSL transformations (including those declared in <?xml-stylesheet?> PIs) and has extended namespaces support that allow backwards-compatibility to old config files in future versions.
+New-style configuration handlers extending AgaviXmlConfigHandler are now given a single AgaviXmlConfigDomDocument (extends DOMDocument) instance to work on, which already holds only the relevant <configuration> blocks in the correct order. Together with other subclasses of ext/dom classes, it provides several convenience methods to ease the processing of configuration files, but of course, all capabilities of DOM, including XPath, are usable inside configuration handlers.
+Backwards compabibility requires PHP's XSL extension enabled; other than that, everything still works as usual. Old-style configuration file handlers are still supported (but deprecated), but don't support the new features explained above.
+Also, the namespaces of configuration files have been changed, with envelope namespaces (<configurations> and other elements) decoupled from the actual config content namespaces. Again, backwards compatibility is maintained, but you should upgrade your configuration files when moving to 1.0 in order to be able to fully leverage all features and make future transitions easier.
+Of note, the legacy support for configuration files with no namespace at all (just <configurations>) has been dropped completely, so your files at the very least have to be in the global 0.11 namespace (http://agavi.org/agavi/1.0/config).
+Two built-in configuration handlers have not been ported to the new infrastructure: AgaviLdmlConfigHandler (to be migrated together with a future update to Unicode CLDR v1.7) and AgaviReturnArrayConfigHandler (will remain old-style for the time being; a more flexible replacement is planned for Agavi 1.1). The latter means that your custom configuration files need to remain entirely in the old http://agavi.org/agavi/1.0/config namespace; several features exclusive to the new system such as XSL transformations or multiple validations will not be available.
+
+Names of compiled configuration files are now different from before; they now consist of the file base name, environment, context, and then a sha1 hash of these three components to make the filename unique. This prevents theoretical situations where configuration file names are ambiguous, and at the same time makes it easier to find a specific file in the cache directory. The files now contain the path to the source file in a header comment so configs with the same base name can be told apart.
+
+Module/Action/View/Model
+------------------------
+The module.xml configuration file has been redesigned. It now needs a <module enabled="true"> element, and inside, there can be any number of <settings> blocks, which like in settings.xml, can have a "prefix" attribute to change the prefix. In the prefix and in setting names, ${moduleName} is expanded to the current module's name. Specifying the module name inside this configuration file is not necessary anymore.
+
+Every module can now have a config_handlers.xml file.
+
+Models can use the same dot-notation for nesting as Actions, e.g. model Foo.Bar sitting in models/Foo/BarModel.class.php with class name Foo_BarModel
+
+Models and Views from other modules can now be used safely even if those other module have base classes in a local autoload.xml etc.
+
+Actions, Views and Models must now use fully qualified class names, including the module name. Examples:
+%core.app_dir%/models/Foo/BarModel.class.php is class Foo_BarModel
+%core.app_dir%/modules/Default/models/FooModel.class.php is class Default_FooModel
+%core.app_dir%/modules/Default/actions/Foo_BarAction.class.php is class Default_Foo_BarAction
+The legacy naming schemes (leaving out module name for Actions, Views and non-global Models; leaving out sub-notation paths except the last one) are not supported anymore.
+
+Finally, you can now define the filesystem structure of the following elements on a per-module basis:
+- Actions
+- Caching XML configs
+- Validation XML configs
+- Views
+You can also customize these aspects:
+- Default template "directory" part
+- View shortname resolution ("Success" => "Default_Sub_MarineSuccess")
+This allows you to put all the files for a feature into a single subdirectory, instead of having the separate files cluttered over action/, template/, view/ etc. subfolders inside the module directory.
+Ticket #668 has more details and an example.
+
+Routing
+-------
+Large parts of the routing have been rewritten; gen() and execute() have seen the most changes.
+
+Most notably, the encoding of values in the result string has been moved to the very end of the generation process, which has a bunch of nice benefits:
+- gen() can now handle objects and arrays as input parameters (__toString() is called on objects unless callbacks do something something more intelligent)
+- gen() now wraps all values in AgaviRoutingValue objects, which hold encoding information for the value, as well as for the prefix and postfix (which can now be set this way, too). The object has a fluent interface, and a new instance for use in gen() can be created by calling AgaviRouting::createValue()
+- callbacks don't have to do something as stupid as rawurldecode() on a value that should appear literally anymore; instead, it's sufficient to call the routing value's setValueNeedsEncoding() method and passing false.
+
+Furthermore, gen() accepts strings in the form of "+rss" and "-locale", i.e. with leading "+" or "-" signs, in which case this modification will be applied to the list of incoming matched routes (think of it as null+"rss").
+
+This new implementation should be backwards compatible in virtually all cases, especially since AgaviRoutingValue has a __toString() overload now that returns the encoded representation of its value. Setting literal strings into parameter arrays still works as before, but using the routing value object is of course recommended. If you run into BC problems, try implementing the AgaviILegacyRoutingCallback interface in your callback class.
+
+Multiple callbacks per route are now supported. The new configuration schema uses <callback> elements inside the route instead of the "callback" attribute on the <route> element itself. Every callback definition can hold <parameter>s, which are then available inside the callback object (AgaviRoutingCallback now extends AgaviParameterHolder), which should make it easier to write generic and re-usable callbacks.
+Callbacks are run in the order they are defined; once an onMatched() callback returns false, onNotMatched() will be called on subsequent callbacks of that route.
+
+Inside a callback's onMatched() and onNotMatched() methods it is now possible to perform any kind of modifications on the execution container directly. Specifically, it is recommended you use AgaviExecutionContainer::setModuleName() and AgaviExecutionContainer::setActionName() inside callbacks instead of modifying the request parameter array from now on, because the "module" and "action" parameters might not be available anymore depending on the setting inside the application (see "Request" below).
+The execution container instance passed to the callback now reflects the actual current state of the routing execution, so checks can be performed against values on the container, and containers can be mutated (as mentioned above). As before, developers are advised not to perform any changes on containers or request data in onMatched() methods if the method will return false.
+Agavi will now explicitly call onNotMatched() on a routing callback that returned false from onMatched().
+
+You can now return an AgaviResponse object (use AgaviContext::createInstanceFor('response') for convenience) directly from a routing callback's onMatched() or onNotMatched() method. This response will then be handled right away by the Controller, and any kind of execution will be skipped (there isn't even an Execution Container in this case).
+
+Request
+-------
+By default, the old "module" and "action" request data parameters are not assigned or used anymore, and also do not receive special treatment by the validation system.
+To re-enable their use and availability, set the configuration parameter "use_module_action_parameters" to true for the request implementation in factories.xml.
+
+AgaviWebRequest now moves POST data that is not of content type application/x-www-form-urlencoded or multipart/form-data, i.e. any POST data that PHP does not decode already, into a file in the request data.
+PUT data of content type application/x-www-form-urlencoded is automatically decoded into request parameters now (can be disabled via config parameter "http_put_decode_urlencoded").
+Both of these measures should lower the barrier for implementing RESTful web services even further.
+
+Command Line
+------------
+Agavi now ships with Request, Routing and Response implementations for console applications. The Sample App has a demonstration implementation using this functionality.
+
+Testing
+-------
+Agavi 1.0 features an EXPERIMENTAL infrastructure for testing of applications. It supports unit tests, as well as testing fragments of the application such as Actions and Views, and also complete dispatch runs.
+This functionality will be constantly modified, improved and refactored until 1.1, so it's very likely that tests written now will not work without modifications in a future version. On the bright side, what matters is *what* you test, and not how you test it, so changing your tests later to comply with the then-stable system will be a comparatively easy effort as 90% of the work (figuring out the test logic, how and what to test, etc.) is already done.
+
+Project development environment
+-------------------------------
+Agavi 1.0 introduces a new environment for creating and managing Agavi-based projects. This environment effectively replaces the older agavi script and Phing build environment. The new environment is also based on Phing. It adds a few useful features:
+- Skeleton projects may be created
+- Targets are included for creating views and other project elements
+- Project-specific build.xml files are now recognized and targets are automatically imported
+- Build files may define objects that act as event listeners for targets, tasks, or build messages
+
+Execution
+---------
+Execution containers now have their own request method. By default, it is equal to the global request's request method. It can, however, be changed using the last (and new) argument of AgaviController::createExecutionContainer() and the related methods in AgaviExecutionContainer and AgaviView. Like the output type, the request method is carried over from the "parent" container if AgaviExecutionContainer::createExecutionContainer() is used (or the methods in AgaviView, which use this method). You can define a slot's request method using the new "method" attribute of the <slot> element in your output_types.xml layout declarations.
+
+When Agavi does an internal forward, for example to the login "system action" when an action requires authentication, the corresponding information in the "org.agavi.controller.forwards.*" namespaces will now be set on as attributes on the respective containers, in addition to the existing request attributes, which remain for BC.
+
+AgaviController::dispatch() now accepts an Execution Container as an optional second argument. If this argument is used, then the Routing will not execute, and the given container is executed right away. This is most useful for testing purposes, "page controllers" or utility scripts.
+
+Caching
+-------
+A new cache group source called "callback" has been added. You can use it to specify the name of a method implemented in the respective Action class. The value this callback returns is used as the group key. You can also throw an AgaviUncacheableException from the callback to prevent caching altogether. These two different abilities offer very nice caching capabilities, such as:
+- Having a cache variant for the owner of an element, and one for everyone else
+- Enabling a cache only for users that are not logged in
+
+The caching system will now call adequate callbacks that users can use together with extensions to checkCache() to implement protection mechanisms against so-called stampedes, race conditions where expired or non-existant caches are tried to be generated by many parallel requests under high load situations, causing the web server to grind to a halt. This is usually only necessary in very high load situations. A reference implementation is to follow.
+
+Security
+--------
+The check against isSecure() is now performed in the Security Filter, which always runs unconditionally when core.use_security is enabled. This is a bug fix that was made because it would otherwise be impossible to make certain changes to Agavi's authentication model.
+
+Validation
+----------
+AgaviValidationManager now assumes "strict" mode by default when no "mode" configuration parameter was given. Agavi code templates always shipped with "strict" for production and "conditional" for development.* environments, so you shouldn't be affected at all.
+If you rely on the less secure "relaxed" mode being default (which you shouldn't), then you might need to adjust your factories.xml configuration.
+
+A new API for accessing information about the result of a validation run is available through AgaviValidationManager::getReport(). It is vastly more convenient and capable of the previous APIs which have been deprecated. This change also fixes some problems where the validation system could not reliably tell input from different sources apart. The old API has been deprecated.
+The primary instrument for accessing validation result information are query objects, which you can retrieve using AgaviValidationReport::createQuery(). They have methods for defining query filter rules (byArgument, byValidator, byMinSeverity, byErrorName), which form a fluent interface. Methods like has(), count() or getErrorMessages() are available to retrieve information from the resulting collection. Please see ticket #1022 for usage examples.
+
+When using new-style validation XML configs, it is necessary to explicitly import Agavi's default definitions of validator shortcuts ("string", "isset" and so on) in %core.agavi_dir%/config/defaults/validators.xml to be able to use them; the most convenient way to achieve this is using the "parent" attribute on the <configurations> element, which also is the approach the build system takes by default. Existing configuration files from the 0.11 namespace are automatically handled this way and thus are not affected.
+
+Validators are not handed a "method" parameter anymore with the request method they should run for. This was extremely redundant since the validators weren't even registered if the request method was "wrong". For manual registering, registerReadValidators(), registerWriteValidators() etc are always used in actions anyway, so no problem here, either. As a result, AgaviValidator::validatesInMethod() is gone, too.
+
+An AgaviArrayLengthValidator has been added.
+AgaviDateTimeValidator now accepts strotime() syntax format strings in "min" and "max" parameters, which is most useful for relative date declarations like "+2 weeks" or "last monday this month".
+
+SOAP
+----
+Agavi can now automatically pack and unpack document/literal wrapped style web service requests and responses if the Controller config parameter "force_document_literal_wrapped_marshalling" is set to true. Future releases of Agavi will enhance this functionality further and add automatic detection for services using this convention.
+
+Multiple SOAP services can now be implemented in the same application. To do this, simply use multiple SOAP contexts of different names. XSD schemas for the generated WSDL documents can remain inside <configurations>, or be put into the relevant <configuration> blocks for each service. The same is valid for the "targetNamespace" attribute or WSDL message definitions.
+
+Sample App
+----------
+The Sample App has been refactored to a large extent to better reflect recommended coding standards, module organization and use of models.
+
+Filters
+-------
+An AgaviTidyFilter has been added.
+
+Deprecated elements
+-------------------
+- The "core.use_routing" configuration directive is now deprecated. Instead, please use <parameter name="enabled"> in factories.xml's <routing> element to control the use of routing on a per-context basis (this is a new feature).
+Existing "core.use_routing" directives will be used as a fallback until the directive is removed completely in Agavi 1.1
+
+- AgaviSecureWebRequest has been deprecated. There is no replacement available. It will be removed in Agavi 1.1, but of course, you can continue to use the implementation from an older release.
+
+- AgaviAdodbDatabase has been deprecated. There is no replacement available. It will be removed in Agavi 1.1, but of course, you can continue to use the implementation from an older release.
+
+- Validation severity "none" is now called "silent".
+
+- AgaviException::printStackTrace() is now called AgaviException::render()
+
+- AgaviTranslationManager::getCurrentTimeZone() is now called AgaviTranslationManager::getDefaultTimeZone()
+
+- Several methods in AgaviValidationManager have been deprecated in favor of the new Report object available through AgaviValidationManager::getReport() (see above)
+
+- AgaviValidationError::getMessageIndex() and AgaviValidationError::setMessageIndex() have been renamed to getName() and setName(), respectively.

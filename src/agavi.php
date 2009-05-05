@@ -39,13 +39,29 @@ if(!version_compare(PHP_VERSION, AgaviConfig::get('core.minimum_php_version'), '
 }
 
 // define a few filesystem paths
-AgaviConfig::set('core.agavi_dir', dirname(__FILE__), true, true);
+AgaviConfig::set('core.agavi_dir', $agavi_config_directive_core_agavi_dir = dirname(__FILE__), true, true);
 
 // default exception template
-AgaviConfig::set('exception.default_template', AgaviConfig::get('core.agavi_dir') . '/exception/templates/shiny.php');
+AgaviConfig::set('exception.default_template', $agavi_config_directive_core_agavi_dir . '/exception/templates/shiny.php');
 
 // required files
-require(AgaviConfig::get('core.agavi_dir') . '/version.php');
-require(AgaviConfig::get('core.agavi_dir') . '/core/Agavi.class.php');
+require($agavi_config_directive_core_agavi_dir . '/version.php');
+require($agavi_config_directive_core_agavi_dir . '/core/Agavi.class.php');
+// required files for classes Agavi and ConfigCache to run
+// consider this the bare minimum we need for bootstrapping
+require($agavi_config_directive_core_agavi_dir . '/util/AgaviInflector.class.php');
+require($agavi_config_directive_core_agavi_dir . '/util/AgaviVirtualArrayPath.class.php');
+require($agavi_config_directive_core_agavi_dir . '/util/AgaviParameterHolder.class.php');
+require($agavi_config_directive_core_agavi_dir . '/config/AgaviConfigCache.class.php');
+require($agavi_config_directive_core_agavi_dir . '/exception/AgaviException.class.php');
+require($agavi_config_directive_core_agavi_dir . '/exception/AgaviAutoloadException.class.php');
+require($agavi_config_directive_core_agavi_dir . '/exception/AgaviCacheException.class.php');
+require($agavi_config_directive_core_agavi_dir . '/exception/AgaviConfigurationException.class.php');
+require($agavi_config_directive_core_agavi_dir . '/exception/AgaviUnreadableException.class.php');
+require($agavi_config_directive_core_agavi_dir . '/exception/AgaviParseException.class.php');
+require($agavi_config_directive_core_agavi_dir . '/util/AgaviToolkit.class.php');
+
+// clean up (we don't want collisions with whatever file included us, in case you were wondering about the ugly name of that var)
+unset($agavi_config_directive_core_agavi_dir);
 
 ?>

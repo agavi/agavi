@@ -65,15 +65,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 * action that's currently run, and in checkCache check for those and return
 	 * an old, stale cache until the flag is gone.
 	 *
-	 * @param      int   The type of the event that occured. See CACHE_CALLBACK_*
-	 *                   constants.
-	 * @param      array The groups.
-	 * @param      array The caching configuration.
+	 * @param      int                     The type of the event that occurred.
+	 *                                     See CACHE_CALLBACK_* constants.
+	 * @param      array                   The groups.
+	 * @param      array                   The caching configuration.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function startedCacheCreationCallback($eventType, array $groups, array $config)
+	public function startedCacheCreationCallback($eventType, array $groups, array $config, AgaviExecutionContainer $container)
 	{
 	}
 	
@@ -83,15 +84,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *
 	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
 	 *
-	 * @param      int   The type of the event that occured. See CACHE_CALLBACK_*
-	 *                   constants.
-	 * @param      array The groups.
-	 * @param      array The caching configuration.
+	 * @param      int                     The type of the event that occurred.
+	 *                                     See CACHE_CALLBACK_* constants.
+	 * @param      array                   The groups.
+	 * @param      array                   The caching configuration.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function abortedCacheCreationCallback($eventType, array $groups, array $config)
+	public function abortedCacheCreationCallback($eventType, array $groups, array $config, AgaviExecutionContainer $container)
 	{
 	}
 	
@@ -101,15 +103,16 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 	 *
 	 * @see        AgaviExecutionFilter::startedCacheCreationCallback()
 	 *
-	 * @param      int   The type of the event that occured. See CACHE_CALLBACK_*
-	 *                   constants.
-	 * @param      array The groups.
-	 * @param      array The caching configuration.
+	 * @param      int                     The type of the event that occurred.
+	 *                                     See CACHE_CALLBACK_* constants.
+	 * @param      array                   The groups.
+	 * @param      array                   The caching configuration.
+	 * @param      AgaviExecutionContainer The current execution container.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function finishedCacheCreationCallback($eventType, array $groups, array $config)
+	public function finishedCacheCreationCallback($eventType, array $groups, array $config, AgaviExecutionContainer $container)
 	{
 	}
 	
@@ -271,6 +274,9 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			case 'callback':
 				$val = $container->getActionInstance()->$name();
 				break;
+			case 'configuration_directive':
+				$val = AgaviConfig::get($name);
+				break;
 			case 'constant':
 				$val = constant($name);
 				break;
@@ -376,7 +382,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			
 				if(!$isActionCached) {
 					// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
-					$this->startedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_NOT_CACHED, $actionGroups, $config);
+					$this->startedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_NOT_CACHED, $actionGroups, $config, $container);
 				}
 			}
 		} else {
@@ -392,7 +398,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$actionInstance->setAttributes($actionCache['action_attributes']);
 			} catch(AgaviException $e) {
 				// cacheable, but action is not cached. notify our callback so it can prevent the stampede that follows
-				$this->startedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_GONE, $actionGroups, $config);
+				$this->startedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_GONE, $actionGroups, $config, $container);
 				$isActionCached = false;
 			}
 		}
@@ -419,7 +425,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				// check if the returned view is cacheable
 				if($isCacheable && is_array($config['views']) && !in_array(array('module' => $actionCache['view_module'], 'name' => $actionCache['view_name']), $config['views'], true)) {
 					$isCacheable = false;
-					$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_VIEW_NOT_CACHEABLE, $actionGroups, $config);
+					$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_VIEW_NOT_CACHEABLE, $actionGroups, $config, $container);
 					
 					// so that view is not cacheable? okay then:
 					// check if we've just run the action again after a previous cache read revealed that the view is not cached for this output type and we need to go back to square one due to the lack of action attribute caching configuration...
@@ -477,11 +483,11 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 							$isViewCached = $this->checkCache($viewGroups, $config['lifetime']);
 							if(!$isViewCached) {
 								// cacheable, but view is not cached. notify our callback so it can prevent the stampede that follows
-								$this->startedCacheCreationCallback(self::CACHE_CALLBACK_VIEW_NOT_CACHED, $viewGroups, $config);
+								$this->startedCacheCreationCallback(self::CACHE_CALLBACK_VIEW_NOT_CACHED, $viewGroups, $config, $container);
 							}
 						}
 					} else {
-						$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_OUTPUT_TYPE_NOT_CACHEABLE, $actionGroups, $config);
+						$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_OUTPUT_TYPE_NOT_CACHEABLE, $actionGroups, $config, $container);
 						$isCacheable = false;
 					}
 				}
@@ -491,7 +497,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					try {
 						$viewCache = $this->readCache($viewGroups);
 					} catch(AgaviException $e) {
-						$this->startedCacheCreationCallback(self::CACHE_CALLBACK_VIEW_CACHE_GONE, $viewGroups, $config);
+						$this->startedCacheCreationCallback(self::CACHE_CALLBACK_VIEW_CACHE_GONE, $viewGroups, $config, $container);
 						$isViewCached = false;
 					}
 				}
@@ -502,10 +508,13 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 						// no. that means we must run the action again!
 						$isActionCached = false;
 						
-						// notify our callback so it can remove the lock on the view
-						$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_USELESS, $viewGroups, $config);
+						if($isCacheable) {
+							// notify our callback so it can remove the lock that's on the view
+							// but only if we're still marked as cacheable (if not, then that means the OT is not cacheable, so there wouldn't be a $viewGroups)
+							$this->abortedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_USELESS, $viewGroups, $config, $container);
+						}
 						// notify our callback so it can prevent the stampede that follows
-						$this->startedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_USELESS, $actionGroups, $config);
+						$this->startedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_USELESS, $actionGroups, $config, $container);
 						
 						// but remember the view info, just in case it differs if we run the action again now
 						$rememberTheView = array(
@@ -665,7 +674,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					$this->writeCache($viewGroups, $viewCache, $config['lifetime']);
 
 					// notify callback that the execution has finished and caches have been written
-					$this->finishedCacheCreationCallback(self::CACHE_CALLBACK_VIEW_CACHE_WRITTEN, $viewGroups, $config);
+					$this->finishedCacheCreationCallback(self::CACHE_CALLBACK_VIEW_CACHE_WRITTEN, $viewGroups, $config, $container);
 					// $lm->log('Writing View cache...');
 				}
 			}
@@ -682,7 +691,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$this->writeCache($actionGroups, $actionCache, $config['lifetime']);
 			
 				// notify callback that the execution has finished and caches have been written
-				$this->finishedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_WRITTEN, $actionGroups, $config);
+				$this->finishedCacheCreationCallback(self::CACHE_CALLBACK_ACTION_CACHE_WRITTEN, $actionGroups, $config, $container);
 			}
 			
 			// we're done here. bai.

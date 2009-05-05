@@ -38,7 +38,13 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 	 */
 	public function execute($config, $context = null)
 	{
-		$configurations = $this->orderConfigurations(AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser)->configurations, AgaviConfig::get('core.environment'), $context);
+		$parsed = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser);
+		if(!isset($parsed->configurations)) {
+			$error = 'Configuration file "%s" is not in the Agavi 0.11 legacy namespace (http://agavi.org/agavi/1.0/config) and/or does not contain a <configurations> element as root node.';
+			$error = sprintf($error, $config);
+			throw new AgaviConfigurationException($error);
+		}
+		$configurations = $this->orderConfigurations($parsed->configurations, AgaviConfig::get('core.environment'), $context);
 		$data = array();
 		foreach($configurations as $cfg) {
 			$data = array_merge($data, $this->convertToArray($cfg, true));

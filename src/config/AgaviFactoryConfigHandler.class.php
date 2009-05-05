@@ -57,7 +57,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 		$config = $document->documentURI;
 		$data = array();
 		
-		// The order of this initialisiation code is fixed, to not change
+		// The order of this initialization code is fixed, to not change
 		// name => required?
 		$factories = array(
 			'execution_container' => array(

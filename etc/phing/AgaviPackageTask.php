@@ -102,13 +102,13 @@ EOD;
 		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'nfontes@cynigram.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('1.0.0beta9');
-		$p2->setAPIVersion('1.0.0beta9');
+		$p2->setReleaseVersion('1.1.0beta1');
+		$p2->setAPIVersion('1.1.0beta1');
 		$p2->setReleaseStability('beta');
 		$p2->setAPIStability('beta');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
-		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes.\n\nFor installation instructions, consult INSTALL. Information on how to migrate existing Agavi 0.11.x applications can be found in UPGRADING.");
+		$p2->setNotes("To see what's new, please refer to the RELEASE_NOTES. Also, the CHANGELOG contains a full list of changes.\n\nFor installation instructions, consult INSTALL. Information on how to migrate applications written using previous releases can be found in UPGRADING.");
 		
 		// this must be the most stupid syntax I've ever seen.
 		$p2->addRelease();

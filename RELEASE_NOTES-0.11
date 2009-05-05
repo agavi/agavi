@@ -1,6 +1,21 @@
 AGAVI RELEASE NOTES (0.11.x)
 ============================
 
+Version 0.11.7 - March 26, 2009
+===============================
+
+This maintenance release fixes a number of issues over Agavi 0.11.6.
+
+The following are worth mentioning:
+- Most notable, a race condition in configuration file compilation was fixed that could lead to corrupt compiled files on disk.
+- Exporting values from validators with argument bases is now possible, and it's possible to control the exact use of keys in the process.
+- The bundled Timezone database was updated to version 2009d.
+- Last but not least, it's now possible to set session_cache_expire(), session_cache_limiter() and session_module_name() through configuration.
+- Several other minor fixes.
+
+As usual, please check the CHANGELOG for a complete list of changes.
+
+
 Version 0.11.6 - February 4, 2009
 =================================
 

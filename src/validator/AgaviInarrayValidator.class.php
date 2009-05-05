@@ -18,7 +18,7 @@
  * 
  * Parameters:
  *   'values'  list of values that form the array
- *   'sep'     seperator of values in the list
+ *   'sep'     separator of values in the list
  *   'case'    verifies case sensitive if true
  *
  * @package    agavi

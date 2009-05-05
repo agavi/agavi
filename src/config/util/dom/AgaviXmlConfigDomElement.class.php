@@ -240,7 +240,6 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 * @param      string The namespace URI. If null, the document default
 	 *                    namespace will be used. If an empty string, no namespace
 	 *                    will be used.
-	 * @param      string Whether or not to apply pluralization magic in selects.
 	 * @param      bool   Whether or not to apply automatic singular/plural
 	 *                    handling that skips plural container elements.
 	 *

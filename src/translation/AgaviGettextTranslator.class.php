@@ -246,7 +246,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 				}
 				
 				// add parenthesis around all ternary expressions. This is done 
-				// to make the ternary operator (?) have precende over the delimiter (:)
+				// to make the ternary operator (?) have precedence over the delimiter (:)
 				// This will transform 
 				// "a ? 1 : b ? c ? 3 : 4 : 2" to "(a ? 1 : (b ? (c ? 3 : 4) : 2))" and
 				// "a ? b ? c ? d ? 5 : 4 : 3 : 2 : 1" to "(a ? (b ? (c ? (d ? 5 : 4) : 3) : 2) : 1)"

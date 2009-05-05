@@ -100,7 +100,7 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Checks if any incidents occured Returns all arguments which succeeded 
+	 * Checks if any incidents occurred Returns all arguments which succeeded 
 	 * in the validation. Includes arguments which were not processed (happens
 	 *  when the argument is "not set" and the validator is not required)
 	 *
@@ -173,7 +173,7 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 	
 	/**
 	 * Will return the highest error severity for an argument. If the field was
-	 * not "touched" by a validator null is returned. Can optionally be resticted
+	 * not "touched" by a validator null is returned. Can optionally be restricted
 	 * to the severity of just one specific validator.
 	 *
 	 * @param      AgaviValidationArgument The argument.
@@ -239,13 +239,11 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Returns all arguments which succeeded in the validation. Includes 
-	 * arguments which were not processed (happens when the argument is 
-	 * "not set" and the validator is not required)
+	 * Returns all arguments which validated successfully.
 	 *
-	 * @param      string The source for which the fields should be returned.
+	 * @param      string Optional source name to limit the list of arguments to.
 	 *
-	 * @return     array An array of AgaviValidationArguments.
+	 * @return     array An array of AgaviValidationArgument objects.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
@@ -263,6 +261,42 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 				}
 			}
 			if($hasInSource && $severity >= AgaviValidator::SUCCESS && $severity <= AgaviValidator::INFO) {
+				$argument = $results[0]['argument'];
+				$arguments[$argument->getHash()] = $argument;
+			}
+		}
+
+		return $arguments;
+	}
+	
+	/**
+	 * Returns all arguments which failed in the validation.
+	 *
+	 * @param      string Optional source name to limit the list of arguments to.
+	 *
+	 * @return     array An array of AgaviValidationArgument objects.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.1
+	 */
+	public function getFailedArguments($source = null)
+	{
+		// shortcut if validation was successful - there won't be failed args in that case
+		if($this->getResult() <= AgaviValidator::INFO) {
+			return array();
+		}
+		
+		$arguments = array();
+		foreach($this->argumentResults as $results) {
+			$hasInSource = false;
+			$severity = AgaviValidator::NOT_PROCESSED;
+			foreach($results as $result) {
+				if($source === null || $result['argument']->getSource() == $source) {
+					$hasInSource = true;
+					$severity = max($severity, $result['severity']);
+				}
+			}
+			if($hasInSource && $severity > AgaviValidator::INFO) {
 				$argument = $results[0]['argument'];
 				$arguments[$argument->getHash()] = $argument;
 			}

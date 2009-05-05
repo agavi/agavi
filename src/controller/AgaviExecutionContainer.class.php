@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * A container used for each action execution that holds neecessary information,
+ * A container used for each action execution that holds necessary information,
  * such as the output type, the response etc.
  *
  * @package    agavi
@@ -260,8 +260,6 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				$this->setNext($this->createSystemActionForwardContainer('error_404'));
 				return $this->proceed();
 			}
-			
-			$this->setActionName(AgaviToolkit::canonicalName($actionName));
 			
 			$this->actionInstance = $controller->createActionInstance($moduleName, $actionName);
 		} catch(AgaviDisabledModuleException $e) {
@@ -531,7 +529,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			$viewModule = AgaviView::NONE;
 		}
 
-		return array($viewModule, $viewName);
+		return array($viewModule, $viewName === AgaviView::NONE ? AgaviView::NONE : AgaviToolkit::canonicalName($viewName));
 	}
 	
 	/**
@@ -887,6 +885,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		if(null === $actionName) {
 			$this->actionName = null;
 		} elseif(preg_match(self::SANE_ACTION_NAME, $actionName)) {
+			$actionName = AgaviToolkit::canonicalName($actionName);
 			$this->actionName = $actionName;
 		} else {
 			throw new AgaviException(sprintf('Invalid action name "%1$s"', $actionName));
@@ -925,6 +924,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		if(null === $viewName) {
 			$this->viewName = null;
 		} elseif(preg_match(self::SANE_VIEW_NAME, $viewName)) {
+			$viewName = AgaviToolkit::canonicalName($viewName);
 			$this->viewName = $viewName;
 		} else {
 			throw new AgaviException(sprintf('Invalid view name "%1$s"', $viewName));

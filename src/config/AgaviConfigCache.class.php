@@ -115,7 +115,7 @@ class AgaviConfigCache
 	}
 	
 	/**
-	 * Fet the handler information for the given filename.
+	 * Fetch the handler information for the given filename.
 	 * 
 	 * @param        string The name of the config file (partial path).
 	 * 
@@ -294,7 +294,7 @@ class AgaviConfigCache
 		}
 
 		// replace unfriendly filename characters with an underscore and postfix the name with a php extension
-		// see http://trac.agavi.org/wiki/RFCs/Ticket932 for an explantion how cache names are constructed
+		// see http://trac.agavi.org/wiki/RFCs/Ticket932 for an explanation how cache names are constructed
 		$cacheName = sprintf(
 			'%1$s_%2$s.php',
 			preg_replace(
@@ -408,7 +408,7 @@ class AgaviConfigCache
 					throw new AgaviConfigurationException("The XSL extension for PHP is used by Agavi for performing transformations in the configuration system; this may be disabled by setting\nAgaviConfig::set('core.skip_config_transformations', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nAs a result, you *will* have to use the latest configuration file formats and namespaces as backwards compatibility is implemented through XSLT. Also, certain additional configuration file validations implemented via Schematron will not be performed.");
 				}
 				// kill a bunch of kittens thanks to http://trac.agavi.org/ticket/1038...
-				$hopeless = version_compare(PHP_VERSION, '5.2.8', '<=');
+				$hopeless = version_compare(PHP_VERSION, '5.2.9', '<');
 				if($hopeless) {
 					$crapfest = error_reporting(error_reporting() & ~E_STRICT);
 				}
@@ -513,11 +513,16 @@ class AgaviConfigCache
 	{
 		$perms = fileperms(AgaviConfig::get('core.cache_dir')) ^ 0x4000;
 
-		$flags = LOCK_EX | (($append) ? FILE_APPEND : 0);
+		$cacheDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR;
 
-		AgaviToolkit::mkdir(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_SUBDIR, $perms);
+		AgaviToolkit::mkdir($cacheDir, $perms);
 
-		if(@file_put_contents($cache, $data, $flags) === false) {
+		if($append && is_readable($cache)) {
+			$data = file_get_contents($cache) . $data;
+		}
+
+		$tmpName = tempnam($cacheDir, basename($cache));
+		if(@file_put_contents($tmpName, $data) === false) {
 			// cannot write cache file
 			$error = 'Failed to write cache file "%s" generated from ' . 'configuration file "%s".';
 			$error .= "\n\n Please make sure the directory \"%s\" is writeable by the web server.";
@@ -525,6 +530,13 @@ class AgaviConfigCache
 
 			throw new AgaviCacheException($error);
 		} else {
+			// with php < 5.2.6 on win32 renaming to an already existing file doesn't work, but copy does
+			// so we simply assume that when rename() fails that we are on win32 and try to use copy()
+			if(!@rename($tmpName, $cache)) {
+				if(copy($tmpName, $cache)) {
+					unlink($tmpName);
+				}
+			}
 			chmod($cache, $perms);
 		}
 	}

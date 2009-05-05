@@ -27,7 +27,7 @@
  *                                              limiter header.
  * # <b>session_module_name</b>     - []      - The name of the session module.
  * # <b>session_save_path</b>       - []      - The filesystem location where
- *                                              sesssion data is stored
+ *                                              session data is stored
  * # <b>session_name</b>            - [Agavi] - The name of the session.
  * # <b>session_id</b>              - []      - Static session ID value to set.
  * # <b>session_cookie_lifetime</b> - []      - The session cookie lifetime (in
@@ -37,7 +37,7 @@
  * # <b>session_cookie_domain</b>   - []      - Session cookie domain.
  * # <b>session_cookie_secure</b>   - []      - Whether or not session cookies
  *                                              should be limited to HTTPS.
- * # <b>session_cookie_domain</b>   - []      - Session cookie "HTTP-only" flag.
+ * # <b>session_cookie_httponly</b> - []      - Session cookie "HTTP-only" flag.
  *
  * All parameters default to whatever PHP would otherwise use, i.e. what's set
  * in php.ini, .htaccess or elsewhere (see {@link http://www.php.net/session}).

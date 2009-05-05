@@ -286,7 +286,7 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	/**
 	 * Check if a redirect is set.
 	 *
-	 * @return     bool true, if a redirect is set, otherwise falsae
+	 * @return     bool true, if a redirect is set, otherwise false
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0

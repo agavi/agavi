@@ -36,7 +36,7 @@
 
 	<xs:complexType name="arguments">
 		<xs:sequence>
-			<xs:element name="argument" type="argument"
+			<xs:element name="argument" type="argument" minOccurs="0"
 			            maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="base" type="xs:string" use="optional" />

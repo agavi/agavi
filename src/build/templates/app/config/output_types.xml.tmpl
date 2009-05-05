@@ -25,6 +25,11 @@
 					<layout name="standard">
 						<layer name="content" />
 					</layout>
+					
+					<!-- special layout for slots that only has a content layer to prevent the obvious infinite loop that would otherwise occur if the decorator layer has slots assigned in the layout; this is loaded automatically by ProjectBaseView::setupHtml() in case the current container is run as a slot -->
+					<layout name="slot">
+						<layer name="content" />
+					</layout>
 				</layouts>
 				
 				<ae:parameter name="http_headers">

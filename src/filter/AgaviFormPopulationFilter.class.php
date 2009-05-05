@@ -16,7 +16,7 @@
 /**
  * AgaviFormPopulationFilter automatically populates a form that is re-posted,
  * which usually happens when a View::INPUT is returned again after a POST
- * request because an error occured during validation.
+ * request because an error occurred during validation.
  * That means that developers don't have to fill in request parameters into
  * form elements in their templates anymore. Text inputs, selects, radios, they
  * all get set to the value the user selected before submitting the form.
@@ -84,8 +84,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$rq = $this->getContext()->getRequest();
 
-		$vr = $container->getValidationManager()->getReport();
-
 		$cfg = $rq->getAttributes('org.agavi.filter.FormPopulationFilter');
 
 		$ot = $response->getOutputType();
@@ -121,6 +119,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$rurl = $cfg['force_request_url'];
 		} else {
 			$rurl = $rq->getUrl();
+		}
+
+		if(isset($cfg['validation_report']) && $cfg['validation_report'] instanceof AgaviValidationReport) {
+			$vr = $cfg['validation_report'];
+		} else {
+			$vr = $container->getValidationManager()->getReport();
 		}
 
 		$errorMessageRules = array();
@@ -192,7 +196,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				$lm->log($m, $cfg['logging_logger']);
 			}
 			
-			// all in all, that didn't go so well. let's see if we should just silently abort instead of throwin an exception
+			// all in all, that didn't go so well. let's see if we should just silently abort instead of throwing an exception
 			if($cfg['ignore_parse_errors']) {
 				return;
 			}
@@ -620,7 +624,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						break;
 					case PREG_INTERNAL_ERROR:
 					default:
-						$error .= "an internal PCRE error occured. As a quick countermeasure, try to upgrade PHP (and the bundled PCRE) as well as libxml (yes!) to the latest versions to see if the problem goes away. If the issue persists, file a bug report with a reproduce case on the Agavi issue tracker or drop by on the IRC support channel.";
+						$error .= "an internal PCRE error occurred. As a quick countermeasure, try to upgrade PHP (and the bundled PCRE) as well as libxml (yes!) to the latest versions to see if the problem goes away. If the issue persists, file a bug report with a reproduce case on the Agavi issue tracker or drop by on the IRC support channel.";
 				}
 				throw new AgaviException($error);
 			}
@@ -648,11 +652,6 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	 */
 	protected function insertErrorMessages(DOMElement $element, array $rules, array $incidents)
 	{
-		if(!count($incidents)) {
-			// nothing to do here
-			return true;
-		}
-
 		$errorMessages = array();
 		foreach($incidents as $incident) {
 			if($incident->getSeverity() <= AgaviValidator::SILENT) {
@@ -661,6 +660,11 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			foreach($incident->getErrors() as $error) {
 				$errorMessages[] = $error->getMessage();
 			}
+		}
+
+		if(!$errorMessages) {
+			// nothing to do here
+			return true;
 		}
 
 		$luie = libxml_use_internal_errors(true);

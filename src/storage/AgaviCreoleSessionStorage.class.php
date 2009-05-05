@@ -218,7 +218,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 
 		$this->db = $this->getContext()->getDatabaseConnection($database);
 		if($this->db === null || !$this->db instanceof Connection) {
-			$error = 'Creole dabatase connection doesn\'t exist. Unable to open session.';
+			$error = 'Creole database connection doesn\'t exist. Unable to open session.';
 			throw new AgaviDatabaseException($error);
 		}
 

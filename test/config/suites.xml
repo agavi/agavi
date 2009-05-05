@@ -22,6 +22,7 @@
 				<testfiles>
 					<testfile>unit/routing/AgaviRoutingTest.php</testfile>
 					<testfile>unit/routing/AgaviWebRoutingTest.php</testfile>
+					<testfile>unit/routing/Ticket1051Test.php</testfile>
 				</testfiles>
 			</suite>
 			<suite name="Request">

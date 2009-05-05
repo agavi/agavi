@@ -28,7 +28,7 @@ class AgaviConstraintViewHandlesOutputType extends PHPUnit_Framework_Constraint
 	protected $acceptGeneric;
 	
 	/**
-	 * contstructor
+	 * constructor
 	 * 
 	 * @param      AgaviAction the action to test
 	 * @param      boolean     true if 'execute' should be accepted
