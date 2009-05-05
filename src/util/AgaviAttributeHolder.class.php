@@ -296,14 +296,23 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 	 *
 	 * @param      string An attribute namespace.
 	 *
+	 * @return     mixed An array with all namespace attributes, if the namespace
+	 *                   was removed, or null otherwise.
+	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
 	public function removeAttributeNamespace($ns)
 	{
+		$retval = null;
+		
 		if(isset($this->attributes[$ns])) {
+			$retval =& $this->attributes[$ns];
+			
 			unset($this->attributes[$ns]);
 		}
+		
+		return $retval;
 	}
 
 	/**

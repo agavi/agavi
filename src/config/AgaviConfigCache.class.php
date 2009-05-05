@@ -408,7 +408,7 @@ class AgaviConfigCache
 					throw new AgaviConfigurationException("The XSL extension for PHP is used by Agavi for performing transformations in the configuration system; this may be disabled by setting\nAgaviConfig::set('core.skip_config_transformations', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nAs a result, you *will* have to use the latest configuration file formats and namespaces as backwards compatibility is implemented through XSLT. Also, certain additional configuration file validations implemented via Schematron will not be performed.");
 				}
 				// kill a bunch of kittens thanks to http://trac.agavi.org/ticket/1038...
-				$hopeless = version_compare(PHP_VERSION, '5.2.8', '<=');
+				$hopeless = version_compare(PHP_VERSION, '5.2.9', '<');
 				if($hopeless) {
 					$crapfest = error_reporting(error_reporting() & ~E_STRICT);
 				}
