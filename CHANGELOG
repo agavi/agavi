@@ -4,5 +4,7 @@ AGAVI CHANGELOG
 1.1.0 beta1 (June ??, 2009)
 ---------------------------
 
+ADD: Response attributes (#1062) (David)
+
 CHG: Move all includes necessary for startup from Agavi::boostrap() into agavi.php (#1094) (David)
 

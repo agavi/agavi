@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviResponse extends AgaviParameterHolder
+abstract class AgaviResponse extends AgaviAttributeHolder
 {
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -309,7 +309,21 @@ abstract class AgaviResponse extends AgaviParameterHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	abstract public function merge(AgaviResponse $otherResponse);
+	public function merge(AgaviResponse $otherResponse)
+	{
+		foreach($otherResponse->getAttributeNamespaces() as $namespace) {
+			foreach($otherResponse->getAttributes($namespace) as $name => $value) {
+				if(!$this->hasAttribute($name, $namespace)) {
+					$this->setAttribute($name, $value, $namespace);
+				} elseif(is_array($value)) {
+					$thisAttribute =& $this->getAttribute($name, $namespace);
+					if(is_array($thisAttribute)) {
+						$thisAttribute = array_merge($value, $thisAttribute);
+					}
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Clear all data for this Response.
