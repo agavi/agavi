@@ -35,29 +35,6 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	protected $isolationEnvironment;
 	
 	/**
-	 * Runs the test case and collects the results in a TestResult object.
-	 * If no TestResult object is passed a new one will be created.
-	 *
-	 * @param  PHPUnit_Framework_TestResult $result
-	 * @return PHPUnit_Framework_TestResult
-	 * @throws InvalidArgumentException
-	 */
-	public function run(PHPUnit_Framework_TestResult $result = NULL)
-	{
-		
-		if(!empty($this->isolationEnvironment)) {
-			$GLOBALS['test.isolationEnvironment'] = $this->isolationEnvironment;
-		}
-		
-		$result = parent::run($result);
-		
-		// restore the testing environment
-		$GLOBALS['test.isolationEnvironment'] = null;
-		
-		return $result;
-	}
-	
-	/**
 	 * set the environment to bootstrap in isolated tests
 	 * 
 	 * @param        string the name of the environment
@@ -70,4 +47,30 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	{
 		$this->isolationEnvironment = $environmentName;
 	}
+	
+	/**
+     * Performs custom preparations on the process isolation template.
+     *
+     * @param PHPUnit_Util_Template $template
+     * @since 1.0.0
+     */
+    protected function prepareTemplate(PHPUnit_Util_Template $template)
+    {
+		parent::prepareTemplate($template);
+		
+		$vars = array(
+			'agavi_environment' => '',
+			'agavi_context' => '',
+			'agavi_clear_cache' => 'false', // literal strings required for proper template rendering
+		);
+		
+		if(!empty($this->isolationEnvironment)) {
+			$vars['agavi_environment'] = $this->isolationEnvironment;
+		}
+		
+		$template->setVar($vars);
+		
+		$templateFile = AgaviConfig::get('core.agavi_dir') . DIRECTORY_SEPARATOR . 'testing' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'TestCaseMethod.tpl';
+		$template->setFile($templateFile);
+    }
 }
