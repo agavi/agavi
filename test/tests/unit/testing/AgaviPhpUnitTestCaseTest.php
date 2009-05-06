@@ -1,6 +1,7 @@
 <?php
 /**
- * @AgaviIsolationEnvironment testing.testIsolation
+ * @AgaviIsolationEnvironment testing.testIsolation	
+ * @AgaviIsolationDefaultContext web-isolated
  */
 class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 {
@@ -29,6 +30,19 @@ class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 	public function testIsolationEnvironmentAnnotated()
 	{
 		$this->assertEquals('testing.testIsolationAnnotated', AgaviConfig::get('testing.environment'));
+	}
+	
+	public function testIsolationDefaultContext()
+	{
+		$this->assertEquals('web-isolated', AgaviConfig::get('core.default_context'));
+	}
+	
+	/**
+	 * @AgaviIsolationDefaultContext web-isolated-annotated-method
+	 */
+	public function testIsolationDefaultContextAnnotated()
+	{
+		$this->assertEquals('web-isolated-annotated-method', AgaviConfig::get('core.default_context'));
 	}
 }
 

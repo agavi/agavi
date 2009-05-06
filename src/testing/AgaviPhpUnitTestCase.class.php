@@ -101,6 +101,33 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
+	 * get the default context to use in isolated tests
+	 * 
+	 * @return       string the default context to use in isolated tests
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function getIsolationDefaultContext()
+	{
+		$ctxName = null;
+		
+		$annotations = $this->getAnnotations();
+		
+		if(!empty($annotations['method']['AgaviIsolationDefaultContext'])) {
+			$ctxName = $annotations['method']['AgaviIsolationDefaultContext'][0];
+		} elseif(!empty($annotations['class']['AgaviIsolationDefaultContext'])) {
+			$ctxName = $annotations['class']['AgaviIsolationDefaultContext'][0];
+		} elseif(!empty($this->isolationDefaultContext)) {
+			$ctxName = $this->isolationDefaultContext;
+		}
+		
+		return $ctxName;
+	}
+	
+	
+	/**
 	 * set whether the cache should be cleared for the isolated subprocess
 	 * 
 	 * @param        bool true if the cache should be cleared
@@ -134,8 +161,8 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 			$vars['agavi_environment'] = $env;
 		}
 		
-		if(!empty($this->isolationDefaultContext)) {
-			$vars['agavi_default_context'] = $this->isolationDefaultContext;
+		if(null !== ($ctx = $this->getIsolationDefaultContext())) {
+			$vars['agavi_default_context'] = $ctx;
 		}
 		
 		if($this->clearIsolationCache) {
