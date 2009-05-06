@@ -58,6 +58,34 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 		$this->isolationEnvironment = $environmentName;
 	}
 	
+	
+	/**
+	 * get the environment to bootstrap in isolated tests
+	 * 
+	 * @return       string the name of the isolation environment
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function getIsolationEnvironment()
+	{
+		$environmentName = null;
+		
+		$annotations = $this->getAnnotations();
+		
+		if(!empty($annotations['method']['AgaviIsolationEnvironment'])) {
+			$environmentName = $annotations['method']['AgaviIsolationEnvironment'][0];
+		} elseif(!empty($annotations['class']['AgaviIsolationEnvironment'])) {
+			$environmentName = $annotations['class']['AgaviIsolationEnvironment'][0];
+		} elseif(!empty($this->isolationEnvironment)) {
+			$environmentName = $this->isolationEnvironment;
+		}
+		
+		return $environmentName;
+	}
+	
+	
 	/**
 	 * set the default context to use in isolated tests
 	 * 
@@ -102,8 +130,8 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 			'agavi_clear_cache' => 'false', // literal strings required for proper template rendering
 		);
 		
-		if(!empty($this->isolationEnvironment)) {
-			$vars['agavi_environment'] = $this->isolationEnvironment;
+		if(null !== ($env = $this->getIsolationEnvironment())) {
+			$vars['agavi_environment'] = $env;
 		}
 		
 		if(!empty($this->isolationDefaultContext)) {
