@@ -100,6 +100,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 		$this->isolationDefaultContext = $contextName;
 	}
 	
+	
 	/**
 	 * get the default context to use in isolated tests
 	 * 
@@ -141,6 +142,34 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 		$this->clearIsolationCache = (bool)$flag;
 	}
 	
+	
+	/**
+	 * check whether to clear the cache in isolated tests
+	 * 
+	 * @return       bool true if the cache is cleared in isolated tests
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function getClearCache()
+	{
+		$flag = null;
+		
+		$annotations = $this->getAnnotations();
+		
+		if(!empty($annotations['method']['AgaviClearIsolationCache'])) {
+			$flag = true;
+		} elseif(!empty($annotations['class']['AgaviClearIsolationCache'])) {
+			$flag = true;
+		} else {
+			$flag = $this->clearIsolationCache;
+		}
+		
+		return $flag;
+	}
+	
+	
 	/**
 	 * Performs custom preparations on the process isolation template.
 	 *
@@ -165,7 +194,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 			$vars['agavi_default_context'] = $ctx;
 		}
 		
-		if($this->clearIsolationCache) {
+		if($this->getClearCache()) {
 			$vars['agavi_clear_cache'] = 'true'; // literal strings required for proper template rendering
 		}
 		
