@@ -35,13 +35,18 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	protected $isolationEnvironment;
 	
 	/**
+	 * @var         bool if the cache in the isolated process should be cleared
+	 */
+	protected $clearIsolationCache = false;
+	
+	/**
 	 * set the environment to bootstrap in isolated tests
 	 * 
 	 * @param        string the name of the environment
 	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 *
-	 * @since      1.0.0
+	 * @since        1.0.0
 	 */
 	public function setIsolationEnvironment($environmentName)
 	{
@@ -49,13 +54,27 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-     * Performs custom preparations on the process isolation template.
-     *
-     * @param PHPUnit_Util_Template $template
-     * @since 1.0.0
-     */
-    protected function prepareTemplate(PHPUnit_Util_Template $template)
-    {
+	 * set whether the cache should be cleared for the isolated subprocess
+	 * 
+	 * @param        bool true if the cache should be cleared
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function setClearCache($flag)
+	{
+		$this->clearIsolationCache = (bool)$flag;
+	}
+	
+	/**
+	 * Performs custom preparations on the process isolation template.
+	 *
+	 * @param        PHPUnit_Util_Template $template
+	 * @since        1.0.0
+	*/
+	protected function prepareTemplate(PHPUnit_Util_Template $template)
+	{
 		parent::prepareTemplate($template);
 		
 		$vars = array(
@@ -68,9 +87,14 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 			$vars['agavi_environment'] = $this->isolationEnvironment;
 		}
 		
+		if($this->clearIsolationCache) {
+			$vars['agavi_clear_cache'] = 'true'; // literal strings required for proper template rendering
+		}
+		
 		$template->setVar($vars);
 		
 		$templateFile = AgaviConfig::get('core.agavi_dir') . DIRECTORY_SEPARATOR . 'testing' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'TestCaseMethod.tpl';
 		$template->setFile($templateFile);
-    }
+	}
+	
 }
