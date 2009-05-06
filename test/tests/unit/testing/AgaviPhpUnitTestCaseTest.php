@@ -1,7 +1,7 @@
 <?php
 /**
- * @AgaviIsolationEnvironment testing.testIsolation	
- * @AgaviIsolationDefaultContext web-isolated
+ * @agaviIsolationEnvironment testing.testIsolation	
+ * @agaviIsolationDefaultContext web-isolated
  */
 class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 {
@@ -25,7 +25,7 @@ class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 	}
 	
 	/**
-	 * @AgaviIsolationEnvironment testing.testIsolationAnnotated
+	 * @agaviIsolationEnvironment testing.testIsolationAnnotated
 	 */
 	public function testIsolationEnvironmentAnnotated()
 	{
@@ -38,7 +38,7 @@ class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 	}
 	
 	/**
-	 * @AgaviIsolationDefaultContext web-isolated-annotated-method
+	 * @agaviIsolationDefaultContext web-isolated-annotated-method
 	 */
 	public function testIsolationDefaultContextAnnotated()
 	{

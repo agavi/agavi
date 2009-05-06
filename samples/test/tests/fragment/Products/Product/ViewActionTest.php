@@ -1,5 +1,8 @@
 <?php 
-
+/**
+ * @AgaviActionName Products.View
+ * @AgaviModuleName Products
+ */
 class Products_Product_ViewActionTest extends AgaviActionTestCase
 {
 	protected static $products = array(

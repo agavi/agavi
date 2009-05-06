@@ -74,10 +74,10 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 		
 		$annotations = $this->getAnnotations();
 		
-		if(!empty($annotations['method']['AgaviIsolationEnvironment'])) {
-			$environmentName = $annotations['method']['AgaviIsolationEnvironment'][0];
-		} elseif(!empty($annotations['class']['AgaviIsolationEnvironment'])) {
-			$environmentName = $annotations['class']['AgaviIsolationEnvironment'][0];
+		if(!empty($annotations['method']['agaviIsolationEnvironment'])) {
+			$environmentName = $annotations['method']['agaviIsolationEnvironment'][0];
+		} elseif(!empty($annotations['class']['agaviIsolationEnvironment'])) {
+			$environmentName = $annotations['class']['agaviIsolationEnvironment'][0];
 		} elseif(!empty($this->isolationEnvironment)) {
 			$environmentName = $this->isolationEnvironment;
 		}
@@ -116,10 +116,10 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 		
 		$annotations = $this->getAnnotations();
 		
-		if(!empty($annotations['method']['AgaviIsolationDefaultContext'])) {
-			$ctxName = $annotations['method']['AgaviIsolationDefaultContext'][0];
-		} elseif(!empty($annotations['class']['AgaviIsolationDefaultContext'])) {
-			$ctxName = $annotations['class']['AgaviIsolationDefaultContext'][0];
+		if(!empty($annotations['method']['agaviIsolationDefaultContext'])) {
+			$ctxName = $annotations['method']['agaviIsolationDefaultContext'][0];
+		} elseif(!empty($annotations['class']['agaviIsolationDefaultContext'])) {
+			$ctxName = $annotations['class']['agaviIsolationDefaultContext'][0];
 		} elseif(!empty($this->isolationDefaultContext)) {
 			$ctxName = $this->isolationDefaultContext;
 		}
@@ -158,9 +158,9 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 		
 		$annotations = $this->getAnnotations();
 		
-		if(!empty($annotations['method']['AgaviClearIsolationCache'])) {
+		if(!empty($annotations['method']['agaviClearIsolationCache'])) {
 			$flag = true;
-		} elseif(!empty($annotations['class']['AgaviClearIsolationCache'])) {
+		} elseif(!empty($annotations['class']['agaviClearIsolationCache'])) {
 			$flag = true;
 		} else {
 			$flag = $this->clearIsolationCache;
