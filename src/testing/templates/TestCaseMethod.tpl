@@ -37,8 +37,8 @@ if('' != '{agavi_environment}') {
 
 AgaviTesting::bootstrap($env);
 
-if('' != '{agavi_context}') {
-	AgaviConfig::set('core.default_context', '{agavi_context}');
+if('' != '{agavi_default_context}') {
+	AgaviConfig::set('core.default_context', '{agavi_default_context}');
 }
 
 require_once 'PHPUnit/Framework.php';

@@ -35,6 +35,11 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	protected $isolationEnvironment;
 	
 	/**
+	 * @var        string  the name of the default context to use in isolated tests.
+	 */
+	protected $isolationDefaultContext;
+	
+	/**
 	 * @var         bool if the cache in the isolated process should be cleared
 	 */
 	protected $clearIsolationCache = false;
@@ -51,6 +56,20 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	public function setIsolationEnvironment($environmentName)
 	{
 		$this->isolationEnvironment = $environmentName;
+	}
+	
+	/**
+	 * set the default context to use in isolated tests
+	 * 
+	 * @param        string the name of the context
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function setIsolationDefaultContext($contextName)
+	{
+		$this->isolationDefaultContext = $contextName;
 	}
 	
 	/**
@@ -79,12 +98,16 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 		
 		$vars = array(
 			'agavi_environment' => '',
-			'agavi_context' => '',
+			'agavi_default_context' => '',
 			'agavi_clear_cache' => 'false', // literal strings required for proper template rendering
 		);
 		
 		if(!empty($this->isolationEnvironment)) {
 			$vars['agavi_environment'] = $this->isolationEnvironment;
+		}
+		
+		if(!empty($this->isolationDefaultContext)) {
+			$vars['agavi_default_context'] = $this->isolationDefaultContext;
 		}
 		
 		if($this->clearIsolationCache) {
