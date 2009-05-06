@@ -6,5 +6,6 @@ AGAVI CHANGELOG
 
 ADD: Response attributes (#1062) (David)
 
+CHG: Add response to default template assigns (#1095) (David)
 CHG: Move all includes necessary for startup from Agavi::boostrap() into agavi.php (#1094) (David)
 

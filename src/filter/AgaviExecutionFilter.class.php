@@ -632,6 +632,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 							'container' => $container,
 							'inner' => $nextOutput,
 							'request_data' => $container->getRequestData(),
+							'response' => $response,
 							'validation_manager' => $container->getValidationManager(),
 							'view' => $viewInstance,
 						);
