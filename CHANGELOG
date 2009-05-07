@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.2 RC1 (May ??, 2009)
+------------------------
+
+FIX: Multiple settings blocks and settings prefixes are not allowed in module configs (#1096) (David)
+
+
 1.0.1 (May 1, 2009)
 -------------------
 
