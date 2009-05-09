@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.2 RC1 (May ??, 2009)
 ------------------------
 
+CHG: Update to PHPUnit 3.4.0beta3 (#1097) (David)
+
 FIX: Multiple settings blocks and settings prefixes are not allowed in module configs (#1096) (David)
 
 
