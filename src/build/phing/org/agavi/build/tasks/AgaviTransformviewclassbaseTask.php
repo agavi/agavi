@@ -16,7 +16,8 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Lists all modules in an Agavi project.
+ * Transforms a view class base name (like <code>YourAction/Success</code>) to
+ * a usable base identifier (like <code>YourAction_Success</code>).
  *
  * @package    agavi
  * @subpackage build
@@ -29,10 +30,10 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviListmodulesTask extends AgaviTask
+class AgaviTransformviewclassbaseTask extends AgaviTask
 {
 	protected $property = null;
-	protected $path = null;
+	protected $string = null;
 	
 	/**
 	 * Sets the property that this task will modify.
@@ -45,56 +46,29 @@ class AgaviListmodulesTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the path to the project directory from which this task will read.
+	 * Sets the string to transform.
 	 *
-	 * @param      PhingFile Path to the project directory.
+	 * @param      string The string to transform.
 	 */
-	public function setPath(PhingFile $path)
+	public function setString($string)
 	{
-		$this->path = $path;
+		$this->string = $string;
 	}
 	
 	/**
-	 * Executes this task.
+	 * Executes the task.
 	 */
 	public function main()
 	{
 		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->path === null) {
-			throw new BuildException('The path attribute must be specified');
+		if($this->string === null) {
+			throw new BuildException('The string attribute must be specified');
 		}
 		
-		$check = new AgaviProjectFilesystemCheck();
-		$check->setAppDirectory($this->project->getProperty('project.directory.app'));
-		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
-		
-		$check->setPath($this->path->getAbsolutePath());
-		if(!$check->check()) {
-			throw new BuildException('The path attribute must be a valid project base directory');
-		}
-		
-		$modules = array();
-		foreach(new DirectoryIterator($this->path->getAbsolutePath() . DIRECTORY_SEPARATOR . $this->project->getProperty('project.directory.app.modules')) as $file) {
-			if($file->isDot()) {
-				continue;
-			}
-			
-			$check = new AgaviModuleFilesystemCheck();
-			$check->setConfigDirectory($this->project->getProperty('module.config.directory'));
-			
-			$check->setPath($file->getPathname());
-			if($check->check()) {
-				$modules[] = (string)$file;
-			}
-		}
-		
-		$list = new AgaviArraytostringTransform();
-		$list->setInput($modules);
-		$list->setDelimiter(' ');
-		
-		$this->project->setUserProperty($this->property, $list->transform());
+		$result = str_replace('/', '_', AgaviToolkit::canonicalName($this->string));
+		$this->project->setUserProperty($this->property, $result);
 	}
 }
 

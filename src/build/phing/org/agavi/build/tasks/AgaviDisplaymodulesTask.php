@@ -67,7 +67,7 @@ class AgaviDisplaymodulesTask extends AgaviTask
 			}
 			
 			$check = new AgaviModuleFilesystemCheck();
-			$check->setConfigDirectory($this->project->getProperty('module.directory.config'));
+			$check->setConfigDirectory($this->project->getProperty('module.config.directory'));
 			
 			$check->setPath($file->getPathname());
 			if($check->check()) {

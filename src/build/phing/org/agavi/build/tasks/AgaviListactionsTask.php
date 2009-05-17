@@ -67,7 +67,7 @@ class AgaviListactionsTask extends AgaviTask
 		}
 	
 		$check = new AgaviModuleFilesystemCheck();
-		$check->setConfigDirectory($this->project->getProperty('module.directory.config'));
+		$check->setConfigDirectory($this->project->getProperty('module.config.directory'));
 		
 		$check->setPath($this->path->getAbsolutePath());
 		if(!$check->check()) {
@@ -75,7 +75,7 @@ class AgaviListactionsTask extends AgaviTask
 		}
 		
 		$actions = array();
-		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->path->getAbsolutePath() . DIRECTORY_SEPARATOR . $this->project->getProperty('module.directory.actions')));
+		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->path->getAbsolutePath()));
 		for(; $iterator->valid(); $iterator->next()) {
 			$rdi = $iterator->getInnerIterator();
 			if($rdi->isDot() || !$rdi->isFile()) {

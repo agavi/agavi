@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Lists all modules in an Agavi project.
+ * Resolves Agavi configuration directives and variables.
  *
  * @package    agavi
  * @subpackage build
@@ -29,11 +29,13 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviListmodulesTask extends AgaviTask
+class AgaviResolveconfigurationTask extends AgaviTask
 {
-	protected $property = null;
-	protected $path = null;
-	
+	protected $property;
+	protected $string;
+	protected $expandDirectives = true;
+	protected $variables = array();
+
 	/**
 	 * Sets the property that this task will modify.
 	 *
@@ -45,56 +47,63 @@ class AgaviListmodulesTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the path to the project directory from which this task will read.
+	 * Sets the string that this task will read.
 	 *
-	 * @param      PhingFile Path to the project directory.
+	 * @param      string The string to read.
 	 */
-	public function setPath(PhingFile $path)
+	public function setString($string)
 	{
-		$this->path = $path;
+		$this->string = $string;
 	}
 	
 	/**
-	 * Executes this task.
+	 * Sets whether directives should be expanded as well as variables.
+	 *
+	 * @param      bool Whether to expand directives in the input string.
+	 */
+	public function setExpandDirectives($expandDirectives)
+	{
+		$this->expandDirectives = StringHelper::booleanValue($expandDirectives);
+	}
+	
+	/**
+	 * Adds a new variable to this task.
+	 *
+	 * @return     AgaviVariableType The new variable.
+	 */
+	public function createVariable()
+	{
+		$variable = new AgaviVariableType();
+		$this->variables[] = $variable;
+		return $variable;
+	}
+	
+	/**
+	 * Executes the task.
 	 */
 	public function main()
 	{
 		if($this->property === null) {
 			throw new BuildException('The property attribute must be specified');
 		}
-		if($this->path === null) {
-			throw new BuildException('The path attribute must be specified');
+		if($this->string === null) {
+			throw new BuildException('The string attribute must be specified');
 		}
 		
-		$check = new AgaviProjectFilesystemCheck();
-		$check->setAppDirectory($this->project->getProperty('project.directory.app'));
-		$check->setPubDirectory($this->project->getProperty('project.directory.pub'));
+		$this->tryLoadAgavi();
+		$this->tryBootstrapAgavi();
 		
-		$check->setPath($this->path->getAbsolutePath());
-		if(!$check->check()) {
-			throw new BuildException('The path attribute must be a valid project base directory');
+		$assigns = array();
+		foreach($this->variables as $variable) {
+			$assigns[$variable->getName()] = $variable->getValue();
 		}
 		
-		$modules = array();
-		foreach(new DirectoryIterator($this->path->getAbsolutePath() . DIRECTORY_SEPARATOR . $this->project->getProperty('project.directory.app.modules')) as $file) {
-			if($file->isDot()) {
-				continue;
-			}
-			
-			$check = new AgaviModuleFilesystemCheck();
-			$check->setConfigDirectory($this->project->getProperty('module.config.directory'));
-			
-			$check->setPath($file->getPathname());
-			if($check->check()) {
-				$modules[] = (string)$file;
-			}
-		}
+		$result = AgaviToolkit::expandVariables(
+			$this->expandDirectives ? AgaviToolkit::expandDirectives($this->string) : $this->string,
+			$assigns
+		);
 		
-		$list = new AgaviArraytostringTransform();
-		$list->setInput($modules);
-		$list->setDelimiter(' ');
-		
-		$this->project->setUserProperty($this->property, $list->transform());
+		$this->project->setUserProperty($this->property, $result);
 	}
 }
 

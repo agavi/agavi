@@ -13,10 +13,8 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviTask.php');
-
 /**
- * Sets relevant Agavi properties given an Agavi installation directory.
+ * Represents a variable.
  *
  * @package    agavi
  * @subpackage build
@@ -29,48 +27,55 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  *
  * @version    $Id$
  */
-class AgaviReadconfigurationTask extends AgaviTask
+class AgaviVariableType extends AgaviType
 {
-	protected $property;
-	protected $configurationValue;
-
+	protected $name = null;
+	protected $value = null;
+	
 	/**
-	 * Sets the property that this task will modify.
+	 * Sets the name of the variable.
 	 *
-	 * @param      string The property to modify.
+	 * @param      string The name of the variable.
 	 */
-	public function setProperty($property)
+	public function setName($name)
 	{
-		$this->property = $property;
+		$this->name = (string)$name;
 	}
 	
 	/**
-	 * Sets the configuration value that this task will read.
+	 * Sets the value of the variable.
 	 *
-	 * @param      string The configuration value to read.
+	 * @param      mixed The variable value.
 	 */
-	public function setConfigurationValue($configurationValue)
+	public function setValue($value)
 	{
-		$this->configurationValue = $configurationValue;
+		$this->value = $value;
+	}
+	
+	/*
+	 * I don't know what the fuck this Phing shit is supposed to fucking do. If
+	 * this worthless garbage doesn't work for you, try copying some fucking
+	 * getRef() or getInstance() shit out of some other fucking DataType.
+	 */
+	
+	/**
+	 * Gets the name of the variable.
+	 *
+	 * @return     string The name of the variable.
+	 */
+	public function getName()
+	{
+		return $this->name;
 	}
 	
 	/**
-	 * Executes the task.
+	 * Gets the value of the variable.
+	 *
+	 * @return     mixed The value of the variable.
 	 */
-	public function main()
+	public function getValue()
 	{
-		if($this->property === null) {
-			throw new BuildException('The property attribute must be specified');
-		}
-		if($this->configurationValue === null) {
-			throw new BuildException('The configurationValue attribute must be specified');
-		}
-		
-		$this->tryLoadAgavi();
-		/* XXX: We don't need to be bootstrapped for this. That said, we also can't
-		 * read configuration data from projects this way. Oh well. */
-		
-		$this->project->setUserProperty($this->property, AgaviConfig::get($this->configurationValue));
+		return $this->value;
 	}
 }
 

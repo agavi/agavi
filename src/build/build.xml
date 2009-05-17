@@ -31,6 +31,7 @@
 	<taskdef name="agavi.transform-namespace-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtoidentifierTask" classpath="phing" />
 	<taskdef name="agavi.transform-namespace-string-to-path" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtopathTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-agavi-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoagaviidentifierTask" classpath="phing" />
+	<taskdef name="agavi.transform-view-class-base" classname="org.agavi.build.tasks.AgaviTransformviewclassbaseTask" classpath="phing" />
 
 	<taskdef name="agavi.base-name" classname="org.agavi.build.tasks.AgaviBasenameTask" classpath="phing" />
 	<taskdef name="agavi.directory-name" classname="org.agavi.build.tasks.AgaviDirectorynameTask" classpath="phing" />
@@ -55,6 +56,7 @@
 	<typedef name="agavi.object" classname="org.agavi.build.types.AgaviObjectType" classpath="phing" />
 
 	<typedef name="agavi.property" classname="org.agavi.build.types.AgaviPropertyType" classpath="phing" />
+	<typedef name="agavi.variable" classname="org.agavi.build.types.AgaviVariableType" classpath="phing" />
 
 	<typedef name="agavi.from" classname="org.agavi.build.types.AgaviFromType" classpath="phing" />
 
@@ -124,6 +126,7 @@
 
 	<taskdef name="agavi.locate-module" classname="org.agavi.build.tasks.AgaviLocatemoduleTask" classpath="phing" />
 	<taskdef name="agavi.check-module" classname="org.agavi.build.tasks.AgaviCheckmoduleTask" classpath="phing" />
+	<taskdef name="agavi.configure-module" classname="org.agavi.build.tasks.AgaviConfiguremoduleTask" classpath="phing" />
 
 	<taskdef name="agavi.list-modules" classname="org.agavi.build.tasks.AgaviListmodulesTask" classpath="phing" />
 	<taskdef name="agavi.display-modules" classname="org.agavi.build.tasks.AgaviDisplaymodulesTask" classpath="phing" />
@@ -133,6 +136,8 @@
 
 	<taskdef name="agavi.read-configuration" classname="org.agavi.build.tasks.AgaviReadconfigurationTask" classpath="phing" />
 	<taskdef name="agavi.write-configuration" classname="org.agavi.build.tasks.AgaviWriteconfigurationTask" classpath="phing" />
+
+	<taskdef name="agavi.resolve-configuration" classname="org.agavi.build.tasks.AgaviResolveconfigurationTask" classpath="phing" />
 
 	<!-- Load some basic configuration values. -->
 	<agavi.read-configuration property="agavi.version" configurationValue="agavi.version" />
@@ -231,19 +236,25 @@
 		<agavi.check-project property="project.available" path="${project.directory}" />
 		<fail unless="project.available" message="Agavi project not found in ${project.directory}" />
 
+		<!-- If these properties don't exist, then we assume we're using the old filesystem layout. -->
+		<property name="module.action.path.default" value="%core.module_dir%/${property-specifier}{moduleName}/actions/${property-specifier}{actionName}Action.class.php" />
+		<property name="module.cache.path.default" value="%core.module_dir%/${property-specifier}{moduleName}/cache/${property-specifier}{actionName}.xml" />
+		<property name="module.templates.directory.default" value="%core.module_dir%/${property-specifier}{module}/templates" />
+		<property name="module.validate.path.default" value="%core.module_dir%/${property-specifier}{moduleName}/validate/${property-specifier}{actionName}.xml" />
+		<property name="module.view.path.default" value="%core.module_dir%/${property-specifier}{moduleName}/views/${property-specifier}{viewName}View.class.php" />
+		<property name="module.view.name.default" value="${property-specifier}{actionName}${property-specifier}{viewName}" />
+
+		<!-- If this property doesn't exist, we assume we can use 'build' as the build-system environment. -->
+		<property name="project.build.environment" value="build" />
+
 		<!-- Load project-specific build configuration. -->
 		<property name="project.file.build-properties" value="${project.directory}/build.properties" />
 		<property userProperty="true" file="${project.file.build-properties}" override="true" />
 
-		<!-- Define module properties. -->
-		<property name="module.directory.actions" value="actions" />
-		<property name="module.directory.cache" value="cache" />
-		<property name="module.directory.config" value="config" />
-		<property name="module.directory.lib" value="lib" />
-		<property name="module.directory.models" value="models" />
-		<property name="module.directory.templates" value="templates" />
-		<property name="module.directory.validate" value="validate" />
-		<property name="module.directory.views" value="views" />
+		<!-- Define other module properties. -->
+		<property name="module.config.directory" value="config" />
+		<property name="module.lib.directory" value="lib" />
+		<property name="module.models.directory" value="models" />
 
 		<!-- Define template properties. -->
 		<property name="templates.directory" value="${agavi.directory.src.build.templates}" />
@@ -326,7 +337,11 @@
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
+		<agavi.resolve-configuration property="template.file" string="${module.view.name}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="Success" />
+		</agavi.resolve-configuration>
+		<copy file="${template.path}" tofile="${module.templates.directory}/${template.file}.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -342,10 +357,10 @@
 
 	<target name="project-wizard-welcome" depends="project-locate">
 		<!-- Fuck this, man, fuck this. -->
-		
+
 		<property userProperty="true" name="module.name" value="Welcome" override="true" />
 		<agavi.execute-target name="module-create" />
-		
+
 		<property userProperty="true" name="action.name" value="Index" override="true" />
 		<agavi.execute-target name="action-create" />
 
@@ -381,7 +396,7 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-		
+
 		<!-- Default global templates. -->
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.templates}">
 			<from path="${templates.directory}" />
@@ -403,8 +418,8 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-		
-		<!-- stuff from the pub directory -->
+
+		<!-- Stuff from the pub directory. -->
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.pub}">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
@@ -415,14 +430,18 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
 	<target name="project-wizard-system-action-error_404-template" depends="project-locate,module-locate,action-locate">
 		<property userProperty="true" name="template.name" value="${action.path}Success" override="true" />
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.app.modules.templates}/Error404Success.php.tmpl">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
+		<agavi.resolve-configuration property="template.file" string="${module.view.name}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="Success" />
+		</agavi.resolve-configuration>
+		<copy file="${template.path}" tofile="${module.templates.directory}/${template.file}.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -462,7 +481,11 @@
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
+		<agavi.resolve-configuration property="template.file" string="${module.view.name}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="Success" />
+		</agavi.resolve-configuration>
+		<copy file="${template.path}" tofile="${module.templates.directory}/${template.file}.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -502,7 +525,11 @@
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
+		<agavi.resolve-configuration property="template.file" string="${module.view.name}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="Success" />
+		</agavi.resolve-configuration>
+		<copy file="${template.path}" tofile="${module.templates.directory}/${template.file}.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -542,7 +569,11 @@
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.templates}/${action.path}Success.${template.extension.default}">
+		<agavi.resolve-configuration property="template.file" string="${module.view.name}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="Success" />
+		</agavi.resolve-configuration>
+		<copy file="${template.path}" tofile="${module.templates.directory}/${template.file}.${template.extension.default}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -638,6 +669,9 @@
 		<!-- Load project properties (first attempt). -->
 		<property userProperty="true" file="${project.file.build-properties}" override="true" />
 
+		<!-- Environment for build system operations. -->
+		<agavi.input property="project.build.environment" message="Agavi environment for build system operations" default="build" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+
 		<!-- Determine project name. -->
 		<agavi.input property="project.name" message="Project name" default="New Agavi Project" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 
@@ -658,15 +692,26 @@
 		<!-- Determine default template extension. -->
 		<agavi.input property="template.extension.default" message="Default template extension" default="php" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 
-		<!-- Define module properties. -->
-		<property name="module.directory.actions" value="actions" />
-		<property name="module.directory.cache" value="cache" />
-		<property name="module.directory.config" value="config" />
-		<property name="module.directory.lib" value="lib" />
-		<property name="module.directory.models" value="models" />
-		<property name="module.directory.templates" value="templates" />
-		<property name="module.directory.validate" value="validate" />
-		<property name="module.directory.views" value="views" />
+		<!-- Determine module paths. -->
+		<echo message="Agavi supports customizable paths to various module components. The" />
+		<echo message="following variables can be used to specify the paths: ${property-specifier}{moduleName}" />
+		<echo message="for the current module name, ${property-specifier}{actionName} for the current action" />
+		<echo message="name, and ${property-specifier}{viewName} for the current view name. Note that none of" />
+		<echo message="these semantics applies to the templates directory, which only" />
+		<echo message="supports the variable ${property-specifier}{module} to represent the current module name." />
+		<echo message="For a list of common choices for these settings, see the documentation." />
+		<echo message="The defaults are suitable for most projects." />
+		<agavi.input property="module.action.path.default" message="Action path" default="%core.module_dir%/${property-specifier}{moduleName}/impl/${property-specifier}{actionName}/Action.class.php" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.cache.path.default" message="Cache configuration path" default="%core.module_dir%/${property-specifier}{moduleName}/impl/${actionName}/cache.xml" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.validate.path.default" message="Validation configuration path" default="%core.module_dir%/${property-specifier}{moduleName}/impl/${property-specifier}{actionName}/validate.xml" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.view.path.default" message="View path" default="%core.module_dir%/${property-specifier}{moduleName}/impl/${property-specifier}{viewName}View.class.php" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.view.name.default" message="View name" default="${property-specifier}{actionName}/${property-specifier}{viewName}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.templates.directory.default" message="Templates directory" default="%core.module_dir%/${property-specifier}{module}/impl/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+
+		<!-- Define other module properties. -->
+		<property name="module.config.directory" value="config" />
+		<property name="module.lib.directory" value="lib" />
+		<property name="module.models.directory" value="models" />
 
 		<!-- Define template properties. -->
 		<property name="templates.directory" value="${agavi.directory.src.build.templates}" />
@@ -713,8 +758,15 @@
 		<agavi.write-properties file="${project.file.build-properties}" update="true">
 			<property name="project.name" value="${project.name}" />
 			<property name="project.prefix" value="${project.prefix}" />
+			<property name="project.build.environment" value="${project.build.environment}" />
 			<property name="template.extension.default" value="${template.extension.default}" />
 			<property name="templates.directory" value="${project.file.build-properties.templates-directory}" />
+			<property name="module.action.path.default" value="${module.action.path.default}" />
+			<property name="module.cache.path.default" value="${module.cache.path.default}" />
+			<property name="module.templates.directory.default" value="${module.templates.directory.default}" />
+			<property name="module.validate.path.default" value="${module.validate.path.default}" />
+			<property name="module.view.path.default" value="${module.view.path.default}" />
+			<property name="module.view.name.default" value="${module.view.name.default}" />
 		</agavi.write-properties>
 		<property userProperty="true" file="${project.file.build-properties}" override="true" />
 
@@ -1052,6 +1104,9 @@
 		<!-- Load module-specific build configuration. -->
 		<property userProperty="true" name="module.file.build-properties" value="${module.directory}/build.properties" override="true" />
 		<property userProperty="true" file="${module.file.build-properties}" override="true" />
+
+		<!-- Load module configuration. -->
+		<agavi.configure-module name="${module.name}" prefix="module" />
 	</target>
 
 	<target name="module-wizard" depends="project-locate" description="Creates a module and user-specified actions, views, and templates">
@@ -1082,23 +1137,24 @@
 		<agavi.check-module property="module.available" path="${module.directory}" />
 		<fail if="module.available" message="Module ${module.name} already exists at ${module.directory}" />
 
+		<!-- Resolve paths. -->
+		<agavi.resolve-configuration property="module.templates.directory.resolved" string="${module.templates.directory.default}">
+			<variable name="module" value="${module.name}" />
+		</agavi.resolve-configuration>
+
 		<!-- Create directory structure. -->
 		<mkdir dir="${module.directory}" />
-		<mkdir dir="${module.directory}/${module.directory.actions}" />
-		<mkdir dir="${module.directory}/${module.directory.cache}" />
-		<mkdir dir="${module.directory}/${module.directory.config}" />
-		<mkdir dir="${module.directory}/${module.directory.lib}" />
-		<mkdir dir="${module.directory}/${module.directory.models}" />
-		<mkdir dir="${module.directory}/${module.directory.templates}" />
-		<mkdir dir="${module.directory}/${module.directory.validate}" />
-		<mkdir dir="${module.directory}/${module.directory.views}" />
+		<mkdir dir="${module.directory}/${module.config.directory}" />
+		<mkdir dir="${module.directory}/${module.lib.directory}" />
+		<mkdir dir="${module.directory}/${module.models.directory}" />
+		<mkdir dir="${module.templates.directory.resolved}" />
 
 		<!-- Create library. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.lib}">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy todir="${module.directory}/${module.directory.lib}">
+		<copy todir="${module.directory}/${module.lib.directory}">
 			<mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/${project.prefix}${module.name}\2" />
 			<fileset dir="${template.path}">
 				<include name="**/*.tmpl" />
@@ -1113,12 +1169,22 @@
 			</filterchain>
 		</copy>
 
+		<!-- Determine the configuration handler paths for actions' XML files. -->
+		<agavi.resolve-configuration expandDirectives="false" property="module.cache.path.handler" string="${module.cache.path.default}">
+			<variable name="moduleName" value="*" />
+			<variable name="actionName" value="*" />
+		</agavi.resolve-configuration>
+		<agavi.resolve-configuration expandDirectives="false" property="module.validate.path.handler" string="${module.validate.path.default}">
+			<variable name="moduleName" value="*" />
+			<variable name="actionName" value="*" />
+		</agavi.resolve-configuration>
+
 		<!-- Copy configuration. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.config}">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy todir="${module.directory}/${module.directory.config}">
+		<copy todir="${module.directory}/${module.config.directory}">
 			<mapper type="glob" from="*.xml.tmpl" to="*.xml" />
 			<fileset dir="${template.path}">
 				<include name="**/*.xml.tmpl" />
@@ -1129,6 +1195,14 @@
 					<token key="PROJECT_LOCATION" value="${project.directory}" />
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODULE_NAME" value="${module.name}" />
+					<token key="MODULE_ACTION_PATH" value="${module.action.path.default}" />
+					<token key="MODULE_VIEW_PATH" value="${module.view.path.default}" />
+					<token key="MODULE_VIEW_NAME" value="${module.view.name.default}" />
+					<token key="MODULE_CACHE_PATH" value="${module.cache.path.default}" />
+					<token key="MODULE_VALIDATE_PATH" value="${module.validate.path.default}" />
+					<token key="MODULE_TEMPLATES_DIRECTORY" value="${module.templates.directory.default}" />
+					<token key="MODULE_CACHE_HANDLER_PATH" value="${module.cache.path.handler}" />
+					<token key="MODULE_VALIDATE_HANDLER_PATH" value="${module.validate.path.handler}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -1145,7 +1219,9 @@
 	<target name="action-locate" depends="project-locate,module-locate">
 		<agavi.input property="action.name" message="Action name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.transform-namespace-string-to-path property="action.path" string="${action.name}" />
-		<property userProperty="true" name="action.file" value="${module.directory}/actions/${action.path}Action.class.php" override="true" />
+		<agavi.resolve-configuration property="action.file" string="${module.action.path}">
+			<variable name="actionName" value="${action.path}" />
+		</agavi.resolve-configuration>
 
 		<agavi.available property="action.available" file="${action.file}" type="file" />
 		<fail unless="action.available" message="Agavi action not found at ${action.file}" />
@@ -1187,7 +1263,9 @@
 		<agavi.transform-string-to-identifier property="action.identifier" string="${action.name}" />
 
 		<agavi.transform-namespace-string-to-path property="action.path" string="${action.name}" />
-		<property userProperty="true" name="action.file" value="${module.directory}/${module.directory.actions}/${action.path}Action.class.php" override="true" />
+		<agavi.resolve-configuration property="action.file" string="${module.action.path}">
+			<variable name="actionName" value="${action.path}" />
+		</agavi.resolve-configuration>
 
 		<agavi.available property="action.available" file="${action.file}" type="file" />
 		<fail if="action.available" message="Action ${action.name} already exists at ${action.file}" />
@@ -1219,7 +1297,10 @@
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.validate}/${action.path}.xml">
+		<agavi.resolve-configuration property="validate.file" string="${module.validate.path}">
+			<variable name="actionName" value="${action.path}" />
+		</agavi.resolve-configuration>
+		<copy file="${template.path}" tofile="${validate.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -1237,7 +1318,10 @@
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
-		<copy file="${template.path}" tofile="${module.directory}/${module.directory.cache}/${action.path}.xml">
+		<agavi.resolve-configuration property="cache.file" string="${module.cache.path}">
+			<variable name="actionName" value="${action.path}" />
+		</agavi.resolve-configuration>
+		<copy file="${template.path}" tofile="${cache.file}">
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
 					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -1258,7 +1342,14 @@
 
 	<target name="view-locate" depends="project-locate,module-locate,action-locate">
 		<agavi.input property="view.name" message="View name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<property userProperty="true" name="view.file" value="${module.directory}/${module.directory.views}/${action.path}${view.name}View.class.php" override="true" />
+		<agavi.resolve-configuration property="view.path" string="${module.view.name}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="${view.name}" />
+		</agavi.resolve-configuration>
+		<agavi.resolve-configuration property="view.file" string="${module.view.path}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="${view.path}" />
+		</agavi.resolve-configuration>
 
 		<agavi.available property="view.available" file="${view.file}" type="file" />
 		<fail unless="view.available" message="Agavi view not found at ${view.file}" />
@@ -1281,13 +1372,25 @@
 			</then>
 		</if>
 
-		<property userProperty="true" name="view.file" value="${module.directory}/${module.directory.views}/${action.path}${view.name}View.class.php" override="true" />
+		<agavi.resolve-configuration property="view.path" string="${module.view.name}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="${view.name}" />
+		</agavi.resolve-configuration>
+		<agavi.resolve-configuration property="view.file" string="${module.view.path}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="${view.path}" />
+		</agavi.resolve-configuration>
 
 		<agavi.available property="view.available" file="${view.file}" type="file" />
 		<fail if="view.available" message="View ${view.name} already exists at ${view.file}" />
 
 		<!-- Define the name of the view class. -->
-		<property userProperty="true" name="view.class" value="${module.name}_${action.identifier}${view.name}View" override="true" />
+		<agavi.resolve-configuration property="view.class.base" string="${module.view.name}">
+			<variable name="actionName" value="${action.identifier}" />
+			<variable name="viewName" value="${view.name}" />
+		</agavi.resolve-configuration>
+		<agavi.transform-view-class-base property="view.class.base" string="${view.class.base}" />
+		<property userProperty="true" name="view.class" value="${module.name}_${view.class.base}View" override="true" />
 
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.views}/View.class.php.tmpl">
@@ -1313,7 +1416,10 @@
 	</target>
 
 	<target name="view-template-create" depends="project-locate,module-locate,action-locate,view-locate" description="Creates a template for a view">
-		<property userProperty="true" name="template.name" value="${action.path}${view.name}" override="true" />
+		<agavi.resolve-configuration property="template.name" string="${module.view.name}">
+			<variable name="actionName" value="${action.path}" />
+			<variable name="viewName" value="${view.name}" />
+		</agavi.resolve-configuration>
 		<agavi.execute-target name="template-create" />
 	</target>
 
@@ -1323,7 +1429,7 @@
 
 	<target name="model-locate" depends="project-locate,module-locate">
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<property userProperty="true" name="model.file" value="${module.directory}/${module.directory.models}/${model.name}Model.class.php" />
+		<property userProperty="true" name="model.file" value="${module.directory}/${module.models.directory}/${model.name}Model.class.php" />
 
 		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail unless="model.available" message="Agavi model not found at ${model.file}" />
@@ -1350,7 +1456,7 @@
 		<agavi.transform-string-to-identifier property="model.identifier" string="${model.name}" />
 
 		<agavi.transform-namespace-string-to-path property="model.path" string="${model.name}" />
-		<property userProperty="true" name="model.file" value="${module.directory}/${module.directory.models}/${model.path}Model.class.php" override="true" />
+		<property userProperty="true" name="model.file" value="${module.directory}/${module.models.directory}/${model.path}Model.class.php" override="true" />
 
 		<agavi.available property="model.available" file="${model.file}" type="file" />
 		<fail if="model.available" message="Model ${model.name} already exists at ${model.file}" />
@@ -1384,7 +1490,7 @@
 	<target name="template-locate" depends="project-locate,module-locate">
 		<agavi.input property="template.name" message="Template name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" />
-		<property userProperty="true" name="template.file" value="${module.directory}/${module.directory.templates}/${template.name}.${template.extension}" override="true" />
+		<property userProperty="true" name="template.file" value="${module.templates.directory}/${template.name}.${template.extension}" override="true" />
 
 		<agavi.available property="template.available" file="${template.file}" type="file" />
 		<fail unless="template.available" message="Agavi template not found at ${template.file}" />
@@ -1393,7 +1499,7 @@
 	<target name="template-create" depends="project-locate,module-locate" description="Creates a template">
 		<agavi.input property="template.name" message="Template name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.input property="template.extension" message="Template extension" default="${template.extension.default}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-		<property userProperty="true" name="template.file" value="${module.directory}/${module.directory.templates}/${template.name}.${template.extension}" override="true" />
+		<property userProperty="true" name="template.file" value="${module.templates.directory}/${template.name}.${template.extension}" override="true" />
 
 		<agavi.available property="template.available" file="${template.file}" type="file" />
 		<fail if="template.available" message="Template ${template.name}.${template.extension} already exists at ${template.file}" />
