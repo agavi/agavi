@@ -60,7 +60,33 @@ class AgaviDisplayactionsTask extends AgaviTask
 			throw new BuildException('The path attribute must be a valid module base directory');
 		}
 		
-		$actions = array();
+		/* We don't know whether the module is configured or not here, so load the
+		 * values we want properly. */
+		$this->tryLoadAgavi();
+		$this->tryBootstrapAgavi();
+		
+		require_once(AgaviConfigCache::checkConfig(
+			sprintf('%s/%s/module.xml',
+				$this->path->getAbsolutePath(),
+				(string)$this->project->getProperty('module.config.directory')
+			)
+		));
+		
+		$actionPath = AgaviToolkit::expandVariables(
+			AgaviToolkit::expandDirectives(AgaviConfig::get(
+				sprintf('modules.%s.agavi.action.path', strtolower($this->path->getName())),
+				'%core.module_dir%/${moduleName}/actions/${actionName}Action.class.php'
+			)),
+			array(
+				'moduleName' => $this->path->getName()
+			)
+		);
+		$pattern = '#^' . AgaviToolkit::expandVariables(
+			/* Blaaaaaaaaauuuuuughhhhhhh... */
+			str_replace('\\$\\{actionName\\}', '${actionName}', preg_quote($actionPath, '#')),
+			array('actionName' => '(?P<action_name>.*?)')
+		) . '$#';
+		
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->path->getAbsolutePath()));
 		for(; $iterator->valid(); $iterator->next()) {
 			$rdi = $iterator->getInnerIterator();
@@ -68,9 +94,9 @@ class AgaviDisplayactionsTask extends AgaviTask
 				continue;
 			}
 			
-			$file = $rdi->getSubpathname();
-			if(preg_match('#Action\.class\.php$#', $file)) {
-				$this->log(str_replace(DIRECTORY_SEPARATOR, '.', substr($file, 0, -16 /* strlen('Action.class.php') */)), Project::MSG_INFO);
+			$file = $rdi->getPathname();
+			if(preg_match($pattern, $file, $matches)) {
+				$this->log(str_replace(DIRECTORY_SEPARATOR, '.', $matches['action_name']));
 			}
 		}
 	}
