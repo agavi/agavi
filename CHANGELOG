@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 CHG: Update to PHPUnit 3.4.0beta3 (#1097) (David)
 
+FIX: AgaviTranslationManager::_n() and _c() ignore custom locale independent format (#1099) (Dominik)
 FIX: Configuration system does not permit identifiers to be one character in length (#1098) (Noah)
 FIX: Multiple settings blocks and settings prefixes are not allowed in module configs (#1096) (David)
 
