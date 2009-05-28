@@ -73,15 +73,6 @@
 				<ref name="data-non-empty-string" />
 			</attribute>
 		</optional>
-		<optional>
-			<attribute name="affects">
-				<list>
-					<oneOrMore>
-						<data type="string" />
-					</oneOrMore>
-				</list>
-			</attribute>
-		</optional>
 		<attribute name="class">
 			<ref name="data-identifier" />
 		</attribute>

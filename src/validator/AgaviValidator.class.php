@@ -26,7 +26,6 @@
  *   'severity'   error severity in case of failure
  *   'error'      error message when validation fails
  *   'errors'     an array of errors with the reason as key
- *   'affects'    list of fields that are affected by an error
  *   'required'   if true the validator will fail when the input parameter is 
  *                not set
  *
