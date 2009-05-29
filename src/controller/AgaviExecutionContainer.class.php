@@ -271,23 +271,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		// initialize the action
 		$this->actionInstance->initialize($this);
 
+		// copy and merge request data as required
+		$this->initRequestData();
+		
 		if($this->actionInstance->isSimple()) {
-			if($this->arguments !== null) {
-				// clone it so mutating it has no effect on the "outside world"
-				$this->requestData = clone $this->arguments;
-			} else {
-				$rdhc = $request->getParameter('request_data_holder_class');
-				$this->requestData = new $rdhc();
-			}
 			// run the execution filter, without a proper chain
 			$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
 		} else {
-			// mmmh I smell awesomeness... clone the RD JIT, yay, that's the spirit
-			$this->requestData = clone $this->globalRequestData;
-
-			if($this->arguments !== null) {
-				$this->requestData->merge($this->arguments);
-			}
 
 			// create a new filter chain
 			$filterChain = $this->context->createInstanceFor('filter_chain');
@@ -317,6 +307,31 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		return $this->proceed();
 	}
 	
+	/**
+	 * copies and merges the global request data
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since        1.1.0
+	 */
+	protected function initRequestData() 
+	{
+		if($this->actionInstance->isSimple()) {
+			if($this->arguments !== null) {
+				// clone it so mutating it has no effect on the "outside world"
+				$this->requestData = clone $this->arguments;
+			} else {
+				$rdhc = $request->getParameter('request_data_holder_class');
+				$this->requestData = new $rdhc();
+			}
+		} else {
+			// mmmh I smell awesomeness... clone the RD JIT, yay, that's the spirit
+			$this->requestData = clone $this->globalRequestData;
+
+			if($this->arguments !== null) {
+				$this->requestData->merge($this->arguments);
+			}
+		}
+	}
 	
 	/**
 	 * create a system forward container
