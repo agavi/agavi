@@ -88,7 +88,6 @@
 			          minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" />
-		<xs:attribute name="affects" type="xs:string" />
 		<xs:attribute name="class" type="xs:string" />
 		<xs:attribute name="depends" type="xs:string" />
 		<xs:attribute name="export" type="xs:string" />

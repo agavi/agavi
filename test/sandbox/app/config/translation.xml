@@ -73,6 +73,15 @@
 				</date_formatter>
 				
 			</translator>
+			
+			<translator domain="ticket1099">
+				<number_formatter>
+					<ae:parameter name="format">##,###.00</ae:parameter>
+				</number_formatter>
+				<currency_formatter>
+					<ae:parameter name="format">##,###.00</ae:parameter>
+				</currency_formatter>
+			</translator>
 		</translators>
 		
 	</ae:configuration>
