@@ -701,12 +701,20 @@
 		<echo message="supports the variable ${property-specifier}{module} to represent the current module name." />
 		<echo message="For a list of common choices for these settings, see the documentation." />
 		<echo message="The defaults are suitable for most projects." />
+		<!-- These are the 1.1+ defaults.
 		<agavi.input property="module.action.path.default" message="Action path" default="%core.module_dir%/${property-specifier}{moduleName}/impl/${property-specifier}{actionName}/Action.class.php" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.input property="module.cache.path.default" message="Cache configuration path" default="%core.module_dir%/${property-specifier}{moduleName}/impl/${actionName}/cache.xml" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.input property="module.validate.path.default" message="Validation configuration path" default="%core.module_dir%/${property-specifier}{moduleName}/impl/${property-specifier}{actionName}/validate.xml" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.input property="module.view.path.default" message="View path" default="%core.module_dir%/${property-specifier}{moduleName}/impl/${property-specifier}{viewName}View.class.php" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.input property="module.view.name.default" message="View name" default="${property-specifier}{actionName}/${property-specifier}{viewName}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<agavi.input property="module.templates.directory.default" message="Templates directory" default="%core.module_dir%/${property-specifier}{module}/impl/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		-->
+		<agavi.input property="module.action.path.default" message="Action path" default="%core.module_dir%/${property-specifier}{moduleName}/actions/${property-specifier}{actionName}Action.class.php" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.cache.path.default" message="Cache configuration path" default="%core.module_dir%/${property-specifier}{moduleName}/cache/${property-specifier}{actionName}.xml" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.validate.path.default" message="Validation configuration path" default="%core.module_dir%/${property-specifier}{moduleName}/validate/${property-specifier}{actionName}.xml" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.view.path.default" message="View path" default="%core.module_dir%/${property-specifier}{moduleName}/views/${property-specifier}{viewName}View.class.php" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.view.name.default" message="View name" default="${property-specifier}{actionName}${property-specifier}{viewName}" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="module.templates.directory.default" message="Templates directory" default="%core.module_dir%/${property-specifier}{module}/templates" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 
 		<!-- Define other module properties. -->
 		<property name="module.config.directory" value="config" />
