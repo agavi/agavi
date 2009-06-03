@@ -142,11 +142,11 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	}
 
 	/**
-	 * Clears the validation manager for reuse
+	 * Clears the validation manager for reuse.
 	 *
-	 * clears the validator manager by resetting the dependency and error
-	 * manager and removing all validators after calling their shutdown
-	 * method so they can do a save shutdown.
+	 * Clears the validator manager by resetting the dependency manager, all error
+	 * information and all result codes, as well as by shutting down and removing
+	 * all child validators.
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @since      0.11.0
