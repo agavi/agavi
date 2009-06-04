@@ -68,6 +68,7 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 	 */
 	protected function runView($otName = null)
 	{
+		$this->container->setActionInstance($this->createActionInstance());
 		$this->container->setOutputType($this->getContext()->getController()->getOutputType($otName));
 		$this->container->setViewInstance($this->createViewInstance());
 		$executionFilter = $this->createExecutionFilter();
