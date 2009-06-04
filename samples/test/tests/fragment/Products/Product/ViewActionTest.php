@@ -46,7 +46,7 @@ class Products_Product_ViewActionTest extends AgaviActionTestCase
 	public function testSuccessViewValidProducts($parameters, $price)
 	{
 		$this->setRequestMethod('read');
-		$this->setArguments($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => $parameters)));
+		$this->setRequestData($this->createRequestDataHolder(array(AgaviWebRequestDataHolder::SOURCE_PARAMETERS => $parameters)));
 		$this->runAction();
 		$this->assertValidatedArgument('id');
 		$this->assertViewNameEquals('Success');
