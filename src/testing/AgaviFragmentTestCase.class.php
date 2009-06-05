@@ -168,7 +168,7 @@ class %1$s extends %2$s
 	
 	public function executeView(AgaviExecutionContainer $container)
 	{
-		$container->cloneArgumentsToRequestData();
+		$container->initRequestData();
 		return parent::executeView($container);
 	}
 }',
@@ -196,7 +196,7 @@ class %1$s extends %2$s
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected function createExecutionContainer()
+	protected function createExecutionContainer($arguments = null, $outputType = null, $requestMethod = null)
 	{
 		$context = $this->getContext();
 
@@ -208,35 +208,15 @@ class %1$s extends %2$s
 			$code = sprintf('
 class %1$s extends %2$s
 {
-	protected $validationResult = null;
-	protected $doneCloneArgumentsToRequestData = false;
-
-	public function performValidation()
-	{
-		if(null === $this->validationResult) {
-			$this->cloneArgumentsToRequestData();
-			$this->validationResult = parent::performValidation();
-		}
-		return $this->validationResult;
-	}
-
-	public function runAction()
-	{
-		$this->cloneArgumentsToRequestData();
-		return parent::runAction();
-	}
-	
-	public function cloneArgumentsToRequestData()
-	{
-		if(!$this->doneCloneArgumentsToRequestData) {
-			$this->requestData = clone $this->arguments;
-			$this->doneCloneArgumentsToRequestData = true;
-		}
-	}
 
 	public function setActionInstance(AgaviAction $action)
 	{
 		$this->actionInstance = $action;
+	}
+	
+	public function initRequestData()
+	{
+		parent::initRequestData();
 	}
 }',
 			$wrapper_class,
@@ -244,17 +224,35 @@ class %1$s extends %2$s
 
 			eval($code);
 		}
-
+		
+		$ecfi['class'] = $wrapper_class;
+		$context->setFactoryInfo('execution_container', $ecfi);
+		
+		if(!($arguments instanceof AgaviRequestDataHolder)) {
+			$arguments = $this->createRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
+		}
 		// create a new execution container with the wrapped class
-		$container = new $wrapper_class();
-		$container->initialize($context, $ecfi['parameters']);
-		$container->setModuleName($this->moduleName);
-		$container->setActionName($this->actionName);
-		$container->setArguments($this->createRequestDataHolder(array()));
-
+		$container = $context->getController()->createExecutionContainer($this->moduleName, $this->actionName, $arguments, $outputType, $requestMethod);
+		
 		return $container;
 	}
 
+	/**
+	 * creates an Action instance and initializes it with this testcases
+	 * container
+	 * 
+	 * @return     AgaviAction
+	 * 
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function createActionInstance()
+	{
+		$actionInstance = $this->getContext()->getController()->createActionInstance($this->moduleName, $this->actionName);
+		$actionInstance->initialize($this->container);
+		return $actionInstance;
+	}
+	
 	/**
 	 * create a requestDataHolder with the given arguments and type
 	 * 
@@ -332,6 +330,17 @@ class %1$s extends %2$s
 		$this->container->setOutputType($outputType);
 	}
 
+	/**
+	 * @see        AgaviRequest::setRequestData()
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected function setRequestData(AgaviRequestDataHolder $rd)
+	{
+		$this->container->setRequestData($rd);
+	}
+	
 	/**
 	 * @see        AgaviExcutionContainer::setArguments()
 	 *

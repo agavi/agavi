@@ -13,6 +13,8 @@ if(isset($arguments['environment'])) {
 	$env = 'testing';
 }
 
+AgaviToolkit::clearCache();
+
 AgaviTesting::bootstrap($env);
 
 PHPUnit_Util_Filter::addDirectoryToFilter(AgaviConfig::get('core.cache_dir'));

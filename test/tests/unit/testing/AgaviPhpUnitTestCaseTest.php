@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @agaviIsolationEnvironment testing.testIsolation	
+ * @agaviIsolationDefaultContext web-isolated
+ */
 class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 {
 	/**
@@ -13,12 +16,33 @@ class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 	{
 		parent::__construct($name, $data, $dataName);
 		$this->setRunTestInSeparateProcess(true);
-		$this->setIsolationEnvironment('testing.testIsolation');
+		$this->setIsolationEnvironment('testing.testIsolation'); // equivalent to the annotation @AgaviIsolationEnvironment on the testcase class
 	}
 	
 	public function testIsolationEnvironment()
 	{
 		$this->assertEquals('testing.testIsolation', AgaviConfig::get('testing.environment'));
+	}
+	
+	/**
+	 * @agaviIsolationEnvironment testing.testIsolationAnnotated
+	 */
+	public function testIsolationEnvironmentAnnotated()
+	{
+		$this->assertEquals('testing.testIsolationAnnotated', AgaviConfig::get('testing.environment'));
+	}
+	
+	public function testIsolationDefaultContext()
+	{
+		$this->assertEquals('web-isolated', AgaviConfig::get('core.default_context'));
+	}
+	
+	/**
+	 * @agaviIsolationDefaultContext web-isolated-annotated-method
+	 */
+	public function testIsolationDefaultContextAnnotated()
+	{
+		$this->assertEquals('web-isolated-annotated-method', AgaviConfig::get('core.default_context'));
 	}
 }
 
