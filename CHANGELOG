@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.2 RC1 (May ??, 2009)
 ------------------------
 
+CHG: Routing callback parameters should be set before initialize method is called (#1105) (David)
 CHG: Update to PHPUnit 3.4.0beta3 (#1097) (David)
 
 FIX: Validation xsd and doc block comments have references to the removed 'affects' parameter (#1101) (Dominik)
