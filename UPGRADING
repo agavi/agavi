@@ -4,3 +4,7 @@ AGAVI UPGRADING INSTRUCTIONS
 Upgrading to 1.1 Series from 1.0 Series
 =======================================
 
+Response
+--------
+If you are using custom implementations of AgaviResponse, please make sure to update the merge() method to call parent::merge(). This method was previously declared abstract, but since Agavi 1.1 it contains the necessary code to perform merging of response attributes.
+

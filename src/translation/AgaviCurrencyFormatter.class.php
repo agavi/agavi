@@ -168,6 +168,8 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 		
 		if(is_array($this->customFormat)) {
 			$format = AgaviToolkit::getValueByKeyList($this->customFormat, AgaviLocale::getLookupPath($this->locale->getIdentifier()), $format);
+		} elseif($this->customFormat) {
+			$format = $this->customFormat;
 		}
 		
 		$this->setFormat($format);

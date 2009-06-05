@@ -32,17 +32,24 @@
 	<xs:complexType name="settings">
 		<xs:sequence>
 			<xs:element name="setting" type="setting"
-			            minOccurs="0" maxOccurs="unbounded" />
+			            maxOccurs="unbounded" />
 		</xs:sequence>
+		<xs:attribute name="prefix" type="xs:string" />
 	</xs:complexType>
 
-	<xs:complexType name="module">
+	<xs:group name="settings">
 		<xs:choice>
 			<xs:element name="settings" type="settings"
 			            minOccurs="0" />
 			<xs:element name="setting" type="setting"
 			            minOccurs="0" maxOccurs="unbounded" />
 		</xs:choice>
+	</xs:group>
+
+	<xs:complexType name="module">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+				<xs:group ref="settings" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
 		<xs:attribute name="enabled" type="types_1_0:boolean" use="required" />
 	</xs:complexType>
 

@@ -298,6 +298,8 @@ class AgaviWebResponse extends AgaviResponse
 	 */
 	public function merge(AgaviResponse $otherResponse)
 	{
+		parent::merge($otherResponse);
+		
 		if($otherResponse instanceof AgaviWebResponse) {
 			foreach($otherResponse->getHttpHeaders() as $name => $value) {
 				if(!$this->hasHttpHeader($name)) {
