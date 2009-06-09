@@ -52,6 +52,8 @@
 
 	<taskdef name="agavi.select-path" classname="org.agavi.build.tasks.AgaviSelectpathTask" classpath="phing" />
 
+	<taskdef name="agavi.generate-action-methods" classname="org.agavi.build.tasks.AgaviGenerateActionMethodsTask" classpath="phing" />
+	
 	<!-- Load types relative to the build system. -->
 	<typedef name="agavi.object" classname="org.agavi.build.types.AgaviObjectType" classpath="phing" />
 
@@ -1256,6 +1258,9 @@
 	<target name="action-create" depends="project-locate,module-locate" description="Creates an action">
 		<!-- Determine action name. -->
 		<agavi.input property="action.name" message="Action name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="action.methods" message="Space-separated list of request methods that should be handled (empty for none)" promptCharacter=":" failIfEmpty="false" ignoreIfSet="true" />
+		<agavi.input property="action.simple" message="Create a simple action? (y/n)" promptCharacter=":" default="n" failIfEmpty="false" ignoreIfSet="true" />
+		
 		<property userProperty="true" name="action.name.input" value="${action.name}" override="true" />
 		<agavi.transform-namespace-string-to-identifier property="action.name" string="${action.name}" />
 		<if>
@@ -1280,12 +1285,15 @@
 
 		<!-- Define the name of the action class. -->
 		<property userProperty="true" name="action.class" value="${module.name}_${action.identifier}Action" override="true" />
-
+		
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.actions}/Action.class.php.tmpl">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
+		
+		<agavi.generate-action-methods property="action.method_declarations" methods="${action.methods}" simple="${action.simple}"/>
+		
 		<property userProperty="true" name="action.source" value="${template.path}" />
 		<copy file="${action.source}" tofile="${action.file}">
 			<filterchain>
@@ -1297,6 +1305,7 @@
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
 					<token key="ACTION_CLASS" value="${action.class}" />
+					<token key="METHOD_DECLARATIONS" value="${action.method_declarations}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
