@@ -89,7 +89,7 @@ class AgaviGenerateActionMethodsTask extends AgaviTask
 	/**
 	 * Handles the %%METHOD_NAME%% request method.
 	 *
-	 * @parameter  AgaviRequestDataHolder the (validated) request method
+	 * @parameter  AgaviRequestDataHolder the (validated) request data
 	 *
 	 * @return     mixed <ul>
 	 *                     <li>A string containing the view name associated
@@ -105,11 +105,13 @@ class AgaviGenerateActionMethodsTask extends AgaviTask
 	}
 ";
 		$methodDeclarations = '';
-		foreach ($this->methods as $methodName) {
+		foreach($this->methods as $methodName) {
 			$methodDeclarations .= str_replace('%%METHOD_NAME%%', ucfirst($methodName), $template);
 		}
 		
-		$methodDeclarations .= "
+		if($this->isSimple) {
+		
+			$methodDeclarations .= "
 
 	/**
 	 * Whether or not this action is \"simple\", i.e. doesn't use validation etc.
@@ -122,7 +124,8 @@ class AgaviGenerateActionMethodsTask extends AgaviTask
 		return true;
 	}
 ";
-		
+		}
+	
 		$this->project->setUserProperty($this->property, $methodDeclarations);
 		return;
 	}
