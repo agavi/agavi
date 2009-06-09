@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Creates the methods to handle requests for an agavi action
+ * Creates the methods to handle requests for an agavi action.
  *
  * @package    agavi
  * @subpackage build
