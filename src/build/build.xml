@@ -53,6 +53,7 @@
 	<taskdef name="agavi.select-path" classname="org.agavi.build.tasks.AgaviSelectpathTask" classpath="phing" />
 
 	<taskdef name="agavi.generate-action-methods" classname="org.agavi.build.tasks.AgaviGenerateActionMethodsTask" classpath="phing" />
+	<taskdef name="agavi.generate-view-methods" classname="org.agavi.build.tasks.AgaviGenerateViewMethodsTask" classpath="phing" />
 	
 	<!-- Load types relative to the build system. -->
 	<typedef name="agavi.object" classname="org.agavi.build.types.AgaviObjectType" classpath="phing" />
@@ -1378,6 +1379,8 @@
 	<target name="view-create" depends="project-locate,module-locate,action-locate" description="Creates a view">
 		<!-- Determine view name. -->
 		<agavi.input property="view.name" message="View name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="view.output-types" message="Space-separated list of output types that should be handled." promptCharacter=":" default="html" failIfEmpty="false" ignoreIfSet="true" />
+		
 		<property userProperty="true" name="view.name.input" value="${view.name}" override="true" />
 		<agavi.transform-string-to-identifier property="view.name" string="${view.name}" />
 		<if>
@@ -1409,6 +1412,9 @@
 		<agavi.transform-view-class-base property="view.class.base" string="${view.class.base}" />
 		<property userProperty="true" name="view.class" value="${module.name}_${view.class.base}View" override="true" />
 
+		<!-- generate the output-type handling methods -->
+		<agavi.generate-view-methods property="view.method-declarations" outputTypes="${view.output-types}" actionName="${action.name}"/>
+		
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.views}/View.class.php.tmpl">
 			<from path="${templates.directory}" />
@@ -1427,6 +1433,7 @@
 					<token key="ACTION_CLASS" value="${action.class}" />
 					<token key="VIEW_NAME" value="${view.name}" />
 					<token key="VIEW_CLASS" value="${view.class}" />
+					<token key="METHOD_DECLARATIONS" value="${view.method-declarations}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
