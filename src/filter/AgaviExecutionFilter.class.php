@@ -623,7 +623,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 								}
 							}
 							// set the presentation data as a template attribute
-							$output[$slotName] = $slotResponse->getContent();
+							AgaviArrayPathDefinition::setValue($slotName, $output, $slotResponse->getContent());
 							// and merge the other slot's response (this used to be conditional and done only when the content was not null)
 							// $lm->log('Merging in response from slot "' . $slotName . '"...');
 							$response->merge($slotResponse);
