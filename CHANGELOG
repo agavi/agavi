@@ -4,8 +4,8 @@ AGAVI CHANGELOG
 0.11.8 (May ?, 2009)
 --------------------
 
+CHG: Update timezone database to 2009i (#1111) (David)
 CHG: Remove unnecessary use of create_function() in AgaviInarrayValidator (#1112) (David)
-CHG: Update timezone database to 2009h (#1102) (David)
 
 FIX: Arrays that failed validation are not purged from request data (#1084) (David)
 FIX: Memory leak in AgaviTranslationManager::getLocaleIdentifier() (#1083) (David)

@@ -8,7 +8,7 @@ This maintenance release fixes two bugs over Agavi 0.11.7:
 - Arrays that failed validation were not purged from request data
 - Memory leak in AgaviTranslationManager::getLocaleIdentifier()
 
-The bundled timezone database was also upgraded to version 2009h.
+The bundled timezone database was also upgraded to version 2009i.
 
 As always, the CHANGELOG has a complete list of changes in this release.
 
