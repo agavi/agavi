@@ -137,6 +137,7 @@
 	
 	<!-- Suppress uses of abstract patterns -->
 	<xslt:template match="iso:pattern[@is-a]"  mode="iae:go" >
+			
 		<xslt:comment>Start pattern based on abstract <xslt:value-of select="@is-a"/></xslt:comment>
 		
 		<xslt:call-template name="iae:abstract-to-real" >
