@@ -16,7 +16,7 @@ The following are worth mentioning:
 - Two regressions related to AgaviRoutingCallback::onGenerate() have been fixed.
 - A memory leak in AgaviTranslationManager::getLocaleIdentifier() was fixed.
 - Handling of slashes and dots in Action, View and Model names has been unified - slashes are now always used internally.
-- The bundled Timezone database was updated to version 2009g.
+- The bundled timezone database was updated to version 2009i.
 - Several other minor fixes and enhancements.
 
 As usual, please check the CHANGELOG for a complete list of changes.
