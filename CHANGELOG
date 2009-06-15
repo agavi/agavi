@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.2 RC1 (May ??, 2009)
 ------------------------
 
+CHG: Allow optional strict comparison of elements in AgaviInarrayValidator (#1107) (David)
 CHG: Update ISO Schematron to version 2009-05-18 (#1103) (David)
 CHG: Update timezone database to 2009h (#1102) (David)
 CHG: Routing callback parameters should be set before initialize method is called (#1105) (David)

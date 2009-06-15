@@ -20,6 +20,7 @@
  *   'values'  list of values that form the array
  *   'sep'     separator of values in the list
  *   'case'    verifies case sensitive if true
+ *   'strict'  whether or not to do strict type comparisons with in_array()
  *
  * @package    agavi
  * @subpackage validator
@@ -62,7 +63,7 @@ class AgaviInarrayValidator extends AgaviValidator
 			$list = array_map(create_function('$a', 'return strtolower($a);'), $list);
 		}
 		
-		if(!in_array($value, $list)) {
+		if(!in_array($value, $list, $this->getParameter('strict', false))) {
 			$this->throwError();
 			return false;
 		}
