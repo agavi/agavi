@@ -246,13 +246,10 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	{
 		$controller = $this->context->getController();
 
-		$request = $this->context->getRequest();
-
 		$controller->countExecution();
 
 		$moduleName = $this->getModuleName();
 		$actionName = $this->getActionName();
-		
 		
 		try {
 			// TODO: cleanup and merge with createActionInstance once Exceptions have been cleaned up and specced properly so that the two error conditions can be told apart
@@ -313,14 +310,14 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since        1.1.0
 	 */
-	protected function initRequestData() 
+	protected function initRequestData()
 	{
 		if($this->actionInstance->isSimple()) {
 			if($this->arguments !== null) {
 				// clone it so mutating it has no effect on the "outside world"
 				$this->requestData = clone $this->arguments;
 			} else {
-				$rdhc = $request->getParameter('request_data_holder_class');
+				$rdhc = $this->getContext()->getRequest()->getParameter('request_data_holder_class');
 				$this->requestData = new $rdhc();
 			}
 		} else {
