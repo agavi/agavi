@@ -47,7 +47,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	protected static $chain = array(
 		'iso_dsdl_include.xsl',
 		'iso_abstract_expand.xsl',
-		'iso_svrl.xsl'
+		'iso_svrl_for_xslt1.xsl'
 	);
 	
 	/**

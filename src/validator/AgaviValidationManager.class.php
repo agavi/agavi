@@ -158,14 +158,12 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	public function clear()
 	{
 		$this->dependencyManager->clear();
-		$this->fieldResults = array();
-		$this->incidents = array();
-		$this->result = AgaviValidator::SUCCESS;
+
+		$this->report = new AgaviValidationReport();
 
 		foreach($this->children as $child) {
 			$child->shutdown();
 		}
-
 		$this->children = array();
 	}
 

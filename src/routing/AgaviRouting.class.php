@@ -582,8 +582,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 				if(!isset($r['callback_instances'])) {
 					foreach($r['opt']['callbacks'] as $key => $callback) {
 						$instance = new $callback['class']();
-						$instance->initialize($this->context, $r);
 						$instance->setParameters($callback['parameters']);
+						$instance->initialize($this->context, $r);
 						$r['callback_instances'][$key] = $instance;
 					}
 				}

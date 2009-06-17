@@ -12,6 +12,11 @@
 					<testfile>unit/config/AgaviConfigCacheTest.php</testfile>
 				</testfiles>
 			</suite>
+			<suite name="Controller">
+				<testfiles>
+					<testfile>unit/controller/AgaviExecutionContainerTest.php</testfile>
+				</testfiles>
+			</suite>
 			<suite name="Date">
 				<testfiles>
 					<testfile>unit/date/AgaviTimezoneTest.php</testfile>

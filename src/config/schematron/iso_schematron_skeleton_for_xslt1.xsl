@@ -173,7 +173,20 @@
  3. This notice may not be removed or altered from any source distribution.
 -->
 <!--
-  VERSION INFORMATION
+  NOTE: Compared to the iso_schematron_skeleton_for_saxon.xsl code, this version is currently missing
+     1) localization
+     2) properties
+     3) pattern/@documents
+
+  VERSION INFORMATION 
+   2009-02-25 RJ
+        * Fix up variable names so none are used twice in same template
+        * Tested on SAXON 9, Xalan 2.7.1. Partly tested MSXML.  
+   2008-09-19 RJ
+        * Add mode schematron-select-full-path and param full-path-notation 
+   
+   2008-08-11
+   		* TT report/@flag was missing
    2008-08-06
    		* TT Top-level lets need to be implemented using xsl:param not xsl:variable
    		* TT xsl:param/@select must have XPath or not be specified
@@ -468,7 +481,14 @@
 <!-- e.g. saxon file.xml file.xsl "sch.exslt.imports=.../string.xsl;.../math.xsl" -->
 <xsl:param name="sch.exslt.imports"/>
 
+<!-- Set the language code for messages -->
+<xsl:param name="langCode">default</xsl:param>
+
 <xsl:param name="debug">false</xsl:param>
+
+
+<!-- Set the default for schematron-select-full-path, i.e. the notation for svrl's @location-->
+<xsl:param name="full-path-notation">1</xsl:param>
 
 <!-- Simple namespace check -->
 <xsl:template match="/">
@@ -593,6 +613,32 @@
 
 <xsl:template name="generate-default-rules">
 		<xsl:text>&#10;&#10;</xsl:text>
+		<xsl:comment>MODE: SCHEMATRON-SELECT-FULL-PATH</xsl:comment><xsl:text>&#10;</xsl:text>
+		<xsl:comment>This mode can be used to generate an ugly though full XPath for locators</xsl:comment><xsl:text>&#10;</xsl:text>
+   		<axsl:template match="*" mode="schematron-select-full-path">
+   			<xsl:choose>
+   				<xsl:when test=" $full-path-notation = '1' ">
+   					<!-- Use for computers, but rather unreadable for humans -->
+					<axsl:apply-templates select="." mode="schematron-get-full-path"/>
+				</xsl:when>
+   				<xsl:when test=" $full-path-notation = '2' ">
+   					<!-- Use for humans, but no good for paths unless namespaces are known out-of-band -->
+					<axsl:apply-templates select="." mode="schematron-get-full-path-2"/>
+				</xsl:when>
+   				<xsl:when test=" $full-path-notation = '3' "> 
+   					<!-- Obsolescent. Use for humans, but no good for paths unless namespaces are known out-of-band -->
+					<axsl:apply-templates select="." mode="schematron-get-full-path-3"/>
+				</xsl:when>
+
+                   <xsl:otherwise >
+                       <!-- Use for computers, but rather unreadable for humans -->
+                    <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+                </xsl:otherwise>
+			</xsl:choose>
+		</axsl:template>
+	
+
+		<xsl:text>&#10;&#10;</xsl:text>
 		<xsl:comment>MODE: SCHEMATRON-FULL-PATH</xsl:comment><xsl:text>&#10;</xsl:text>
 		<xsl:comment>This mode can be used to generate an ugly though full XPath for locators</xsl:comment><xsl:text>&#10;</xsl:text>
    		<axsl:template match="*" mode="schematron-get-full-path">
@@ -604,10 +650,10 @@
 			<axsl:choose>
 			<axsl:when test="namespace-uri()=''">
 			<axsl:value-of select="name()"/>
-			<axsl:variable name="p" select="1+
+			<axsl:variable name="p_1" select="1+
 			count(preceding-sibling::*[name()=name(current())])" />
-		<axsl:if test="$p&gt;1 or following-sibling::*[name()=name(current())]">
-		  <xsl:text/>[<axsl:value-of select="$p"/>]<xsl:text/>
+		<axsl:if test="$p_1&gt;1 or following-sibling::*[name()=name(current())]">
+		  <xsl:text/>[<axsl:value-of select="$p_1"/>]<xsl:text/>
 		</axsl:if>
 		</axsl:when>
 		<axsl:otherwise>
@@ -615,10 +661,10 @@
 		<axsl:value-of select="local-name()"/><axsl:text>' and namespace-uri()='</axsl:text>
 		<axsl:value-of select="namespace-uri()"/>
 		<axsl:text>']</axsl:text>
-		<axsl:variable name="p" select="1+
+		<axsl:variable name="p_2" select="1+
 		count(preceding-sibling::*[local-name()=local-name(current())])" />
-		<axsl:if test="$p&gt;1 or following-sibling::*[local-name()=local-name(current())]">
-		  <xsl:text/>[<axsl:value-of select="$p"/>]<xsl:text/>
+		<axsl:if test="$p_2&gt;1 or following-sibling::*[local-name()=local-name(current())]">
+		  <xsl:text/>[<axsl:value-of select="$p_2"/>]<xsl:text/>
 		</axsl:if>
 		</axsl:otherwise>
 		</axsl:choose> 
@@ -868,7 +914,8 @@
 			<xsl:call-template name="process-report">
 				<xsl:with-param name="test" select="normalize-space(@test)" />
 				<xsl:with-param name="diagnostics" select="@diagnostics"/>
-				
+					<xsl:with-param name="flag" select="@flag"/>
+					
 					<!-- "Rich" properties -->
 					<xsl:with-param name="fpi" select="@fpi"/>
 					<xsl:with-param name="icon" select="@icon"/>
@@ -1019,22 +1066,22 @@
           </xsl:when> 
           
           <xsl:when test="string-length( $fragment-id ) &gt; 0">
-              <xsl:variable name="theDocument" select="document( $document-uri,/ )" />
-              <xsl:variable name="theFragment" select="$theDocument//iso:*[@id= $fragment-id ]" />
-              <xsl:if test=" $theFragment/self::iso:schema ">
+              <xsl:variable name="theDocument_1" select="document( $document-uri,/ )" />
+              <xsl:variable name="theFragment_1" select="$theDocument_1//iso:*[@id= $fragment-id ]" />
+              <xsl:if test=" $theFragment_1/self::iso:schema ">
                  <xsl:message>Schema error: Use include to include fragments, not a whole schema</xsl:message>
               </xsl:if>
-              <xsl:apply-templates select=" $theFragment"/>
+              <xsl:apply-templates select=" $theFragment_1"/>
 		   </xsl:when>
 		  
 		   <xsl:otherwise>
-              <xsl:variable name="theDocument" select="document( $document-uri,/ )" />
-              <xsl:variable name="theFragment" select="$theDocument/iso:*" />
-              <xsl:variable name="theContainedFragments" select="$theDocument/*/iso:*" />
-              <xsl:if test=" $theFragment/self::iso:schema or $theContainedFragments/self::iso:schema">
+              <xsl:variable name="theDocument_2" select="document( $document-uri,/ )" />
+              <xsl:variable name="theFragment_2" select="$theDocument_2/iso:*" />
+              <xsl:variable name="theContainedFragments" select="$theDocument_2/*/iso:*" />
+              <xsl:if test=" $theFragment_2/self::iso:schema or $theContainedFragments/self::iso:schema">
                  <xsl:message>Schema error: Use include to include fragments, not a whole schema</xsl:message>
               </xsl:if>
-       		<xsl:apply-templates select="$theFragment | $theContainedFragments "/>
+       		<xsl:apply-templates select="$theFragment_2 | $theContainedFragments "/>
        	   </xsl:otherwise>
        </xsl:choose>
    </xsl:template>
@@ -1051,24 +1098,24 @@
           </xsl:when> 
           
           <xsl:when test="string-length( $fragment-id ) &gt; 0">
-              <xsl:variable name="theDocument" select="document( $document-uri,/ )" />
-              <xsl:variable name="theFragment" select="$theDocument//iso:*[@id= $fragment-id ]" />
-              <xsl:if test=" $theFragment/self::iso:schema ">
+              <xsl:variable name="theDocument_1" select="document( $document-uri,/ )" />
+              <xsl:variable name="theFragment_1" select="$theDocument_1//iso:*[@id= $fragment-id ]" />
+              <xsl:if test=" $theFragment_1/self::iso:schema ">
                  <xsl:message>Schema error: Use include to include fragments, not a whole schema</xsl:message>
               </xsl:if>
-              <xsl:apply-templates select=" $theFragment" mode="do-all-patterns"/>
+              <xsl:apply-templates select=" $theFragment_1" mode="do-all-patterns"/>
 		   </xsl:when>
 		  
 		   <xsl:otherwise>
 		   	  <!-- Import the top-level element if it is in schematron namespace,
 		   	  or its children otherwise, to allow a simple containment mechanism. -->
-              <xsl:variable name="theDocument" select="document( $document-uri,/ )" />
-              <xsl:variable name="theFragment" select="$theDocument/iso:*" />
-              <xsl:variable name="theContainedFragments" select="$theDocument/*/iso:*" />
-              <xsl:if test=" $theFragment/self::iso:schema or $theContainedFragments/self::iso:schema">
+              <xsl:variable name="theDocument_2" select="document( $document-uri,/ )" />
+              <xsl:variable name="theFragment_2" select="$theDocument_2/iso:*" />
+              <xsl:variable name="theContainedFragments" select="$theDocument_2/*/iso:*" />
+              <xsl:if test=" $theFragment_2/self::iso:schema or $theContainedFragments/self::iso:schema">
                  <xsl:message>Schema error: Use include to include fragments, not a whole schema</xsl:message>
               </xsl:if>
-       		<xsl:apply-templates select="$theFragment | $theContainedFragments "
+       		<xsl:apply-templates select="$theFragment_2 | $theContainedFragments "
        		mode="do-all-patterns" />
        	   </xsl:otherwise>
        </xsl:choose>
