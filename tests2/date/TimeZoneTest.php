@@ -2,6 +2,10 @@
 
 require_once(dirname(__FILE__) . '/BaseCalendarTest.php');
 
+/**
+ * Ported from ICU:
+ *  icu/trunk/source/test/intltest/tztest.cpp   r22096
+ */
 class TimeZoneTest extends BaseCalendarTest
 {
 	const millisPerHour = 3600000;
@@ -328,6 +332,9 @@ TODO: is_equal doesn't work yet
  * definition. This test has been updated to reflect this.
  * 12/3/99 aliu
  *
+ * Added tests for additional zones and aliases from the icuzones file. 
+ * Markus Scherer 2006-nov-06
+ * 
  * [srl - from java - 7/5/1998]
  * @bug 4130885
  * Certain short zone IDs, used since 1.1.x, are incorrect.
@@ -433,19 +440,43 @@ TODO: is_equal doesn't work yet
 															// "NST", 720, false,
 															// As of bug 4130885, fix NST (New Zealand)
 															array('id' =>"NST", 'offset' =>  720, 'daylight' => true), // Pacific/Auckland
+															
+															
+															// From icuzones: 
+															array('id' =>"Etc/Unknown", 'offset' => 0, false),
+
+															array('id' =>"SystemV/AST4ADT", 'offset' => -240, 'daylight' => true),
+															array('id' =>"SystemV/EST5EDT", 'offset' => -300, 'daylight' => true),
+															array('id' =>"SystemV/CST6CDT", 'offset' => -360, 'daylight' => true),
+															array('id' =>"SystemV/MST7MDT", 'offset' => -420, 'daylight' => true),
+															array('id' =>"SystemV/PST8PDT", 'offset' => -480, 'daylight' => true),
+															array('id' =>"SystemV/YST9YDT", 'offset' => -540, 'daylight' => true),
+															array('id' =>"SystemV/AST4", 'offset' => -240, 'daylight' => false),
+#if U_ICU_VERSION_MAJOR_NUM>3 || U_ICU_VERSION_MINOR_NUM>=8
+															// CLDR 1.4.1 has an alias from SystemV/EST5 to America/Indianapolis
+															// which is incorrect because Indiana has started to observe DST.
+															// Re-enable this test once CLDR has fixed the alias.
+															// (For example, it could alias SystemV/EST5 to Etc/GMT+5.)
+															array('id' =>"SystemV/EST5", 'offset' => -300, 'daylight' => false),
+#endif
+															array('id' =>"SystemV/CST6", 'offset' => -360, 'daylight' => false),
+															array('id' =>"SystemV/MST7", 'offset' => -420, 'daylight' => false),
+															array('id' =>"SystemV/PST8", 'offset' => -480, 'daylight' => false),
+															array('id' =>"SystemV/YST9", 'offset' => -540, 'daylight' => false),
+															array('id' =>"SystemV/HST10", 'offset' => -600, 'daylight' => false),
 		);
 
 
 		$compatibilityMap = array(
 				// This list is copied from tz.alias.  If tz.alias
-				// changes, this list must be updated.  Current as of Aug 2003
+				// changes, this list must be updated.  Current as of Mar 2007
 				"ACT" => "Australia/Darwin",
 				"AET" => "Australia/Sydney",
 				"AGT" => "America/Buenos_Aires",
 				"ART" => "Africa/Cairo",
 				"AST" => "America/Anchorage",
 				"BET" => "America/Sao_Paulo",
-				"BST" => "Asia/Dhaka",// Spelling changed in 2000h
+				"BST" => "Asia/Dhaka", // # spelling changed in 2000h; was Asia/Dacca 
 				"CAT" => "Africa/Harare",
 				"CNT" => "America/St_Johns",
 				"CST" => "America/Chicago",
@@ -453,16 +484,17 @@ TODO: is_equal doesn't work yet
 				"EAT" => "Africa/Addis_Ababa",
 				"ECT" => "Europe/Paris",
 				'EET' => 'Europe/Istanbul', # EET is a standard UNIX zone
-				// "EST" => "America/New_York", # EST is an Olson alias now (2003)
+				// "EST" => "America/New_York", # Defined as -05:00 
 				'EST' => 'EST',
-				"HST" => "Pacific/Honolulu",
+				// "HST" => "Pacific/Honolulu", # Defined as -10:00 
+				'HST' => 'HST',
 				'GMT' => 'Etc/GMT',
 				"IET" => "America/Indianapolis",
 				"IST" => "Asia/Calcutta",
 				"JST" => "Asia/Tokyo",
 				'MET' => 'MET', # MET is a standard UNIX zone
 				"MIT" => "Pacific/Apia",
-				// "MST", "America/Denver", # MST is an Olson alias now (2003)
+				// "MST", "America/Denver", # Defined as -07:00
 				'MST' => 'MST',
 				"NET" => "Asia/Yerevan",
 				"NST" => "Pacific/Auckland",
@@ -1019,5 +1051,81 @@ We don't support the old aliases (yet)
 			$this->assertEquals($item['offset'], $raw + $dst, 'Zone ' . $id);
 		}
 	}
+	
+	// Test that a transition at the end of February is handled correctly.
+	public function testFebruary() {
+		// Time zone with daylight savings time from the first Sunday in November
+		// to the last Sunday in February.
+		// Similar to the new rule for Brazil (Sao Paulo) in tzdata2006n.
+		$tz1 = new AgaviSimpleTimeZone($this->tm, -3 * AgaviDateDefinitions::MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT
+		                               "nov-feb",
+		                               AgaviDateDefinitions::NOVEMBER, 1, AgaviDateDefinitions::SUNDAY,   // start: November, first, Sunday
+		                               0,                               //        midnight wall time
+		                               AgaviDateDefinitions::FEBRUARY, -1, AgaviDateDefinitions::SUNDAY,  // end:   February, last, Sunday
+		                               0                                //        midnight wall time
+		);
 
+		// Time zone for Brazil, with effectively the same rules as above,
+		// but expressed with DOW_GE_DOM_MODE and DOW_LE_DOM_MODE rules.
+		$tz2 = $this->tm->createTimeZone("America/Sao_Paulo");
+
+		// Now hardcode the same rules as for Brazil, so that we cover the intended code 
+		// even when in the future zoneinfo hardcodes these transition dates. 
+		$tz3 = new AgaviSimpleTimeZone($this->tm, -3 * AgaviDateDefinitions::MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT 
+		                               "nov-feb2", 
+		                               AgaviDateDefinitions::NOVEMBER, 1, -AgaviDateDefinitions::SUNDAY,  // start: November, 1 or after, Sunday 
+		                               0,                               //        midnight wall time 
+		                               AgaviDateDefinitions::FEBRUARY, -29, -AgaviDateDefinitions::SUNDAY,// end:   February, 29 or before, Sunday 
+		                               0                                //        midnight wall time 
+		); 
+
+		// Gregorian calendar with the UTC time zone for getting sample test date/times.
+		$gc = new AgaviGregorianCalendar(AgaviTimeZone::getGMT($this->tm));
+
+		$data = array(
+			array( 'year' => 2006, 'month' => AgaviDateDefinitions::NOVEMBER, 'day' =>  5, 'hour' => 02, 'minute' => 59, 'second' => 59, 'offsetHours' => -3 ),
+			array( 'year' => 2006, 'month' => AgaviDateDefinitions::NOVEMBER, 'day' =>  5, 'hour' => 03, 'minute' => 00, 'second' => 00, 'offsetHours' => -2 ),
+			array( 'year' => 2007, 'month' => AgaviDateDefinitions::FEBRUARY, 'day' => 25, 'hour' => 01, 'minute' => 59, 'second' => 59, 'offsetHours' => -2 ),
+			array( 'year' => 2007, 'month' => AgaviDateDefinitions::FEBRUARY, 'day' => 25, 'hour' => 02, 'minute' => 00, 'second' => 00, 'offsetHours' => -3 ),
+
+			array( 'year' => 2007, 'month' => AgaviDateDefinitions::NOVEMBER, 'day' =>  4, 'hour' => 02, 'minute' => 59, 'second' => 59, 'offsetHours' => -3 ),
+			array( 'year' => 2007, 'month' => AgaviDateDefinitions::NOVEMBER, 'day' =>  4, 'hour' => 03, 'minute' => 00, 'second' => 00, 'offsetHours' => -2 ),
+			array( 'year' => 2008, 'month' => AgaviDateDefinitions::FEBRUARY, 'day' => 24, 'hour' => 01, 'minute' => 59, 'second' => 59, 'offsetHours' => -2 ),
+			array( 'year' => 2008, 'month' => AgaviDateDefinitions::FEBRUARY, 'day' => 24, 'hour' => 02, 'minute' => 00, 'second' => 00, 'offsetHours' => -3 ),
+
+			array( 'year' => 2008, 'month' => AgaviDateDefinitions::NOVEMBER, 'day' =>  2, 'hour' => 02, 'minute' => 59, 'second' => 59, 'offsetHours' => -3 ),
+			array( 'year' => 2008, 'month' => AgaviDateDefinitions::NOVEMBER, 'day' =>  2, 'hour' => 03, 'minute' => 00, 'second' => 00, 'offsetHours' => -2 ),
+			array( 'year' => 2009, 'month' => AgaviDateDefinitions::FEBRUARY, 'day' => 22, 'hour' => 01, 'minute' => 59, 'second' => 59, 'offsetHours' => -2 ),
+			array( 'year' => 2009, 'month' => AgaviDateDefinitions::FEBRUARY, 'day' => 22, 'hour' => 02, 'minute' => 00, 'second' => 00, 'offsetHours' => -3 ),
+
+			array( 'year' => 2009, 'month' => AgaviDateDefinitions::NOVEMBER, 'day' =>  1, 'hour' => 02, 'minute' => 59, 'second' => 59, 'offsetHours' => -3 ),
+			array( 'year' => 2009, 'month' => AgaviDateDefinitions::NOVEMBER, 'day' =>  1, 'hour' => 03, 'minute' => 00, 'second' => 00, 'offsetHours' => -2 ),
+			array( 'year' => 2010, 'month' => AgaviDateDefinitions::FEBRUARY, 'day' => 28, 'hour' => 01, 'minute' => 59, 'second' => 59, 'offsetHours' => -2 ),
+			array( 'year' => 2010, 'month' => AgaviDateDefinitions::FEBRUARY, 'day' => 28, 'hour' => 02, 'minute' => 00, 'second' => 00, 'offsetHours' => -3 ),
+		);
+
+		$timezones = array($tz1, $tz2, $tz3);
+
+#	    TimeZone *tz;
+#	    UDate dt;
+#	    int32_t t, i, raw, dst;
+		$t = $i = $raw = $dst = null;
+		for($t = 0; $t < count($timezones); ++$t) {
+			$tz = clone $timezones[$t];
+			for($i = 0; $i < count($data); ++$i) {
+				$gc->set($data[$i]['year'], $data[$i]['month'], $data[$i]['day'],
+				          $data[$i]['hour'], $data[$i]['minute'], $data[$i]['second']);
+				$dt = $gc->getTime();
+				$tz->getOffsetRef($dt, false, $raw, $dst);
+				if(($raw + $dst) != $data[$i]['offsetHours'] * AgaviDateDefinitions::MILLIS_PER_HOUR) {
+					$this->fail(sprintf("test case %d.%d: tz.getOffset(%04d-%02d-%02d %02d:%02d:%02d) returns %d+%d != %d",
+					                    $t, $i,
+					                    $data[$i]['year'], $data[$i]['month'] + 1, $data[$i]['day'],
+					                    $data[$i]['hour'], $data[$i]['minute'], $data[$i]['second'],
+					                    $raw, $dst, $data[$i]['offsetHours'] * AgaviDateDefinitions::MILLIS_PER_HOUR)
+					);
+				}
+			}
+		}
+	}
 }

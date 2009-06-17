@@ -18,6 +18,10 @@
  * over time. The raw offset, rules, presence or absence of daylight savings 
  * time, and even the daylight savings amount can all vary.
  *
+ * Ported from ICU:
+ *  icu/trunk/source/i18n/olsontz.cpp         r19133
+ *  icu/trunk/source/i18n/olsontz.h           r18762
+ * 
  * @package    agavi
  * @subpackage date
  *

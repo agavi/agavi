@@ -14,7 +14,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * 
+ * Ported from ICU:
+ *  icu/trunk/source/i18n/simpletz.cpp        r21282
+ *  icu/trunk/source/i18n/unicode/simpletz.h  r18762
  *
  * @package    agavi
  * @subpackage date
@@ -823,7 +825,7 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	 */
 	public function getOffsetIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, $monthLength)
 	{
-		// Check the month before indexing into STATICMONTHLENGTH. This
+		// Check the month before calling Grego::monthLength(). This
 		// duplicates a test that occurs in the 9-argument getOffset(),
 		// however, this is unavoidable. We don't mind because this method, in
 		// fact, should not be called; internal code should always call the
@@ -835,6 +837,9 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 				return -1;
 		}
 
+		// We ignore monthLength because it can be derived from year and month.
+		// This is so that February in leap years is calculated correctly.
+		// We keep this argument in this function for backwards compatibility.
 		return $this->getOffsetIIIIIIII($era, $year, $month, $day, $dayOfWeek, $millis, AgaviCalendarGrego::monthLength($year, $month), AgaviCalendarGrego::previousMonthLength($year, $month));
 	}
 

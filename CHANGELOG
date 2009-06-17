@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.2 RC1 (May ??, 2009)
 ------------------------
 
+CHG: Backport any necessary ICU changes and fixes (#858) (Dominik)
 CHG: Update timezone database to 2009i (#1111) (David)
 CHG: Remove unnecessary use of create_function() in AgaviInarrayValidator (#1112) (David)
 CHG: Allow optional strict comparison of elements in AgaviInarrayValidator (#1107) (David)

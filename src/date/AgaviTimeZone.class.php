@@ -14,6 +14,12 @@
 // +---------------------------------------------------------------------------+
 
 /**
+ * Ported from ICU:
+ *  icu/trunk/source/i18n/timezone.cpp        r22069
+ *  icu/trunk/source/i18n/unicode/timezone.h  r18762
+ * 
+ * Skipped methods:
+ *  getTZDataVersion() - not supported [22063,22069]
  * 
  *
  * @package    agavi

@@ -2,6 +2,10 @@
 
 require_once(dirname(__FILE__) . '/BaseCalendarTest.php');
 
+/**
+ * Ported from ICU:
+ *  icu/trunk/source/test/intltest/tzbdtest.cpp r19558
+ */
 class TimeZoneBoundaryTest extends BaseCalendarTest
 {
 	protected $ONE_SECOND;
