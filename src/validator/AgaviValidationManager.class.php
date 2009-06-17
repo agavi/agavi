@@ -158,14 +158,12 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 	public function clear()
 	{
 		$this->dependencyManager->clear();
-		$this->fieldResults = array();
-		$this->incidents = array();
-		$this->result = AgaviValidator::SUCCESS;
+
+		$this->report = new AgaviValidationReport();
 
 		foreach($this->children as $child) {
 			$child->shutdown();
 		}
-
 		$this->children = array();
 	}
 
@@ -312,6 +310,17 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 		}
 
 		if($mode == self::MODE_STRICT || ($executedValidators > 0 && $mode == self::MODE_CONDITIONAL)) {
+			
+			// first, we explicitly unset failed arguments
+			// the primary purpose of this is to make sure that arrays that failed validation themselves (e.g. due to array length validation, or due to use of operator validators with an argument base) are removed
+			// that's of course only necessary if validation failed
+			$failedArguments = $this->report->getFailedArguments();
+			foreach($failedArguments as $argument) {
+				$parameters->remove($argument->getSource(), $argument->getName());
+			}
+			
+			// next, we remove all arguments from the request data that are not in the list of succeeded arguments
+			// this will also remove any arguments that didn't have validation rules defined
 			$succeededArguments = $this->report->getSucceededArguments();
 			foreach($parameters->getSourceNames() as $source) {
 				$sourceItems = $parameters->getAll($source);

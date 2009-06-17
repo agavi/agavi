@@ -36,7 +36,7 @@
 
 	<xs:complexType name="arguments">
 		<xs:sequence>
-			<xs:element name="argument" type="argument"
+			<xs:element name="argument" type="argument" minOccurs="0"
 			            maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="base" type="xs:string" use="optional" />
@@ -88,7 +88,6 @@
 			          minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" />
-		<xs:attribute name="affects" type="xs:string" />
 		<xs:attribute name="class" type="xs:string" />
 		<xs:attribute name="depends" type="xs:string" />
 		<xs:attribute name="export" type="xs:string" />

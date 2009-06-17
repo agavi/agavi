@@ -42,6 +42,23 @@ class AgaviTranslationManagerTest extends AgaviUnitTestCase
 		$this->assertEquals('Donnerstag, 20. November 2008 2:00 Uhr GMT-05:00', $tm->_d($cal, null, 'de@timezone=America/New_York'));
 		$this->assertEquals($originalTimeZoneId, $cal->getTimeZone()->getId());
 	}
+	
+	public function testTicket1099()
+	{
+		$tm = $this->getContext()->getTranslationManager();
+		$this->assertEquals('123,45', $tm->_n(123.45, 'ticket1099', 'de_DE'));
+		$this->assertEquals('123,45', $tm->_n(123.4512, 'ticket1099', 'de_DE'));
+		$this->assertEquals('123,46', $tm->_n(123.45678, 'ticket1099', 'de_DE'));
+		$this->assertEquals('9.876,00', $tm->_n(9876, 'ticket1099', 'de_DE'));
+		$this->assertEquals('9.876.543.210,00', $tm->_n(9876543210, 'ticket1099', 'de_DE'));
+
+		$this->assertEquals('123,45', $tm->_c(123.45, 'ticket1099', 'de_DE'));
+		$this->assertEquals('123,45', $tm->_c(123.4512, 'ticket1099', 'de_DE'));
+		// note, 1.0 ALWAYS uses the fractionalDigits as defined in the ldml
+		$this->assertEquals('123,45', $tm->_c(123.45678, 'ticket1099', 'de_DE'));
+		$this->assertEquals('9.876,00', $tm->_c(9876, 'ticket1099', 'de_DE'));
+		$this->assertEquals('9.876.543.210,00', $tm->_c(9876543210, 'ticket1099', 'de_DE'));
+	}
 }
 
 ?>

@@ -150,17 +150,21 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		$parameters = $validator->getAgaviParameters($parameters);
 		
 		foreach($validator->get('arguments') as $argument) {
-			// let's see if this buddy has a <arguments> parent with valuable information
-			if($argument->parentNode->localName == 'arguments') {
-				if($argument->parentNode->hasAttribute('base')) {
-					$parameters['base'] = $argument->parentNode->getAttribute('base');
-				}
-			}
-			
 			if($argument->hasAttribute('name')) {
 				$arguments[$argument->getAttribute('name')] = $argument->getValue();
 			} else {
 				$arguments[] = $argument->getValue();
+			}
+		}
+		
+		if($validator->hasChild('arguments')) {
+			$parameters['base'] = $validator->getChild('arguments')->getAttribute('base');
+			
+			if(!$arguments) {
+				// no arguments defined, but there is an <arguments /> element, so we're validating an array there
+				// lets add an empty fake argument for validation to work
+				// must be an empty string, not null
+				$arguments[] = '';
 			}
 		}
 		

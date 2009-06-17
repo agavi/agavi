@@ -1,19 +1,22 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.1 - April ??, 2009
-==============================
+Version 1.0.1 - May 1, 2009
+===========================
 
 This maintenance release fixes a number of issues over Agavi 1.0.0 and brings a couple of minor enhancements.
 
 The following are worth mentioning:
 - Most notable, a race condition in configuration file compilation was fixed that could lead to corrupt compiled files on disk.
+- Arrays that failed validation are now always purged correctly from request data.
 - Exporting values from validators with argument bases is now possible, and it's possible to control the exact use of keys in the process.
-- The bundled Timezone database was updated to version 2009d.
-- Last but not least, it's now possible to set session_cache_expire(), session_cache_limiter() and session_module_name() through configuration.
+- Caching callbacks in the Execution Filter are now passed the current Execution Container as last argument.
+- It's now possible to set session_cache_expire(), session_cache_limiter() and session_module_name() through configuration.
 - Support for document/literal wrapped style SOAP services has been improved.
 - Two regressions related to AgaviRoutingCallback::onGenerate() have been fixed.
+- A memory leak in AgaviTranslationManager::getLocaleIdentifier() was fixed.
 - Handling of slashes and dots in Action, View and Model names has been unified - slashes are now always used internally.
+- The bundled timezone database was updated to version 2009i.
 - Several other minor fixes and enhancements.
 
 As usual, please check the CHANGELOG for a complete list of changes.

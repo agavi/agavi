@@ -29,7 +29,9 @@
   validate with schemas from either namespace.
   
 
-  History: 
+  History:  
+    2009-03-18
+    	* Fix atrribute with space "see " which generates wrong name in some processors
     2008-08-11
    		* RJ Fix attribute/@select which saxon allows  in XSLT 1
    2008-08-07
@@ -113,7 +115,7 @@
 
 <!-- The command-line parameters are:
   			phase           NMTOKEN | "#ALL" (default) Select the phase for validation
-    		allow-foreign   "true" | "false" (default)   Pass non-Schematron elements to the generated stylesheet
+    		allow-foreign   "true" | "false" (default)   Pass non-Schematron elements  and rich markup  to the generated stylesheet
             diagnose= true | false|yes|no    Add the diagnostics to the assertion test in reports (yes|no are obsolete)
             generate-paths=true|false|yes|no   generate the @location attribute with XPaths (yes|no are obsolete)
             sch.exslt.imports semi-colon delimited string of filenames for some EXSLT implementations          
@@ -134,11 +136,14 @@
 
 <!-- Select the import statement and adjust the path as 
    necessary for your system.
+   If not XSLT2 then also remove svrl:active-pattern/@document="{document-uri()}" from process-pattern()
 -->
-<xsl:import href="iso_schematron_skeleton_for_xslt1.xsl"/>
 <!--
 <xsl:import href="iso_schematron_skeleton_for_saxon.xsl"/>
- 
+--> 
+  
+<xsl:import href="iso_schematron_skeleton_for_xslt1.xsl"/>
+ <!--
 <xsl:import href="iso_schematron_skeleton.xsl"/>
 <xsl:import href="skeleton1-5.xsl"/>
 <xsl:import href="skeleton1-6.xsl"/>
@@ -474,7 +479,7 @@
 	<xsl:param name="lang" />
 	<xsl:param name="see" />
 	<xsl:param name="space" />
-	<svrl:active-pattern >
+	<svrl:active-pattern > 
 		<xsl:if test=" string( $id )">
 			<axsl:attribute name="id">
 				<xsl:value-of select=" $id " />
@@ -537,17 +542,17 @@
 	<xsl:if  test=" $allow-foreign = 'true'">
 	<xsl:if test="string($fpi)"> 
 		<axsl:attribute name="fpi">
-			<xsl:value-of select="$fpi "/>
+			<xsl:value-of select="$fpi"/>
 		</axsl:attribute>
 	</xsl:if>
 	<xsl:if test="string($icon)"> 
 		<axsl:attribute name="icon">
-			<xsl:value-of select="$icon "/>
+			<xsl:value-of select="$icon"/>
 		</axsl:attribute>
 	</xsl:if>
 	<xsl:if test="string($see)"> 
-		<axsl:attribute name="see ">
-			<xsl:value-of select="$see "/>
+		<axsl:attribute name="see">
+			<xsl:value-of select="$see"/>
 		</axsl:attribute>
 	</xsl:if>
 	</xsl:if>
