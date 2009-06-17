@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/BaseCalendarTest.php');
 
 /**
  * Ported from ICU:
- *  icu/trunk/source/test/intltest/tztest.cpp   r22096
+ *  icu/trunk/source/test/intltest/tztest.cpp   r22978
  */
 class TimeZoneTest extends BaseCalendarTest
 {
@@ -442,6 +442,7 @@ TODO: is_equal doesn't work yet
 															array('id' =>"NST", 'offset' =>  720, 'daylight' => true), // Pacific/Auckland
 															
 															
+/* disabled until we support the old aliases at all
 															// From icuzones: 
 															array('id' =>"Etc/Unknown", 'offset' => 0, false),
 
@@ -464,6 +465,7 @@ TODO: is_equal doesn't work yet
 															array('id' =>"SystemV/PST8", 'offset' => -480, 'daylight' => false),
 															array('id' =>"SystemV/YST9", 'offset' => -540, 'daylight' => false),
 															array('id' =>"SystemV/HST10", 'offset' => -600, 'daylight' => false),
+*/
 		);
 
 
@@ -549,29 +551,62 @@ We don't support the old aliases (yet)
 /**
  * Utility function for TestCustomParse
  */
-	protected function formatMinutes($min)
+	protected function formatOffset($offset, $insertSep = true)
 	{
 		$rv = '';
-
-		$sign = '+';
-		if($min < 0) { $sign = '-'; $min = -$min; }
-		$h = $min/60;
-		$min = $min%60;
-
-		$rv .= $sign;
-		if($h > 10)
-			$rv .= chr(0x30 + ($h/10));
-		$rv .= chr(0x30 + ($h%10));
-
-		$rv .= ":";
-
-		if($min > 10)
-				$rv .= chr(0x30 + ($min/10));
-		else
-				$rv .= "0";
-
-		$rv += chr(0x30 + ($min%10));
-
+		$sign = chr(0x002B);
+		if($offset < 0) {
+			$sign = chr(0x002D);
+			$offset = -$offset;
+		}
+		
+		$s = $offset % 60;
+		$offset /= 60;
+		$m = $offset % 60;
+		$h = $offset / 60;
+		
+		$rv .= ($sign);
+		if($h >= 10) {
+			$rv .= chr(0x0030 + ($h/10));
+		} else {
+			$rv .= chr(0x0030);
+		}
+		$rv .= chr(0x0030 + ($h%10));
+		
+		if($insertSep) {
+			$rv .= chr(0x003A); /* ':' */
+		}
+		
+		if($m >= 10) {
+			$rv .= chr(0x0030 + ($m/10));
+		} else {
+			$rv .= chr(0x0030);
+		}
+		$rv .= chr(0x0030 + ($m%10));
+		
+		if($s) {
+			if($insertSep) {
+				$rv .= chr(0x003A); /* ':' */
+			}
+			if($s >= 10) {
+				$rv .= chr(0x0030 + ($s/10));
+			} else {
+				$rv .= chr(0x0030);
+			}
+			$rv .= chr(0x0030 + ($s%10));
+		}
+		return $rv;
+	}
+	
+	/** 
+	 * Utility function for TestCustomParse, generating time zone ID 
+	 * string for the give offset. 
+	 */
+	protected function formatTZID($offset)
+	{
+		$offsetStr = $this->formatOffset($offset, false);
+		$rv = 'GMT';
+		$rv .= $offsetStr;
 		return $rv;
 	}
 
@@ -587,75 +622,58 @@ We don't support the old aliases (yet)
 	public function testCustomParse()
 	{
 		$kUnparseable = 604800; // the number of seconds in a week. More than any offset should be.
-		$kExpectedCustomID = "Custom";
 
 		$kData = array(
-				// ID        Expected offset in minutes
-				//{"GMT",       kUnparseable},   //Isn't custom. Can't test it here. [returns normal GMT]
+				// ID        Expected offset in seconds
+				array('customId' => "GMT",       'expectedOffset' => $kUnparseable), // Isn't custom. [returns normal GMT] 
 				array('customId' => "GMT-YOUR.AD.HERE", 'expectedOffset' => $kUnparseable),
+#				array('customId' => "GMT0",      'expectedOffset' => $kUnparseable),
+#				array('customId' => "GMT+0",     'expectedOffset' => (0)),
 				// {"GMT0",      kUnparseable), // ICU 2.8: An Olson zone ID
 				// {"GMT+0",     (0)), // ICU 2.8: An Olson zone ID
-				array('customId' => "GMT+1",     'expectedOffset' => (60)),
-				array('customId' => "GMT-0030",  'expectedOffset' => (-30)),
-				array('customId' => "GMT+15:99", 'expectedOffset' => (15*60+99)),
+				array('customId' => "GMT+1",     'expectedOffset' => (60*60)),
+				array('customId' => "GMT-0030",  'expectedOffset' => (-30*60)),
+				array('customId' => "GMT+15:99", 'expectedOffset' => $kUnparseable),
 				array('customId' => "GMT+",      'expectedOffset' => $kUnparseable),
 				array('customId' => "GMT-",      'expectedOffset' => $kUnparseable),
 				array('customId' => "GMT+0:",    'expectedOffset' => $kUnparseable),
 				array('customId' => "GMT-:",     'expectedOffset' => $kUnparseable),
 				array('customId' => "GMT-YOUR.AD.HERE",     'expectedOffset' => $kUnparseable),
-				array('customId' => "GMT+0010",  'expectedOffset' => (10)), // Interpret this as 00:10
-				array('customId' => "GMT-10",    'expectedOffset' => (-10*60)),
-				array('customId' => "GMT+30",    'expectedOffset' => (30)),
-				array('customId' => "GMT-3:30",  'expectedOffset' => (-(3*60+30))),
-				array('customId' => "GMT-230",   'expectedOffset' => (-(2*60+30))),
+				array('customId' => "GMT+0010",  'expectedOffset' => (10*60)), // Interpret this as 00:10
+				array('customId' => "GMT-10",    'expectedOffset' => (-10*60*60)),
+				array('customId' => "GMT+30",    'expectedOffset' => $kUnparseable),
+				array('customId' => "GMT-3:30",  'expectedOffset' => (-(3*60+30)*60)),
+				array('customId' => "GMT-230",   'expectedOffset' => (-(2*60+30)*60)),
+				array('customId' => "GMT+05:13:05",'expectedOffset' => ((5*60+13)*60+5)),
+				array('customId' => "GMT-71023", 'expectedOffset' => (-((7*60+10)*60+23))),
+				array('customId' => "GMT+01:23:45:67", 'expectedOffset' => $kUnparseable),
+				array('customId' => "GMT+01:234",      'expectedOffset' => $kUnparseable),
+				array('customId' => "GMT-2:31:123",    'expectedOffset' => $kUnparseable),
+				array('customId' => "GMT+3:75",        'expectedOffset' => $kUnparseable),
+				array('customId' => "GMT-01010101",    'expectedOffset' => $kUnparseable),
 		);
 
 		foreach($kData as $entry) {
 			$id = $entry['customId'];
 			$exp = $entry['expectedOffset'];
-/*
-				{ // for no data test Jitterbug 4354
-						UErrorCode success = U_ZERO_ERROR;
-						NumberFormat* numberFormat = NumberFormat::createInstance(success);
-						if (U_FAILURE(success)) {
-								dataerrln(" NumberFormat::createInstance() error");
-								return;
-						}
-						delete numberFormat;
-				}
-				*/
-
 			$zone = $this->tm->createTimeZone($id);
 
 			if(!$zone && $exp != $kUnparseable) {
 				$this->fail('Time Zone ' . $id . ' does not exist!');
-			} elseif($zone && $exp == $kUnparseable) {
-				$this->fail('Time Zone ' . $id . ' exists but we expected it to be unparseable');
-			} elseif($zone) {
+			} elseif($zone && $exp == $kUnparseable && $zone->getId() != 'GMT') {
+				$this->fail('Time Zone ' . $id . ' exists as "' . $zone->getResolvedId() . '" but we expected it to be unparseable');
+			} elseif($zone && $exp != $kUnparseable) {
 				$itsID = $zone->getId();
-				$ioffset = $zone->getRawOffset()/60000;
-				$offset = $this->formatMinutes($ioffset);
+				$ioffset = $zone->getRawOffset()/1000;
+				$offset = $this->formatOffset($ioffset);
+				$expectedID = $this->formatTZID($ioffset);
+				 // JDK 1.3 creates custom zones with the ID "Custom"
+				// JDK 1.4 creates custom zones with IDs of the form "GMT+02:00"
+				// ICU creates custom zones with IDs of the form "GMT+0200"
 				$this->assertNotEquals($exp, $kUnparseable);
 				$this->assertEquals((float)$exp, $ioffset, 'Custom zone string ' . $id);
-				$this->assertEquals($kExpectedCustomID, $itsID);
+				$this->assertEquals($expectedID, $itsID);
 			}
-
-/*
-
-			if(strpos($zone->getId(), 'GMT') !== false) {
-				// When TimeZone.getTimeZone() can't parse the id, it
-				// returns GMT -- a dubious practice, but required for
-				// backward compatibility.
-				$this->assertEquals($exp, $kUnparseable);
-			} else {
-				$itsID = $zone->getId();
-				$ioffset = $zone->getRawOffset()/60000;
-				$offset = $this->formatMinutes($ioffset);
-				$this->assertNotEquals($exp, $kUnparseable);
-				$this->assertFalse($ioffset != $exp || $itsID != $kExpectedCustomID);
-			}
-*/
-
 		}
 	}
 
@@ -1057,6 +1075,9 @@ We don't support the old aliases (yet)
 		// Time zone with daylight savings time from the first Sunday in November
 		// to the last Sunday in February.
 		// Similar to the new rule for Brazil (Sao Paulo) in tzdata2006n.
+		// 
+		// Note: In tzdata2007h, the rule had changed, so no actual zones uses 
+		// lastSun in Feb anymore.
 		$tz1 = new AgaviSimpleTimeZone($this->tm, -3 * AgaviDateDefinitions::MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT
 		                               "nov-feb",
 		                               AgaviDateDefinitions::NOVEMBER, 1, AgaviDateDefinitions::SUNDAY,   // start: November, first, Sunday
@@ -1065,13 +1086,9 @@ We don't support the old aliases (yet)
 		                               0                                //        midnight wall time
 		);
 
-		// Time zone for Brazil, with effectively the same rules as above,
-		// but expressed with DOW_GE_DOM_MODE and DOW_LE_DOM_MODE rules.
-		$tz2 = $this->tm->createTimeZone("America/Sao_Paulo");
-
 		// Now hardcode the same rules as for Brazil, so that we cover the intended code 
 		// even when in the future zoneinfo hardcodes these transition dates. 
-		$tz3 = new AgaviSimpleTimeZone($this->tm, -3 * AgaviDateDefinitions::MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT 
+		$tz2 = new AgaviSimpleTimeZone($this->tm, -3 * AgaviDateDefinitions::MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT 
 		                               "nov-feb2", 
 		                               AgaviDateDefinitions::NOVEMBER, 1, -AgaviDateDefinitions::SUNDAY,  // start: November, 1 or after, Sunday 
 		                               0,                               //        midnight wall time 
@@ -1104,7 +1121,7 @@ We don't support the old aliases (yet)
 			array( 'year' => 2010, 'month' => AgaviDateDefinitions::FEBRUARY, 'day' => 28, 'hour' => 02, 'minute' => 00, 'second' => 00, 'offsetHours' => -3 ),
 		);
 
-		$timezones = array($tz1, $tz2, $tz3);
+		$timezones = array($tz1, $tz2);
 
 #	    TimeZone *tz;
 #	    UDate dt;
