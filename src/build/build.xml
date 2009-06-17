@@ -54,6 +54,7 @@
 
 	<taskdef name="agavi.generate-action-methods" classname="org.agavi.build.tasks.AgaviGenerateActionMethodsTask" classpath="phing" />
 	<taskdef name="agavi.generate-view-methods" classname="org.agavi.build.tasks.AgaviGenerateViewMethodsTask" classpath="phing" />
+	<taskdef name="agavi.generate-model-attributes" classname="org.agavi.build.tasks.AgaviGenerateModelAttributesTask" classpath="phing" />
 	
 	<!-- Load types relative to the build system. -->
 	<typedef name="agavi.object" classname="org.agavi.build.types.AgaviObjectType" classpath="phing" />
@@ -1465,6 +1466,7 @@
 	<target name="model-create" depends="project-locate,module-locate" description="Creates a model">
 		<!-- Determine model name. -->
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="target.model.attributes.names" message="Space separated list of properties for this model" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property userProperty="true" name="model.name.input" value="${model.name}" override="true" />
 		<agavi.transform-namespace-string-to-identifier property="model.name" string="${model.name}" />
 		<if>
@@ -1488,6 +1490,9 @@
 		<!-- Define the name of the model class. -->
 		<property userProperty="true" name="model.class" value="${module.name}_${model.identifier}Model" override="true" />
 
+		<!-- Generate the code for the attribute list and accessors-->
+		<agavi.iterate property="model.attribute.name" target="model-attribute-create" list="${target.model.attributes.names}" delimiter=" ," exceptionsFatal="false" />
+		
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.models}/Model.class.php.tmpl">
 			<from path="${templates.directory}" />
@@ -1502,11 +1507,20 @@
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="MODEL_NAME" value="${model.name}" />
 					<token key="MODEL_CLASS" value="${model.class}" />
+					<token key="ATTRIBUTE_LIST" value="${model.attributes.list}" /> 
+					<token key="ATTRIBUTE_ACCESSORS" value="${model.attributes.accessors}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
 	</target>
-
+	
+	<target name="model-attribute-create" description="Creates the attributes for a model">
+		<agavi.input property="model.attribute.type" message="Type for attribute ${model.attribute.name}" default="mixed" promptCharacter=":" failIfEmpty="true" ignoreIfSet="false" />
+		<agavi.input property="model.attribute.access.level" message="The access for attribute ${model.attribute.name} (public, protected, private)" default="protected" promptCharacter=":" failIfEmpty="true" ignoreIfSet="false" />
+		
+		<agavi.generate-model-attributes attributeListProperty="model.attributes.list" attributeAccessorsProperty="model.attributes.accessors" attributeName="${model.attribute.name}" attributeType="${model.attribute.type}" attributeAccessLevel="${model.attribute.access.level}" />
+		
+	</target>
 	<!--
 	  Template targets.
 	  -->
