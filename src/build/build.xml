@@ -1525,7 +1525,29 @@
 		<agavi.input property="model.attribute.type" message="Type for attribute ${model.attribute.name}" default="mixed" promptCharacter=":" failIfEmpty="true" ignoreIfSet="false" />
 		<agavi.input property="model.attribute.access.level" message="The access for attribute ${model.attribute.name} (public, protected, private)" default="protected" promptCharacter=":" failIfEmpty="true" ignoreIfSet="false" />
 		
-		<agavi.generate-model-attributes attributeListProperty="model.attributes.list" attributeAccessorsProperty="model.attributes.accessors" attributeName="${model.attribute.name}" attributeType="${model.attribute.type}" attributeAccessLevel="${model.attribute.access.level}" />
+		<agavi.select-path property="model.templates.getter.path" path="code/models/AttributeGetter.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<agavi.select-path property="model.templates.setter.path" path="code/models/AttributeSetter.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<agavi.select-path property="model.templates.attribute.path" path="code/models/Attribute.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		
+		<agavi.generate-model-attributes 
+			attributeListProperty="model.attributes.list" 
+			attributeAccessorsProperty="model.attributes.accessors" 
+			attributeName="${model.attribute.name}" 
+			attributeType="${model.attribute.type}" 
+			attributeAccessLevel="${model.attribute.access.level}" 
+			attributeTemplate="${model.templates.attribute.path}"
+			attributeSetterTemplate="${model.templates.setter.path}"
+			attributeGetterTemplate="${model.templates.getter.path}"
+			/>
 		
 	</target>
 	<!--

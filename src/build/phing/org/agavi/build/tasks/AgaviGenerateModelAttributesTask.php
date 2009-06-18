@@ -37,6 +37,9 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 	protected $name = null;
 	protected $type = null;
 	protected $accessLevel = null;
+	protected $attributeTemplate = null;
+	protected $attributeSetterTemplate = null;
+	protected $attributeGetterTemplate = null;
 	
 	/**
 	 * Sets the property that this task will modify.
@@ -52,7 +55,6 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 	{
 		$this->attributeAccessorsProperty = $property;
 	}
-	
 
 	public function setAttributeName($name)
 	{
@@ -67,6 +69,21 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 	public function setAttributeAccessLevel($level)
 	{
 		$this->accessLevel = $level;
+	}
+	
+	public function setAttributeTemplate($path)
+	{
+		$this->attributeTemplate = $path;
+	}
+	
+	public function setAttributeSetterTemplate($path)
+	{
+		$this->attributeSetterTemplate = $path;
+	}
+	
+	public function setAttributeGetterTemplate($path)
+	{
+		$this->attributeGetterTemplate = $path;
 	}
 
 	/**
@@ -86,45 +103,10 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 		$attrList = $this->project->getUserProperty($this->attributeListProperty);
 		
 		
-		$attributeListItemTemplate = "
-
-	/**
-	 * @todo fill in documentation here
-	 *
-	 * @var          %%TYPE%% 
-	 */
-	%%ACCESS_LEVEL%% %%VARIABLE%%;
-";
-
+		$attributeListItemTemplate = file_get_contents($this->attributeTemplate);
+		$attributeSetterTemplate = file_get_contents($this->attributeSetterTemplate);
+		$attributeGetterTemplate = file_get_contents($this->attributeSetterTemplate);
 		
-		$attributeSetterTemplate = "
-
-	/**
-	 * Sets the %%VARNAME%% attribute.
-	 *
-	 * @param        %%TYPE%% the new value for %%VARNAME%%
-	 *
-	 * @return       void
-	 */
-	public function %%METHODNAME%%(%%VARIABLE%%)
-	{
-		\$this->%%VARNAME%% = %%VARIABLE%%;
-	}
-";
-
-		$attributeGetterTemplate = "
-
-	/**
-	 * Retrieves the %%VARNAME%% attribute.
-	 *
-	 * @return       %%TYPE%% the value for %%VARNAME%%
-	 */
-	public function %%METHODNAME%%(%%VARIABLE%%)
-	{
-		return \$this->%%VARNAME%%;
-	}
-";
-
 		$varname = $this->name;
 		$variable = '$'.$varname;
 		$type = $this->type;
