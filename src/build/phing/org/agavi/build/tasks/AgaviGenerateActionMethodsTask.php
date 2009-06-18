@@ -105,6 +105,24 @@ class AgaviGenerateActionMethodsTask extends AgaviTask
 			throw new BuildException('An action cannot serve request methods and be simple at the same time.');
 		}
 		
+		if($this->requestMethodTemplate === null || !is_readable($this->requestMethodTemplate)) {
+			throw new BuildException(
+				sprintf(
+					'The requestMethodTemplate attribute must be specified and must point to a readable template file. Current value is "%1$s".',
+					$this->requestMethodTemplate
+				)
+			);
+		}
+		
+		if($this->simpleMethodTemplate === null || !is_readable($this->simpleMethodTemplate)) {
+			throw new BuildException(
+				sprintf(
+					'The simpleMethodTemplate attribute must be specified and must point to a readable template file. Current value is "%1$s".',
+					$this->simpleMethodTemplate
+				)
+			);
+		}
+		
 		$template = file_get_contents($this->requestMethodTemplate);
 		
 		$methodDeclarations = '';
