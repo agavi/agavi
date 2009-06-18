@@ -74,10 +74,13 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 	 */
 	public function main()
 	{
-/*		if($this->property === null) {
-			throw new BuildException('The property attribute must be specified');
+		if($this->attributeListProperty === null) {
+			throw new BuildException('The attributeListProperty attribute must be specified');
 		}
-*/
+		
+		if($this->attributeAccessorsProperty === null) {
+			throw new BuildException('The attributeAccessorsProperty attribute must be specified');
+		}
 		
 		$attrAccessors = $this->project->getUserProperty($this->attributeAccessorsProperty);
 		$attrList = $this->project->getUserProperty($this->attributeListProperty);
