@@ -953,6 +953,9 @@
 		<!-- Determine model name. -->
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property userProperty="true" name="model.name.input" value="${model.name}" override="true" />
+		
+		<agavi.input property="target.model.attributes.names" message="Space separated list of properties for this model" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		
 		<agavi.transform-namespace-string-to-identifier property="model.name" string="${model.name}" />
 		<if>
 			<not>
@@ -975,6 +978,8 @@
 		<!-- Define the name of the model class. -->
 		<property userProperty="true" name="model.class" value="${model.identifier}Model" override="true" />
 
+		<!-- Generate the code for the attribute list and accessors-->
+		<agavi.iterate property="model.attribute.name" target="model-attribute-create" list="${target.model.attributes.names}" delimiter=" ," exceptionsFatal="false" />
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.models}/Model.class.php.tmpl">
 			<from path="${templates.directory}" />
@@ -988,6 +993,8 @@
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODEL_NAME" value="${model.name}" />
 					<token key="MODEL_CLASS" value="${model.class}" />
+					<token key="ATTRIBUTE_LIST" value="${model.attributes.list}" /> 
+					<token key="ATTRIBUTE_ACCESSORS" value="${model.attributes.accessors}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
