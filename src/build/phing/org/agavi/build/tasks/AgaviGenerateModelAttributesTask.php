@@ -16,7 +16,7 @@
 require_once(dirname(__FILE__) . '/AgaviTask.php');
 
 /**
- * Creates the methods to handle output types for an agavi view.
+ * Creates the code to handle attributes in an agavi model.
  *
  * @package    agavi
  * @subpackage build
@@ -31,56 +31,124 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  */
 class AgaviGenerateModelAttributesTask extends AgaviTask
 {
-	
+	/**
+	 * @var          string the property to modify for attribute defintions
+	 */
 	protected $attributeListProperty = null;
+	
+	/**
+	 * @var          string the property to modify for attribute accessors
+	 */
 	protected $attributeAccessorsProperty = null;
+	
+	/**
+	 * @var          string attributes name
+	 */
 	protected $name = null;
+	
+	/**
+	 * @var          string attributes type
+	 */
 	protected $type = null;
+	
+	/**
+	 * @var          string attributes access level
+	 */
 	protected $accessLevel = null;
+	
+	/**
+	 * @var          string the template to use for the attribute definition
+	 */
 	protected $attributeTemplate = null;
+	
+	/**
+	 * @var          string the template to use for the attribute setter
+	 */
 	protected $attributeSetterTemplate = null;
+	
+	/**
+	 * @var          string the template to use for the attribute getter
+	 */
 	protected $attributeGetterTemplate = null;
 	
 	/**
-	 * Sets the property that this task will modify.
+	 * Sets the property that this task will use to access the attribute list
+	 * code.
 	 *
-	 * @param      string The property to modify.
+	 * @param        string The property to modify.
 	 */
 	public function setAttributeListProperty($property)
 	{
 		$this->attributeListProperty = $property;
 	}
 	
+	/**
+	 * Sets the property that this task will use to access the attribute
+	 * accessor code.
+	 *
+	 * @param        string The property to modify.
+	 */
 	public function setAttributeAccessorsProperty($property)
 	{
 		$this->attributeAccessorsProperty = $property;
 	}
 
+	/**
+	 * Sets the attribute name to generate code for.
+	 *
+	 * @param        string The attribute name.
+	 */
 	public function setAttributeName($name)
 	{
 		$this->name = $name;
 	}
 
+	/**
+	 * Sets the attribute type.
+	 *
+	 * @param        string The attribute type.
+	 */
 	public function setAttributeType($type)
 	{
 		$this->type = $type;
 	}
 	
+	
+	/**
+	 * Sets the attribute's access level.
+	 *
+	 * @param        string The attribute type.
+	 */
 	public function setAttributeAccessLevel($level)
 	{
 		$this->accessLevel = $level;
 	}
 	
+	/**
+	 * Set the template to use for the attribute-declaration.
+	 * 
+	 * @param        string the full path to the template
+	 */
 	public function setAttributeTemplate($path)
 	{
 		$this->attributeTemplate = $path;
 	}
 	
+	/**
+	 * Set the template to use for the attribute-getter-declaration.
+	 * 
+	 * @param        string the full path to the template
+	 */
 	public function setAttributeSetterTemplate($path)
 	{
 		$this->attributeSetterTemplate = $path;
 	}
 	
+	/**
+	 * Set the template to use for the attribute-setter-declaration.
+	 * 
+	 * @param        string the full path to the template
+	 */
 	public function setAttributeGetterTemplate($path)
 	{
 		$this->attributeGetterTemplate = $path;
