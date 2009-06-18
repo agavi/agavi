@@ -35,6 +35,8 @@ class AgaviGenerateActionMethodsTask extends AgaviTask
 	protected $property = null;
 	protected $methods = '';
 	protected $isSimple = false;
+	protected $requestMethodTemplate;
+	protected $simpleMethodTemplate;
 	
 	/**
 	 * Sets the property that this task will modify.
@@ -67,10 +69,29 @@ class AgaviGenerateActionMethodsTask extends AgaviTask
 	 */
 	public function setSimple($flag)
 	{
-		$this->isSimple = (bool)$flag;
+		$this->isSimple = 'y' == $flag;
 	}
 	
-
+	/**
+	 * Sets the template to use for the request method handling methods.
+	 *
+	 * @param      string the template path
+	 */
+	public function setRequestMethodTemplate($path)
+	{
+		$this->requestMethodTemplate = $path;
+	}
+	
+	/**
+	 * Sets the template to use for the isSimple() method.
+	 *
+	 * @param      string the template path
+	 */
+	public function setSimpleMethodTemplate($path)
+	{
+		$this->simpleMethodTemplate = $path;
+	}
+	
 	/**
 	 * Executes the task.
 	 */
@@ -84,46 +105,15 @@ class AgaviGenerateActionMethodsTask extends AgaviTask
 			throw new BuildException('An action cannot serve request methods and be simple at the same time.');
 		}
 		
-		$template = "
-
-	/**
-	 * Handles the %%METHOD_NAME%% request method.
-	 *
-	 * @parameter  AgaviRequestDataHolder the (validated) request data
-	 *
-	 * @return     mixed <ul>
-	 *                     <li>A string containing the view name associated
-	 *                     with this action; or</li>
-	 *                     <li>An array with two indices: the parent module
-	 *                     of the view to be executed and the view to be
-	 *                     executed.</li>
-	 *                   </ul>
-	 */
-	public function execute%%METHOD_NAME%%(AgaviRequestDataHolder \$rd)
-	{
-		return 'Success';
-	}
-";
+		$template = file_get_contents($this->requestMethodTemplate);
+		
 		$methodDeclarations = '';
 		foreach($this->methods as $methodName) {
 			$methodDeclarations .= str_replace('%%METHOD_NAME%%', ucfirst($methodName), $template);
 		}
 		
 		if($this->isSimple) {
-		
-			$methodDeclarations .= "
-
-	/**
-	 * Whether or not this action is \"simple\", i.e. doesn't use validation etc.
-	 *
-	 * @return     bool true, if this action should act in simple mode, or false.
-	 *
-	 */
-	public function isSimple()
-	{
-		return true;
-	}
-";
+			$methodDeclarations .= file_get_contents($this->simpleMethodTemplate);
 		}
 	
 		$this->project->setUserProperty($this->property, $methodDeclarations);

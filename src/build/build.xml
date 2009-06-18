@@ -1301,7 +1301,22 @@
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
 		
-		<agavi.generate-action-methods property="action.method_declarations" methods="${action.methods}" simple="${action.simple}"/>
+		<agavi.select-path property="action.templates.methods.request" path="code/actions/HandleRequestMethod.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<agavi.select-path property="action.templates.methods.simple" path="code/actions/Simple.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		
+		<agavi.generate-action-methods 
+			property="action.methods.declarations" 
+			methods="${action.methods}" 
+			simple="${action.simple}"
+			requestMethodTemplate="${action.templates.methods.request}"
+			simpleMethodTemplate="${action.templates.methods.simple}"
+			/>
 		
 		<property userProperty="true" name="action.source" value="${template.path}" />
 		<copy file="${action.source}" tofile="${action.file}">
@@ -1314,7 +1329,7 @@
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
 					<token key="ACTION_CLASS" value="${action.class}" />
-					<token key="METHOD_DECLARATIONS" value="${action.method_declarations}" />
+					<token key="METHOD_DECLARATIONS" value="${action.methods.declarations}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
