@@ -31,10 +31,24 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  */
 class AgaviGenerateViewMethodsTask extends AgaviTask
 {
-	
+	/**
+	 * @var          string The property to modify.
+	 */
 	protected $property = null;
+	
+	/**
+	 * @var          array the list of output type names to generate methods for
+	 */
 	protected $outputTypes = array();
+	
+	/**
+	 * @var          string the action name this view belongs to
+	 */
 	protected $actionName = '';
+	
+	/**
+	 * @var          string the absolute filesytem path to method template
+	 */
 	protected $methodTemplate = null;
 	
 	/**
@@ -71,6 +85,11 @@ class AgaviGenerateViewMethodsTask extends AgaviTask
 		$this->actionName = $name;
 	}
 	
+	/**
+	 * Sets the template to use for the output type handling methods.
+	 * 
+	 * @param        string the absolute filesytem path to method template
+	 */
 	public function setMethodTemplate($path)
 	{
 		$this->methodTemplate = $path;
