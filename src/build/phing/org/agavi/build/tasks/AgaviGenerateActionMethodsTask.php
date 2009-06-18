@@ -31,11 +31,29 @@ require_once(dirname(__FILE__) . '/AgaviTask.php');
  */
 class AgaviGenerateActionMethodsTask extends AgaviTask
 {
-	
+	/**
+	 * @var          string The property to modify.
+	 */
 	protected $property = null;
-	protected $methods = '';
+	
+	/**
+	 * @var          array the list of request methods to generate handlers for
+	 */
+	protected $methods = array();
+	
+	/**
+	 * @var          boolean whether the generated action should be simple
+	 */
 	protected $isSimple = false;
+	
+	/**
+	 * @var          string the template to use for the handler methods
+	 */
 	protected $requestMethodTemplate;
+	
+	/**
+	 * @var          string the template to use for the isSimple method
+	 */
 	protected $simpleMethodTemplate;
 	
 	/**
