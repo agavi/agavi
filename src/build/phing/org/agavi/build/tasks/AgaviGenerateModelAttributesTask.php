@@ -114,7 +114,7 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 	/**
 	 * Retrieves the %%VARNAME%% attribute.
 	 *
-	 * @return       %%TYPE%% the new value for %%VARNAME%%
+	 * @return       %%TYPE%% the value for %%VARNAME%%
 	 */
 	public function %%METHODNAME%%(%%VARIABLE%%)
 	{
