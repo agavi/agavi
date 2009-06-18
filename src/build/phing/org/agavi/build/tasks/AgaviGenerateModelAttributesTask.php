@@ -99,6 +99,33 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 			throw new BuildException('The attributeAccessorsProperty attribute must be specified');
 		}
 		
+		if($this->attributeTemplate === null || !is_readable($this->attributeTemplate)) {
+			throw new BuildException(
+				sprintf(
+					'The attributeTemplate attribute must be specified and must point to a readable template file. Current value is "%1$s".',
+					$this->attributeTemplate
+				)
+			);
+		}
+		
+		if($this->attributeSetterTemplate === null || !is_readable($this->attributeSetterTemplate)) {
+			throw new BuildException(
+				sprintf(
+					'The attributeSetterTemplate attribute must be specified and must point to a readable template file. Current value is "%1$s".',
+					$this->attributeSetterTemplate
+				)
+			);
+		}
+		
+		if($this->attributeGetterTemplate === null || !is_readable($this->attributeGetterTemplate)) {
+			throw new BuildException(
+				sprintf(
+					'The attributeGetterTemplate attribute must be specified and must point to a readable template file. Current value is "%1$s".',
+					$this->attributeGetterTemplate
+				)
+			);
+		}
+		
 		$attrAccessors = $this->project->getUserProperty($this->attributeAccessorsProperty);
 		$attrList = $this->project->getUserProperty($this->attributeListProperty);
 		
