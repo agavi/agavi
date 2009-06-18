@@ -1436,7 +1436,16 @@
 		<property userProperty="true" name="view.class" value="${module.name}_${view.class.base}View" override="true" />
 
 		<!-- generate the output-type handling methods -->
-		<agavi.generate-view-methods property="view.method-declarations" outputTypes="${view.output-types}" actionName="${action.name}"/>
+		<agavi.select-path property="view.templates.methods.output-type" path="code/views/HandleOutputType.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<agavi.generate-view-methods 
+			property="view.method-declarations" 
+			outputTypes="${view.output-types}" 
+			actionName="${action.name}"
+			methodTemplate="${view.templates.methods.output-type}"
+			/>
 		
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.views}/View.class.php.tmpl">

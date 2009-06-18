@@ -35,6 +35,7 @@ class AgaviGenerateViewMethodsTask extends AgaviTask
 	protected $property = null;
 	protected $outputTypes = array();
 	protected $actionName = '';
+	protected $methodTemplate = null;
 	
 	/**
 	 * Sets the property that this task will modify.
@@ -70,6 +71,10 @@ class AgaviGenerateViewMethodsTask extends AgaviTask
 		$this->actionName = $name;
 	}
 	
+	public function setMethodTemplate($path)
+	{
+		$this->methodTemplate = $path;
+	}
 
 	/**
 	 * Executes the task.
@@ -80,26 +85,8 @@ class AgaviGenerateViewMethodsTask extends AgaviTask
 			throw new BuildException('The property attribute must be specified');
 		}
 		
-		$template = "
-
-	/**
-	 * Handles the %%OUTPUT_TYPE_NAME%% output type.
-	 *
-	 * @parameter  AgaviRequestDataHolder the (validated) request data
-	 *
-	 * @return     mixed <ul>
-	 *                     <li>An AgaviExecutionContainer to forward the execution to or</li>
-	 *                     <li>Any other type will be set as the response content.</li>
-	 *                   </ul>
-	 */
-	public function execute%%OUTPUT_TYPE_NAME%%(AgaviRequestDataHolder \$rd)
-	{
-		\$this->setup%%OUTPUT_TYPE_NAME%%(\$rd);
-
-		\$this->setAttribute('_title', '%%ACTION_NAME%%');
-	}
-
-";
+		$template = file_get_contents($this->methodTemplate);
+		
 		$methodDeclarations = '';
 		foreach ($this->outputTypes as $otName) {
 			$methodDeclarations .= str_replace(array('%%OUTPUT_TYPE_NAME%%', '%%ACTION_NAME%%'), array(ucfirst($otName), $this->actionName), $template);
