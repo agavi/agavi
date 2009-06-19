@@ -200,7 +200,7 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 		
 		$attributeListItemTemplate = file_get_contents($this->attributeTemplate);
 		$attributeSetterTemplate = file_get_contents($this->attributeSetterTemplate);
-		$attributeGetterTemplate = file_get_contents($this->attributeSetterTemplate);
+		$attributeGetterTemplate = file_get_contents($this->attributeGetterTemplate);
 		
 		$varname = $this->name;
 		$variable = '$'.$varname;
