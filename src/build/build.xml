@@ -1434,19 +1434,10 @@
 		</agavi.resolve-configuration>
 		<agavi.transform-view-class-base property="view.class.base" string="${view.class.base}" />
 		<property userProperty="true" name="view.class" value="${module.name}_${view.class.base}View" override="true" />
-
-		<!-- generate the output-type handling methods -->
-		<agavi.select-path property="view.templates.methods.output-type" path="code/views/HandleOutputType.tmpl">
-			<from path="${templates.directory}" />
-			<from path="${agavi.directory.src.build.templates}" />
-		</agavi.select-path>
-		<agavi.generate-view-methods 
-			property="view.method-declarations" 
-			outputTypes="${view.output-types}" 
-			actionName="${action.name}"
-			methodTemplate="${view.templates.methods.output-type}"
-			/>
 		
+		<!-- generate the output-type handling methods -->
+		<agavi.iterate property="view.output-type.name" target="view-methods-create" list="${view.output-types}" delimiter=" ," exceptionsFatal="false" />
+			
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.views}/View.class.php.tmpl">
 			<from path="${templates.directory}" />
@@ -1471,6 +1462,22 @@
 		</copy>
 	</target>
 
+	<target name="view-methods-create">
+		<!-- generate the output-type handling methods -->
+		<agavi.select-path property="view.templates.methods.output-type">
+			<from path="${templates.directory}/code/views/HandleOutputType.${view.output-type.name}.tmpl" />
+			<from path="${templates.directory}/code/views/HandleOutputType.tmpl" />
+			<from path="${agavi.directory.src.build.templates}/code/views/HandleOutputType.${view.output-type.name}.tmpl" />	
+			<from path="${agavi.directory.src.build.templates}/code/views/HandleOutputType.tmpl" />
+		</agavi.select-path>
+		<agavi.generate-view-methods 
+			property="view.method-declarations" 
+			outputType="${view.output-type.name}" 
+			actionName="${action.name}"
+			methodTemplate="${view.templates.methods.output-type}"
+			/>
+	</target>
+	
 	<target name="view-template-create" depends="project-locate,module-locate,action-locate,view-locate" description="Creates a template for a view">
 		<agavi.resolve-configuration property="template.name" string="${module.view.name}">
 			<variable name="actionName" value="${action.path}" />

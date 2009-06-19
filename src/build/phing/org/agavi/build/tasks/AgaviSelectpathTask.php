@@ -35,7 +35,7 @@ class AgaviSelectpathTask extends AgaviTask
 	const TYPE_DIRECTORY = 'directory';
 	
 	protected $property = null;
-	protected $path = '';
+	protected $path = null;
 	protected $type = null;
 	protected $froms = array();
 	
@@ -56,9 +56,13 @@ class AgaviSelectpathTask extends AgaviTask
 	 */
 	public function setPath($path)
 	{
-		/* This must be created here to prevent the directory from
-		 * becoming automatically converted to an absolute path. */
-		$this->path = new PhingFile($path);
+		if(!empty($path)) {
+			/* This must be created here to prevent the directory from
+			 * becoming automatically converted to an absolute path. */
+			$this->path = new PhingFile($path);			
+		} else {
+			$this->path = null;
+		}
 	}
 	
 	/**
@@ -96,7 +100,11 @@ class AgaviSelectpathTask extends AgaviTask
 		}
 		
 		foreach($this->froms as $from) {
-			$path = new PhingFile($from->getPath()->getAbsolutePath() . DIRECTORY_SEPARATOR . $this->path->getPath());
+			if(null !== $this->path) {
+				$path = new PhingFile($from->getPath()->getAbsolutePath() . DIRECTORY_SEPARATOR . $this->path->getPath());
+			} else {
+				$path = new PhingFile($from->getPath()->getAbsolutePath());
+			}
 			if(
 				($this->type === null && file_exists($path->getPath())) ||
 				($this->type === self::TYPE_FILE && is_file($path->getPath())) ||

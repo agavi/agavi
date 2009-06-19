@@ -37,9 +37,9 @@ class AgaviGenerateViewMethodsTask extends AgaviTask
 	protected $property = null;
 	
 	/**
-	 * @var          array the list of output type names to generate methods for
+	 * @var          string the output type names to generate methods for
 	 */
-	protected $outputTypes = array();
+	protected $outputType = array();
 	
 	/**
 	 * @var          string the action name this view belongs to
@@ -62,17 +62,13 @@ class AgaviGenerateViewMethodsTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets the output type names to generate code for.
+	 * Sets the output type name to generate code for.
 	 *
-	 * @param      string a space separated list of output-type names.
+	 * @param      string the output-type name.
 	 */
-	public function setOutputTypes($otNames)
+	public function setOutputType($otName)
 	{
-		if ("" == trim($otNames)) {
-			$this->outputTypes = array();
-		} else {
-			$this->outputTypes = explode(" ", $otNames);
-		}		
+		$this->outputType = $otName;
 	}
 	
 	/**
@@ -115,13 +111,11 @@ class AgaviGenerateViewMethodsTask extends AgaviTask
 			
 		$template = file_get_contents($this->methodTemplate);
 		
-		$methodDeclarations = '';
-		foreach ($this->outputTypes as $otName) {
-			$methodDeclarations .= str_replace(array('%%OUTPUT_TYPE_NAME%%', '%%ACTION_NAME%%'), array(ucfirst($otName), $this->actionName), $template);
-		}
+		$methodDeclarations = $this->project->getUserProperty($this->property);
+		
+		$methodDeclarations .= str_replace(array('%%OUTPUT_TYPE_NAME%%', '%%ACTION_NAME%%'), array(ucfirst($this->outputType), $this->actionName), $template);
 		
 		$this->project->setUserProperty($this->property, $methodDeclarations);
-		return;
 	}
 }
 
