@@ -212,13 +212,20 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 		$attributeSetterTemplate = file_get_contents($this->attributeSetterTemplate);
 		$attributeGetterTemplate = file_get_contents($this->attributeGetterTemplate);
 		
+		
+		$type = $this->type;
+		$isScalar = in_array(strtolower($type), array("int", "integer", "float", "double", "string", "bool", "boolean", "mixed"));
+		if($isScalar) {
+			$typehint = "";
+		} else {
+			$typehint = $type." ";
+		}
 		$varname = $this->name;
 		$variable = '$'.$varname;
-		$type = $this->type;
 		$level = $this->accessLevel;
 		
-		$search = array('%%TYPE%%', '%%VARIABLE%%', '%%VARNAME%%', '%%ACCESS_LEVEL%%');
-		$replace = array($type, $variable, $varname, $level);
+		$search = array('%%TYPE%%', '%%VARIABLE%%', '%%VARNAME%%', '%%ACCESS_LEVEL%%', '%%TYPE_HINT%%');
+		$replace = array($type, $variable, $varname, $level, $typehint);
 		
 		$attrList .= str_replace($search, $replace, $attributeListItemTemplate);
 		
