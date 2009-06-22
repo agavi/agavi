@@ -121,6 +121,16 @@ class AgaviGenerateModelAttributesTask extends AgaviTask
 	 */
 	public function setAttributeAccessLevel($level)
 	{
+		$level = strtolower($level);
+		if(!in_array($level, array("private", "protected", "public"))) {
+			throw new BuildException(
+				sprintf(
+					'The access level "%1$s" is not a valid access level, must be any of [private, protected, public]', 
+					$level
+				)
+			);
+		}
+		
 		$this->accessLevel = $level;
 	}
 	
