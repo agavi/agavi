@@ -105,7 +105,10 @@ class AgaviTesting
 	{
 		$s = new $suite['class']($name);
 		foreach($suite['testfiles'] as $file) {
-			$s->addTestFile('tests/'.$file);
+			if(!AgaviToolkit::isPathAbsolute($file)) {
+				$file = 'tests/'.$file;
+			}
+			$s->addTestFile($file);
 		}
 		return $s;
 	}
