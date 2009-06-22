@@ -72,9 +72,9 @@ class AgaviGenerateViewMethodsTask extends AgaviTask
 	}
 	
 	/**
-	 * Sets if the action should be simple.
+	 * Sets the action's name.
 	 *
-	 * @param      boolean true if the action is simple.
+	 * @param      string the actions name.
 	 */
 	public function setActionName($name)
 	{
