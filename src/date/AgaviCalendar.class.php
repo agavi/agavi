@@ -231,20 +231,12 @@ abstract class AgaviCalendar
 			$this->get(AgaviDateDefinitions::HOUR_OF_DAY), $this->get(AgaviDateDefinitions::MINUTE), $this->get(AgaviDateDefinitions::SECOND)
 		);
 		
-		$tzId = $this->getTimeZone()->getId();
-		if($tzId == AgaviTimeZone::CUSTOM) {
-			$offsetInMinutes = $this->getTimeZone()->getRawOffset() / 60000;
-			$sign = '+';
-			if($offsetInMinutes < 0) {
-				$sign = '-';
-			}
-			$offsetInMinutes = abs($offsetInMinutes);
-			$hours = (int) ($offsetInMinutes / 60);
-			$minutes = ($offsetInMinutes % 60);
-			$tzId = sprintf('%s%02d:%02d', $sign, $hours, $minutes);
-			return new DateTime($dateTimeString . $tzId);
+		$tz = $this->getTimeZone();
+		// check if this is a custom timezone (they have GMT+0000 as id and could potentially contain seconds as well, so we allow up to 6 digits)
+		if(preg_match('#GMT[+-]\d{4,6}#', $tz->getId())) {
+			return new DateTime($dateTimeString . $tz->formatOffset(false, '', ''));
 		} else {
-			return new DateTime($dateTimeString, new DateTimeZone($tzId));
+			return new DateTime($dateTimeString, new DateTimeZone($tz->getId()));
 		}
 		
 		return $date;

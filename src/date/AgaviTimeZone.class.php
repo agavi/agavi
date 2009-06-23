@@ -37,11 +37,6 @@
 abstract class AgaviTimeZone
 {
 	/**
-	 * The identifier of a custom timezone
-	 */
-	const CUSTOM = 'Custom';
-	
-	/**
 	 * The translation manager instance.
 	 *
 	 * @var        AgaviTranslationManager
@@ -336,7 +331,7 @@ abstract class AgaviTimeZone
 		}
 
 		if(!$displayString) {
-			$displayString = $this->getGmtString($daylight);
+			$displayString = $this->formatOffset($daylight);
 		}
 
 		return $displayString;
@@ -346,29 +341,31 @@ abstract class AgaviTimeZone
 	 * Returns the GMT+-hh:mm representation of this timezone.
 	 * 
 	 * @param      bool Whether dst is active.
+	 * @param      string The hour/minute and minute/second separator.
+	 * @param      string A prefix to be added in front of the string.
 	 *
 	 * @return     string The formatted representation.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
+	 * @since      1.0.2
 	 */
-	protected function getGmtString($daylight, $useSeparator = true)
+	public function formatOffset($daylight, $separator = ':', $prefix = 'GMT')
 	{
 		$value = $this->getRawOffset() + ($daylight ? $this->getDSTSavings() : 0);
 
 		if($value < 0) {
-			$str = 'GMT-';
+			$str = sprintf('%s-', $prefix);
 			$value = -$value; // suppress the '-' sign for text display.
 		} else {
-			$str = 'GMT+';
+			$str = sprintf('%s+', $prefix);
 		}
 
 		$str .=		str_pad((int) ($value / AgaviDateDefinitions::MILLIS_PER_HOUR), 2, '0', STR_PAD_LEFT)
-						. ($useSeparator ? ':' : '')
+						. $separator
 						. str_pad((int) (($value % AgaviDateDefinitions::MILLIS_PER_HOUR) / AgaviDateDefinitions::MILLIS_PER_MINUTE),  2, '0', STR_PAD_LEFT);
 		$offsetSeconds = ((int) ($value / AgaviDateDefinitions::MILLIS_PER_SECOND) % 60);
 		if($offsetSeconds) {
-			$str .= str_pad($offsetSeconds, 2, '0', STR_PAD_LEFT);
+			$str .= $separator . str_pad($offsetSeconds, 2, '0', STR_PAD_LEFT);
 		}
 		return $str;
 	}
@@ -574,8 +571,9 @@ abstract class AgaviTimeZone
 			$offset = -$offset;
 		}
 		
-		$tz = new AgaviSimpleTimeZone($tm, $offset * 1000.0, self::CUSTOM);
-		$tz->setId($tz->getGmtString(false, false));
+		// create the timezone with an empty id and set it afterwards
+		$tz = new AgaviSimpleTimeZone($tm, $offset * 1000.0);
+		$tz->setId($tz->formatOffset(false, ''));
 		return $tz;
 	}
 

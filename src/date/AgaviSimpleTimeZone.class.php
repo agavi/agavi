@@ -88,9 +88,13 @@ class AgaviSimpleTimeZone extends AgaviTimeZone
 	{
 		$arguments = func_get_args();
 		if(count($arguments) == 1) {
-			parent::__construct($arguments[0]);
-			return;
+			$arguments[1] = 0;
+			$arguments[2] = '';
 		}
+		if(count($arguments) == 2) {
+			$arguments[2] = '';
+		}
+		
 		$fName = AgaviToolkit::overloadHelper(array(
 			array('name' => 'constructorOIS',
 						'parameters' => array('object', 'int', 'string')),
