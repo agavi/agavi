@@ -52,6 +52,10 @@
 
 	<taskdef name="agavi.select-path" classname="org.agavi.build.tasks.AgaviSelectpathTask" classpath="phing" />
 
+	<taskdef name="agavi.generate-action-methods" classname="org.agavi.build.tasks.AgaviGenerateActionMethodsTask" classpath="phing" />
+	<taskdef name="agavi.generate-view-methods" classname="org.agavi.build.tasks.AgaviGenerateViewMethodsTask" classpath="phing" />
+	<taskdef name="agavi.generate-model-attributes" classname="org.agavi.build.tasks.AgaviGenerateModelAttributesTask" classpath="phing" />
+	
 	<!-- Load types relative to the build system. -->
 	<typedef name="agavi.object" classname="org.agavi.build.types.AgaviObjectType" classpath="phing" />
 
@@ -949,6 +953,9 @@
 		<!-- Determine model name. -->
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property userProperty="true" name="model.name.input" value="${model.name}" override="true" />
+		
+		<agavi.input property="target.model.attributes.names" message="Space separated list of properties for this model" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		
 		<agavi.transform-namespace-string-to-identifier property="model.name" string="${model.name}" />
 		<if>
 			<not>
@@ -971,6 +978,8 @@
 		<!-- Define the name of the model class. -->
 		<property userProperty="true" name="model.class" value="${model.identifier}Model" override="true" />
 
+		<!-- Generate the code for the attribute list and accessors-->
+		<agavi.iterate property="model.attribute.name" target="model-attribute-create" list="${target.model.attributes.names}" delimiter=" ," exceptionsFatal="false" />
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.models}/Model.class.php.tmpl">
 			<from path="${templates.directory}" />
@@ -984,6 +993,8 @@
 					<token key="PROJECT_PREFIX" value="${project.prefix}" />
 					<token key="MODEL_NAME" value="${model.name}" />
 					<token key="MODEL_CLASS" value="${model.class}" />
+					<token key="ATTRIBUTE_LIST" value="${model.attributes.list}" /> 
+					<token key="ATTRIBUTE_ACCESSORS" value="${model.attributes.accessors}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -1256,6 +1267,9 @@
 	<target name="action-create" depends="project-locate,module-locate" description="Creates an action">
 		<!-- Determine action name. -->
 		<agavi.input property="action.name" message="Action name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="action.methods" message="Space-separated list of request methods that should be handled (empty for none)" promptCharacter=":" failIfEmpty="false" ignoreIfSet="true" />
+		<agavi.input property="action.simple" message="Create a simple action? (y/n)" promptCharacter=":" default="n" failIfEmpty="false" ignoreIfSet="true" />
+		
 		<property userProperty="true" name="action.name.input" value="${action.name}" override="true" />
 		<agavi.transform-namespace-string-to-identifier property="action.name" string="${action.name}" />
 		<if>
@@ -1280,12 +1294,30 @@
 
 		<!-- Define the name of the action class. -->
 		<property userProperty="true" name="action.class" value="${module.name}_${action.identifier}Action" override="true" />
-
+		
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.actions}/Action.class.php.tmpl">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
 		</agavi.select-path>
+		
+		<agavi.select-path property="action.templates.methods.request" path="code/actions/HandleRequestMethod.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<agavi.select-path property="action.templates.methods.simple" path="code/actions/Simple.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		
+		<agavi.generate-action-methods 
+			property="action.methods.declarations" 
+			methods="${action.methods}" 
+			simple="${action.simple}"
+			requestMethodTemplate="${action.templates.methods.request}"
+			simpleMethodTemplate="${action.templates.methods.simple}"
+			/>
+		
 		<property userProperty="true" name="action.source" value="${template.path}" />
 		<copy file="${action.source}" tofile="${action.file}">
 			<filterchain>
@@ -1297,6 +1329,7 @@
 					<token key="ACTION_NAME" value="${action.name}" />
 					<token key="ACTION_IDENTIFIER" value="${action.identifier}" />
 					<token key="ACTION_CLASS" value="${action.class}" />
+					<token key="METHOD_DECLARATIONS" value="${action.methods.declarations}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -1369,6 +1402,8 @@
 	<target name="view-create" depends="project-locate,module-locate,action-locate" description="Creates a view">
 		<!-- Determine view name. -->
 		<agavi.input property="view.name" message="View name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="view.output-types" message="Space-separated list of output types that should be handled." promptCharacter=":" default="html" failIfEmpty="false" ignoreIfSet="true" />
+		
 		<property userProperty="true" name="view.name.input" value="${view.name}" override="true" />
 		<agavi.transform-string-to-identifier property="view.name" string="${view.name}" />
 		<if>
@@ -1399,7 +1434,10 @@
 		</agavi.resolve-configuration>
 		<agavi.transform-view-class-base property="view.class.base" string="${view.class.base}" />
 		<property userProperty="true" name="view.class" value="${module.name}_${view.class.base}View" override="true" />
-
+		
+		<!-- generate the output-type handling methods -->
+		<agavi.iterate property="view.output-type.name" target="view-methods-create" list="${view.output-types}" delimiter=" ," exceptionsFatal="false" />
+			
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.views}/View.class.php.tmpl">
 			<from path="${templates.directory}" />
@@ -1418,11 +1456,28 @@
 					<token key="ACTION_CLASS" value="${action.class}" />
 					<token key="VIEW_NAME" value="${view.name}" />
 					<token key="VIEW_CLASS" value="${view.class}" />
+					<token key="METHOD_DECLARATIONS" value="${view.method-declarations}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
 	</target>
 
+	<target name="view-methods-create">
+		<!-- generate the output-type handling methods -->
+		<agavi.select-path property="view.templates.methods.output-type">
+			<from path="${templates.directory}/code/views/HandleOutputType.${view.output-type.name}.tmpl" />
+			<from path="${templates.directory}/code/views/HandleOutputType.tmpl" />
+			<from path="${agavi.directory.src.build.templates}/code/views/HandleOutputType.${view.output-type.name}.tmpl" />	
+			<from path="${agavi.directory.src.build.templates}/code/views/HandleOutputType.tmpl" />
+		</agavi.select-path>
+		<agavi.generate-view-methods 
+			property="view.method-declarations" 
+			outputType="${view.output-type.name}" 
+			actionName="${action.name}"
+			methodTemplate="${view.templates.methods.output-type}"
+			/>
+	</target>
+	
 	<target name="view-template-create" depends="project-locate,module-locate,action-locate,view-locate" description="Creates a template for a view">
 		<agavi.resolve-configuration property="template.name" string="${module.view.name}">
 			<variable name="actionName" value="${action.path}" />
@@ -1449,6 +1504,7 @@
 	<target name="model-create" depends="project-locate,module-locate" description="Creates a model">
 		<!-- Determine model name. -->
 		<agavi.input property="model.name" message="Model name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+		<agavi.input property="target.model.attributes.names" message="Space separated list of properties for this model" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
 		<property userProperty="true" name="model.name.input" value="${model.name}" override="true" />
 		<agavi.transform-namespace-string-to-identifier property="model.name" string="${model.name}" />
 		<if>
@@ -1472,6 +1528,9 @@
 		<!-- Define the name of the model class. -->
 		<property userProperty="true" name="model.class" value="${module.name}_${model.identifier}Model" override="true" />
 
+		<!-- Generate the code for the attribute list and accessors-->
+		<agavi.iterate property="model.attribute.name" target="model-attribute-create" list="${target.model.attributes.names}" delimiter=" ," exceptionsFatal="false" />
+		
 		<!-- Copy. -->
 		<agavi.select-path property="template.path" path="${templates.directory.app.modules.models}/Model.class.php.tmpl">
 			<from path="${templates.directory}" />
@@ -1486,11 +1545,42 @@
 					<token key="MODULE_NAME" value="${module.name}" />
 					<token key="MODEL_NAME" value="${model.name}" />
 					<token key="MODEL_CLASS" value="${model.class}" />
+					<token key="ATTRIBUTE_LIST" value="${model.attributes.list}" /> 
+					<token key="ATTRIBUTE_ACCESSORS" value="${model.attributes.accessors}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
 	</target>
-
+	
+	<target name="model-attribute-create" description="Creates the attributes for a model">
+		<agavi.input property="model.attribute.type" message="Type for attribute ${model.attribute.name}" default="mixed" promptCharacter=":" failIfEmpty="true" ignoreIfSet="false" />
+		<agavi.input property="model.attribute.access.level" message="The access for attribute ${model.attribute.name} (public, protected, private)" default="protected" promptCharacter=":" failIfEmpty="true" ignoreIfSet="false" />
+		
+		<agavi.select-path property="model.templates.getter.path" path="code/models/AttributeGetter.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<agavi.select-path property="model.templates.setter.path" path="code/models/AttributeSetter.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		<agavi.select-path property="model.templates.attribute.path" path="code/models/Attribute.tmpl">
+			<from path="${templates.directory}" />
+			<from path="${agavi.directory.src.build.templates}" />
+		</agavi.select-path>
+		
+		<agavi.generate-model-attributes 
+			attributeListProperty="model.attributes.list" 
+			attributeAccessorsProperty="model.attributes.accessors" 
+			attributeName="${model.attribute.name}" 
+			attributeType="${model.attribute.type}" 
+			attributeAccessLevel="${model.attribute.access.level}" 
+			attributeTemplate="${model.templates.attribute.path}"
+			attributeSetterTemplate="${model.templates.setter.path}"
+			attributeGetterTemplate="${model.templates.getter.path}"
+			/>
+		
+	</target>
 	<!--
 	  Template targets.
 	  -->
