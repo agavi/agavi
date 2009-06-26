@@ -291,11 +291,13 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected function assertViewForwards($expectedModule, $expectedAction, $message = '')
+	protected function assertViewForwards($expectedModule, $expectedAction, $message = 'Failed asserting that the view forwards to "%1$s" "%2$s".')
 	{
 		if(!($this->viewResult instanceof AgaviExecutionContainer)) {
-			$this->fail('Failed asserting that the view result is a forward.');
+			$this->fail(sprintf($message, $expectedModule, $expectedAction));
 		}
+		$this->assertEquals($expectedModule, $this->viewResult->getModuleName());
+		$this->assertEquals(AgaviToolkit::canonicalName($expectedAction), $this->viewResult->getActionName());
 	}
 	
 	/**
