@@ -66,7 +66,6 @@ class AgaviTesting
 
 	public static function dispatch($arguments = array())
 	{		
-		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
 		
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.testing_dir').'/config/suites.xml');
 		$master_suite = new AgaviTestSuite('Master');
