@@ -91,6 +91,15 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(array('baz' => 'qux') + $data, AgaviConfig::toArray());
 	}
 
+	public function testFromArrayMergesAndReindexes()
+	{
+		$data = array('zomg', 'lol');
+		AgaviConfig::clear();
+		AgaviConfig::set(0, 'yay');
+		AgaviConfig::fromArray($data);
+		$this->assertEquals(array(0 => 'yay', 1 => 'zomg', 2 => 'lol'), AgaviConfig::toArray());
+	}
+
 	public function testHasNullValue()
 	{
 		AgaviConfig::set('fubar', null);
