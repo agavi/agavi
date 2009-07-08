@@ -4,13 +4,13 @@ AGAVI CHANGELOG
 1.0.2 RC1 (May ??, 2009)
 ------------------------
 
+CHG: Update to PHPUnit 3.4.0beta4 (#1118) (David)
 CHG: Backport any necessary ICU changes and fixes (#858) (Dominik)
 CHG: Update timezone database to 2009i (#1111) (David)
 CHG: Remove unnecessary use of create_function() in AgaviInarrayValidator (#1112) (David)
 CHG: Allow optional strict comparison of elements in AgaviInarrayValidator (#1107) (David)
 CHG: Update ISO Schematron to version 2009-05-18 (#1103) (David)
 CHG: Routing callback parameters should be set before initialize method is called (#1105) (David)
-CHG: Update to PHPUnit 3.4.0beta3 (#1097) (David)
 
 FIX: AgaviValidationManager::clear() doesn't clear validation errors (#1104) (David)
 FIX: Validation xsd and doc block comments have references to the removed 'affects' parameter (#1101) (Dominik)
