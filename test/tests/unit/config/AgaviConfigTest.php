@@ -1,7 +1,7 @@
 <?php
 
 if(!class_exists('AgaviConfig')) {
-	include('../../../../src/config/AgaviConfig.class.php');
+	include(dirname(__FILE__) . '/../../../../src/config/AgaviConfig.class.php');
 }
 
 class AgaviConfigTest extends PHPUnit_Framework_TestCase
