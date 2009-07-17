@@ -99,10 +99,10 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 	{
 		$data = array('zomg', 'lol');
 		AgaviConfig::clear();
-		AgaviConfig::set(0, 'yay');
+		AgaviConfig::set(2, 'yay');
 		AgaviConfig::fromArray($data);
 		var_dump(AgaviConfig::toArray());
-		$this->assertEquals(array(0 => 'yay', 1 => 'zomg', 2 => 'lol'), AgaviConfig::toArray());
+		$this->assertEquals(array(2 => 'yay', 3 => 'zomg', 4 => 'lol'), AgaviConfig::toArray());
 	}
 
 	public function testHasNullValue()
