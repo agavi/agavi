@@ -33,6 +33,9 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertTrue(AgaviConfig::set($key, $value));
 		$this->assertEquals($value, AgaviConfig::get($key));
+		$this->assertTrue(AgaviConfig::has($key));
+		$this->assertFalse(AgaviConfig::isReadonly($key));
+		$this->assertTrue(AgaviConfig::remove($key));
 	}
 	public function providerGetSet()
 	{
@@ -65,7 +68,7 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse(AgaviConfig::has('opa'));
 		$this->assertFalse(AgaviConfig::has('blu'));
 	}
-/*
+
 	public function testFromArray()
 	{
 		$data = array('foo' => 'bar', 'bar' => 'baz');
@@ -73,7 +76,7 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		AgaviConfig::fromArray($data);
 		$this->assertEquals($data, AgaviConfig::toArray());
 	}
-/*
+
 	public function testFromArrayMerges()
 	{
 		$data = array('foo' => 'bar', 'bar' => 'baz');
@@ -98,9 +101,10 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		AgaviConfig::clear();
 		AgaviConfig::set(0, 'yay');
 		AgaviConfig::fromArray($data);
+		var_dump(AgaviConfig::toArray());
 		$this->assertEquals(array(0 => 'yay', 1 => 'zomg', 2 => 'lol'), AgaviConfig::toArray());
 	}
-*/
+
 	public function testHasNullValue()
 	{
 		AgaviConfig::set('fubar', null);
@@ -156,7 +160,7 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(AgaviConfig::has('WORM'));
 		$this->assertFalse(AgaviConfig::has('WMRM'));
 	}
-/*
+
 	public function testFromArrayMergesButDoesNotOverwriteReadonlies()
 	{
 		$data = array('foo' => 'bar', 'bar' => 'baz', 'baz' => 'qux');
@@ -167,7 +171,7 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		// once we use test isolation, use this one instead
 		// $this->assertEquals(array('baz' => 'lol') + $data, AgaviConfig::toArray());
 	}
-*/
+
 	public function testReadonlySurvivesRemove()
 	{
 		AgaviConfig::set('bla', 'goo', true, true);
