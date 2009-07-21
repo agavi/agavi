@@ -1,10 +1,10 @@
 AGAVI CHANGELOG
 ===============
 
-0.11.8 (May ?, 2009)
---------------------
+0.11.8 (July ??, 2009)
+----------------------
 
-CHG: Update timezone database to 2009i (#1111) (David)
+CHG: Update timezone database to 2009k (#1121) (David)
 CHG: Remove unnecessary use of create_function() in AgaviInarrayValidator (#1112) (David)
 
 FIX: Arrays that failed validation are not purged from request data (#1084) (David)
