@@ -8,7 +8,9 @@
 				<ae:parameter name="break">true</ae:parameter>
 			</validator_definition>
 			
-			<validator_definition name="arraylength" class="AgaviArraylengthValidator" />
+			<validator_definition name="arraylength" class="AgaviArraylengthValidator">
+				<ae:parameter name="min">1</ae:parameter>
+			</validator_definition>
 			
 			<validator_definition name="datetime" class="AgaviDateTimeValidator">
 				<ae:parameter name="check">true</ae:parameter>
