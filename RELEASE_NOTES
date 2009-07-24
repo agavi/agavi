@@ -1,6 +1,30 @@
 AGAVI RELEASE NOTES
 ===================
 
+Version 1.0.2 - August ??, 2009
+===============================
+
+This maintenance release fixes a number of issues over Agavi 1.0.1 and brings a couple of minor enhancements.
+
+The following fixes are worth mentioning:
+- AgaviArraylengthValidator didn't work with files
+- AgaviValidationManager::clear() didn't clear validation errors
+- Multiple settings blocks and settings prefixes were not allowed in module configs
+
+Important Changes:
+- Optional strict comparison of elements in AgaviInarrayValidator now possible
+- Validator shortcut "arraylength" now defaults to minimum of one element
+- Routing callback parameters are now set before initialize method is called
+- Lots of ICU bugfix and change backports to the date and translation system. As a result, custom time zones now have identifiers like "GMT+0200".
+
+Bundle updates:
+- The timezone database has been updated to version 2009k.
+- PHPUnit has been updated to version 3.4.0beta5.
+- ISO Schematron has been updated to version 2009-05-18
+
+Please refer to CHANGELOG for a full list of changes.
+
+
 Version 1.0.1 - May 1, 2009
 ===========================
 
