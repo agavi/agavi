@@ -1,14 +1,17 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 0.11.8 - May ?, 2009
-============================
+Version 0.11.8 - July ??, 2009
+==============================
 
 This maintenance release fixes two bugs over Agavi 0.11.7:
+- AgaviArraylengthValidator didn't work with files
 - Arrays that failed validation were not purged from request data
 - Memory leak in AgaviTranslationManager::getLocaleIdentifier()
 
-The bundled timezone database was also upgraded to version 2009i.
+It also contains minor optimizations in AgaviInarrayValidator and AgaviArraylengthValidator.
+
+The bundled timezone database was also upgraded to version 2009k.
 
 As always, the CHANGELOG has a complete list of changes in this release.
 
