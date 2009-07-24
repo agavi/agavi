@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 CHG: Update timezone database to 2009k (#1121) (David)
 CHG: Remove unnecessary use of create_function() in AgaviInarrayValidator (#1112) (David)
 
+FIX: AgaviArraylengthValidator doesn't work with files (#1122) (David)
 FIX: Arrays that failed validation are not purged from request data (#1084) (David)
 FIX: Memory leak in AgaviTranslationManager::getLocaleIdentifier() (#1083) (David)
 
