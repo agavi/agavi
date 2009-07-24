@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 0.11.8 (July ??, 2009)
 ----------------------
 
+CHG: Validator shortcut "arraylength" should default to minimum of one element (#1123) (David)
 CHG: Update timezone database to 2009k (#1121) (David)
 CHG: Remove unnecessary use of create_function() in AgaviInarrayValidator (#1112) (David)
 
