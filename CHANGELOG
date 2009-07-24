@@ -12,6 +12,7 @@ CHG: Allow optional strict comparison of elements in AgaviInarrayValidator (#110
 CHG: Update ISO Schematron to version 2009-05-18 (#1103) (David)
 CHG: Routing callback parameters should be set before initialize method is called (#1105) (David)
 
+FIX: AgaviArraylengthValidator doesn't work with files (#1122) (David)
 FIX: AgaviValidationManager::clear() doesn't clear validation errors (#1104) (David)
 FIX: Validation xsd and doc block comments have references to the removed 'affects' parameter (#1101) (Dominik)
 FIX: AgaviTranslationManager::_n() and _c() ignore custom locale independent format (#1099) (Dominik)
