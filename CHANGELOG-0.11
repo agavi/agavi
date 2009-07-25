@@ -1,6 +1,18 @@
 AGAVI CHANGELOG (0.11.x)
 ========================
 
+0.11.8 (July 25, 2009)
+----------------------
+
+CHG: Validator shortcut "arraylength" should default to minimum of one element (#1123) (David)
+CHG: Update timezone database to 2009k (#1121) (David)
+CHG: Remove unnecessary use of create_function() in AgaviInarrayValidator (#1112) (David)
+
+FIX: AgaviArraylengthValidator doesn't work with files (#1122) (David)
+FIX: Arrays that failed validation are not purged from request data (#1084) (David)
+FIX: Memory leak in AgaviTranslationManager::getLocaleIdentifier() (#1083) (David)
+
+
 0.11.7 (March 26, 2009)
 -----------------------
 
