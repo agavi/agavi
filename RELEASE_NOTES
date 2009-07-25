@@ -1,7 +1,7 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 0.11.8 - July ??, 2009
+Version 0.11.8 - July 25, 2009
 ==============================
 
 This maintenance release fixes two bugs over Agavi 0.11.7:
@@ -14,6 +14,8 @@ It also contains minor optimizations in AgaviInarrayValidator and AgaviArrayleng
 The bundled timezone database was also upgraded to version 2009k.
 
 As always, the CHANGELOG has a complete list of changes in this release.
+
+This release marks the end of maintenance for Agavi 0.11.x.
 
 
 Version 0.11.7 - March 26, 2009
