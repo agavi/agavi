@@ -450,7 +450,9 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 			$this->attributes[$ns] = array();
 		}
 
-		$this->attributes[$ns] = array_merge($this->attributes[$ns], $attributes);
+		// array_merge would reindex numeric keys, so we use the + operator
+		// mind the operand order: keys that exist in the left one aren't overridden
+		$this->attributes[$ns] = $attributes + $this->attributes[$ns];
 	}
 
 	/**

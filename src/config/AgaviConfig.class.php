@@ -144,7 +144,9 @@ final class AgaviConfig
 	 */
 	public static function fromArray($data)
 	{
-		self::$config = array_merge(array_merge(self::$config, $data), self::$readonlies);
+		// array_merge would reindex numeric keys, so we use the + operator
+		// mind the operand order: keys that exist in the left one aren't overridden
+		self::$config = self::$readonlies + $data + self::$config;
 	}
 
 	/**

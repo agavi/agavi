@@ -258,7 +258,9 @@ class AgaviParameterHolder
 	 */
 	public function setParameters(array $parameters)
 	{
-		$this->parameters = array_merge($this->parameters, $parameters);
+		// array_merge would reindex numeric keys, so we use the + operator
+		// mind the operand order: keys that exist in the left one aren't overridden
+		$this->parameters = $parameters + $this->parameters;
 	}
 
 	/**
