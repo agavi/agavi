@@ -5,11 +5,12 @@
 			<suite name="Context">
 				<testfiles>
 					<testfile>unit/context/AgaviContextTest.php</testfile>
-				</testfiles>				
+				</testfiles>
 			</suite>
 			<suite name="Config">
 				<testfiles>
 					<testfile>unit/config/AgaviConfigCacheTest.php</testfile>
+					<testfile>unit/config/AgaviConfigTest.php</testfile>
 				</testfiles>
 			</suite>
 			<suite name="Controller">
