@@ -65,7 +65,7 @@ class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
 		$data = array(1 => 'boo');
 		$p = new MyAgaviAttributeHolder();
 		$p->setAttributes($data);
-		$this->assertEquals(array(0 => 'boo'), $p->getAttributes());
+		$this->assertEquals(array(1 => 'boo'), $p->getAttributes());
 	}
 
 	public function testGetAttribute()
@@ -106,14 +106,21 @@ class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('beh', $p->getAttribute('baz', 'anothernamespace', 'beh'));
 	}
 
+	public function testGetAttributeWithoutNamespaceAndDefault()
+	{
+		$data = array('baz' => 'boo');
+		$p = new MyAgaviAttributeHolder();
+		$p->setAttributes($data);
+		$this->assertEquals('boo', $p->getAttribute('baz', null, 'beh'));
+		$this->assertEquals('beh', $p->getAttribute('bla', null, 'beh'));
+	}
+
 	public function testGetAttributeWithIntegerIndex()
 	{
 		$data = array(2 => 'boo');
 		$p = new MyAgaviAttributeHolder();
 		$p->setAttributes($data);
-		$this->assertEquals('boo', $p->getAttribute(0));
-		//after the reindexing problem has been fixed:
-		//$this->assertEquals('boo', $p->getAttribute(2));
+		$this->assertEquals('boo', $p->getAttribute(2));
 	}
 
 	public function testHasAttribute()
@@ -133,8 +140,8 @@ class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
 		$p = new MyAgaviAttributeHolder();
 		$p->setAttributes($data);
 		//reindexing made my php
-		$this->assertTrue($p->hasAttribute(0));
-		$this->assertFalse($p->hasAttribute(2));
+		$this->assertTrue($p->hasAttribute(2));
+		$this->assertFalse($p->hasAttribute(0));
 	}
 
 	public function testHasAttributeWithNamespace()
@@ -251,7 +258,7 @@ class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
 		$p = new MyAgaviAttributeHolder();
 		$p->setAttributes($data);
 		//reindexing made my php
-		$this->assertEquals('boo', $p->removeAttribute(0));
+		$this->assertEquals('boo', $p->removeAttribute(2));
 	}
 
 	public function testRemoveAttributeWithNamespace()
