@@ -228,7 +228,7 @@ class AgaviParameterHolderTest extends PHPUnit_Framework_TestCase
 		$data = array('stefy' => 'ecuador', 'amy' => 'florida', 'stasy' => 'ukraine', 'lalala');
 		$p = new AgaviParameterHolder($data);
 		$p->setParameters(array('kiki' => 'bulgaria', 'stefy' => 'germany', 'ohh'));
-		$this->assertEquals(array('stefy' => 'germany', 'amy' => 'florida', 'stasy' => 'ukraine', 'lalala', 'kiki' => 'bulgaria', 'ohh'), $p->getParameters());
+		$this->assertEquals(array('stefy' => 'germany', 'amy' => 'florida', 'stasy' => 'ukraine', 'kiki' => 'bulgaria', 'ohh'), $p->getParameters());
 		$p->clearParameters();
 		$this->assertEquals(array(), $p->getParameters());
 	}
@@ -239,7 +239,7 @@ class AgaviParameterHolderTest extends PHPUnit_Framework_TestCase
 		$p = new AgaviParameterHolder($data);
 		$p->setParameters(array('ohh', 1 => 'london'));
 		// fails in php
-		$this->assertEquals(array(1 => 'ukraine', 'lalala', 'ohh', 'london'), $p->getParameters());
+		$this->assertEquals(array('ohh', 'london', 'lalala'), $p->getParameters());
 		$p->clearParameters();
 		$this->assertEquals(array(), $p->getParameters());
 	}
