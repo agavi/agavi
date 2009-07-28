@@ -4,6 +4,9 @@ if(!class_exists('AgaviConfig')) {
 	include(dirname(__FILE__) . '/../../../../src/config/AgaviConfig.class.php');
 }
 
+/**
+ * @agaviBootstrap off
+ */
 class AgaviConfigTest extends PHPUnit_Framework_TestCase
 {
 	/**
@@ -16,14 +19,13 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		// $this->setRunTestInSeparateProcess(true);
+		$this->setRunTestInSeparateProcess(true);
 	}
 
 	public function testInitiallyEmpty()
 	{
 		$this->assertEquals(array(), AgaviConfig::toArray());
 		$this->assertNull(AgaviConfig::get('something'));
-		
 	}
 
 	/**
@@ -101,8 +103,7 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		AgaviConfig::clear();
 		AgaviConfig::set(2, 'yay');
 		AgaviConfig::fromArray($data);
-		var_dump(AgaviConfig::toArray());
-		$this->assertEquals(array(2 => 'yay', 3 => 'zomg', 4 => 'lol'), AgaviConfig::toArray());
+		$this->assertEquals(array(2 => 'yay', 0 => 'zomg', 1 => 'lol'), AgaviConfig::toArray());
 	}
 
 	public function testHasNullValue()
@@ -167,9 +168,7 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		AgaviConfig::clear();
 		AgaviConfig::set('baz', 'lol', true, true);
 		AgaviConfig::fromArray($data);
-		$this->assertEquals(array('baz' => 'lol', 'WORM' => 'yay', 'bulletproof' => 'abc') + $data, AgaviConfig::toArray());
-		// once we use test isolation, use this one instead
-		// $this->assertEquals(array('baz' => 'lol') + $data, AgaviConfig::toArray());
+		$this->assertEquals(array('baz' => 'lol') + $data, AgaviConfig::toArray());
 	}
 
 	public function testReadonlySurvivesRemove()
