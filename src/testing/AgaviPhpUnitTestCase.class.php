@@ -200,8 +200,50 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 		
 		$template->setVar($vars);
 		
-		$templateFile = AgaviConfig::get('core.agavi_dir') . DIRECTORY_SEPARATOR . 'testing' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'TestCaseMethod.tpl';
-		$template->setFile($templateFile);
+		$templateFile = $this->getTemplateFile();
+		if(null !== $templateFile) {
+			$template->setFile($templateFile);
+		}
+	}
+	
+	/**
+	 * Returns the template file to use.
+	 * 
+	 * @return       string the full template path, null for the phpunit standard template
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.1.0
+	 */
+	protected function getTemplateFile()
+	{
+		if($this->doBootstrap()) {
+			return AgaviConfig::get('core.agavi_dir') . DIRECTORY_SEPARATOR . 'testing' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'TestCaseMethod.tpl';
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Whether or not an agavi bootstrap should be done in isolation.
+	 * 
+	 * @return       boolean true if agavi should be bootstrapped
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.1.0
+	 */
+	protected function doBootstrap()
+	{
+		$flag = true;
+			
+		$annotations = $this->getAnnotations();
+		if(!empty($annotations['method']['agaviBootstrap'])) {
+			$flag = AgaviToolkit::literalize($annotations['method']['agaviBootstrap'][0]);
+		} elseif(!empty($annotations['class']['agaviBootstrap'])) {
+			$flag = AgaviToolkit::literalize($annotations['class']['agaviBootstrap'][0]);
+		}
+		return $flag;
 	}
 	
 }

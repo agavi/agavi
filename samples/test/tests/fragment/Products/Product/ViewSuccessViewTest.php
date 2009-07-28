@@ -45,11 +45,11 @@ class Products_Product_ViewSuccessViewTest extends AgaviViewTestCase
 		$this->setAttribute('product_name', 'spam');
 		$this->setAttribute('product_price', '123.45');
 		$this->runView();
-		$this->assertResponseHasHTTPStatus(200);
+		$this->assertViewResponseHasHTTPStatus(200);
 		$this->assertViewResultEquals('');
 		$this->assertHasLayer('content');
 		$this->assertHasLayer('decorator');
-		$this->assertResponseHasNoRedirect();
+		$this->assertViewRedirectsNot();
 		$this->assertContainerAttributeExists('_title');
 	}
 	
