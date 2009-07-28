@@ -1,8 +1,9 @@
-<?php 
+<?php
+
 /**
- * Constraint that checks if an view handles an expected outputType
- * 
- * The viewInstance is passed in the constructor.
+ * Constraint that checks if an view handles an expected Output Type.
+ *
+ * The View instance is passed to the constructor.
  *
  * @package    agavi
  * @subpackage testing
@@ -16,23 +17,22 @@
  */
 class AgaviConstraintViewHandlesOutputType extends PHPUnit_Framework_Constraint
 {
-	
 	/**
-	 * @var        AgaviAction the action instance
+	 * @var        AgaviAction The action instance.
 	 */
 	protected $viewInstance;
 	
 	/**
-	 * @var        boolean true if 'execute' should be accepted
+	 * @var        bool true if 'execute' should be accepted.
 	 */
 	protected $acceptGeneric;
 	
 	/**
-	 * constructor
-	 * 
-	 * @param      AgaviAction the action to test
-	 * @param      boolean     true if 'execute' should be accepted
-	 * 
+	 * Constructor.
+	 *
+	 * @param      AgaviAction The action to test.
+	 * @param      bool        true if 'execute' should be accepted.
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -43,12 +43,13 @@ class AgaviConstraintViewHandlesOutputType extends PHPUnit_Framework_Constraint
 	}
 	
 	/**
-	 * Evaluates the constraint for parameter $other. Returns TRUE if the
-	 * constraint is met, FALSE otherwise.
+	 * Evaluates the constraint for the given argument. Returns true if the
+	 * constraint is met, false otherwise.
 	 *
-	 * @param mixed $other Value or object to evaluate.
-	 * @return bool
-	 * 
+	 * @param      mixed Value or object to evaluate.
+	 *
+	 * @return     bool Whether or not the constraint was met.
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -65,8 +66,8 @@ class AgaviConstraintViewHandlesOutputType extends PHPUnit_Framework_Constraint
 	/**
 	 * Returns a string representation of the constraint.
 	 *
-	 * @return string
-	 * 
+	 * @return     string The string representation of the constraint.
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -74,20 +75,19 @@ class AgaviConstraintViewHandlesOutputType extends PHPUnit_Framework_Constraint
 	{
 		return sprintf(
 			'%1$s handles output type',
-		
 			get_class($this->viewInstance)
 		);
 	}
 	
 	/**
-	 * returns a custom error description
+	 * Returns a custom error description.
 	 * 
 	 * @param      mixed  Value or object to evaluate.
-	 * @param      string the original description
-	 * @param      bool   true if the constraint was negated
-	 * 
-	 * @return     string the error description
-	 * 
+	 * @param      string The original description.
+	 * @param      bool   true if the constraint was negated.
+	 *
+	 * @return     string The error description.
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -96,7 +96,7 @@ class AgaviConstraintViewHandlesOutputType extends PHPUnit_Framework_Constraint
 		if(!$not) {
 			return sprintf(
 				'Failed asserting that %1$s handles output type "%2$s".', get_class($this->viewInstance), $other
-				);
+			);
 		} else {
 			return sprintf(
 				'Failed asserting that %1$s does not handle output type "%2$s".', get_class($this->viewInstance), $other
