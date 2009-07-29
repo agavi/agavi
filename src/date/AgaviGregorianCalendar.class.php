@@ -14,7 +14,9 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * 
+ * Ported from ICU:
+ *  icu/trunk/source/i18n/gregocal.cpp        r22379
+ *  icu/trunk/source/i18n/unicode/gregocal.h  r19003
  *
  * @package    agavi
  * @subpackage date
@@ -561,9 +563,12 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 */
 	protected function handleGetMonthLength($extendedYear, $month)
 	{
-		if(!isset(self::$kLeapMonthLength[$month])) {
-			return null;
+		// If the month is out of range, adjust it into range, and
+		// modify the extended year value accordingly.
+		if($month < 0 || $month > 11) { 
+			$extendedYear += AgaviToolkit::floorDivide($month, 12, $month); 
 		}
+		
 		return $this->isLeapYear($extendedYear) ? self::$kLeapMonthLength[$month] : self::$kMonthLength[$month];
 	}
 
@@ -1180,7 +1185,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 		array(        1,        1,       28,       31 ), // DAY_OF_MONTH
 		array(        1,        1,      365,      366 ), // DAY_OF_YEAR
 		array(/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1 ), // DAY_OF_WEEK
-		array(       -1,       -1,        4,        6 ), // DAY_OF_WEEK_IN_MONTH
+		array(       -1,       -1,        4,        5 ), // DAY_OF_WEEK_IN_MONTH
 		array(/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1 ), // AM_PM
 		array(/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1 ), // HOUR
 		array(/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1 ), // HOUR_OF_DAY

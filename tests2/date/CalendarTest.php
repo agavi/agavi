@@ -2,6 +2,10 @@
 
 require_once(dirname(__FILE__) . '/BaseCalendarTest.php');
 
+/**
+ * Ported from ICU:
+ *  icu/trunk/source/test/intltest/caltest.cpp r21087
+ */
 class CalendarTest extends BaseCalendarTest
 {
 	protected function fieldName($id)
@@ -149,7 +153,7 @@ class CalendarTest extends BaseCalendarTest
 			$this->assertFalse($cal->getMinimum($i) >= $cal->getMaximum($i), 'getMinimum not less than getMaximum for field ' . $i);
 		}
 
-		$cal->adoptTimeZone($this->tm->getDefaultTimeZone());
+		$cal->setTimeZone($this->tm->getDefaultTimeZone());
 		$cal->clear();
 		$cal->set2(1984, 5, 24);
 		$this->assertEquals($this->date(84, 5, 24), $cal->getTime(), 'AgaviCalendarCalendar::set(3 args) failed');
@@ -722,7 +726,10 @@ class CalendarTest extends BaseCalendarTest
 		$times = 20;
 		$cal = $this->tm->createCalendar($this->tm->getLocale('de_DE'));
 		$sdf = new AgaviSimpleDateFormat("YYYY'-W'ww-ee", AgaviLocale::getGermany());
+		// ICU no longer use localized date-time pattern characters by default (ticket#5597)
+		/*
 		$sdf->applyLocalizedPattern("JJJJ'-W'ww-ee");
+		*/
 		$cal->clear();
 		$cal->set(1997, AgaviDateDefinitions::DECEMBER, 25);
 		$this->doYEAR_WOYLoop($cal, $sdf, $times);

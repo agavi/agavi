@@ -14,6 +14,12 @@
 // +---------------------------------------------------------------------------+
 
 /**
+ * Ported from ICU:
+ *  icu/trunk/source/i18n/timezone.cpp        r22069
+ *  icu/trunk/source/i18n/unicode/timezone.h  r18762
+ * 
+ * Skipped methods:
+ *  getTZDataVersion() - not supported [22063,22069]
  * 
  *
  * @package    agavi
@@ -30,11 +36,6 @@
  */
 abstract class AgaviTimeZone
 {
-	/**
-	 * The identifier of a custom timezone
-	 */
-	const CUSTOM = 'Custom';
-	
 	/**
 	 * The translation manager instance.
 	 *
@@ -330,7 +331,7 @@ abstract class AgaviTimeZone
 		}
 
 		if(!$displayString) {
-			$displayString = $this->getGmtString($daylight);
+			$displayString = $this->formatOffset($daylight);
 		}
 
 		return $displayString;
@@ -340,26 +341,32 @@ abstract class AgaviTimeZone
 	 * Returns the GMT+-hh:mm representation of this timezone.
 	 * 
 	 * @param      bool Whether dst is active.
+	 * @param      string The hour/minute and minute/second separator.
+	 * @param      string A prefix to be added in front of the string.
 	 *
 	 * @return     string The formatted representation.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
+	 * @since      1.0.2
 	 */
-	protected function getGmtString($daylight)
+	public function formatOffset($daylight, $separator = ':', $prefix = 'GMT')
 	{
 		$value = $this->getRawOffset() + ($daylight ? $this->getDSTSavings() : 0);
 
 		if($value < 0) {
-			$str = 'GMT-';
+			$str = sprintf('%s-', $prefix);
 			$value = -$value; // suppress the '-' sign for text display.
 		} else {
-			$str = 'GMT+';
+			$str = sprintf('%s+', $prefix);
 		}
 
 		$str .=		str_pad((int) ($value / AgaviDateDefinitions::MILLIS_PER_HOUR), 2, '0', STR_PAD_LEFT)
-						. ':'
+						. $separator
 						. str_pad((int) (($value % AgaviDateDefinitions::MILLIS_PER_HOUR) / AgaviDateDefinitions::MILLIS_PER_MINUTE),  2, '0', STR_PAD_LEFT);
+		$offsetSeconds = ((int) ($value / AgaviDateDefinitions::MILLIS_PER_SECOND) % 60);
+		if($offsetSeconds) {
+			$str .= $separator . str_pad($offsetSeconds, 2, '0', STR_PAD_LEFT);
+		}
 		return $str;
 	}
 
@@ -509,37 +516,65 @@ abstract class AgaviTimeZone
 	 */
 	public static function createCustomTimeZone(AgaviTranslationManager $tm, $id)
 	{
+		$maxCustomHour = 23;
+		$maxCustomMin = 59;
+		$maxCustomSec = 59;
+		
 		$hours = 0;
 		$minutes = 0;
+		$seconds = 0;
 		$negative = false;
-		if(preg_match('#^GMT([+-]?)(\d{1,2}):(\d{1,2})$#', $id, $match)) {
+		if(preg_match('#^GMT([+-])(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?$#', $id, $match)) {
 			$negative = $match[1] == '-';
 			$hours = $match[2];
 			$minutes = $match[3];
-		} elseif(preg_match('#^GMT([+-]?)(\d{1,2})(\d{2})$#', $id, $match)) {
+			$seconds = isset($match[4]) ? $match[4] : 0;
+		} elseif(preg_match('#^GMT([+-])(\d{1,6})$#', $id, $match)) {
 			$negative = $match[1] == '-';
+			// Supported formats are below -
+			//
+			// HHmmss
+			// Hmmss
+			// HHmm
+			// Hmm
+			// HH
+			// H
 			$hours = $match[2];
-			$minutes = $match[3];
-		} elseif(preg_match('#^GMT([+-]?)(\d{1,2})$#', $id, $match)) {
-			$negative = $match[1] == '-';
-			// Be strict about interpreting something as hh; it must be
-			// an offset < 30, and it must be one or two digits. Thus
-			// 0010 is interpreted as 00:10, but 10 is interpreted as 10:00.
-			if($match[2] < 30) {
-				$hours = $match[2];
-			} else {
-				$minutes = $match[2];
+			switch(strlen($hours)) {
+				case 1:
+				case 2:
+					// already set to hour
+					break;
+				case 3:
+				case 4:
+					$minutes = $hours % 100;
+					$hours = (int) ($hours / 100);
+					break;
+				case 5:
+				case 6:
+					$seconds = $hours % 100;
+					$minutes = ((int)($hours / 100)) % 100;
+					$hours = (int) ($hours / 10000);
+					break;
 			}
 		} else {
 			throw new InvalidArgumentException('Zone identifier is not parseable');
 		}
-
-		$offset = $hours * 60 + $minutes;
 		
-		if($negative)
+		if($hours > $maxCustomHour || $minutes > $maxCustomMin || $seconds > $maxCustomSec) {
+			throw new InvalidArgumentException('Zone identifier is not parseable');
+		}
+		
+		$offset = $hours * 3600 + $minutes * 60 + $seconds;
+		
+		if($negative) {
 			$offset = -$offset;
-
-		return new AgaviSimpleTimeZone($tm, $offset * 60000.0, self::CUSTOM);
+		}
+		
+		// create the timezone with an empty id and set it afterwards
+		$tz = new AgaviSimpleTimeZone($tm, $offset * 1000.0);
+		$tz->setId($tz->formatOffset(false, ''));
+		return $tz;
 	}
 
 	/**
