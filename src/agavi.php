@@ -50,6 +50,7 @@ require($agavi_config_directive_core_agavi_dir . '/core/Agavi.class.php');
 // required files for classes Agavi and ConfigCache to run
 // consider this the bare minimum we need for bootstrapping
 require($agavi_config_directive_core_agavi_dir . '/util/AgaviInflector.class.php');
+require($agavi_config_directive_core_agavi_dir . '/util/AgaviArrayPathDefinition.class.php');
 require($agavi_config_directive_core_agavi_dir . '/util/AgaviVirtualArrayPath.class.php');
 require($agavi_config_directive_core_agavi_dir . '/util/AgaviParameterHolder.class.php');
 require($agavi_config_directive_core_agavi_dir . '/config/AgaviConfigCache.class.php');
