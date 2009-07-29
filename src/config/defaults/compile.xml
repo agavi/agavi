@@ -3,7 +3,6 @@
 	<ae:configuration>
 		<compiles>
 			<compile>%core.agavi_dir%/util/AgaviAttributeHolder.class.php</compile>
-			<compile>%core.agavi_dir%/util/AgaviArrayPathDefinition.class.php</compile>
 			<compile>%core.agavi_dir%/action/AgaviAction.class.php</compile>
 			<compile>%core.agavi_dir%/core/AgaviContext.class.php</compile>
 			<compile>%core.agavi_dir%/controller/AgaviController.class.php</compile>
