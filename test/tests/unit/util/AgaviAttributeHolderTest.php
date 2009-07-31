@@ -1,5 +1,13 @@
 <?php
 
+if(!class_exists('AgaviArrayPathDefinition')) {
+	include(dirname(__FILE__) . '/../../../../src/util/AgaviArrayPathDefinition.class.php');
+}
+
+if(!class_exists('AgaviVirtualArrayPath')) {
+	include(dirname(__FILE__) . '/../../../../src/util/AgaviVirtualArrayPath.class.php');
+}
+
 if(!class_exists('AgaviParameterHolder')) {
 	include(dirname(__FILE__) . '/../../../../src/util/AgaviParameterHolder.class.php');
 }
@@ -9,14 +17,6 @@ if(!class_exists('AgaviAttributeHolder')) {
 }
 
 class MyAgaviAttributeHolder extends AgaviAttributeHolder {}
-
-if(!class_exists('AgaviArrayPathDefinition')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviArrayPathDefinition.class.php');
-}
-
-if(!class_exists('AgaviVirtualArrayPath')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviVirtualArrayPath.class.php');
-}
 
 class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
 {
@@ -120,7 +120,7 @@ class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
 		$data = array(2 => 'boo');
 		$p = new MyAgaviAttributeHolder();
 		$p->setAttributes($data);
-		$this->assertEquals('boo', $p->getAttribute(2));
+		$this->assertEquals('boo', $p->getAttribute("2"));
 	}
 
 	public function testHasAttribute()
@@ -254,10 +254,9 @@ class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
 
 	public function testRemoveAttributeWithIntegerIndex()
 	{
-		$data = array(2 => 'boo');
+		$data = array('2' => 'boo');
 		$p = new MyAgaviAttributeHolder();
 		$p->setAttributes($data);
-		//reindexing made my php
 		$this->assertEquals('boo', $p->removeAttribute(2));
 	}
 
@@ -283,7 +282,7 @@ class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
 	{
 		$p = new MyAgaviAttributeHolder();
 		$p->setAttribute(1, 'boo');
-		$this->assertTrue($p->hasAttribute(1));
+		$this->assertTrue($p->hasAttribute('1'));
 		$this->assertEquals('boo', $p->getAttribute(1));
 	}
 

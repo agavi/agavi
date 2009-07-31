@@ -19,7 +19,7 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
+		//$this->setRunTestInSeparateProcess(true);
 	}
 
 	public function testInitiallyEmpty()
@@ -102,8 +102,10 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		$data = array('zomg', 'lol');
 		AgaviConfig::clear();
 		AgaviConfig::set(2, 'yay');
+		AgaviConfig::set(1, 'aha');
+		AgaviConfig::set(0, 'omg', true, true);
 		AgaviConfig::fromArray($data);
-		$this->assertEquals(array(2 => 'yay', 0 => 'zomg', 1 => 'lol'), AgaviConfig::toArray());
+		$this->assertEquals(array(2 => 'yay', 0 => 'omg', 1 => 'lol'), AgaviConfig::toArray());
 	}
 
 	public function testHasNullValue()
@@ -178,5 +180,11 @@ class AgaviConfigTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(AgaviConfig::has('bla'));
 	}
 
+	public function testGetSetStringInteger() {
+		AgaviConfig::set('10', 'ten');
+		$this->assertEquals('ten', AgaviConfig::get(10));
+		AgaviConfig::set(21, 'twentyone');
+		$this->assertEquals('twentyone', AgaviConfig::get('21'));
+	}
 
 }
