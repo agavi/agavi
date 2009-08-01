@@ -29,7 +29,13 @@
 
 	<xs:simpleType name="identifier">
 		<xs:restriction base="xs:string">
-			<xs:pattern value="[_A-Za-z\p{IsLatin-1Supplement}][_A-Za-z0-9\p{IsLatin-1Supplement}]*" />
+			<!--
+				See Ticket #1132:
+				We exclude all the useless stuff from the ASCII range: we allow _a-zA-Z0-9 (and _a-zA-Z for the first character) from Unicode u00-u7E plus all the rest defined in Unicode.
+				The result is that the UTF-8 representation of such a string matches the regular expression ^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$ (applied to the raw bytes), which is the pattern for a valid PHP "LABEL".
+				We start at &#9;, not &#0;, because #0-#8 are invalid XMLChars.
+			-->
+			<xs:pattern value="[^&#9;-&#64;\&#91;\&#92;\&#93;&#94;&#96;&#123;&#124;&#125;&#126;][^&#9;-&#47;&#58;-&#64;\&#91;\&#92;\&#93;&#94;&#96;&#123;&#124;&#125;&#126;]*" />
 		</xs:restriction>
 	</xs:simpleType>
 

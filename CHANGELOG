@@ -13,6 +13,7 @@ CHG: Allow optional strict comparison of elements in AgaviInarrayValidator (#110
 CHG: Update ISO Schematron to version 2009-05-18 (#1103) (David)
 CHG: Routing callback parameters should be set before initialize method is called (#1105) (David)
 
+FIX: XML Schema type "identifier" is broken (#1132) (David)
 FIX: AgaviArrayPathDefinition is not included prior to framework startup (#1127) (David)
 FIX: Numeric keys are reindexed, not merged, in AgaviConfig::fromArray() (#1126) (David)
 FIX: Numeric keys are reindexed, not merged, in AgaviParameterHolder::setParameters() (#1125) (David)
