@@ -88,14 +88,14 @@
 			          minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" />
-		<xs:attribute name="class" type="xs:string" />
+		<xs:attribute name="class" type="types_1_0:php_class" />
 		<xs:attribute name="depends" type="xs:string" />
 		<xs:attribute name="export" type="xs:string" />
-		<xs:attribute name="method" type="xs:string" />
+		<xs:attribute name="method" type="types_1_0:php_label" />
 		<xs:attribute name="provides" type="xs:string" />
 		<xs:attribute name="required" type="types_1_0:boolean" />
 		<xs:attribute name="severity" type="severity" />
-		<xs:attribute name="source" type="xs:string" />
+		<xs:attribute name="source" type="types_1_0:php_label" />
 		<xs:attribute name="translation_domain" type="xs:string" />
 	</xs:complexType>
 
@@ -104,7 +104,7 @@
 			<xs:element name="validator" type="validator"
 			            minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
-		<xs:attribute name="method" type="xs:string" />
+		<xs:attribute name="method" type="types_1_0:php_label" />
 		<xs:attribute name="severity" type="severity" />
 	</xs:complexType>
 
@@ -122,7 +122,7 @@
 			<xs:group ref="envelope_1_0:parameters" />
 		</xs:sequence>
 		<xs:attribute name="name" type="types_1_0:non_empty_string" use="required" />
-		<xs:attribute name="class" type="types_1_0:identifier" use="required" />
+		<xs:attribute name="class" type="types_1_0:php_class" use="required" />
 	</xs:complexType>
 
 	<xs:complexType name="validator_definitions">

@@ -24,7 +24,7 @@
 			<xs:group ref="envelope_1_0:parameters" />
 			<xs:element name="filters" type="filters" minOccurs="0" />
 		</xs:sequence>
-		<xs:attribute name="class" type="types_1_0:identifier" />
+		<xs:attribute name="class" type="types_1_0:php_class" />
 	</xs:complexType>
 
 	<xs:complexType name="formatter">
