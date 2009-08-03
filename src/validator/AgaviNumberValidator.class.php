@@ -90,6 +90,7 @@ class AgaviNumberValidator extends AgaviValidator
 				break;
 			
 			case 'float':
+			case 'double':
 				if((!is_float($value) && !is_int($value)) || $hasExtraChars) {
 					$this->throwError('type');
 					return false;
