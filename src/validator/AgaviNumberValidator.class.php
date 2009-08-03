@@ -18,12 +18,12 @@
  * apply size constraints.
  * 
  * Parameters:
- *   'type'       number type (int, integer or float)
- *   'type_error' error message if number has wrong type
- *   'min'        number must be at least this
- *   'min_error'  error message if number less then 'min'
- *   'max'        number must not be greater then this
- *   'max_error'  error message if number greater then 'max' 
+ *   'no_locale' do not use localized number format parsing with translation on
+ *   'in_locale' locale to use for parsing rather than the current locale
+ *   'type'      number type (int/integer or double/float)
+ *   'cast_to'   type to cast to (int/integer or double/float)
+ *   'min'       minimum value for the input
+ *   'max'       maximum value for the input
  * 
  * @package    agavi
  * @subpackage validator
