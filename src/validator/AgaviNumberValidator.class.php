@@ -65,7 +65,10 @@ class AgaviNumberValidator extends AgaviValidator
 				$locale = $this->getContext()->getTranslationManager()->getCurrentLocale();
 			}
 
-			$value = AgaviDecimalFormatter::parse($value, $locale, $hasExtraChars);
+			$parsedValue = AgaviDecimalFormatter::parse($value, $locale, $hasExtraChars);
+			if($parsedValue !== false && !$hasExtraChars) {
+				$value = $parsedValue;
+			}
 		} else {
 			if(is_numeric($value)) {
 				if(((int) $value) == $value) {
@@ -75,7 +78,6 @@ class AgaviNumberValidator extends AgaviValidator
 				}
 			}
 		}
-		
 
 		switch(strtolower($this->getParameter('type'))) {
 			case 'int':
