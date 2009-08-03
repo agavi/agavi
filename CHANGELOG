@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.2 RC1 (July ??, 2009)
 -------------------------
 
+ADD: Allow optional strict comparison in AgaviEqualsValidator (#1128) (David, Dennis Meckel)
+
 CHG: Support PHP namespaces in configuration schemas (#1133) (David)
 CHG: Validator shortcut "arraylength" should default to minimum of one element (#1123) (David)
 CHG: Update timezone database to 2009k (#1121) (David)

@@ -24,6 +24,7 @@
  * Parameters:
  *   'value'   value which the input should equals to
  *   'asparam' whether the 'value' should be treated as a parameter name 
+ *   'strict'  whether or no to perform strict equality check (default: false)
  *
  * @package    agavi
  * @subpackage validator
@@ -59,8 +60,11 @@ class AgaviEqualsValidator extends AgaviValidator
 			$value = $this->getData($this->getArgument());
 		}
 
+		$strict = $this->getParameter('strict', false);
+
 		foreach($this->getArguments() as $key => $argument) {
-			if($this->getData($argument) != $value) {
+			$input = $this->getData($argument);
+			if(($strict && $input !== $value) || (!$strict && $input != $value)) {
 				$this->throwError();
 				return false;
 			}
