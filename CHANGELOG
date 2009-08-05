@@ -16,6 +16,7 @@ CHG: Allow optional strict comparison of elements in AgaviInarrayValidator (#110
 CHG: Update ISO Schematron to version 2009-05-18 (#1103) (David)
 CHG: Routing callback parameters should be set before initialize method is called (#1105) (David)
 
+FIX: agavi.sh does not allow parameters with spaces (#1137) (Felix)
 FIX: AgaviNumberValidator does not allow "double" as type name (#1135) (David)
 FIX: AgaviNumberValidator mutates invalid input if translation is used for parsing (#1136) (David)
 FIX: XML Schema type "identifier" is broken (#1132) (David)
