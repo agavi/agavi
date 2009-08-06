@@ -134,18 +134,11 @@ class AgaviVirtualArrayPath
 		if($position < 0 || $position >= $this->length()) {
 			return null;
 		}
-		if(!$this->length()) {
-			return null;
-		}
 
-		$part = $this->parts[0];
+		$part = $this->parts[$position];
 
 		if((string)(int)$part == $part) {
 			$part = (int)$part;
-		}
-
-		if(!$this->absolute && $addBracketsWhenRelative) {
-			$part = sprintf('[%s]', $part);
 		}
 
 		return $part;
