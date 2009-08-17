@@ -96,6 +96,13 @@ class AgaviDatabaseConfigHandler extends AgaviXmlConfigHandler
 			}
 		}
 
+		if(!$databases) {
+			// we have no connections
+			$error = 'Configuration file "%s" does not contain any database connections.';
+			$error = sprintf($error, $document->documentURI);
+			throw new AgaviConfigurationException($error);
+		}
+
 		$data = array();
 
 		foreach($databases as $name => $db) {
