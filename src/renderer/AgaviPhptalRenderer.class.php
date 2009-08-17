@@ -80,17 +80,26 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	protected function getEngine()
 	{
 		if($this->phptal === null) {
+			$phptalPhpCodeDestination = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR;
+			
+			// we keep this for < 1.2
 			if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
-				define('PHPTAL_PHP_CODE_DESTINATION', AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR);
-				AgaviToolkit::mkdir(PHPTAL_PHP_CODE_DESTINATION, fileperms(AgaviConfig::get('core.cache_dir')), true);
+				define('PHPTAL_PHP_CODE_DESTINATION', $phptalPhpCodeDestination);
 			}
+			
+			AgaviToolkit::mkdir($phptalPhpCodeDestination, fileperms(AgaviConfig::get('core.cache_dir')), true);
 			
 			if(!class_exists('PHPTAL')) {
 				require('PHPTAL.php');
 			}
 			
 			$this->phptal = new PHPTAL();
+			
+			if(version_compare(PHPTAL_VERSION, '1.2', 'ge')) {
+				$this->phptal->setPhpCodeDestination($phptalPhpCodeDestination);
+			}
 		}
+		
 		return $this->phptal;
 	}
 
