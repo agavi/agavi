@@ -340,21 +340,31 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	}
 
 	/**
-	 * Returns the first argument which should be validated.
+	 * Returns the name of the argument which should be validated.
+	 * Returns the name of the first (and typically only) argument by default, or,
+	 * if a string is provided to the method, returns the name of the argument
+	 * as configured for that identifier.
 	 *
-	 * This method is to be used by validators which only expect 1 input
-	 * argument.
+	 * @param      string The optional argument identifier, as configured.
 	 *
-	 * @return     string The input argument name.
+	 * @return     string The resulting name of the argument in the request data.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * 
 	 * @since      0.11.0
 	 */
-	protected function getArgument()
+	protected function getArgument($name = null)
 	{
-		$argNames = $this->arguments;
-		reset($argNames);
-		return current($argNames);
+		if($name === null) {
+			$argNames = $this->arguments;
+			reset($argNames);
+			return current($argNames);
+		} else {
+			if(isset($this->arguments[$name])) {
+				return $this->arguments[$name];
+			}
+		}
 	}
 
 	/**

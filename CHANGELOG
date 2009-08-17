@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.2 RC1 (July ??, 2009)
 -------------------------
 
+ADD: Accept optional argument identifier in AgaviValidator::getArgument() (#1142) (David)
 ADD: Support for PHPTAL 1.2 (#1141) (David)
 ADD: Allow optional strict comparison in AgaviEqualsValidator (#1128) (David, Dennis Meckel)
 
