@@ -8,6 +8,7 @@ ADD: Accept optional argument identifier in AgaviValidator::getArgument() (#1142
 ADD: Support for PHPTAL 1.2 (#1141) (David)
 ADD: Allow optional strict comparison in AgaviEqualsValidator (#1128) (David, Dennis Meckel)
 
+CHG: Update PHPUnit external to 3.4RC1 (#1145) (Felix)
 CHG: Update timezone database to 2009l (#1144) (David)
 CHG: Improve AgaviDatabaseConfigHandler error message in case no database connections are configured (#1138) (David)
 CHG: Support PHP namespaces in configuration schemas (#1133) (David)
