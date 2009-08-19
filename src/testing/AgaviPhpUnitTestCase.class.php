@@ -35,39 +35,214 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	protected $isolationEnvironment;
 	
 	/**
-	 * Runs the test case and collects the results in a TestResult object.
-	 * If no TestResult object is passed a new one will be created.
-	 *
-	 * @param  PHPUnit_Framework_TestResult $result
-	 * @return PHPUnit_Framework_TestResult
-	 * @throws InvalidArgumentException
+	 * @var        string  the name of the default context to use in isolated tests.
 	 */
-	public function run(PHPUnit_Framework_TestResult $result = NULL)
-	{
-		
-		if(!empty($this->isolationEnvironment)) {
-			$GLOBALS['test.isolationEnvironment'] = $this->isolationEnvironment;
-		}
-		
-		$result = parent::run($result);
-		
-		// restore the testing environment
-		$GLOBALS['test.isolationEnvironment'] = null;
-		
-		return $result;
-	}
+	protected $isolationDefaultContext;
+	
+	/**
+	 * @var         bool if the cache in the isolated process should be cleared
+	 */
+	protected $clearIsolationCache = false;
 	
 	/**
 	 * set the environment to bootstrap in isolated tests
 	 * 
 	 * @param        string the name of the environment
 	 * 
-	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 *
-	 * @since      1.0.0
+	 * @since        1.0.0
 	 */
 	public function setIsolationEnvironment($environmentName)
 	{
 		$this->isolationEnvironment = $environmentName;
+	}
+	
+	
+	/**
+	 * get the environment to bootstrap in isolated tests
+	 * 
+	 * @return       string the name of the isolation environment
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function getIsolationEnvironment()
+	{
+		$environmentName = null;
+		
+		$annotations = $this->getAnnotations();
+		
+		if(!empty($annotations['method']['agaviIsolationEnvironment'])) {
+			$environmentName = $annotations['method']['agaviIsolationEnvironment'][0];
+		} elseif(!empty($annotations['class']['agaviIsolationEnvironment'])) {
+			$environmentName = $annotations['class']['agaviIsolationEnvironment'][0];
+		} elseif(!empty($this->isolationEnvironment)) {
+			$environmentName = $this->isolationEnvironment;
+		}
+		
+		return $environmentName;
+	}
+	
+	
+	/**
+	 * set the default context to use in isolated tests
+	 * 
+	 * @param        string the name of the context
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function setIsolationDefaultContext($contextName)
+	{
+		$this->isolationDefaultContext = $contextName;
+	}
+	
+	
+	/**
+	 * get the default context to use in isolated tests
+	 * 
+	 * @return       string the default context to use in isolated tests
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function getIsolationDefaultContext()
+	{
+		$ctxName = null;
+		
+		$annotations = $this->getAnnotations();
+		
+		if(!empty($annotations['method']['agaviIsolationDefaultContext'])) {
+			$ctxName = $annotations['method']['agaviIsolationDefaultContext'][0];
+		} elseif(!empty($annotations['class']['agaviIsolationDefaultContext'])) {
+			$ctxName = $annotations['class']['agaviIsolationDefaultContext'][0];
+		} elseif(!empty($this->isolationDefaultContext)) {
+			$ctxName = $this->isolationDefaultContext;
+		}
+		
+		return $ctxName;
+	}
+	
+	
+	/**
+	 * set whether the cache should be cleared for the isolated subprocess
+	 * 
+	 * @param        bool true if the cache should be cleared
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function setClearCache($flag)
+	{
+		$this->clearIsolationCache = (bool)$flag;
+	}
+	
+	
+	/**
+	 * check whether to clear the cache in isolated tests
+	 * 
+	 * @return       bool true if the cache is cleared in isolated tests
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.0.0
+	 */
+	public function getClearCache()
+	{
+		$flag = null;
+		
+		$annotations = $this->getAnnotations();
+		
+		if(!empty($annotations['method']['agaviClearIsolationCache'])) {
+			$flag = true;
+		} elseif(!empty($annotations['class']['agaviClearIsolationCache'])) {
+			$flag = true;
+		} else {
+			$flag = $this->clearIsolationCache;
+		}
+		
+		return $flag;
+	}
+	
+	/**
+	 * Performs custom preparations on the process isolation template.
+	 *
+	 * @param        PHPUnit_Util_Template $template
+	 * @since        1.0.0
+	*/
+	protected function prepareTemplate(PHPUnit_Util_Template $template)
+	{
+		parent::prepareTemplate($template);
+		
+		$vars = array(
+			'agavi_environment' => '',
+			'agavi_default_context' => '',
+			'agavi_clear_cache' => 'false', // literal strings required for proper template rendering
+		);
+		
+		if(null !== ($env = $this->getIsolationEnvironment())) {
+			$vars['agavi_environment'] = $env;
+		}
+		
+		if(null !== ($ctx = $this->getIsolationDefaultContext())) {
+			$vars['agavi_default_context'] = $ctx;
+		}
+		
+		if($this->getClearCache()) {
+			$vars['agavi_clear_cache'] = 'true'; // literal strings required for proper template rendering
+		}
+		
+		$template->setVar($vars);
+		
+		$templateFile = $this->getTemplateFile();
+		if(null !== $templateFile) {
+			$template->setFile($templateFile);
+		}
+	}
+	
+	/**
+	 * Returns the template file to use.
+	 * 
+	 * @return       string the full template path, null for the phpunit standard template
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.1.0
+	 */
+	protected function getTemplateFile()
+	{
+		if($this->doBootstrap()) {
+			return AgaviConfig::get('core.agavi_dir') . DIRECTORY_SEPARATOR . 'testing' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'TestCaseMethod.tpl';
+		}
+		
+		return null;
+	}
+	
+	
+	/**
+	 * Whether or not an agavi bootstrap should be done in isolation.
+	 * 
+	 * @return       boolean true if agavi should be bootstrapped
+	 * 
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 *
+	 * @since        1.1.0
+	 */
+	protected function doBootstrap()
+	{
+		$flag = true;
+			
+		$annotations = $this->getAnnotations();
+		if(!empty($annotations['method']['agaviBootstrap'])) {
+			$flag = AgaviToolkit::literalize($annotations['method']['agaviBootstrap'][0]);
+		} elseif(!empty($annotations['class']['agaviBootstrap'])) {
+			$flag = AgaviToolkit::literalize($annotations['class']['agaviBootstrap'][0]);
+		}
+		return $flag;
 	}
 }
