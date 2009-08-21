@@ -24,6 +24,8 @@ class AgaviVirtualArrayPathTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($obj2->isAbsolute());
 		$obj3 = new AgaviVirtualArrayPath(0);
 		$this->assertTrue($obj3->isAbsolute());
+		$obj4 = new AgaviVirtualArrayPath("[path]");
+		$this->assertFalse($obj4->isAbsolute());
 	}
 
 	public function testToString()
@@ -36,6 +38,8 @@ class AgaviVirtualArrayPathTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('0', $obj3->__toString());
 		$obj = new AgaviVirtualArrayPath('one[two]');
 		$this->assertEquals('one[two]', $obj->__toString());
+		$obj = new AgaviVirtualArrayPath('one[two][three]');
+		$this->assertEquals('one[two][three]', $obj->__toString());
 	}
 
 	public function testLength()
@@ -83,15 +87,24 @@ class AgaviVirtualArrayPathTest extends PHPUnit_Framework_TestCase
 	public function testGetParts()
 	{
 		$obj = new AgaviVirtualArrayPath("path");
+		$this->assertEquals('path', $obj->get(0));
 		$obj->push("baz");
+		$this->assertEquals('path', $obj->get(0));
+		$this->assertEquals('baz', $obj->get(1));
 		$this->assertEquals(array('path', 'baz'), $obj->getParts());
 		$obj->push('boo');
+		$this->assertEquals('path', $obj->get(0));
+		$this->assertEquals(3, $obj->length());
+		$this->assertEquals('path', $obj->get(0));
+		$this->assertEquals('baz', $obj->get(1));
+		$this->assertEquals('boo', $obj->get(2));
 		$this->assertEquals(array('path', 'baz', 'boo'), $obj->getParts());
 	}
 
 	public function testGetParts2()
 	{
 		$obj = new AgaviVirtualArrayPath("path[jump]");
+		$this->assertEquals(array('path', 'jump'), $obj->getParts());
 		$obj->push("baz");
 		$this->assertEquals(array('path', 'jump', 'baz'), $obj->getParts());
 		$obj->push('boo');
@@ -106,6 +119,11 @@ class AgaviVirtualArrayPathTest extends PHPUnit_Framework_TestCase
 		$newobj = $obj->pushRetNew("baz[boo]");
 		$this->assertEquals(array('path', 'baz', 'boo'), $newobj->getParts());
 		$this->assertEquals(array('path'), $obj->getParts());
+		$this->assertEquals('path', $newobj->get(0));
+		$this->assertEquals('baz', $newobj->get(1));
+		$this->assertEquals('boo', $newobj->get(2));
+		$this->assertEquals('path', $obj->get(0));
+		$this->assertEquals(NULL, $obj->get(1));
 	}
 
 	public function testPop()
@@ -175,7 +193,6 @@ class AgaviVirtualArrayPathTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('path', $obj->left(false));
 		$obj->shift();
 		$this->assertEquals('[jump]', $obj->left(true));
-		//$this->assertEquals('path', $obj->get(0));
 		$obj->shift();
 		$this->assertEquals(NULL, $obj->left());
 	}
@@ -185,15 +202,25 @@ class AgaviVirtualArrayPathTest extends PHPUnit_Framework_TestCase
 		$obj3 = new AgaviVirtualArrayPath(0);
 		$this->assertEquals(0, $obj3->left());
 	}
-	
+
 	public function testUnshift()
 	{
 		$obj = new AgaviVirtualArrayPath("path[jump]");
 		$obj->unshift('front');
+		$this->assertEquals('front', $obj->get(0));
+		$this->assertEquals('path', $obj->get(1));
 		$this->assertEquals('front', $obj->left(true));
 		$this->assertEquals(array('front', 'path', 'jump'), $obj->getParts());
+		$obj->unshift('again');
+		$this->assertEquals(4, $obj->length());
+		$this->assertEquals('again', $obj->get(0));
+		$this->assertEquals('front', $obj->get(1));
+		$this->assertEquals('path', $obj->get(2));
+		$this->assertEquals('jump', $obj->get(3));
+		$this->assertEquals(array('again', 'front', 'path', 'jump'), $obj->getParts());
 		$obj->shift();
-		$this->assertEquals('path', $obj->left());
+		$this->assertEquals('front', $obj->left());
+		$this->assertEquals(array('front', 'path', 'jump'), $obj->getParts());
 	}
 
 	public function testGetValue()
