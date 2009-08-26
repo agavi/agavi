@@ -91,7 +91,7 @@
 		<xs:attribute name="class" type="types_1_0:php_class" />
 		<xs:attribute name="depends" type="xs:string" />
 		<xs:attribute name="export" type="xs:string" />
-		<xs:attribute name="method" type="types_1_0:php_label" />
+		<xs:attribute name="method" type="types_1_0:php_label_list" />
 		<xs:attribute name="provides" type="xs:string" />
 		<xs:attribute name="required" type="types_1_0:boolean" />
 		<xs:attribute name="severity" type="severity" />
@@ -104,7 +104,7 @@
 			<xs:element name="validator" type="validator"
 			            minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
-		<xs:attribute name="method" type="types_1_0:php_label" />
+		<xs:attribute name="method" type="types_1_0:php_label_list" />
 		<xs:attribute name="severity" type="severity" />
 	</xs:complexType>
 
