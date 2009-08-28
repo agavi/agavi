@@ -616,6 +616,9 @@ array data format
 				if(isset($syms->plusSign)) {
 					$data['numbers']['symbols']['plusSign'] = $this->unescape($syms->plusSign->getValue());
 				}
+				if(isset($syms->minusSign)) {
+					$data['numbers']['symbols']['minusSign'] = $this->unescape($syms->minusSign->getValue());
+				}
 				if(isset($syms->exponential)) {
 					$data['numbers']['symbols']['exponential'] = $this->unescape($syms->exponential->getValue());
 				}
