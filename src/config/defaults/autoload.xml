@@ -233,6 +233,7 @@
 			<autoload name="AgaviParameterHolder">%core.agavi_dir%/util/AgaviParameterHolder.class.php</autoload>
 			<autoload name="AgaviToolkit">%core.agavi_dir%/util/AgaviToolkit.class.php</autoload>
 			<autoload name="AgaviVirtualArrayPath">%core.agavi_dir%/util/AgaviVirtualArrayPath.class.php</autoload>
+			<autoload name="AgaviRecursiveDirectoryFilterIterator">%core.agavi_dir%/util/AgaviRecursiveDirectoryFilterIterator.class.php</autoload>
 
 			<!-- agavi/validator -->
 			<autoload name="AgaviAndoperatorValidator">%core.agavi_dir%/validator/AgaviAndoperatorValidator.class.php</autoload>

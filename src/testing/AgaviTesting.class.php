@@ -102,10 +102,30 @@ class AgaviTesting
 	
 	protected static function createSuite($name, $suite) 
 	{
+		$base = (null == $suite['base']) ? 'tests' : $suite['base'];
+		if(!AgaviToolkit::isPathAbsolute($base)) {
+			$base = AgaviConfig::get('core.testing_dir').'/'.$base;
+		}
 		$s = new $suite['class']($name);
+		if(!empty($suite['includes'])) {
+			foreach(
+				new RecursiveIteratorIterator(
+					new AgaviRecursiveDirectoryFilterIterator(
+						new RecursiveDirectoryIterator($base), 
+						$suite['includes'], 
+						$suite['excludes']
+					), 
+					RecursiveIteratorIterator::CHILD_FIRST
+				) as $finfo) {
+					
+				if($finfo->isFile()) {
+					$s->addTestFile($finfo->getPathName());
+				}
+			}
+		}
 		foreach($suite['testfiles'] as $file) {
 			if(!AgaviToolkit::isPathAbsolute($file)) {
-				$file = 'tests/'.$file;
+				$file = $base.'/'.$file;
 			}
 			$s->addTestFile($file);
 		}

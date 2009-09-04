@@ -58,11 +58,28 @@ class AgaviTestSuitesConfigHandler extends AgaviXmlConfigHandler
 		// loop over <configuration> elements
 		foreach($document->getConfigurationElements() as $configuration) {
 			foreach($configuration->get('suites') as $current) {
-				$suite =  array('class' => $current->getAttribute('class', 'AgaviTestSuite'));
+				$includes = array();
+				foreach($current->get('includes') as $include) {
+					$includes[] = $include->textContent;
+				}
+				
+				$excludes = array();
+				foreach($current->get('excludes') as $excludes) {
+					$excludes[] = $excludes->textContent;
+				}
+				
+				$suite =  array(
+					'class' => $current->getAttribute('class', 'AgaviTestSuite'),
+					'base' => $current->getAttribute('base', 'tests/'),
+					'includes' => $includes,
+					'excludes' => $excludes
+				);
+				
 				$suite['testfiles'] = array();
 				foreach($current->get('testfiles') as $file) {
 					$suite['testfiles'][] = $file->textContent;
 				}
+				
 				$data[$current->getAttribute('name')] = $suite;
 			}
 		}
