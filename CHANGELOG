@@ -8,6 +8,7 @@ ADD: Accept optional argument identifier in AgaviValidator::getArgument() (#1142
 ADD: Support for PHPTAL 1.2 (#1141) (David)
 ADD: Allow optional strict comparison in AgaviEqualsValidator (#1128) (David, Dennis Meckel)
 
+CHG: Update old tests to use bundled PHPUnit (#1153) (Felix)
 CHG: Update to PHPUnit 3.4.0RC3 (#1152) (Felix)
 CHG: Refactor renderers to perform engine creation in separate methods (#1139) (David)
 CHG: Update timezone database to 2009l (#1144) (David)
