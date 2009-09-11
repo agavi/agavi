@@ -21,6 +21,7 @@ CHG: Allow optional strict comparison of elements in AgaviInarrayValidator (#110
 CHG: Update ISO Schematron to version 2009-05-18 (#1103) (David)
 CHG: Routing callback parameters should be set before initialize method is called (#1105) (David)
 
+FIX: AgaviValidationReportQuery::getResult() possibly throws a notices when used with byValidator queries (#1151) (Dominik)
 FIX: AgaviLdmlConfigHandler does not compile /ldml/numbers/symbols/minusSign (#1149) (David)
 FIX: AgaviConfigCache::writeCacheFile() permission error handling is broken (#1148) (David)
 FIX: AgaviVirtualArrayPath::get() ignores position argument (#1143) (Kirila)
