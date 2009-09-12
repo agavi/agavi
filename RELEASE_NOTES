@@ -1,26 +1,31 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.2 - August ??, 2009
-===============================
+Version 1.0.2 - September ??, 2009
+==================================
 
 This maintenance release fixes a number of issues over Agavi 1.0.1 and brings a couple of minor enhancements.
 
 The following fixes are worth mentioning:
-- AgaviArraylengthValidator didn't work with files
-- AgaviValidationManager::clear() didn't clear validation errors
-- Multiple settings blocks and settings prefixes were not allowed in module configs
+- AgaviArraylengthValidator didn't work with files.
+- AgaviValidationManager::clear() didn't clear validation errors.
+- Multiple settings blocks and settings prefixes were not allowed in module configs.
+- AgaviNumberValidator does not mutate invalid input anymore.
+- Several ICU bugfixes have been ported.
 
 Important Changes:
-- Optional strict comparison of elements in AgaviInarrayValidator now possible
-- Validator shortcut "arraylength" now defaults to minimum of one element
-- Routing callback parameters are now set before initialize method is called
+- Optional strict comparison of elements in AgaviInarrayValidator now possible.
+- Validator shortcut "arraylength" now defaults to minimum of one element.
+- Routing callback parameters are now set before initialize method is called.
 - Lots of ICU bugfix and change backports to the date and translation system. As a result, custom time zones now have identifiers like "GMT+0200".
+- Namespaced class identifiers can now be used in all configuration files.
+- AgaviValidator::getArgument() now accepts an argument identifier.
+- Support for PHPTAL 1.2.
 
 Bundle updates:
-- The timezone database has been updated to version 2009k.
-- PHPUnit has been updated to version 3.4.0beta5.
-- ISO Schematron has been updated to version 2009-05-18
+- The timezone database has been updated to version 2009m.
+- PHPUnit has been updated to version 3.4.0RC3.
+- ISO Schematron has been updated to version 2009-05-18.
 
 Please refer to CHANGELOG for a full list of changes.
 
