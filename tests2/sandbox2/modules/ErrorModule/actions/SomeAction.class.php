@@ -1,7 +1,7 @@
 <?php
 class ErrorModule_SomeAction extends AgaviAction
 {
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $rd)
 	{
 		return 'Success';
 	}

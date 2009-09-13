@@ -1,9 +1,9 @@
 <?php
 
-class ModuleUnavailableSuccessView extends AgaviView
+class ErrorModule_ModuleUnavailableSuccessView extends AgaviView
 {
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $rd)
 	{
-		$this->setTemplate('notavailable');
+		// $this->setTemplate('notavailable');
 	}
 }

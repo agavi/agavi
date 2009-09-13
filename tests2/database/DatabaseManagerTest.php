@@ -7,6 +7,10 @@ class DatabaseManagerTest extends AgaviTestCase
 	
 	public function setUp()
 	{
+		unlink(AgaviConfigCache::getCacheName(AgaviConfig::get('core.config_dir') . '/factories.xml', AgaviConfig::get('core.default_context')));
+		AgaviConfig::set('core.use_database', true);
+		AgaviContext::getInstance('test')->initialize();
+		
 		$this->_context = AgaviContext::getInstance('test');
 		
 		$this->_dbm = $this->_context->getDatabaseManager();

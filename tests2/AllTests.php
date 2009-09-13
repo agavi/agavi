@@ -15,7 +15,6 @@ set_include_path($here . '/src/vendor' . PATH_SEPARATOR . get_include_path());
 
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
-
 require_once('AgaviTestCase.class.php');
 
 $testDir = dirname(__FILE__);
@@ -33,7 +32,10 @@ class AllTests
 	public static function main()
 	{
 		$reportDir = dirname(__FILE__) . '/test_report/';
-		PHPUnit_TextUI_TestRunner::run(self::suite(), array(), $reportDir);
+		PHPUnit_TextUI_TestRunner::run(self::suite(), array(
+			'backupGlobals' => false,
+			'backupStaticAttributes' => false,
+		), $reportDir);
 	}
 
 	public static function suite()
