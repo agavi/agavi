@@ -67,6 +67,38 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		unset($keys[array_search('phptal', $keys)]);
 		return $keys;
 	}
+	
+	/**
+	 * Create an instance of PHPTAL and initialize it correctly.
+	 *
+	 * @return     PHPTAL The PHPTAL instance.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.2
+	 */
+	protected function createEngineInstance()
+	{
+		$phptalPhpCodeDestination = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR;
+		
+		// we keep this for < 1.2
+		if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
+			define('PHPTAL_PHP_CODE_DESTINATION', $phptalPhpCodeDestination);
+		}
+		
+		AgaviToolkit::mkdir($phptalPhpCodeDestination, fileperms(AgaviConfig::get('core.cache_dir')), true);
+		
+		if(!class_exists('PHPTAL')) {
+			require('PHPTAL.php');
+		}
+		
+		$phptal = new PHPTAL();
+		
+		if(version_compare(PHPTAL_VERSION, '1.2', 'ge')) {
+			$phptal->setPhpCodeDestination($phptalPhpCodeDestination);
+		}
+		
+		return $phptal;
+	}
 
 	/**
 	 * Retrieve the PHPTAL instance
@@ -79,26 +111,11 @@ class AgaviPhptalRenderer extends AgaviRenderer
 	 */
 	protected function getEngine()
 	{
-		if($this->phptal === null) {
-			$phptalPhpCodeDestination = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_DIR . DIRECTORY_SEPARATOR . AgaviPhptalRenderer::COMPILE_SUBDIR . DIRECTORY_SEPARATOR;
-			
-			// we keep this for < 1.2
-			if(!defined('PHPTAL_PHP_CODE_DESTINATION')) {
-				define('PHPTAL_PHP_CODE_DESTINATION', $phptalPhpCodeDestination);
-			}
-			
-			AgaviToolkit::mkdir($phptalPhpCodeDestination, fileperms(AgaviConfig::get('core.cache_dir')), true);
-			
-			if(!class_exists('PHPTAL')) {
-				require('PHPTAL.php');
-			}
-			
-			$this->phptal = new PHPTAL();
-			
-			if(version_compare(PHPTAL_VERSION, '1.2', 'ge')) {
-				$this->phptal->setPhpCodeDestination($phptalPhpCodeDestination);
-			}
+		if($this->phptal) {
+			return $this->phptal;
 		}
+		
+		$this->phptal = $this->createEngineInstance();
 		
 		return $this->phptal;
 	}

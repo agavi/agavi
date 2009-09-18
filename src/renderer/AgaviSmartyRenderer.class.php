@@ -73,6 +73,36 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 		unset($keys[array_search('smarty', $keys)]);
 		return $keys;
 	}
+	
+	public function initialize(AgaviContext $context, array $parameters = array())
+	{
+		$this->setParameter('engine_class', 'Smarty');
+		
+		parent::initialize($context, $parameters);
+	}
+	
+	/**
+	 * Create an instance of Smarty and initialize it correctly.
+	 *
+	 * @return     Smarty The Smarty instance.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.2
+	 */
+	protected function createEngineInstance()
+	{
+		if(!class_exists('Smarty')) {
+			if(defined('SMARTY_DIR') ) {
+				// if SMARTY_DIR constant is defined, we'll use it
+				require(SMARTY_DIR . 'Smarty.class.php');
+			} else {
+				// otherwise we resort to include_path
+				require('Smarty.class.php');
+			}
+		}
+		
+		return new Smarty();
+	}
 
 	/**
 	 * Grab a cleaned up smarty instance.
@@ -91,17 +121,7 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 			return $this->smarty;
 		}
 
-		if(!class_exists('Smarty')) {
-			if(defined('SMARTY_DIR') ) {
-				// if SMARTY_DIR constant is defined, we'll use it
-				require(SMARTY_DIR . 'Smarty.class.php');
-			} else {
-				// otherwise we resort to include_path
-				require('Smarty.class.php');
-			}
-		}
-
-		$this->smarty = new Smarty();
+		$this->smarty = $this->createEngineInstance();
 		$this->smarty->clear_all_assign();
 		$this->smarty->clear_config();
 		$this->smarty->config_dir = AgaviConfig::get('core.config_dir');
