@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.2 RC2 (September ??, 2009)
+------------------------------
+
+FIX: agavi.php erroneously always assumes it is a symlink if project.directory is empty (#1155) (Felix)
+
+
 1.0.2 RC1 (September 13, 2009)
 ------------------------------
 

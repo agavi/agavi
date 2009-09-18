@@ -212,8 +212,8 @@ try {
 			$task->setPath(new PhingFile($project->getProperty('project.directory')));
 			$task->init();
 			$task->perform();
-		} else {
-			/* The script might be a symlink. */
+		} elseif(is_link($_SERVER['argv'][0])) {
+			/* The script is a symlink. */
 			$task = $project->createTask('agavi.locate-project');
 			$task->setProperty('project.directory');
 			
