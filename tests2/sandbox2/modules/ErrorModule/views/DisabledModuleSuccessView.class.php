@@ -1,9 +1,9 @@
 <?php
 
-class DisabledModuleSuccessView extends AgaviView
+class ErrorModule_DisabledModuleSuccessView extends AgaviView
 {
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $rd)
 	{
-		$this->setTemplate('disabled');
+		// $this->setTemplate('disabled');
 	}
 }

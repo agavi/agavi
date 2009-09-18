@@ -2,8 +2,8 @@
 
 class ErrorModule_SomeSuccessView extends AgaviView
 {
-	public function execute(AgaviParameterHolder $parameters)
+	public function execute(AgaviRequestDataHolder $rd)
 	{
-		$this->setTemplate('some');
+		// $this->setTemplate('some');
 	}
 }

@@ -404,7 +404,7 @@ TODO: is_equal doesn't work yet
 		kReferenceList [] =
 */
 		$kReferenceList = array(
-															array('id' => "MIT", 'offset' => -660, 'daylight' => false),
+															array('id' => "MIT", 'offset' => -660, 'daylight' => true),
 															array('id' =>"HST", 'offset' =>  -600, 'daylight' => false),
 															array('id' =>"AST", 'offset' =>  -540, 'daylight' => true),
 															array('id' =>"PST", 'offset' =>  -480, 'daylight' => true),

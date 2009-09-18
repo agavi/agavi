@@ -408,12 +408,14 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 					}
 				}
 			} else {
-				foreach($this->report->getArgumentResults() as $argumentResult) {
-					if(
-						(!$this->argumentFilter || in_array($argumentResult['argument'], $this->argumentFilter)) &&
-						(!$this->validatorFilter || ($argumentResult['validator'] && in_array($argumentResult['validator']->getName(), $this->validatorFilter)))
-					) {
-						$results[] = $argumentResult['severity'];
+				foreach($this->report->getArgumentResults() as $argumentResults) {
+					foreach($argumentResults as $argumentResult) {
+						if(
+							(!$this->argumentFilter || in_array($argumentResult['argument'], $this->argumentFilter)) &&
+							(!$this->validatorFilter || ($argumentResult['validator'] && in_array($argumentResult['validator']->getName(), $this->validatorFilter)))
+						) {
+							$results[] = $argumentResult['severity'];
+						}
 					}
 				}
 			}

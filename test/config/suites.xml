@@ -63,6 +63,11 @@
 					<testfile>unit/util/AgaviArrayPathDefinitionTest.php</testfile>
 				</testfiles>
 			</suite>
+			<suite name="Validator">
+				<testfiles>
+					<testfile>unit/validator/AgaviNumberValidatorTest.php</testfile>
+				</testfiles>
+			</suite>
 		</suites>
 	</ae:configuration>
 </ae:configurations>
