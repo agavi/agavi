@@ -66,7 +66,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 *
-	 * @since        1.0.0
+	 * @since        1.0.2
 	 */
 	public function getIsolationEnvironment()
 	{
@@ -93,7 +93,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 *
-	 * @since        1.0.0
+	 * @since        1.0.2
 	 */
 	public function setIsolationDefaultContext($contextName)
 	{
@@ -108,7 +108,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 *
-	 * @since        1.0.0
+	 * @since        1.0.2
 	 */
 	public function getIsolationDefaultContext()
 	{
@@ -135,7 +135,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 *
-	 * @since        1.0.0
+	 * @since        1.0.2
 	 */
 	public function setClearCache($flag)
 	{
@@ -150,7 +150,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 *
-	 * @since        1.0.0
+	 * @since        1.0.2
 	 */
 	public function getClearCache()
 	{
@@ -174,7 +174,9 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	 * Performs custom preparations on the process isolation template.
 	 *
 	 * @param        PHPUnit_Util_Template $template
-	 * @since        1.0.0
+	 *
+	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since        1.0.2
 	*/
 	protected function prepareTemplate(PHPUnit_Util_Template $template)
 	{
@@ -213,7 +215,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 *
-	 * @since        1.1.0
+	 * @since        1.0.2
 	 */
 	protected function getTemplateFile()
 	{
@@ -231,7 +233,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	 * 
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 *
-	 * @since        1.1.0
+	 * @since        1.0.2
 	 */
 	protected function doBootstrap()
 	{
