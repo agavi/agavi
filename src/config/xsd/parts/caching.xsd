@@ -109,7 +109,7 @@
 			<xs:group ref="slots" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="include" type="xs:string" />
+		<xs:attribute name="include" type="types_1_0:boolean" />
 	</xs:complexType>
 
 	<xs:complexType name="layers">
@@ -137,7 +137,7 @@
 			<xs:group ref="template_variables" />
 			<xs:group ref="layers" />
 		</xs:sequence>
-		<xs:attribute name="name" type="types_1_0:identifier_list" />
+		<xs:attribute name="name" type="types_1_0:php_label_list" />
 	</xs:complexType>
 
 	<xs:complexType name="output_types">
@@ -161,7 +161,7 @@
 	<xs:complexType name="view">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="module" type="types_1_0:identifier" />
+				<xs:attribute name="module" type="types_1_0:php_label" />
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -240,7 +240,7 @@
 			<xs:group ref="action_attributes" />
 			<xs:group ref="output_types" />
 		</xs:sequence>
-		<xs:attribute name="method" type="types_1_0:identifier" />
+		<xs:attribute name="method" type="types_1_0:php_label" />
 		<xs:attribute name="enabled" type="types_1_0:boolean" />
 		<xs:attribute name="lifetime" type="xs:string" />
 	</xs:complexType>

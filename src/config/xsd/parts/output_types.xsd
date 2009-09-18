@@ -20,7 +20,7 @@
 			<xs:group ref="envelope_1_0:parameters" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="class" type="types_1_0:identifier" use="required" />
+		<xs:attribute name="class" type="types_1_0:php_class" use="required" />
 	</xs:complexType>
 
 	<xs:complexType name="renderers">
@@ -38,10 +38,10 @@
 			<xs:group ref="envelope_1_0:parameters" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="module" type="types_1_0:identifier" use="required" />
+		<xs:attribute name="module" type="types_1_0:php_label" use="required" />
 		<xs:attribute name="action" type="xs:string" use="required" />
-		<xs:attribute name="output_type" type="types_1_0:identifier" />
-		<xs:attribute name="method" type="types_1_0:identifier" />
+		<xs:attribute name="output_type" type="types_1_0:php_label" />
+		<xs:attribute name="method" type="types_1_0:php_label" />
 	</xs:complexType>
 
 	<xs:complexType name="slots">
@@ -68,7 +68,7 @@
 			<xs:group ref="slots" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="class" type="types_1_0:identifier" />
+		<xs:attribute name="class" type="types_1_0:php_class" />
 		<xs:attribute name="renderer" type="xs:string" />
 	</xs:complexType>
 
@@ -116,7 +116,7 @@
 			<xs:element name="layouts" type="layouts"
 			            minOccurs="0" />
 		</xs:sequence>
-		<xs:attribute name="name" type="types_1_0:identifier" use="required" />
+		<xs:attribute name="name" type="types_1_0:php_label" use="required" />
 		<xs:attribute name="exception_template" type="xs:string" />
 	</xs:complexType>
 
@@ -125,7 +125,7 @@
 			<xs:element name="output_type" type="output_type"
 			            maxOccurs="unbounded" />
 		</xs:sequence>
-		<xs:attribute name="default" type="types_1_0:identifier" use="required" />
+		<xs:attribute name="default" type="types_1_0:php_label" use="required" />
 	</xs:complexType>
 
 	<xs:group name="configuration">

@@ -17,7 +17,7 @@
 		<xs:sequence maxOccurs="unbounded">
 			<xs:group ref="envelope_1_0:parameters" />
 		</xs:sequence>
-		<xs:attribute name="class" type="types_1_0:identifier" use="required" />
+		<xs:attribute name="class" type="types_1_0:php_class" use="required" />
 	</xs:complexType>
 
 	<xs:group name="configuration">

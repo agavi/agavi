@@ -18,7 +18,7 @@
 			<xs:group ref="envelope_1_0:parameters" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="class" type="types_1_0:identifier" />
+		<xs:attribute name="class" type="types_1_0:php_class" />
 	</xs:complexType>
 
 	<xs:complexType name="databases">
