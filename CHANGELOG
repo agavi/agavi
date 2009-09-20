@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.2 RC2 (September ??, 2009)
 ------------------------------
 
+FIX: Shiny exception template prepends file paths with an underscore (#1156) (David)
 FIX: agavi.php erroneously always assumes it is a symlink if project.directory is empty (#1155) (Felix)
 
 
