@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 CHG: Update to PHPUnit 3.4.0 (#1159) (Felix)
 
+FIX: AgaviConfigParser::convertEncoding() produces notice when throwing exception (#1161) (David)
 FIX: Shiny exception template prepends file paths with an underscore (#1156) (David)
 FIX: agavi.php erroneously always assumes it is a symlink if project.directory is empty (#1155) (Felix)
 

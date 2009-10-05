@@ -39,6 +39,11 @@ class AgaviConfigParser
 	protected $encoding = 'utf-8';
 	
 	/**
+	 * @var        string The filesystem path to the configuration file.
+	 */
+	protected $config = '';
+	
+	/**
 	 * @param      string An absolute filesystem path to a configuration file.
 	 * @param      array  An associative array of validation information.
 	 *
@@ -49,6 +54,9 @@ class AgaviConfigParser
 	 */
 	public function parse($config, $validationFile = null)
 	{
+		// copy path in case convertEncoding() needs to complain about a missing ICONV extension
+		$this->config = $config;
+		
 		$parser = new AgaviXmlConfigParser($config, AgaviConfig::get('core.environment'), null);
 		
 		$validation = array(
@@ -62,6 +70,7 @@ class AgaviConfigParser
 		}
 		$doc = $parser->execute(array(), $validation);
 		
+		// remember encoding for convertEncoding()
 		$this->encoding = $doc->encoding;
 		
 		$rootRes = new AgaviConfigValueHolder();
