@@ -71,7 +71,7 @@ class AgaviConfigParser
 		$doc = $parser->execute(array(), $validation);
 		
 		// remember encoding for convertEncoding()
-		$this->encoding = $doc->encoding;
+		$this->encoding = strtolower($doc->encoding);
 		
 		$rootRes = new AgaviConfigValueHolder();
 		
