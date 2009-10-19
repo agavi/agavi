@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.2 RC2 (September ??, 2009)
 ------------------------------
 
+CHG: Update timezone database to 2009o (#1157) (David)
 CHG: Update to PHPUnit 3.4.0 (#1159) (Felix)
 
 FIX: AgaviConfigParser::convertEncoding() performs case-sensitive comparison of encoding (#1162) (David)
