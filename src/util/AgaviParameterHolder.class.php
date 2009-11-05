@@ -165,10 +165,13 @@ class AgaviParameterHolder
 			unset($this->parameters[$name]);
 			return $retval;
 		}
+		
+		$retval = null;
 		try {
-			return AgaviArrayPathDefinition::unsetValue($name, $this->parameters);
+			$retval =& AgaviArrayPathDefinition::unsetValue($name, $this->parameters);
 		} catch(InvalidArgumentException $e) {
 		}
+		return $retval;
 	}
 
 	/**
