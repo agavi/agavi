@@ -47,6 +47,7 @@
 			<suite name="Util">
 				<testfiles>
 					<testfile>unit/util/AgaviToolkitTest.php</testfile>
+					<testfile>unit/util/AgaviAttributeHolderTest.php</testfile>
 					<testfile>unit/util/AgaviParameterHolderTest.php</testfile>
 					<testfile>unit/util/AgaviArrayPathDefinitionTest.php</testfile>
 				</testfiles>
