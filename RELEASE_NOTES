@@ -23,7 +23,7 @@ Important Changes:
 - Support for PHPTAL 1.2.
 
 Bundle updates:
-- The timezone database has been updated to version 2009p.
+- The timezone database has been updated to version 2009q.
 - PHPUnit has been updated to version 3.4.1.
 - ISO Schematron has been updated to version 2009-05-18.
 

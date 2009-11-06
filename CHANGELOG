@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 1.0.2 RC2 (September ??, 2009)
 ------------------------------
 
-CHG: Update timezone database to 2009p (#1170) (David)
+CHG: Update timezone database to 2009q (#1176) (David)
 CHG: Update to PHPUnit 3.4.1 (#1163) (David)
 
 FIX: AgaviAttributeHolder::removeAttribute() does not return values by reference if array key access is used (#1175) (David)
