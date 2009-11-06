@@ -24,7 +24,7 @@ Important Changes:
 
 Bundle updates:
 - The timezone database has been updated to version 2009q.
-- PHPUnit has been updated to version 3.4.1.
+- PHPUnit has been updated to version 3.4.2.
 - ISO Schematron has been updated to version 2009-05-18.
 
 Please refer to CHANGELOG for a full list of changes.
