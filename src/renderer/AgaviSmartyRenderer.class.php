@@ -74,13 +74,6 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 		return $keys;
 	}
 	
-	public function initialize(AgaviContext $context, array $parameters = array())
-	{
-		$this->setParameter('engine_class', 'Smarty');
-		
-		parent::initialize($context, $parameters);
-	}
-	
 	/**
 	 * Create an instance of Smarty and initialize it correctly.
 	 *
