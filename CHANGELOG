@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.2 (November ??, 2009)
+-------------------------
+
+FIX: Duplicate error message if agavi console script cannot determine Phing version (#1180) (David)
+
+
 1.0.2 RC2 (November 6, 2009)
 ----------------------------
 
