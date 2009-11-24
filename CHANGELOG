@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.2 (November ??, 2009)
 -------------------------
 
+FIX: AgaviWebResponse throws notice if "http_headers" parameter is not an array (#1186) (David)
 FIX: Duplicate error message if agavi console script cannot determine Phing version (#1180) (David)
 
 
