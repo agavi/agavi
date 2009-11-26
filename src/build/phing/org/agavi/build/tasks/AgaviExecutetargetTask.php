@@ -103,7 +103,13 @@ class AgaviExecutetargetTask extends AgaviTask
 		
 		Phing::setCurrentProject($this->project);
 		
-		//$project->copyUserProperties($this->project);
+		/**
+		 * :NOTE: copy all user properties so that child task may overwrite
+		 * properties that were already set in the parent project
+		 * 
+		 * using the Project::copyUserProperties() will result in
+		 * properties not adjusted to the new value.
+		 */
 		foreach($project->getUserProperties() as $name => $property) {
 			$this->project->setUserProperty($name, $property);
 		}
