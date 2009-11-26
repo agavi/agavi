@@ -103,7 +103,11 @@ class AgaviExecutetargetTask extends AgaviTask
 		
 		Phing::setCurrentProject($this->project);
 		
-		$project->copyUserProperties($this->project);
+		//$project->copyUserProperties($this->project);
+		foreach($project->getUserProperties() as $name => $property) {
+			$this->project->setUserProperty($name, $property);
+		}
+		
 		$project->copyInheritedProperties($this->project);
 		foreach($project->getProperties() as $name => $property) {
 			if($this->project->getProperty($name) === null) {
