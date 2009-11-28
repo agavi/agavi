@@ -212,7 +212,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			if(strtolower($meta->getAttribute('http-equiv')) == 'content-type') {
 				if($this->doc->encoding === null) {
 					// media-type = type "/" subtype *( ";" parameter ), says http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
-					if(preg_match('/;\s*charset=(")?(?P<charset>.+?(?(1)(?=(?<!\\\\)")|(?=[;\s])))(?(1)")/i', $meta->getAttribute('content'), $matches)) {
+					if(preg_match('/;\s*charset=(")?(?P<charset>.+?(?(1)(?=(?<!\\\\)")|($|(?=[;\s]))))(?(1)")/i', $meta->getAttribute('content'), $matches)) {
 						$this->doc->encoding = $matches['charset'];
 					} else {
 						$this->doc->encoding = self::ENCODING_UTF_8;
