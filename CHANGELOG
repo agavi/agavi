@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.2 (November ??, 2009)
 -------------------------
 
+CHG: Make HTTP Content-Type response header charset detection in AgaviFormPopulationFilter more robust (#1187) (David)
+
 FIX: HTML meta tag charset detection in AgaviFormPopulationFilter never matches strings without quotation marks (#1185) (David)
 FIX: FormPopulationFilter raises warning with old PCRE versions (#1183) (David)
 FIX: AgaviWebResponse throws notice if "http_headers" parameter is not an array (#1186) (David)

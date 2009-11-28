@@ -156,9 +156,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$hasXmlProlog = false;
 		if($xhtml && preg_match('/^<\?xml[^\?]*\?>/', $output)) {
 			$hasXmlProlog = true;
-		} elseif($xhtml && preg_match('/charset=(.+)\s*$/i', $ot->getParameter('http_headers[Content-Type]'), $matches)) {
+		} elseif($xhtml && preg_match('/;\s*charset=(")?(?P<charset>.+?(?(1)(?=(?<!\\\\)")|($|(?=[;\s]))))(?(1)")/i', $ot->getParameter('http_headers[Content-Type]'), $matches)) {
+			// media-type = type "/" subtype *( ";" parameter ), says http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
 			// add an XML prolog with the char encoding, works around issues with ISO-8859-1 etc
-			$output = "<?xml version='1.0' encoding='" . $matches[1] . "' ?>\n" . $output;
+			$output = "<?xml version='1.0' encoding='" . $matches['charset'] . "' ?>\n" . $output;
 		}
 
 		if($xhtml && $cfg['parse_xhtml_as_xml']) {
