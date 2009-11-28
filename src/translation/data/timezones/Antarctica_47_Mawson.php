@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Mawson".
- * Compiled from olson file "antarctica", version 8.5.
+ * Compiled from olson file "antarctica", version 8.7.
  *
  * @package    agavi
  * @subpackage translation
@@ -24,6 +24,12 @@ return array (
       'dstOffset' => 0,
       'name' => 'MAWT',
     ),
+    1 => 
+    array (
+      'rawOffset' => 18000,
+      'dstOffset' => 0,
+      'name' => 'MAWT',
+    ),
   ),
   'rules' => 
   array (
@@ -32,16 +38,21 @@ return array (
       'time' => -501206400,
       'type' => 0,
     ),
+    1 => 
+    array (
+      'time' => 1255809600,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'MAWT',
-    'offset' => 21600,
-    'startYear' => 1955,
+    'offset' => 18000,
+    'startYear' => 2010,
   ),
   'source' => 'antarctica',
-  'version' => '8.5',
+  'version' => '8.7',
   'name' => 'Antarctica/Mawson',
 );
 

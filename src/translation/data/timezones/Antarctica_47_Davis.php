@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Davis".
- * Compiled from olson file "antarctica", version 8.5.
+ * Compiled from olson file "antarctica", version 8.7.
  *
  * @package    agavi
  * @subpackage translation
@@ -30,6 +30,12 @@ return array (
       'dstOffset' => 0,
       'name' => 'zzz',
     ),
+    2 => 
+    array (
+      'rawOffset' => 18000,
+      'dstOffset' => 0,
+      'name' => 'DAVT',
+    ),
   ),
   'rules' => 
   array (
@@ -48,16 +54,21 @@ return array (
       'time' => -28857600,
       'type' => 0,
     ),
+    3 => 
+    array (
+      'time' => 1255806000,
+      'type' => 2,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'DAVT',
-    'offset' => 25200,
-    'startYear' => 1970,
+    'offset' => 18000,
+    'startYear' => 2010,
   ),
   'source' => 'antarctica',
-  'version' => '8.5',
+  'version' => '8.7',
   'name' => 'Antarctica/Davis',
 );
 

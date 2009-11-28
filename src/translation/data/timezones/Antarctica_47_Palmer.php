@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Palmer".
- * Compiled from olson file "antarctica", version 8.5.
+ * Compiled from olson file "antarctica", version 8.7.
  *
  * @package    agavi
  * @subpackage translation
@@ -339,7 +339,7 @@ return array (
     'startYear' => 2000,
   ),
   'source' => 'antarctica',
-  'version' => '8.5',
+  'version' => '8.7',
   'name' => 'Antarctica/Palmer',
 );
 

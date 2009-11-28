@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Guadalcanal".
- * Compiled from olson file "australasia", version 8.14.
+ * Compiled from olson file "australasia", version 8.15.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
     'startYear' => 1913,
   ),
   'source' => 'australasia',
-  'version' => '8.14',
+  'version' => '8.15',
   'name' => 'Pacific/Guadalcanal',
 );
 

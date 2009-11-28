@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Fiji".
- * Compiled from olson file "australasia", version 8.14.
+ * Compiled from olson file "australasia", version 8.15.
  *
  * @package    agavi
  * @subpackage translation
@@ -58,15 +58,25 @@ return array (
       'time' => 951573600,
       'type' => 0,
     ),
+    5 => 
+    array (
+      'time' => 1259416800,
+      'type' => 1,
+    ),
+    6 => 
+    array (
+      'time' => 1272117600,
+      'type' => 0,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'none',
     'offset' => 43200,
-    'startYear' => 2001,
+    'startYear' => 2011,
   ),
   'source' => 'australasia',
-  'version' => '8.14',
+  'version' => '8.15',
   'name' => 'Pacific/Fiji',
 );
 
