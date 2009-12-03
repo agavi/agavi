@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.2 (November ??, 2009)
 -------------------------
 
+CHG: Use printf rather than echo in bin/agavi
 CHG: Update to PHPUnit 3.4.3 (#1184) (David)
 CHG: Update timezone database to 2009s (#1188) (David)
 CHG: Make HTTP Content-Type response header charset detection in AgaviFormPopulationFilter more robust (#1187) (David)
