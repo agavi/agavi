@@ -272,13 +272,11 @@ final class AgaviToolkit
 	 */
 	public static function literalize($value)
 	{
-		if($value == null) {
-			// null value
-			return null;
-		}
-		
 		if(!is_string($value)) {
 			return $value;
+		} elseif($value == '') {
+			// must be done before the trim!
+			return null;
 		}
 		
 		// lowercase our value for comparison
@@ -295,7 +293,7 @@ final class AgaviToolkit
 			return self::expandDirectives($value);
 		}
 		
-		// numeric value
+		// numeric value, remains a string on purpose (for BC)
 		return $value;
 	}
 	

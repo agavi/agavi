@@ -9,6 +9,7 @@ CHG: Update to PHPUnit 3.4.3 (#1184) (David)
 CHG: Update timezone database to 2009s (#1188) (David)
 CHG: Make HTTP Content-Type response header charset detection in AgaviFormPopulationFilter more robust (#1187) (David)
 
+FIX: AgaviToolkit::literalize incorrectly returns null for certain input values (#1190) (David)
 FIX: HTML meta tag charset detection in AgaviFormPopulationFilter never matches strings without quotation marks (#1185) (David)
 FIX: FormPopulationFilter raises warning with old PCRE versions (#1183) (David)
 FIX: AgaviWebResponse throws notice if "http_headers" parameter is not an array (#1186) (David)
