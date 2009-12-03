@@ -263,7 +263,7 @@ final class AgaviArrayPathDefinition
 						if($c != '[') {
 							$cur .= $c;
 						} else {
-							if($cur) {
+							if($cur !== '') {
 								$parts[] = $cur;
 								$cur = '';
 							}
