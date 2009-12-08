@@ -1,8 +1,10 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.2 (November ??, 2009)
--------------------------
+1.0.2 RC3 (December ?, 2009)
+----------------------------
+
+ADD: Support for Propel 1.4 (#1181) (David)
 
 CHG: Use printf rather than echo in bin/agavi
 CHG: Update to PHPUnit 3.4.3 (#1184) (David)
