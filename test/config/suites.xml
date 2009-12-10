@@ -66,6 +66,7 @@
 			<suite name="Validator">
 				<testfiles>
 					<testfile>unit/validator/AgaviNumberValidatorTest.php</testfile>
+					<testfile>unit/validator/AgaviBooleanValidatorTest.php</testfile>
 				</testfiles>
 			</suite>
 		</suites>
