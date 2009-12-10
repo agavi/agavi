@@ -29,8 +29,16 @@ For Propel 1.4, the format of the keys for the "overrides" parameter has changed
   <ae:parameter name="classmap.Zomg">path/to/Zomg</ae:parameter>
   <ae:parameter name="datasources.bookstore.connection.attributes.ATTR_EMULATE_PREPARES.value">false</ae:parameter>
 </ae:parameter>
-This syntax, as well as the old one, is supported for Propel 1.3 as well, although the classmap is to be found in "datasources.bookstore.classes" rather than "classmap".
 This new approach is much more forward compatible and allows for more control over the overrides; for instance, the ATTR_EMULATE_PREPARES setting above was not possible before.
+For older Propel versions, the old-style syntax still applies:
+<ae:parameter name="overrides">
+  <ae:parameter name="connection">
+    <ae:parameter name="dsn">pgsql:...</ae:parameter>
+  </ae:parameter>
+  <ae:parameter name="classes">
+    <ae:parameter name="Zomg">path/to/Zomg</ae:parameter>
+  </ae:parameter>
+</ae:parameter>
 
 Bundle updates:
 - The timezone database has been updated to version 2009q.
