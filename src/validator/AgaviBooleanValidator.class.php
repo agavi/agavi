@@ -1,4 +1,4 @@
-#<?php
+<?php
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
@@ -19,6 +19,10 @@
  * Accepted values are string 0/1, int 0/1, bool true/false, string yes/no,
  * string true/false, string on/off - basically all values that 
  * {@see AgaviToolkit::literalize()} will accept.
+ * 
+ * The value will be casted to the respective boolean unless it's exported. If
+ * the export parameter is given, the value will be retained in its original
+ * form.
  *
  * @package    agavi
  * @subpackage validator
@@ -57,7 +61,17 @@ class AgaviBooleanValidator extends AgaviValidator
 		}
 		
 		if(is_bool($value)) {
-			$this->export($value);
+			
+			// we don't cast if the value is exported.
+			// caution, AgaviValidator::export does the test for empty
+			// strings, null and false values, so we can't use
+			// hasParameter here
+			if($this->getParameter('export')) {
+				$value = $origValue;
+			} else {
+				$this->export($value);
+			}
+			
 			return true;
 		}
 		
