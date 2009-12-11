@@ -1,4 +1,4 @@
-<?php
+#<?php
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
@@ -50,7 +50,7 @@ class AgaviBooleanValidator extends AgaviValidator
 			// noop
 		} elseif(1 === $value || '1' === $value) {
 			$value = true;
-		} elseif (0 === $value || '0' === $value) {
+		} elseif(0 === $value || '0' === $value) {
 			$value = false;
 		} elseif(is_string($value)) {
 			$value = AgaviToolkit::literalize($value);
