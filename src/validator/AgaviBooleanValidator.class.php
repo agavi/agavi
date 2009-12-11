@@ -43,7 +43,8 @@ class AgaviBooleanValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$value = $this->getData($this->getArgument());
+		$value = & $this->getData($this->getArgument());
+		$origValue = $value;
 		
 		if(is_bool($value)) {
 			// noop
@@ -59,6 +60,8 @@ class AgaviBooleanValidator extends AgaviValidator
 			$this->export($value);
 			return true;
 		}
+		
+		$value = $origValue;
 		
 		$this->throwError('type');
 		

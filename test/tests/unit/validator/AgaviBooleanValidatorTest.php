@@ -23,6 +23,7 @@ class AgaviBooleanValidatorTest extends AgaviUnitTestCase
 		$result = $validator->execute($rd);
 		$this->assertEquals(AgaviValidator::SUCCESS, $result, 'Failed asserting that the validation succeeded.');
 		$this->assertEquals($expectedResult, $rd->getParameter('exported'), 'Failed asserting that the exported value is the expected value');
+		$this->assertEquals($expectedResult, $rd->getParameter('bool'), 'Failed asserting that the validated value is the expected value');
 	}
 
 	public function validValues() {
@@ -54,6 +55,7 @@ class AgaviBooleanValidatorTest extends AgaviUnitTestCase
 		$result = $validator->execute($rd);
 		$this->assertEquals(AgaviValidator::ERROR, $result, 'Failed asserting that the validation failed.');
 		$this->assertNull($rd->getParameter('exported'), 'Failed asserting that the value is not exported');
+		$this->assertEquals($value, $rd->getParameter('bool'), 'Failed asserting that the validated value is the original value');
 	}
 	
 	public function invalidValues() {
@@ -61,7 +63,9 @@ class AgaviBooleanValidatorTest extends AgaviUnitTestCase
 			'nä' => array('nä'),
 			'nicht doch' => array('nicht doch'), 
 			'%core.debug%' => array('%core.debug%'), 
-			'foo' => array('foo')
+			'foo' => array('foo'),
+			'(int)2' => array(2),
+			'(string)2' => array('2')
 		);
 	}
 }
