@@ -180,7 +180,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 	 */
 	protected function loadDefinitions()
 	{
-		$cfg = $this->getParameter('definitions_file', AgaviConfig::get("core.config_dir") . '/rbac_definitions.xml');
+		$cfg = $this->getParameter('definitions_file', AgaviConfig::get('core.config_dir') . '/rbac_definitions.xml');
 		
 		if(is_readable($cfg)) {
 			$this->definitions = include(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));

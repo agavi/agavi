@@ -19,7 +19,7 @@ require_once('AgaviTestCase.class.php');
 
 $testDir = dirname(__FILE__);
 include($testDir . '/../src/agavi.php');
-AgaviConfig::set("tests.dir", $testDir); // where the main tests dir resides
+AgaviConfig::set('tests.dir', $testDir); // where the main tests dir resides
 AgaviConfig::set('core.app_dir', AgaviConfig::get('tests.dir') . "/sandbox2");
 
 AgaviConfig::set('core.default_context', 'test');

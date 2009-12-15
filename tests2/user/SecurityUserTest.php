@@ -53,8 +53,8 @@ class SecurityUserTest extends AgaviTestCase
 	public function teststrictCredentialComparison()
 	{
 		$this->_u->clearCredentials();
-		$this->_u->addCredential("0");
-		$this->assertTrue($this->_u->hasCredentials("0"));
+		$this->_u->addCredential('0');
+		$this->assertTrue($this->_u->hasCredentials('0'));
 		$this->assertFalse($this->_u->hasCredentials(0));
 		$this->assertFalse($this->_u->hasCredentials(false));
 	}

@@ -63,7 +63,7 @@ class AgaviOlsonCompileTask extends Task
 				// the file doesn't contain an extension so we parse it
 				// and we don't want the factory time zone
 				if(strpos($file->getFilename(), '.') === false && $file->getFilename() != 'factory') {
-					$this->log("compiling " . $file->getPathname(), PROJECT_MSG_INFO);
+					$this->log(sprintf('compiling %s', $file->getPathname()), PROJECT_MSG_INFO);
 					$parser = new AgaviTimeZoneDataParser();
 					$parser->initialize(AgaviContext::getInstance($context));
 					$rules = $parser->parse($file->getPathname());

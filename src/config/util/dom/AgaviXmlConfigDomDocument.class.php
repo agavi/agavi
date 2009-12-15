@@ -110,7 +110,7 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 		if(libxml_get_last_error() !== false) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
-$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				$errors[] = sprintf('Line %d: %s', $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
@@ -156,7 +156,7 @@ $errors[] = sprintf("Line %d: %s", $error->line, $error->message);
 		if(libxml_get_last_error() !== false) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
-$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				$errors[] = sprintf('Line %d: %s', $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
@@ -205,7 +205,7 @@ $errors[] = sprintf("Line %d: %s", $error->line, $error->message);
 				if($error->level != LIBXML_ERR_WARNING) {
 					$throw = true;
 				}
-				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				$errors[] = sprintf('Line %d: %s', $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			if($throw) {
@@ -291,7 +291,7 @@ $errors[] = sprintf("Line %d: %s", $error->line, $error->message);
 		if(!$result = parent::schemaValidate($filename)) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
-				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				$errors[] = sprintf('Line %d: %s', $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
@@ -328,7 +328,7 @@ $errors[] = sprintf("Line %d: %s", $error->line, $error->message);
 		if(!$result = parent::schemaValidateSource($source)) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
-				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				$errors[] = sprintf('Line %d: %s', $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
@@ -364,7 +364,7 @@ $errors[] = sprintf("Line %d: %s", $error->line, $error->message);
 		if(!$result = parent::relaxNGValidate($filename)) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
-				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				$errors[] = sprintf('Line %d: %s', $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);

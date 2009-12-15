@@ -23,7 +23,7 @@ class BaseCalendarTest extends AgaviTestCase
 			$time = $cal;
 		}
 		$time->getTime();
-		$format = new AgaviDateFormatter("EEE MMM dd HH:mm:ss zzz yyyy");
+		$format = new AgaviDateFormatter('EEE MMM dd HH:mm:ss zzz yyyy');
 		return $format->format($time, 'gregorian', $this->tm->getCurrentLocale());
 	}
 

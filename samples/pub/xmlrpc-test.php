@@ -7,7 +7,7 @@
 	<body>
 		<h1>Agavi XML-RPC Test</h1>
 <?php
-$request = xmlrpc_encode_request('getProduct', array('id' => 123456), array("encoding" => "utf-8", "escaping" => "markup"));
+$request = xmlrpc_encode_request('getProduct', array('id' => 123456), array('encoding' => 'utf-8', 'escaping' => 'markup'));
 
 $url = "http://localhost/~dzuelke/Code/oss/agavi/branches/1.0/samples/pub/xmlrpc.php";
 

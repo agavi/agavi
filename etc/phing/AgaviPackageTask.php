@@ -35,7 +35,7 @@ class AgaviPackageTask extends Task
 		
 		set_time_limit(0);
 		
-		$this->log("Adding .keep files to empty directories", PROJECT_MSG_INFO);
+		$this->log('Adding .keep files to empty directories', PROJECT_MSG_INFO);
 		
 		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(realpath('samples')), RecursiveIteratorIterator::CHILD_FIRST) as $dir) {
 			if($dir->isDir()) {
@@ -48,7 +48,7 @@ class AgaviPackageTask extends Task
 			}
 		}
 		
-		$this->log("Building package contents in: {$this->dir}", PROJECT_MSG_INFO);
+		$this->log(sprintf('Building package contents in: %s', $this->dir), PROJECT_MSG_INFO);
 		
 		// Modify short description. Try to keep under 80 chars width
 $shortDesc = <<<EOD
@@ -154,7 +154,7 @@ EOD;
 		try {
 			$p2->writePackageFile();
 		} catch(PEAR_Exception $e) {
-			$this->log("Oops! Caught PEAR Exception: ".$e->getMessage());
+			$this->log(sprintf('Oops! Caught PEAR Exception: ', $e->getMessage()));
 		}
 	}
 }

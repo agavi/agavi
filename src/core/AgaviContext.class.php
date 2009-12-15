@@ -379,7 +379,7 @@ class AgaviContext
 
 		if(!class_exists($class)) {
 			// it's not there. 
-			throw new AgaviAutoloadException("Couldn't find class for Model " . $origModelName);
+			throw new AgaviAutoloadException(sprintf("Couldn't find class for Model %s", $origModelName));
 		}
 		
 		// so if we're here, we found something, right? good.
