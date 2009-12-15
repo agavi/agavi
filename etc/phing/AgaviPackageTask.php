@@ -154,7 +154,7 @@ EOD;
 		try {
 			$p2->writePackageFile();
 		} catch(PEAR_Exception $e) {
-			$this->log(sprintf('Oops! Caught PEAR Exception: ', $e->getMessage()));
+			$this->log(sprintf('Oops! Caught PEAR Exception: %s', $e->getMessage()));
 		}
 	}
 }
