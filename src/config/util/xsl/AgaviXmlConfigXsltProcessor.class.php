@@ -49,7 +49,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 		if(libxml_get_last_error() !== false || count(libxml_get_errors())) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
-				$errors[] = $error->message;
+				$errors[] = sprintf('[%s #%d] Line %d: %s', $error->level == LIBXML_ERR_WARNING ? 'Warning' : ($error->level == LIBXML_ERR_ERROR ? 'Error' : 'Fatal'), $error->code, $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
@@ -88,7 +88,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 		if($result === false || libxml_get_last_error() !== false || count(libxml_get_errors())) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
-				$errors[] = $error->message;
+				$errors[] = sprintf('[%s #%d] Line %d: %s', $error->level == LIBXML_ERR_WARNING ? 'Warning' : ($error->level == LIBXML_ERR_ERROR ? 'Error' : 'Fatal'), $error->code, $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);

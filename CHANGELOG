@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.2 RC4 (January ?, 2010)
 ---------------------------
 
+ADD: Include error type and code when reporting libxml errors (#1202) (David)
+
 CHG: Move error suppression operator for XML validation calls to wrapper methods (#1201) (David)
 
 FIX: Regression: single Propel init query is lost during initialization (#1194) (David)
