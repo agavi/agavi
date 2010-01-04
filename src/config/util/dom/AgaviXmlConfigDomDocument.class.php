@@ -288,7 +288,8 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
 		
-		if(!$result = parent::schemaValidate($filename)) {
+		// gotta do the @ to suppress PHP warnings when the schema cannot be loaded or is invalid
+		if(!$result = @parent::schemaValidate($filename)) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
 				$errors[] = sprintf('Line %d: %s', $error->line, $error->message);
@@ -325,7 +326,8 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
 		
-		if(!$result = parent::schemaValidateSource($source)) {
+		// gotta do the @ to suppress PHP warnings when the schema cannot be loaded or is invalid
+		if(!$result = @parent::schemaValidateSource($source)) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
 				$errors[] = sprintf('Line %d: %s', $error->line, $error->message);
@@ -361,7 +363,8 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 		$luie = libxml_use_internal_errors(true);
 		libxml_clear_errors();
 		
-		if(!$result = parent::relaxNGValidate($filename)) {
+		// gotta do the @ to suppress PHP warnings when the schema cannot be loaded or is invalid
+		if(!$result = @parent::relaxNGValidate($filename)) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
 				$errors[] = sprintf('Line %d: %s', $error->line, $error->message);
