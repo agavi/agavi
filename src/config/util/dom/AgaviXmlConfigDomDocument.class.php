@@ -212,7 +212,7 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 				libxml_use_internal_errors($luie);
 				throw new DOMException(
 					sprintf(
-						'Error%s occured while resolving XInclude directives: ' . "\n\n%s", 
+						'Error%s occurred while resolving XInclude directives: ' . "\n\n%s", 
 						count($errors) > 1 ? 's' : '', 
 						implode("\n", $errors)
 					)
@@ -260,7 +260,7 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 			libxml_use_internal_errors($luie);
 			throw new DOMException(
 				sprintf(
-					'Error%s occured while importing a new node "%s": ' . "\n\n%s",
+					'Error%s occurred while importing a new node "%s": ' . "\n\n%s",
 					count($errors) > 1 ? 's' : '', 
 					$node->nodeName,
 					implode("\n", $errors)

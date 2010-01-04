@@ -94,7 +94,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 			libxml_use_internal_errors($luie);
 			throw new Exception(
 				sprintf(
-					'Error%s occured while transforming the document using an XSL stylesheet: ' . "\n\n%s", 
+					'Error%s occurred while transforming the document using an XSL stylesheet: ' . "\n\n%s", 
 					count($errors) > 1 ? 's' : '', 
 					implode("\n", $errors)
 				)
