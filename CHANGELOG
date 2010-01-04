@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.2 (December ??, 2009)
--------------------------
+1.0.2 RC4 (January ?, 2010)
+---------------------------
 
 CHG: Move error suppression operator for XML validation calls to wrapper methods (#1201) (David)
 
