@@ -12,6 +12,7 @@ The following fixes are worth mentioning:
 - Multiple settings blocks and settings prefixes were not allowed in module configs.
 - AgaviNumberValidator does not mutate invalid input anymore.
 - Several ICU bugfixes have been ported.
+- Configuration parameter values containing only whitespace are now converted to NULL instead of to an empty string.
 
 Important Changes:
 - Optional strict comparison of elements in AgaviInarrayValidator now possible.

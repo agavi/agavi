@@ -274,13 +274,15 @@ final class AgaviToolkit
 	{
 		if(!is_string($value)) {
 			return $value;
-		} elseif($value == '') {
-			// must be done before the trim!
+		}
+		
+		// trim!
+		$value = trim($value);
+		if($value == '') {
 			return null;
 		}
 		
 		// lowercase our value for comparison
-		$value  = trim($value);
 		$lvalue = strtolower($value);
 		
 		if($lvalue == 'on' || $lvalue == 'yes' || $lvalue == 'true') {

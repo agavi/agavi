@@ -8,6 +8,7 @@ ADD: Include error type and code when reporting libxml errors (#1202) (David)
 
 CHG: Move error suppression operator for XML validation calls to wrapper methods (#1201) (David)
 
+FIX: Configuration parameter whitespace handling is inconsistent (#1203) (David)
 FIX: Regression: single Propel init query is lost during initialization (#1194) (David)
 FIX: Regression: support for Propel 1.3 is broken (#1195) (David)
 
