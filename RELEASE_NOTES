@@ -1,8 +1,8 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.2 - December ??, 2009
-=================================
+Version 1.0.2 - January ??, 2009
+================================
 
 This maintenance release fixes a number of issues over Agavi 1.0.1 and brings a couple of minor enhancements.
 
@@ -22,7 +22,7 @@ Important Changes:
 - Namespaced class identifiers can now be used in all configuration files.
 - AgaviValidator::getArgument() now accepts an argument identifier.
 - Support for PHPTAL 1.2.
-- Support for Propel 1.4
+- Support for Propel 1.4.
 
 For Propel 1.4, the format of the keys for the "overrides" parameter has changed. It's now mandatory to use Propel's internal config syntax with the full parameter name. Examples
 <ae:parameter name="overrides">

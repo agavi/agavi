@@ -18,7 +18,7 @@ FIX: Regression: support for Propel 1.3 is broken (#1195) (David)
 
 ADD: Support for Propel 1.4 (#1181) (David)
 
-CHG: Use printf rather than echo in bin/agavi
+CHG: Use printf rather than echo in bin/agavi (#1191) (David)
 CHG: Update to PHPUnit 3.4.3 (#1184) (David)
 CHG: Update timezone database to 2009s (#1188) (David)
 CHG: Make HTTP Content-Type response header charset detection in AgaviFormPopulationFilter more robust (#1187) (David)
