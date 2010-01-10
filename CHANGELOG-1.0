@@ -1,6 +1,40 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.2 RC3 (December 8, 2009)
+----------------------------
+
+ADD: Support for Propel 1.4 (#1181) (David)
+
+CHG: Use printf rather than echo in bin/agavi (#1191) (David)
+CHG: Update to PHPUnit 3.4.3 (#1184) (David)
+CHG: Update timezone database to 2009s (#1188) (David)
+CHG: Make HTTP Content-Type response header charset detection in AgaviFormPopulationFilter more robust (#1187) (David)
+
+FIX: Validation drops first element in multi-dimensional array exports (#1189) (Dominik)
+FIX: AgaviToolkit::literalize incorrectly returns null for certain input values (#1190) (David)
+FIX: HTML meta tag charset detection in AgaviFormPopulationFilter never matches strings without quotation marks (#1185) (David)
+FIX: FormPopulationFilter raises warning with old PCRE versions (#1183) (David)
+FIX: AgaviWebResponse throws notice if "http_headers" parameter is not an array (#1186) (David)
+FIX: Duplicate error message if agavi console script cannot determine Phing version (#1180) (David)
+
+
+1.0.2 RC2 (November 6, 2009)
+----------------------------
+
+CHG: Update to PHPUnit 3.4.2 (#1178) (David)
+CHG: Change generated timezone files to have version info, not timestamp, in header comments (#1177) (David)
+CHG: Update timezone database to 2009q (#1176) (David)
+
+FIX: AgaviAttributeHolder::removeAttribute() does not return values by reference if array key access is used (#1175) (David)
+FIX: AgaviParameterHolder::removeParameter() causes notice for invalid keys when calling with by-ref assignment (#1174) (David)
+FIX: agavi.bat-dist lacks double quotes for PHP and Agavi path assignments (#1172) (David)
+FIX: AgaviConfigParser::convertEncoding() performs case-sensitive comparison of encoding (#1162) (David)
+FIX: AgaviConfigParser::convertEncoding() produces notice when throwing exception (#1161) (David)
+FIX: Shiny exception template prepends file paths with an underscore (#1156) (David)
+FIX: agavi.php erroneously always assumes it is a symlink if project.directory is empty (#1155) (Felix)
+
+
 1.0.2 RC1 (May ??, 2009)
 ------------------------
 
