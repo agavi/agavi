@@ -32,7 +32,7 @@ final class Agavi
 	/**
 	 * @var        array An assoc array of classes and files used for autoloading.
 	 */
-	public static $autoloads = null;
+	public static $autoloads = array();
 
 	/**
 	 * Handles autoloading of classes
@@ -44,36 +44,13 @@ final class Agavi
 	 */
 	public static function __autoload($class)
 	{
-		if(self::$autoloads === null) {
-			self::$autoloads = array();
-			// catch parse errors of autoload.xml
-			try {
-				$cfg = AgaviConfig::get('core.config_dir') . '/autoload.xml';
-				if(!is_readable($cfg)) {
-					$cfg = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
-					if(!is_readable($cfg)) {
-						return;
-					}
-				}
-				self::$autoloads = include(AgaviConfigCache::checkConfig($cfg));
-				// if(class_exists($class, false)) {
-				// 	return;
-				// }
-			} catch(Exception $e) {
-				trigger_error($e->getMessage(), E_USER_ERROR);
-			}
-		}
-
 		if(isset(self::$autoloads[$class])) {
 			// class exists, let's include it
 			require(self::$autoloads[$class]);
 		}
 
-		/*
-			If the class doesn't exist in autoload.xml there's not a lot we can do. Because
-			PHP's class_exists resorts to __autoload we cannot throw exceptions
-			for this might break some 3rd party lib autoloading mechanism.
-		*/
+		// If the class doesn't exist in autoload.xml there's not a lot we can do.
+		// Hopefully, another registered autoloader will be able to help :)
 	}
 
 	/**
@@ -129,6 +106,13 @@ final class Agavi
 
 			AgaviConfig::set('core.cldr_dir', AgaviConfig::get('core.agavi_dir') . '/translation/data', false, true);
 
+			// autoloads first (will trigger the compilation of config_handlers.xml)
+			$autoload = AgaviConfig::get('core.config_dir') . '/autoload.xml';
+			if(!is_readable($autoload)) {
+				$autoload = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
+			}
+			self::$autoloads = include(AgaviConfigCache::checkConfig($cfg));
+			
 			// load base settings
 			AgaviConfigCache::load(AgaviConfig::get('core.config_dir') . '/settings.xml');
 
