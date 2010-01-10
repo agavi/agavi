@@ -282,7 +282,7 @@ abstract class AgaviAttributeHolder extends AgaviParameterHolder
 				unset($this->attributes[$ns][$name]);
 			} else {
 				try {
-					$retval = AgaviArrayPathDefinition::unsetValue($name, $this->attributes[$ns]);
+					$retval =& AgaviArrayPathDefinition::unsetValue($name, $this->attributes[$ns]);
 				} catch(InvalidArgumentException $e) {
 				}
 			}

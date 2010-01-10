@@ -649,7 +649,11 @@ class AgaviWebResponse extends AgaviResponse
 		}
 		
 		if($outputType !== null) {
-			foreach($outputType->getParameter('http_headers', array()) as $name => $value) {
+			$httpHeaders = $outputType->getParameter('http_headers');
+			if(!is_array($httpHeaders)) {
+				$httpHeaders = array();
+			}
+			foreach($httpHeaders as $name => $value) {
 				if(!$this->hasHttpHeader($name)) {
 					$this->setHttpHeader($name, $value);
 				}

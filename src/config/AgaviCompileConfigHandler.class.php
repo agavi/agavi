@@ -146,7 +146,7 @@ class AgaviCompileConfigHandler extends AgaviXmlConfigHandler
 									$replace = "\n";
 								}
 								if($replace) {
-									$text = preg_replace("/\s+/m", $replace, $text);
+									$text = preg_replace('/\s+/m', $replace, $text);
 								}
 								$tokenized .= $text;
 							}

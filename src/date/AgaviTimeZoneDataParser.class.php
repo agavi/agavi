@@ -114,7 +114,17 @@ class AgaviTimeZoneDataParser
 	 */
 	protected function parseFile($file)
 	{
-		$zoneLines = explode("\n", file_get_contents($file));
+		$data = file_get_contents($file);
+		
+		// find version info
+		if(!preg_match('/^#\s*@\(#\)\s*(?P<filename>\S+)\s+(?P<version>\S+)\s*$/m', $data, $meta)) {
+			$meta = array(
+				'filename' => '(unknown)',
+				'version' => '(unknown)',
+			);
+		}
+		
+		$zoneLines = explode("\n", $data);
 		// filter comments
 		$zoneLines = array_filter($zoneLines, array(__CLASS__, 'commentFilter'));
 
@@ -141,6 +151,8 @@ class AgaviTimeZoneDataParser
 				}
 
 				$zone = $this->parseZone($colLines);
+				$zone['source'] = $meta['filename'];
+				$zone['version'] = $meta['version'];
 				$zones[] = $zone;
 			} elseif(preg_match('!^\s*Link\s+([^\s]+)\s+([^\s]+)!', $line, $match)) {
 				// to - from
@@ -155,7 +167,7 @@ class AgaviTimeZoneDataParser
 		$this->prepareRules($rules);
 		$zones = $this->generateDatatables($zones);
 
-		return array('zones' => $zones, 'links' => $links);
+		return array('zones' => $zones, 'links' => $links, 'meta' => $meta);
 	}
 
 	/**
@@ -528,7 +540,7 @@ class AgaviTimeZoneDataParser
 
 			usort($myFinalRules, array(__CLASS__, 'ruleCmp'));
 
-			$zoneTables[$zone['name']] = array('types' => $myFinalTypes, 'rules' => $myFinalRules, 'finalRule' => $finalRule);
+			$zoneTables[$zone['name']] = array('types' => $myFinalTypes, 'rules' => $myFinalRules, 'finalRule' => $finalRule, 'source' => $zone['source'], 'version' => $zone['version']);
 		}
 
 		return $zoneTables;

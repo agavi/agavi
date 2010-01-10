@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Data file for timezone "Africa/Tunis".
- * Compiled from olson file "africa", version 8.23.
+ * Data file for timezone "Asia/Novokuznetsk".
+ * Compiled from olson file "europe", version 8.24.
  *
  * @package    agavi
  * @subpackage translation
@@ -20,211 +20,217 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 561,
+      'rawOffset' => 21600,
       'dstOffset' => 0,
-      'name' => 'PMT',
+      'name' => 'KRAT',
     ),
     1 => 
     array (
-      'rawOffset' => 3600,
+      'rawOffset' => 25200,
       'dstOffset' => 0,
-      'name' => 'CET',
+      'name' => 'KRAT',
     ),
     2 => 
     array (
-      'rawOffset' => 3600,
+      'rawOffset' => 25200,
       'dstOffset' => 3600,
-      'name' => 'CEST',
+      'name' => 'KRAST',
+    ),
+    3 => 
+    array (
+      'rawOffset' => 21600,
+      'dstOffset' => 3600,
+      'name' => 'KRAST',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2797202444,
+      'time' => -1577512128,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1855958961,
+      'time' => -1247551200,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -969242400,
+      'time' => 354906000,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -950493600,
+      'time' => 370713600,
       'type' => 1,
     ),
     4 => 
     array (
-      'time' => -941940000,
+      'time' => 386442000,
       'type' => 2,
     ),
     5 => 
     array (
-      'time' => -891136800,
+      'time' => 402249600,
       'type' => 1,
     ),
     6 => 
     array (
-      'time' => -877827600,
+      'time' => 417978000,
       'type' => 2,
     ),
     7 => 
     array (
-      'time' => -857257200,
+      'time' => 433785600,
       'type' => 1,
     ),
     8 => 
     array (
-      'time' => -844556400,
+      'time' => 449607600,
       'type' => 2,
     ),
     9 => 
     array (
-      'time' => -842918400,
+      'time' => 465332400,
       'type' => 1,
     ),
     10 => 
     array (
-      'time' => -842223600,
+      'time' => 481057200,
       'type' => 2,
     ),
     11 => 
     array (
-      'time' => -828230400,
+      'time' => 496782000,
       'type' => 1,
     ),
     12 => 
     array (
-      'time' => -812502000,
+      'time' => 512506800,
       'type' => 2,
     ),
     13 => 
     array (
-      'time' => -796269600,
+      'time' => 528231600,
       'type' => 1,
     ),
     14 => 
     array (
-      'time' => -781059600,
+      'time' => 543956400,
       'type' => 2,
     ),
     15 => 
     array (
-      'time' => -766634400,
+      'time' => 559681200,
       'type' => 1,
     ),
     16 => 
     array (
-      'time' => 231202800,
+      'time' => 575406000,
       'type' => 2,
     ),
     17 => 
     array (
-      'time' => 243903600,
+      'time' => 591130800,
       'type' => 1,
     ),
     18 => 
     array (
-      'time' => 262825200,
+      'time' => 606855600,
       'type' => 2,
     ),
     19 => 
     array (
-      'time' => 276044400,
+      'time' => 622580400,
       'type' => 1,
     ),
     20 => 
     array (
-      'time' => 581122800,
+      'time' => 638305200,
       'type' => 2,
     ),
     21 => 
     array (
-      'time' => 591145200,
+      'time' => 654634800,
       'type' => 1,
     ),
     22 => 
     array (
-      'time' => 606870000,
-      'type' => 2,
+      'time' => 670359600,
+      'type' => 0,
     ),
     23 => 
     array (
-      'time' => 622594800,
-      'type' => 1,
+      'time' => 670363200,
+      'type' => 3,
     ),
     24 => 
     array (
-      'time' => 641516400,
-      'type' => 2,
+      'time' => 686088000,
+      'type' => 0,
     ),
     25 => 
     array (
-      'time' => 654649200,
+      'time' => 695764800,
       'type' => 1,
     ),
     26 => 
     array (
-      'time' => 1114902000,
+      'time' => 701798400,
       'type' => 2,
     ),
     27 => 
     array (
-      'time' => 1128038400,
+      'time' => 717519600,
       'type' => 1,
     ),
     28 => 
     array (
-      'time' => 1143334800,
+      'time' => 733258800,
       'type' => 2,
     ),
     29 => 
     array (
-      'time' => 1162083600,
+      'time' => 748983600,
       'type' => 1,
     ),
     30 => 
     array (
-      'time' => 1174784400,
+      'time' => 764708400,
       'type' => 2,
     ),
     31 => 
     array (
-      'time' => 1193533200,
+      'time' => 780433200,
       'type' => 1,
     ),
     32 => 
     array (
-      'time' => 1206838800,
+      'time' => 796158000,
       'type' => 2,
     ),
     33 => 
     array (
-      'time' => 1224982800,
+      'time' => 811882800,
       'type' => 1,
     ),
     34 => 
     array (
-      'time' => 1269738000,
+      'time' => 828212400,
       'type' => 2,
     ),
     35 => 
     array (
-      'time' => 1288486800,
+      'time' => 846356400,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'dynamic',
-    'offset' => 3600,
-    'name' => 'CE%sT',
+    'offset' => 21600,
+    'name' => 'NOV%sT',
     'save' => 3600,
     'start' => 
     array (
@@ -242,11 +248,11 @@ return array (
       'time' => 7200000,
       'type' => 1,
     ),
-    'startYear' => 2009,
+    'startYear' => 1996,
   ),
-  'source' => 'africa',
-  'version' => '8.23',
-  'name' => 'Africa/Tunis',
+  'source' => 'europe',
+  'version' => '8.24',
+  'name' => 'Asia/Novokuznetsk',
 );
 
 ?>

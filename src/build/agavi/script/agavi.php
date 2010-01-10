@@ -57,7 +57,6 @@ try {
 		}
 	} catch(Exception $e) {
 		$GLOBALS['ERROR']->write(sprintf('Error: Phing version could not be determined; Phing %s or later required', MIN_PHING_VERSION) . PHP_EOL);
-		$GLOBALS['ERROR']->write(sprintf('Error: Phing version could not be determined; Phing %s or later required', MIN_PHING_VERSION) . PHP_EOL);
 		exit(1);
 	}
 } catch(Exception $e) {

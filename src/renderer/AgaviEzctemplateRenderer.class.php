@@ -131,8 +131,8 @@ class AgaviEzctemplateRenderer extends AgaviRenderer implements AgaviIReusableRe
 		}
 
 		// add some usefull Agavi Functions/Blocks as Extension
-		$config->addExtension("AgaviEzctemplateCustomBlocks");
-		$config->addExtension("AgaviEzctemplateCustomFunctions");
+		$config->addExtension('AgaviEzctemplateCustomBlocks');
+		$config->addExtension('AgaviEzctemplateCustomFunctions');
 		
 		foreach($this->getParameter('extensions', array()) as $extension) {
 			$config->addExtension($extension);

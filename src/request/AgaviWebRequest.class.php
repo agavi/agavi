@@ -443,8 +443,8 @@ class AgaviWebRequest extends AgaviRequest
 				}
 			} else {
 				// some other data via PUT. we need to populate $_FILES manually
-				$putFile = tempnam(AgaviConfig::get('core.cache_dir'), "PUTUpload_");
-				$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($putFile, "wb"));
+				$putFile = tempnam(AgaviConfig::get('core.cache_dir'), 'PUTUpload_');
+				$size = stream_copy_to_stream(fopen('php://input', 'rb'), $handle = fopen($putFile, 'wb'));
 				fclose($handle);
 
 				$_FILES = array(
@@ -460,8 +460,8 @@ class AgaviWebRequest extends AgaviRequest
 			}
 		} elseif($this->getMethod() == $methods['POST'] && (!isset($_SERVER['CONTENT_TYPE']) || (isset($_SERVER['CONTENT_TYPE']) && !preg_match('#^(application/x-www-form-urlencoded|multipart/form-data)(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])))) {
 			// POST, but no regular urlencoded data or file upload. lets put the request payload into a file
-			$postFile = tempnam(AgaviConfig::get('core.cache_dir'), "POSTUpload_");
-			$size = stream_copy_to_stream(fopen("php://input", "rb"), $handle = fopen($postFile, "wb"));
+			$postFile = tempnam(AgaviConfig::get('core.cache_dir'), 'POSTUpload_');
+			$size = stream_copy_to_stream(fopen('php://input', 'rb'), $handle = fopen($postFile, 'wb'));
 			fclose($handle);
 
 			$_FILES = array(
@@ -507,7 +507,7 @@ class AgaviWebRequest extends AgaviRequest
 	{
 		parent::startup();
 		
-		if($this->getParameter("unset_input", true)) {
+		if($this->getParameter('unset_input', true)) {
 			$rla = ini_get('register_long_arrays');
 			
 			$_GET = $_POST = $_COOKIE = $_REQUEST = $_FILES = array();

@@ -191,13 +191,22 @@ class AgaviPropelDatabase extends AgaviDatabase
 		$datasource = $this->getParameter('datasource', null);
 		$use_as_default = $this->getParameter('use_as_default', false);
 		$config = require($configPath);
+		
 		if($datasource === null || $datasource == 'default') {
-			$datasource = $config['propel']['datasources']['default'];
+			if(isset($config['propel']['datasources']['default'])) {
+				$datasource = $config['propel']['datasources']['default'];
+			} elseif(isset($config['datasources']['default'])) {
+				$datasource = $config['datasources']['default'];
+			} else {
+				throw new AgaviDatabaseException('No datasource given for Propel connection, and no default datasource specified in runtime configuration file.');
+			}
 		}
-		$is12 = true;
-		if(isset($config['propel']['generator_version']) && version_compare($config['propel']['generator_version'], '1.3.0-dev') >= 0) {
-			$is12 = false;
+		
+		$is12 = false;
+		if(!isset($config['propel']['generator_version']) && !isset($config['generator_version'])) {
+			$is12 = true;
 		}
+		
 		if($is12) {
 			// Propel 1.1 or 1.2, so let's use Creole for the connection.
 			$this->agaviCreoleDatabase = new AgaviCreoleDatabase();
@@ -214,6 +223,8 @@ class AgaviPropelDatabase extends AgaviDatabase
 				self::setDefaultConfigPathSet();
 			}
 		}
+		
+		$is13 = false;
 		if(!$is12) {
 			// it's Propel 1.3 or later, let's autoload or include Propel
 			if(!class_exists('Propel')) {
@@ -221,28 +232,49 @@ class AgaviPropelDatabase extends AgaviDatabase
 			}
 			if(!Propel::isInit()) {
 				// that wasn't PropelAutoload, so init it
-				Propel::init(self::getDefaultConfigPath());
+				Propel::init($configPath);
 			}
+			
+			$is13 = version_compare(Propel::VERSION, '1.3.1', '<');
 		}
 		
 		// grab the configuration values and inject possibly defined overrides for this data source
-		$config = Propel::getConfiguration();
-		$config['datasources'][$datasource]['adapter'] = $this->getParameter('overrides[adapter]', $config['datasources'][$datasource]['adapter']);
-		$config['datasources'][$datasource]['connection'] = array_merge($config['datasources'][$datasource]['connection'], $this->getParameter('overrides[connection]', array()));
-		
-		if(!$is12) {
-			// for 1.3+, also the autoload classes
-			$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
+		if($is12 || $is13) {
+			// old-style config array; PropelConfiguration was added after 1.3.0, http://trac.agavi.org/ticket/1195
+			$config = Propel::getConfiguration();
+			$config['datasources'][$datasource]['adapter'] = $this->getParameter('overrides[adapter]', $config['datasources'][$datasource]['adapter']);
+			$config['datasources'][$datasource]['connection'] = array_merge($config['datasources'][$datasource]['connection'], $this->getParameter('overrides[connection]', array()));
 			
-			// append our list of "init queries" to propel's
-			if(!isset($config['datasources'][$datasource]['connection']['settings']['queries']) || !is_array($config['datasources'][$datasource]['connection']['settings']['queries'])) {
-				$config['datasources'][$datasource]['connection']['settings']['queries'] = array();
+			if($is13) {
+				// for 1.3+, also the autoload classes 
+				$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
+				
+				// and init queries
+				if(!isset($config['datasources'][$datasource]['connection']['settings']['queries']['query'])) {
+					$config['datasources'][$datasource]['connection']['settings']['queries']['query'] = array();
+				}
+				// array cast because "query" might be a string if just one init query was given, http://trac.agavi.org/ticket/1194
+				$config['datasources'][$datasource]['connection']['settings']['queries']['query'] = array_merge((array)$config['datasources'][$datasource]['connection']['settings']['queries']['query'], (array)$this->getParameter('init_queries'));
 			}
-			$config['datasources'][$datasource]['connection']['settings']['queries'] = array_merge($config['datasources'][$datasource]['connection']['settings']['queries'], (array)$this->getParameter('init_queries'));
+			
+			// set the new config
+			Propel::setConfiguration($config);
+		} else {
+			$config = Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT);
+			
+			$overrides = (array)$this->getParameter('overrides');
+			
+			// set override values
+			foreach($overrides as $key => $value) {
+				$config->setParameter($key, $value);
+			}
+			
+			// handle init queries in a cross-adapter fashion (they all support the "init_queries" param)
+			$queries = (array)$config->getParameter('datasources.' . $datasource . '.connection.settings.queries.query', array());
+			// yes... it's one array, [connection][settings][queries][query], with all the init queries from the config, so we append to that
+			$queries = array_merge($queries, (array)$this->getParameter('init_queries'));
+			$config->setParameter('datasources.' . $datasource . '.connection.settings.queries.query', $queries);
 		}
-		
-		// set the new config
-		Propel::setConfiguration($config);
 		
 		if(!$is12) {
 			if(true === $this->getParameter('enable_instance_pooling')) {

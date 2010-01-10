@@ -279,6 +279,13 @@ class AgaviParameterHolderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('one', $p->getParameter('1'));
 		$this->assertEquals(array(1 => 'one', 10 => 'ten', 21 => 'twentyone'), $p->getParameters());
 	}
+
+	public function testRemoveInvalidKeyCausesNoNotice()
+	{
+		$ph = new AgaviParameterHolder();
+		$zomg =& $ph->removeParameter('[]foo[]');
+		$this->assertNull($zomg);
+	}
 }
 
 ?>

@@ -83,10 +83,10 @@ class AgaviConsoleRequest extends AgaviRequest
 		
 		$_FILES = array();
 		if($this->getParameter('read_stdin', false)) {
-			$stdinFile = tempnam(AgaviConfig::get('core.cache_dir'), "stdin_");
+			$stdinFile = tempnam(AgaviConfig::get('core.cache_dir'), 'stdin_');
 			$stdin = fopen('php://stdin', 'rb');
 			stream_set_blocking($stdin, false);
-			$size = stream_copy_to_stream($stdin, $handle = fopen($stdinFile, "wb"));
+			$size = stream_copy_to_stream($stdin, $handle = fopen($stdinFile, 'wb'));
 			fclose($handle);
 			
 			$_FILES = array(
@@ -142,7 +142,7 @@ class AgaviConsoleRequest extends AgaviRequest
 	{
 		parent::startup();
 		
-		if($this->getParameter("unset_input", true)) {
+		if($this->getParameter('unset_input', true)) {
 			$_SERVER['argv'] = $_ENV['argv'] = $GLOBALS['argv'] = array();
 			$_SERVER['argc'] = $_ENV['argc'] = $GLOBALS['argc'] = 0;
 		}

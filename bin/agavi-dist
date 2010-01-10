@@ -16,33 +16,33 @@ PHP_EXECUTABLE=$( which php )
 # Message display shortcuts.
 agavi_message_null()
 {
-	echo
+	printf "\n"
 }
 
 agavi_message_notice()
 {
 	MESSAGE=$1
-	echo "   [notice] ${1}"
+	printf "   [notice] %s\n" "${MESSAGE}"
 }
 
 agavi_message_warning()
 {
 	MESSAGE=$1
-	echo "  [warning] ${1}"
+	printf "  [warning] %s\n" "${MESSAGE}"
 }
 
 agavi_message_error()
 {
 	MESSAGE=$1
-	echo "    [error] ${1}"
+	printf "    [error] %s\n" "${MESSAGE}"
 }
 
 agavi_message_fatal()
 {
 	MESSAGE=$1
 	RETURN=$2
-	echo "    [fatal] ${1}"
-	exit ${2}
+	printf "    [fatal] %s\n" "${MESSAGE}"
+	exit $RETURN
 }
 
 agavi_input()
@@ -50,8 +50,8 @@ agavi_input()
 	VARIABLE=$1
 	MESSAGE=$2
 	PROMPT=$3
-	echo -n "        [?] ${2}${3} "
-	read "${1}"
+	printf "        [?] %s%s " "${MESSAGE}" "${PROMPT}"
+	read "${VARIABLE}"
 }
 
 # Initial detection.

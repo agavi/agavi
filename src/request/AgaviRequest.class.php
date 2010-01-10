@@ -185,7 +185,7 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	 */
 	public function startup()
 	{
-		if($this->getParameter("unset_input", true)) {
+		if($this->getParameter('unset_input', true)) {
 			// remove raw post data
 			// can still be read from php://input, but we can't prevent that
 			unset($GLOBALS['HTTP_RAW_POST_DATA']);

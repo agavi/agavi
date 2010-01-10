@@ -414,6 +414,24 @@ class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('coo', $p->getAttribute('baz', 'mynamespace'));
 	}
 
+	public function testRemoveReturnsByReference()
+	{
+		$one = 'two';
+		$omg = array('foo' => 'bar', 'bar' => 'baz');
+		$foo =& $omg['foo'];
+		
+		$ph = new MyAgaviAttributeHolder();
+		
+		$ph->setAttributeByRef('one', $one);
+		$two =& $ph->removeAttribute('one');
+		$two = 'six';
+		$this->assertEquals('six', $one);
+		
+		$ph->setAttributeByRef('omg', $omg);
+		$omgfoo =& $ph->removeAttribute('omg[foo]');
+		$omgfoo = 'baz';
+		$this->assertEquals('baz', $foo);
+	}
 }
 
 ?>

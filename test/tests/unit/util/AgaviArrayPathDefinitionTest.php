@@ -104,6 +104,17 @@ class AgaviArrayPathDefintionTest extends AgaviPhpUnitTestCase
 				),
 				'InvalidArgumentException',
 			),
+			'partStartsWithZero,ticket1189' => array(
+				'0[1]',
+				array(
+					'parts' => array(
+						'0',
+						'1',
+					),
+					'absolute' => true,
+				),
+				false,
+			),
 			
 		);
 	}

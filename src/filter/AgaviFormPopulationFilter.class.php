@@ -156,9 +156,10 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		$hasXmlProlog = false;
 		if($xhtml && preg_match('/^<\?xml[^\?]*\?>/', $output)) {
 			$hasXmlProlog = true;
-		} elseif($xhtml && preg_match('/charset=(.+)\s*$/i', $ot->getParameter('http_headers[Content-Type]'), $matches)) {
+		} elseif($xhtml && preg_match('/;\s*charset=(")?(?P<charset>.+?(?(1)(?=(?<!\\\\)")|($|(?=[;\s]))))(?(1)")/i', $ot->getParameter('http_headers[Content-Type]'), $matches)) {
+			// media-type = type "/" subtype *( ";" parameter ), says http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
 			// add an XML prolog with the char encoding, works around issues with ISO-8859-1 etc
-			$output = "<?xml version='1.0' encoding='" . $matches[1] . "' ?>\n" . $output;
+			$output = "<?xml version='1.0' encoding='" . $matches['charset'] . "' ?>\n" . $output;
 		}
 
 		if($xhtml && $cfg['parse_xhtml_as_xml']) {
@@ -179,7 +180,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		if(libxml_get_last_error() !== false) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
-				$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+				$errors[] = sprintf('[%s #%d] Line %d: %s', $error->level == LIBXML_ERR_WARNING ? 'Warning' : ($error->level == LIBXML_ERR_ERROR ? 'Error' : 'Fatal'), $error->code, $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
@@ -212,7 +213,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			if(strtolower($meta->getAttribute('http-equiv')) == 'content-type') {
 				if($this->doc->encoding === null) {
 					// media-type = type "/" subtype *( ";" parameter ), says http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
-					if(preg_match('/;\s*charset=(")?(?P<charset>.+?(?(-2)(?=(?<!\\\\)")|(?=[;\s])))(?(-2)")/i', $meta->getAttribute('content'), $matches)) {
+					if(preg_match('/;\s*charset=(")?(?P<charset>.+?(?(1)(?=(?<!\\\\)")|($|(?=[;\s]))))(?(1)")/i', $meta->getAttribute('content'), $matches)) {
 						$this->doc->encoding = $matches['charset'];
 					} else {
 						$this->doc->encoding = self::ENCODING_UTF_8;
@@ -768,7 +769,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			if(libxml_get_last_error() !== false) {
 				$errors = array();
 				foreach(libxml_get_errors() as $error) {
-					$errors[] = sprintf("Line %d: %s", $error->line, $error->message);
+					$errors[] = sprintf('[%s #%d] Line %d: %s', $error->level == LIBXML_ERR_WARNING ? 'Warning' : ($error->level == LIBXML_ERR_ERROR ? 'Error' : 'Fatal'), $error->code, $error->line, $error->message);
 				}
 				libxml_clear_errors();
 				libxml_use_internal_errors($luie);
