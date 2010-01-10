@@ -111,7 +111,7 @@ final class Agavi
 			if(!is_readable($autoload)) {
 				$autoload = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
 			}
-			self::$autoloads = include(AgaviConfigCache::checkConfig($cfg));
+			self::$autoloads = include(AgaviConfigCache::checkConfig($autoload));
 			
 			// load base settings
 			AgaviConfigCache::load(AgaviConfig::get('core.config_dir') . '/settings.xml');
