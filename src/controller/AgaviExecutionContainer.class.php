@@ -468,12 +468,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 		$useGenericMethods = false;
 		$executeMethod = 'execute' . $method;
-		if(!method_exists($actionInstance, $executeMethod)) {
+		if(!is_callable(array($actionInstance, $executeMethod))) {
 			$executeMethod = 'execute';
 			$useGenericMethods = true;
 		}
 
-		if($actionInstance->isSimple() || ($useGenericMethods && !method_exists($actionInstance, $executeMethod))) {
+		if($actionInstance->isSimple() || ($useGenericMethods && !is_callable(array($actionInstance, $executeMethod)))) {
 			// this action will skip validation/execution for this method
 			// get the default view
 			$key = $request->toggleLock();
@@ -507,7 +507,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			} else {
 				// validation failed
 				$handleErrorMethod = 'handle' . $method . 'Error';
-				if(!method_exists($actionInstance, $handleErrorMethod)) {
+				if(!is_callable(array($actionInstance, $handleErrorMethod))) {
 					$handleErrorMethod = 'handleError';
 				}
 				$key = $request->toggleLock();
@@ -574,7 +574,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$validated = $validationManager->execute($requestData);
 
 		$validateMethod = 'validate' . $method;
-		if(!method_exists($actionInstance, $validateMethod)) {
+		if(!is_callable(array($actionInstance, $validateMethod))) {
 			$validateMethod = 'validate';
 		}
 
@@ -620,7 +620,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 
 		// manually load validators
 		$registerValidatorsMethod = 'register' . $method . 'Validators';
-		if(!method_exists($actionInstance, $registerValidatorsMethod)) {
+		if(!is_callable(array($actionInstance, $registerValidatorsMethod))) {
 			$registerValidatorsMethod = 'registerValidators';
 		}
 		$actionInstance->$registerValidatorsMethod();
