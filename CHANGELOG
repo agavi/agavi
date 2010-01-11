@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 ADD: Include error type and code when reporting libxml errors (#1202) (David)
 
+CHG: Update timezone database to 2009u (#1207) (David)
 CHG: Move error suppression operator for XML validation calls to wrapper methods (#1201) (David)
 
 FIX: AgaviTimeZoneDataParser doesn't support "-" as a time value (#1208) (David)

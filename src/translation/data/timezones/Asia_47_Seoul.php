@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Seoul".
- * Compiled from olson file "asia", version 8.44.
+ * Compiled from olson file "asia", version 8.50.
  *
  * @package    agavi
  * @subpackage translation
@@ -130,7 +130,7 @@ return array (
     'startYear' => 1989,
   ),
   'source' => 'asia',
-  'version' => '8.44',
+  'version' => '8.50',
   'name' => 'Asia/Seoul',
 );
 
