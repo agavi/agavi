@@ -7,5 +7,5 @@ foreach($t['locales'] as $locale): ?>
 <?php endforeach; ?>
 	</p>
 	<p>Powered by <?php echo $t['agavi_plug']; ?></p>
-	<p>Copyright © 2005-2009 The Agavi Project</p>
+	<p>Copyright © 2005-2010 The Agavi Project</p>
 </div>
