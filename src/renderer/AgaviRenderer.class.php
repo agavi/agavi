@@ -122,7 +122,7 @@ abstract class AgaviRenderer extends AgaviParameterHolder
 		
 		foreach($this->getParameter('assigns', array()) as $item => $var) {
 			$getter = 'get' . str_replace('_', '', $item);
-			if(method_exists($this->context, $getter)) {
+			if(is_callable(array($this->context, $getter))) {
 				if($var === null) {
 					// the name is null, which means this one should not be assigned
 					// we do this in here, not for the moreAssignNames, since those are checked later in the renderer

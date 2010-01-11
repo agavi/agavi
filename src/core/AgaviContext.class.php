@@ -411,7 +411,7 @@ class AgaviContext
 			}
 		}
 		
-		if(method_exists($model, 'initialize')) {
+		if(is_callable(array($model, 'initialize'))) {
 			// pass the constructor params again. dual use for the win
 			$model->initialize($this, (array) $parameters);
 		}

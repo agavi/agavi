@@ -55,7 +55,7 @@ class AgaviConstraintViewHandlesOutputType extends PHPUnit_Framework_Constraint
 	public function evaluate($other)
 	{
 		$executeMethod = 'execute' . $other;
-		if(method_exists($this->viewInstance, $executeMethod) || ($this->acceptGeneric && method_exists($this->viewInstance, 'execute'))) {
+		if(is_callable(array($this->viewInstance, $executeMethod)) || ($this->acceptGeneric && is_callable(array($this->viewInstance, 'execute')))) {
 			return true;
 		}
 		

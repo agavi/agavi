@@ -735,7 +735,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 		// $lm->log('View is not cached, executing...');
 		// view initialization completed successfully
 		$executeMethod = 'execute' . $outputType;
-		if(!method_exists($viewInstance, $executeMethod)) {
+		if(!is_callable(array($viewInstance, $executeMethod))) {
 			$executeMethod = 'execute';
 		}
 		$key = $request->toggleLock();
