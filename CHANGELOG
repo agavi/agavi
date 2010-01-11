@@ -8,6 +8,7 @@ ADD: Include error type and code when reporting libxml errors (#1202) (David)
 
 CHG: Move error suppression operator for XML validation calls to wrapper methods (#1201) (David)
 
+FIX: AgaviTimeZoneDataParser doesn't support "-" as a time value (#1208) (David)
 FIX: Several method existence checks don't deal with visibility (#1205) (David)
 FIX: Configuration parameter whitespace handling is inconsistent (#1203) (David)
 FIX: Regression: single Propel init query is lost during initialization (#1194) (David)
