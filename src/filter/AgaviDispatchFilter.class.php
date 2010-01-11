@@ -15,9 +15,10 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviExecutionTimeFilter tracks the length of time it takes for an entire
- * request to be served starting with the dispatch and ending when the last 
- * action request has been served.
+ * AgaviDispatchFilter is the last in the chain of global filters and executes
+ * the execution container, also re-setting the container's response to the
+ * return value of the execution, so responses from forwards are passed along
+ * properly.
  *
  * @package    agavi
  * @subpackage filter
