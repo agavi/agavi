@@ -55,7 +55,7 @@ class AgaviConstraintActionHandlesMethod extends PHPUnit_Framework_Constraint
 	public function evaluate($other)
 	{
 		$executeMethod = 'execute' . $other;
-		if(method_exists($this->actionInstance, $executeMethod) || ($this->acceptGeneric && method_exists($this->actionInstance, 'execute'))) {
+		if(is_callable(array($this->actionInstance, $executeMethod)) || ($this->acceptGeneric && is_callable(array($this->actionInstance, 'execute')))) {
 			return true;
 		}
 		

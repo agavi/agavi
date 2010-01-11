@@ -1038,6 +1038,8 @@ class AgaviTimeZoneDataParser
 			if($match[1] == '-') {
 				$seconds = -$seconds;
 			}
+		} elseif($time == '-') {
+			$seconds = 0;
 		} else {
 			throw new Exception('unknown time format "' . $time . '"');
 		}
