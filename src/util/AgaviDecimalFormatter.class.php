@@ -608,6 +608,69 @@ class AgaviDecimalFormatter
 
 		return $map[$mode];
 	}
+	
+	protected static function getDecimalParseRegex(AgaviLocale $locale = null)
+	{
+		static $patternCache = array();
+		
+		if($locale) {
+			$localeId = $locale->getIdentifier();
+		} else {
+			$localeId = '';
+		}
+		
+		if(isset($patternCache[$localeId])) {
+			return $patternCache[$localeId];
+		}
+		
+		if($locale) {
+			$decimalFormats = $locale->getDecimalFormats();
+			$groupingSeparator = $locale->getNumberSymbolGroup();
+			$decimalSeparator = $locale->getNumberSymbolDecimal();
+			$minusSign = $locale->getNumberSymbolMinusSign();
+		} else {
+			$decimalFormats = array('#,##0.###');
+			$groupingSeparator = ',';
+			$decimalSeparator = '.';
+			$minusSign = '-';
+		}
+		
+		$patterns = array();
+		
+		foreach($decimalFormats as $decimalFormatList) {
+			$decimalFormatList = explode(';', $decimalFormatList, 2);
+			if(count($decimalFormatList) == 1) {
+				// no pattern for negative numbers
+				// we need a copy of the format with a minus prefix
+				$decimalFormatList[1] = '-' . $decimalFormatList[0];
+			}
+			foreach($decimalFormatList as $decimalFormat) {
+				// we need to make three parts: number, decimal part and minus sign
+				$decimalFormatChunks = preg_split('/([\.\-])/', $decimalFormat, 0, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+				// there is a minus sign at the beginning or end! find it!
+				$pastDecimalSeparator = false;
+				foreach($decimalFormatChunks as &$decimalFormatChunk) {
+					if($decimalFormatChunk == '-') {
+						$decimalFormatChunk = '(?P<minus>' . preg_quote($minusSign, '#') . ')';
+					} elseif($decimalFormatChunk == '.') {
+						$pastDecimalSeparator = true;
+						$decimalFormatChunk = preg_quote($decimalSeparator, '#') . '?';
+					} else {
+						$decimalFormatChunk = preg_replace('/[#0,]+/u', '[\d' . preg_quote($groupingSeparator, '#') . ']', $decimalFormatChunk);
+						if(!$pastDecimalSeparator) {
+							$decimalFormatChunk = '(?P<num>' . $decimalFormatChunk . '*(\d(?![' . preg_quote($decimalSeparator, '#') . '\d,])|,(?!\.\d))|' . $decimalFormatChunk . '*(?=' . preg_quote($decimalSeparator, '#') . $decimalFormatChunk . '*))';
+						} else {
+							$decimalFormatChunk = '(?P<dec>(?<=' . preg_quote($decimalSeparator, '#') . ')' . $decimalFormatChunk . '*\d)?';
+						}
+					}
+				}
+				
+				$patterns[] = implode('', $decimalFormatChunks);
+			}
+		}
+		
+		return $patternCache[$localeId] = '#(?J)^(' . implode('|', $patterns) . ')#u';
+	}
 
 	/**
 	 * Parses a string into float or int.
@@ -627,44 +690,41 @@ class AgaviDecimalFormatter
 	{
 		$string = trim($string);
 
+		$pattern = self::getDecimalParseRegex($locale);
+
 		if($locale) {
 			$groupingSeparator = $locale->getNumberSymbolGroup();
-			$decimalSeparator = $locale->getNumberSymbolDecimal();
 		} else {
 			$groupingSeparator = ',';
-			$decimalSeparator = '.';
 		}
-
-		$rx = '#(?P<sign>\+|-)?(?P<num>[0-9' . preg_quote($groupingSeparator, '#') . ']*)(' . preg_quote($decimalSeparator, '#') . '(?P<dec>[0-9]+))?(e(?P<exp>(\+|-)?[0-9]+))?#';
-		if(preg_match($rx, $string, $match)) {
-
-			if(strlen($match[0]) < strlen($string)) {
+		
+		var_dump($string, $pattern);
+		if(preg_match($pattern, $string, $matches)) {
+			var_dump($matches);
+			if(strlen($matches[0]) < strlen($string)) {
 				$hasExtraChars = true;
 			}
 
 			$num = 0;
-			if(!empty($match['num'])) {
-				$num = (int) str_replace($groupingSeparator, '', $match['num']);
+			if(!empty($matches['num'])) {
+				$num = (int) str_replace($groupingSeparator, '', $matches['num']);
 			}
-			if(!empty($match['dec'])) {
-				$num += (float) ('0.' . $match['dec']);
-			}
-
-			if(!empty($match['exp'])) {
-				$num = $num * pow(10, $match['exp']);
+			if(!empty($matches['dec'])) {
+				$num += (float) ('0.' . (int) str_replace($groupingSeparator, '', $matches['dec']));
 			}
 
-			if(!empty($match['sign']) && '-' == $match['sign']) {
+			if(!empty($matches['minus'])) {
 				$num = $num * -1;
 			}
-
+			
 			return $num;
-		} else {
-			if(strlen($string) > 0) {
-				$hasExtraChars = true;
-			}
-			return false;
 		}
+		
+		if(strlen($string) > 0) {
+			$hasExtraChars = true;
+		}
+	
+		return false;
 	}
 }
 

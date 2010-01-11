@@ -56,33 +56,22 @@ class AgaviNumberValidator extends AgaviValidator
 			return false;
 		}
 
-		$hasExtraChars = false;
-
+		$locale = null;
 		if(AgaviConfig::get('core.use_translation') && !$this->getParameter('no_locale', false)) {
 			if($locale = $this->getParameter('in_locale')) {
 				$locale = $this->getContext()->getTranslationManager()->getLocale($locale);
 			} else {
 				$locale = $this->getContext()->getTranslationManager()->getCurrentLocale();
 			}
-
-			$parsedValue = AgaviDecimalFormatter::parse($value, $locale, $hasExtraChars);
-			if($parsedValue !== false && !$hasExtraChars) {
-				$value = $parsedValue;
-			}
-		} else {
-			if(is_numeric($value)) {
-				if(((int) $value) == $value) {
-					$value = (int) $value;
-				} else {
-					$value = (float) $value;
-				}
-			}
 		}
-
+		
+		$hasExtraChars = false;
+		$parsedValue = AgaviDecimalFormatter::parse($value, $locale, $hasExtraChars);
+		
 		switch(strtolower($this->getParameter('type'))) {
 			case 'int':
 			case 'integer':
-				if(!is_int($value) || $hasExtraChars) {
+				if(!is_int($parsedValue) || $hasExtraChars) {
 					$this->throwError('type');
 					return false;
 				}
@@ -91,35 +80,46 @@ class AgaviNumberValidator extends AgaviValidator
 			
 			case 'float':
 			case 'double':
-				if((!is_float($value) && !is_int($value)) || $hasExtraChars) {
+				if((!is_float($parsedValue) && !is_int($parsedValue)) || $hasExtraChars) {
 					$this->throwError('type');
 					return false;
 				}
 				
 				break;
+			
+			default:
+				if($parsedValue === false || $hasExtraChars) {
+					$this->throwError('type');
+					return false;
+				}
 		}
 
-		switch(strtolower($this->getParameter('cast_to'))) {
+		switch(strtolower($this->getParameter('cast_to', $this->getParameter('type')))) {
 			case 'int':
 			case 'integer':
-				$value = (int) $value;
+				$parsedValue = (int) $parsedValue;
 				break;
-
+			
 			case 'float':
 			case 'double':
-				$value = (float) $value;
+				$parsedValue = (float) $parsedValue;
 				break;
-
 		}
 
-		if($this->hasParameter('min') && $value < $this->getParameter('min')) {
+		if($this->hasParameter('min') && $parsedValue < $this->getParameter('min')) {
 			$this->throwError('min');
 			return false;
 		}
 
-		if($this->hasParameter('max') && $value > $this->getParameter('max')) {
+		if($this->hasParameter('max') && $parsedValue > $this->getParameter('max')) {
 			$this->throwError('max');
 			return false;
+		}
+		
+		if($this->hasParameter('export')) {
+			$this->export($parsedValue);
+		} else {
+			$value = $parsedValue;
 		}
 		
 		return true;
