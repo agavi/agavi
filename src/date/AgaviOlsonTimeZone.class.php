@@ -442,11 +442,11 @@ class AgaviOlsonTimeZone extends AgaviTimeZone
 		$limit = (int) AgaviCalendarGrego::fieldsToDay($year + 1, 0, 1) * AgaviDateDefinitions::SECONDS_PER_DAY;
 
 		// Return TRUE if DST is observed at any time during the current year.
-		foreach($this->transitions as $transition) {
-			if($transition['time'] >= $limit) {
+		for($i = 0, $transitionCount = count($this->transitions); $i < $transitionCount; ++$i) {
+			if($this->transitions[$i]['time'] >= $limit) {
 				break;
 			}
-			if($transition['time'] >= $start && $this->types[$transition['type']]['dstOffset'] != 0) {
+			if(($this->transitions[$i]['time'] >= $start && $this->types[$this->transitions[$i]['type']]['dstOffset'] != 0) || ($this->transitions[$i]['time'] > $start && $i > 0 && $this->types[$this->transitions[$i-1]['type']]['dstOffset'] != 0)) {
 				return true;
 			}
 		}
