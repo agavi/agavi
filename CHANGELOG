@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.2 RC4 (January ?, 2010)
 ---------------------------
 
+ADD: Support for HTML 5 forms (#1213) (David)
 ADD: Support for Doctrine 1.2 (#1210) (David)
 ADD: Include error type and code when reporting libxml errors (#1202) (David)
 
