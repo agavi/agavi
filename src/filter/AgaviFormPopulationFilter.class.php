@@ -687,10 +687,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				continue;
 			}
 			foreach($incident->getErrors() as $error) {
-				$errorMessages[] = $error->getMessage();
+				if(($errorMessage = $error->getMessage()) !== null && $errorMessage !== '') {
+					$errorMessages[] = $errorMessage;
+				}
 			}
 		}
-
+		
 		if(!$errorMessages) {
 			// nothing to do here
 			return true;
