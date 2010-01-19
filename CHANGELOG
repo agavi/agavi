@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.2 (January ??, 2009)
 ------------------------
 
+CHG: Update timezone database to 2010a (#1215) (David)
+
 FIX: Form Population Filter doesn't filter out empty error messages (#1214) (David)
 
 

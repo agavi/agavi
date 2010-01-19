@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Karachi".
- * Compiled from olson file "asia", version 8.50.
+ * Compiled from olson file "asia", version 8.51.
  *
  * @package    agavi
  * @subpackage translation
@@ -132,7 +132,7 @@ return array (
     'startYear' => 2009,
   ),
   'source' => 'asia',
-  'version' => '8.50',
+  'version' => '8.51',
   'name' => 'Asia/Karachi',
 );
 
