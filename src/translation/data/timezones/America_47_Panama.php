@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Panama".
- * Compiled from olson file "northamerica", version 8.28.
+ * Compiled from olson file "northamerica", version 8.30.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1909,
   ),
   'source' => 'northamerica',
-  'version' => '8.28',
+  'version' => '8.30',
   'name' => 'America/Panama',
 );
 

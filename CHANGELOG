@@ -4,8 +4,8 @@ AGAVI CHANGELOG
 1.0.2 (January ??, 2009)
 ------------------------
 
+CHG: Update timezone database to 2010b (#1219) (David)
 CHG: Update ISO Schematron to version 2010-01-25 (#1217) (David)
-CHG: Update timezone database to 2010a (#1215) (David)
 
 FIX: Build system is incompatible with Phing 2.4.0 (#1216) (David)
 FIX: Form Population Filter doesn't filter out empty error messages (#1214) (David)

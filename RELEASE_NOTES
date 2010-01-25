@@ -51,7 +51,7 @@ For older Propel versions, the old-style syntax still applies:
 </ae:parameter>
 
 Bundle updates:
-- The timezone database has been updated to version 2010a.
+- The timezone database has been updated to version 2010b.
 - PHPUnit has been updated to version 3.4.2.
 - ISO Schematron has been updated to the final version 2010-01-25.
 

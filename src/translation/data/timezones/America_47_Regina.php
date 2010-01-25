@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Regina".
- * Compiled from olson file "northamerica", version 8.28.
+ * Compiled from olson file "northamerica", version 8.30.
  *
  * @package    agavi
  * @subpackage translation
@@ -331,7 +331,7 @@ return array (
     'startYear' => 1961,
   ),
   'source' => 'northamerica',
-  'version' => '8.28',
+  'version' => '8.30',
   'name' => 'America/Regina',
 );
 

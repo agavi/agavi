@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "America/Cancun".
+ * Data file for timezone "America/Matamoros".
  * Compiled from olson file "northamerica", version 8.30.
  *
  * @package    agavi
@@ -26,24 +26,6 @@ return array (
     ),
     1 => 
     array (
-      'rawOffset' => -18000,
-      'dstOffset' => 0,
-      'name' => 'EST',
-    ),
-    2 => 
-    array (
-      'rawOffset' => -18000,
-      'dstOffset' => 3600,
-      'name' => 'EDT',
-    ),
-    3 => 
-    array (
-      'rawOffset' => -21600,
-      'dstOffset' => 0,
-      'name' => 'CDT',
-    ),
-    4 => 
-    array (
       'rawOffset' => -21600,
       'dstOffset' => 3600,
       'name' => 'CDT',
@@ -58,80 +40,90 @@ return array (
     ),
     1 => 
     array (
-      'time' => 377935200,
-      'type' => 1,
+      'time' => 568015200,
+      'type' => 0,
     ),
     2 => 
     array (
-      'time' => 828860400,
-      'type' => 2,
+      'time' => 576057600,
+      'type' => 1,
     ),
     3 => 
     array (
-      'time' => 846396000,
-      'type' => 1,
+      'time' => 594198000,
+      'type' => 0,
     ),
     4 => 
     array (
-      'time' => 860310000,
-      'type' => 2,
+      'time' => 599637600,
+      'type' => 0,
     ),
     5 => 
     array (
-      'time' => 877845600,
+      'time' => 828864000,
       'type' => 1,
     ),
     6 => 
     array (
-      'time' => 891759600,
-      'type' => 2,
+      'time' => 846399600,
+      'type' => 0,
     ),
     7 => 
     array (
-      'time' => 902037600,
-      'type' => 3,
+      'time' => 860313600,
+      'type' => 1,
     ),
     8 => 
     array (
-      'time' => 909298800,
+      'time' => 877849200,
       'type' => 0,
     ),
     9 => 
     array (
-      'time' => 923212800,
-      'type' => 4,
+      'time' => 891763200,
+      'type' => 1,
     ),
     10 => 
     array (
-      'time' => 941353200,
+      'time' => 909298800,
       'type' => 0,
     ),
     11 => 
     array (
-      'time' => 954662400,
-      'type' => 4,
+      'time' => 923212800,
+      'type' => 1,
     ),
     12 => 
     array (
-      'time' => 972802800,
+      'time' => 941353200,
       'type' => 0,
     ),
     13 => 
     array (
-      'time' => 989136000,
-      'type' => 4,
+      'time' => 954662400,
+      'type' => 1,
     ),
     14 => 
     array (
-      'time' => 1001833200,
+      'time' => 972802800,
       'type' => 0,
     ),
     15 => 
     array (
-      'time' => 1018166400,
-      'type' => 4,
+      'time' => 989136000,
+      'type' => 1,
     ),
     16 => 
+    array (
+      'time' => 1001833200,
+      'type' => 0,
+    ),
+    17 => 
+    array (
+      'time' => 1018166400,
+      'type' => 1,
+    ),
+    18 => 
     array (
       'time' => 1035702000,
       'type' => 0,
@@ -145,17 +137,17 @@ return array (
     'save' => 3600,
     'start' => 
     array (
-      'month' => 3,
-      'date' => '1',
+      'month' => 2,
+      'date' => '8',
       'day_of_week' => -1,
       'time' => 7200000,
       'type' => 0,
     ),
     'end' => 
     array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
+      'month' => 10,
+      'date' => '1',
+      'day_of_week' => -1,
       'time' => 7200000,
       'type' => 0,
     ),
@@ -163,7 +155,7 @@ return array (
   ),
   'source' => 'northamerica',
   'version' => '8.30',
-  'name' => 'America/Cancun',
+  'name' => 'America/Matamoros',
 );
 
 ?>
