@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 CHG: Update timezone database to 2010a (#1215) (David)
 
+FIX: Build system is incompatible with Phing 2.4.0 (#1216) (David)
 FIX: Form Population Filter doesn't filter out empty error messages (#1214) (David)
 
 
