@@ -179,6 +179,9 @@
      3) pattern/@documents
 
   VERSION INFORMATION 
+
+     2010-01-24 RJ
+     	* Allow let elements to have direct content instead of @value 
    2009-02-25 RJ
         * Fix up variable names so none are used twice in same template
         * Tested on SAXON 9, Xalan 2.7.1. Partly tested MSXML.  
@@ -1127,19 +1130,41 @@
                     <xsl:message>Warning: Variables should not be used with the "xpath" query language binding.</xsl:message>
        </xsl:if>
 		
-       <!-- lets at the top-level are implemented as parameters -->
+       <!-- lets at the top-level are implemented as parameters unless they have contents -->
  
        	<xsl:choose>
+       		<!-- TODO: what about top-level lets that include data? -->
        		<xsl:when test="parent::iso:schema">
        			<!-- it is an error to have an empty param/@select because an XPath is expected -->
-	      		 <axsl:param name="{@name}" select="{@value}">
-	      		 		<xsl:if test="string-length(@value) &gt; 0">
-	      		 			<xsl:attribute name="select"><xsl:value-of select="@value"/></xsl:attribute>
-	      		 		</xsl:if>
-	      		 </axsl:param> 
+       			<!-- So why is the select="{@value}" still there?  because the let always has a value! -->
+       			<!-- TODO: remove spurious let. -->
+       			<xsl:choose>
+       				<xsl:when test="@value">
+	      				<axsl:param name="{@name}" select="{@value}">
+	      		 			<xsl:if test="string-length(@value) &gt; 0">
+	      		 				<xsl:attribute name="select"><xsl:value-of select="@value"/></xsl:attribute>
+	      		 			</xsl:if>
+	      		 		</axsl:param>
+	      		 	</xsl:when>
+	      		 	<xsl:otherwise>
+						<axsl:variable name="{@name}"  >
+						  <xsl:copy-of select="child::node()" />
+						</axsl:variable>
+	      		 	</xsl:otherwise> 
+	      		 </xsl:choose>
        		</xsl:when>
        		<xsl:otherwise>
-				<axsl:variable name="{@name}" select="{@value}"/>
+       		    <xsl:choose>
+       		    	<xsl:when  test="@value">
+						<axsl:variable name="{@name}" select="{@value}"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<axsl:variable name="{@name}"  >
+						  <xsl:copy-of select="child::node()" />
+						</axsl:variable>
+				   </xsl:otherwise>
+				 </xsl:choose>
+				  	
 			</xsl:otherwise>
 		</xsl:choose>
 		  
