@@ -25,6 +25,13 @@ Important Changes:
 - Support for PHPTAL 1.2.
 - Support for Doctrine 1.2.
 - Support for Propel 1.4.
+- Support for Phing 2.4.0.
+
+Due to changes in Doctrine 1.2 that broke backwards compatibility without prior notice, attribute names and values must now be specified using fully qualified constant names, for example:
+<ae:parameter name="attributes">
+  <ae:parameter name="Doctrine_Core::ATTR_PORTABILITY">Doctrine_Core::PORTABILITY_RTRIM</ae:parameter>
+</ae:parameter>
+The new model autoloading modes are also supported, as are extensions.
 
 For Propel 1.4, the format of the keys for the "overrides" parameter has changed. It's now mandatory to use Propel's internal config syntax with the full parameter name. Examples
 <ae:parameter name="overrides">
@@ -44,9 +51,9 @@ For older Propel versions, the old-style syntax still applies:
 </ae:parameter>
 
 Bundle updates:
-- The timezone database has been updated to version 2009u.
+- The timezone database has been updated to version 2010a.
 - PHPUnit has been updated to version 3.4.2.
-- ISO Schematron has been updated to version 2009-05-18.
+- ISO Schematron has been updated to the final version 2010-01-25.
 
 Please refer to CHANGELOG for a full list of changes.
 
