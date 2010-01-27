@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.2 (January ??, 2009)
+1.0.2 (January 27, 2009)
 ------------------------
 
 CHG: Update timezone database to 2010b (#1219) (David)
@@ -69,6 +69,7 @@ FIX: agavi.php erroneously always assumes it is a symlink if project.directory i
 ADD: Accept optional argument identifier in AgaviValidator::getArgument() (#1142) (David)
 ADD: Support for PHPTAL 1.2 (#1141) (David)
 ADD: Allow optional strict comparison in AgaviEqualsValidator (#1128) (David, Dennis Meckel)
+ADD: Allow optional strict comparison of elements in AgaviInarrayValidator (#1107) (David)
 
 CHG: Update timezone database to 2009m (#1154) (David)
 CHG: Update old tests to use bundled PHPUnit (#1153) (Felix)
@@ -79,7 +80,6 @@ CHG: Support PHP namespaces in configuration schemas (#1133) (David)
 CHG: Validator shortcut "arraylength" should default to minimum of one element (#1123) (David)
 CHG: Backport any necessary ICU changes and fixes (#858) (Dominik)
 CHG: Remove unnecessary use of create_function() in AgaviInarrayValidator (#1112) (David)
-CHG: Allow optional strict comparison of elements in AgaviInarrayValidator (#1107) (David)
 CHG: Update ISO Schematron to version 2009-05-18 (#1103) (David)
 CHG: Routing callback parameters should be set before initialize method is called (#1105) (David)
 
