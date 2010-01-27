@@ -183,6 +183,7 @@ try {
 	}
 	
 	$project->init();
+	ProjectConfigurator::configureProject($project, $GLOBALS['BUILD']);
 	
 	$project->addTaskDefinition('agavi.import', 'org.agavi.build.tasks.AgaviImportTask', 'phing');
 	$project->addTaskDefinition('agavi.locate-project', 'org.agavi.build.tasks.AgaviLocateprojectTask', 'phing');

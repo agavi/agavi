@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "America/Indiana/Vevay".
+ * Data file for timezone "America/Ojinaga".
  * Compiled from olson file "northamerica", version 8.30.
  *
  * @package    agavi
@@ -20,175 +20,152 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => -21600,
+      'rawOffset' => -25200,
       'dstOffset' => 0,
-      'name' => 'CT',
+      'name' => 'MST',
     ),
     1 => 
-    array (
-      'rawOffset' => -21600,
-      'dstOffset' => 3600,
-      'name' => 'CDT',
-    ),
-    2 => 
     array (
       'rawOffset' => -21600,
       'dstOffset' => 0,
       'name' => 'CST',
     ),
+    2 => 
+    array (
+      'rawOffset' => -21600,
+      'dstOffset' => 3600,
+      'name' => 'CDT',
+    ),
     3 => 
     array (
-      'rawOffset' => -21600,
+      'rawOffset' => -25200,
       'dstOffset' => 3600,
-      'name' => 'CWT',
-    ),
-    4 => 
-    array (
-      'rawOffset' => -21600,
-      'dstOffset' => 3600,
-      'name' => 'CPT',
-    ),
-    5 => 
-    array (
-      'rawOffset' => -18000,
-      'dstOffset' => 0,
-      'name' => 'EST',
-    ),
-    6 => 
-    array (
-      'rawOffset' => -18000,
-      'dstOffset' => 3600,
-      'name' => 'EDT',
+      'name' => 'MDT',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2717647200,
+      'time' => -1514739600,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1633276800,
+      'time' => -1343066400,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1615136400,
-      'type' => 2,
+      'time' => -1234807200,
+      'type' => 0,
     ),
     3 => 
     array (
-      'time' => -1601827200,
+      'time' => -1220292000,
       'type' => 1,
     ),
     4 => 
     array (
-      'time' => -1583686800,
-      'type' => 2,
+      'time' => -1207159200,
+      'type' => 0,
     ),
     5 => 
     array (
-      'time' => -880214400,
-      'type' => 3,
+      'time' => -1191344400,
+      'type' => 1,
     ),
     6 => 
     array (
-      'time' => -769395600,
-      'type' => 4,
+      'time' => 820476000,
+      'type' => 1,
     ),
     7 => 
     array (
-      'time' => -765392400,
+      'time' => 828864000,
       'type' => 2,
     ),
     8 => 
     array (
-      'time' => -495043200,
-      'type' => 5,
+      'time' => 846399600,
+      'type' => 1,
     ),
     9 => 
     array (
-      'time' => -31518000,
-      'type' => 5,
+      'time' => 860313600,
+      'type' => 2,
     ),
     10 => 
     array (
-      'time' => -21488400,
-      'type' => 6,
+      'time' => 877849200,
+      'type' => 1,
     ),
     11 => 
     array (
-      'time' => -5767200,
-      'type' => 5,
+      'time' => 883634400,
+      'type' => 1,
     ),
     12 => 
     array (
-      'time' => 9961200,
-      'type' => 6,
+      'time' => 891410400,
+      'type' => 0,
     ),
     13 => 
     array (
-      'time' => 25682400,
-      'type' => 5,
+      'time' => 891766800,
+      'type' => 3,
     ),
     14 => 
     array (
-      'time' => 41410800,
-      'type' => 6,
+      'time' => 909302400,
+      'type' => 0,
     ),
     15 => 
     array (
-      'time' => 57736800,
-      'type' => 5,
+      'time' => 923216400,
+      'type' => 3,
     ),
     16 => 
     array (
-      'time' => 73465200,
-      'type' => 6,
+      'time' => 941356800,
+      'type' => 0,
     ),
     17 => 
     array (
-      'time' => 89186400,
-      'type' => 5,
+      'time' => 954666000,
+      'type' => 3,
     ),
     18 => 
     array (
-      'time' => 94712400,
-      'type' => 5,
+      'time' => 972806400,
+      'type' => 0,
     ),
     19 => 
     array (
-      'time' => 1136091600,
-      'type' => 5,
+      'time' => 989139600,
+      'type' => 3,
     ),
     20 => 
     array (
-      'time' => 1143961200,
-      'type' => 6,
+      'time' => 1001836800,
+      'type' => 0,
     ),
     21 => 
     array (
-      'time' => 1162101600,
-      'type' => 5,
+      'time' => 1018170000,
+      'type' => 3,
     ),
     22 => 
     array (
-      'time' => 1173596400,
-      'type' => 6,
-    ),
-    23 => 
-    array (
-      'time' => 1194156000,
-      'type' => 5,
+      'time' => 1035705600,
+      'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'dynamic',
-    'offset' => -18000,
-    'name' => 'E%sT',
+    'offset' => -25200,
+    'name' => 'M%sT',
     'save' => 3600,
     'start' => 
     array (
@@ -206,11 +183,11 @@ return array (
       'time' => 7200000,
       'type' => 0,
     ),
-    'startYear' => 2007,
+    'startYear' => 2002,
   ),
   'source' => 'northamerica',
   'version' => '8.30',
-  'name' => 'America/Indiana/Vevay',
+  'name' => 'America/Ojinaga',
 );
 
 ?>

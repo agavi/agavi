@@ -1,8 +1,8 @@
-[iso_schematron_skeleton.xsl]
+[iso_schematron_skeleton_for_xslt1.xsl]
 
 LEGAL INFORMATION
 
-Copyright (c) 2000-2007 Rick Jelliffe and Academia Sinica Computing Center, Taiwan
+Copyright (c) 2000-2008 Rick Jelliffe and Academia Sinica Computing Center, Taiwan
 
 This software is provided 'as-is', without any express or implied warranty. 
 In no event will the authors be held liable for any damages arising from 

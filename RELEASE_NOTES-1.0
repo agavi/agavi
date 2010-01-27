@@ -1,6 +1,64 @@
 AGAVI RELEASE NOTES (1.0.x)
 ===========================
 
+Version 1.0.2 - January 27, 2010
+================================
+
+This maintenance release fixes a number of issues over Agavi 1.0.1 and brings a couple of minor enhancements.
+
+Important enhancements and changes:
+- Support for HTML 5 forms in AgaviFormPopulationFilter.
+- Support for Doctrine 1.2.
+- Support for Propel 1.4.
+- Support for Phing 2.4.0.
+- Support for PHPTAL 1.2.
+- Optional strict comparison of elements in AgaviInarrayValidator and AgaviEqualsValidator.
+- Validator shortcut "arraylength" now defaults to minimum of one element.
+- Routing callback parameters are now set before initialize method is called.
+- Lots of ICU bugfix and change backports to the date and translation system. As a result, custom time zones now have identifiers like "GMT+0200".
+- Support for PHP 5.3 namespaces in all configuration files.
+- AgaviValidator::getArgument() now accepts an argument identifier.
+
+The following fixes are worth mentioning:
+- AgaviArraylengthValidator didn't work with files.
+- AgaviValidationManager::clear() didn't clear validation errors.
+- Multiple settings blocks and settings prefixes were not allowed in module configs.
+- Several ICU bugfixes have been ported.
+- Validation used to drop the first element when exporting multi-dimensional arrays.
+- Configuration parameter values containing only whitespace are now converted to NULL instead of an empty string.
+- FPF will now discard empty error messages.
+
+Due to changes in Doctrine 1.2 that broke backwards compatibility without prior notice, attribute names and values must now be specified using fully qualified constant names, for example:
+<ae:parameter name="attributes">
+  <ae:parameter name="Doctrine_Core::ATTR_PORTABILITY">Doctrine_Core::PORTABILITY_RTRIM</ae:parameter>
+</ae:parameter>
+The new model autoloading modes are also supported, as are extensions.
+
+For Propel 1.4, the format of the keys for the "overrides" parameter has changed. It's now mandatory to use Propel's internal config syntax with the full parameter name. Examples
+<ae:parameter name="overrides">
+  <ae:parameter name="datasources.bookstore.connection.dsn">pgsql:...</ae:parameter>
+  <ae:parameter name="classmap.Zomg">path/to/Zomg</ae:parameter>
+  <ae:parameter name="datasources.bookstore.connection.attributes.ATTR_EMULATE_PREPARES.value">false</ae:parameter>
+</ae:parameter>
+This new approach is much more forward compatible and allows for more control over the overrides; for instance, the ATTR_EMULATE_PREPARES setting above was not possible before.
+For older Propel versions, the old-style syntax still applies:
+<ae:parameter name="overrides">
+  <ae:parameter name="connection">
+    <ae:parameter name="dsn">pgsql:...</ae:parameter>
+  </ae:parameter>
+  <ae:parameter name="classes">
+    <ae:parameter name="Zomg">path/to/Zomg</ae:parameter>
+  </ae:parameter>
+</ae:parameter>
+
+Bundle updates:
+- The timezone database has been updated to version 2010b.
+- PHPUnit has been updated to version 3.4.2.
+- ISO Schematron has been updated to the final version 2010-01-25.
+
+Please refer to CHANGELOG for a full list of changes.
+
+
 Version 1.0.1 - May 1, 2009
 ===========================
 

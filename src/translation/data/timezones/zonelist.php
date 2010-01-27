@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2010-01-11T14:22:40+00:00.
+ * Generated on 2010-01-25T15:28:40+00:00.
  *
  * @package    agavi
  * @subpackage translation
@@ -571,6 +571,11 @@ return array (
     'type' => 'zone',
     'filename' => 'America_47_Merida.php',
   ),
+  'America/Matamoros' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'America_47_Matamoros.php',
+  ),
   'America/Monterrey' => 
   array (
     'type' => 'zone',
@@ -580,6 +585,11 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'America_47_Mexico_City.php',
+  ),
+  'America/Ojinaga' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'America_47_Ojinaga.php',
   ),
   'America/Chihuahua' => 
   array (
@@ -600,6 +610,11 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'America_47_Tijuana.php',
+  ),
+  'America/Santa_Isabel' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'America_47_Santa_Isabel.php',
   ),
   'America/Anguilla' => 
   array (

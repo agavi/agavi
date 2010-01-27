@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Tijuana".
- * Compiled from olson file "northamerica", version 8.28.
+ * Compiled from olson file "northamerica", version 8.30.
  *
  * @package    agavi
  * @subpackage translation
@@ -485,24 +485,24 @@ return array (
     'save' => 3600,
     'start' => 
     array (
-      'month' => 3,
-      'date' => '1',
+      'month' => 2,
+      'date' => '8',
       'day_of_week' => -1,
       'time' => 7200000,
       'type' => 0,
     ),
     'end' => 
     array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
+      'month' => 10,
+      'date' => '1',
+      'day_of_week' => -1,
       'time' => 7200000,
       'type' => 0,
     ),
     'startYear' => 2003,
   ),
   'source' => 'northamerica',
-  'version' => '8.28',
+  'version' => '8.30',
   'name' => 'America/Tijuana',
 );
 

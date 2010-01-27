@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Barbados".
- * Compiled from olson file "northamerica", version 8.28.
+ * Compiled from olson file "northamerica", version 8.30.
  *
  * @package    agavi
  * @subpackage translation
@@ -103,7 +103,7 @@ return array (
     'startYear' => 1981,
   ),
   'source' => 'northamerica',
-  'version' => '8.28',
+  'version' => '8.30',
   'name' => 'America/Barbados',
 );
 
