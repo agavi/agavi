@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.3 RC1 - February ?, 2010
 ----------------------------
 
+FIX: Generated action cache configs have caching enabled by default (#1223) (David)
+
 
 1.0.2 (January 27, 2010)
 ------------------------
