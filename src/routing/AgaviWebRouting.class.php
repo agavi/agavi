@@ -44,24 +44,16 @@ class AgaviWebRouting extends AgaviRouting
 	 * @var        array The GET parameters that were passed in the URL.
 	 */
 	protected $inputParameters = array();
-	
+
 	/**
 	 * @var        array arg_separator.input as defined in php.ini, exploded
 	 */
-	protected $argSeparatorInput = '&amp;';
+	protected $argSeparatorInput = array('&');
 
 	/**
 	 * @var        string arg_separator.output as defined in php.ini
 	 */
 	protected $argSeparatorOutput = '&amp;';
-
-	/**
-	 * @var        array An array of needles and replaces for gen(null) cleanup.
-	 */
-	protected $genNullReplaces = array(
-		'[' => '%5B',
-		'%'
-	);
 
 	/**
 	 * Constructor.
