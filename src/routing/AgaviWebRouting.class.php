@@ -44,6 +44,24 @@ class AgaviWebRouting extends AgaviRouting
 	 * @var        array The GET parameters that were passed in the URL.
 	 */
 	protected $inputParameters = array();
+	
+	/**
+	 * @var        array arg_separator.input as defined in php.ini, exploded
+	 */
+	protected $argSeparatorInput = '&amp;';
+
+	/**
+	 * @var        string arg_separator.output as defined in php.ini
+	 */
+	protected $argSeparatorOutput = '&amp;';
+
+	/**
+	 * @var        array An array of needles and replaces for gen(null) cleanup.
+	 */
+	protected $genNullReplaces = array(
+		'[' => '%5B',
+		'%'
+	);
 
 	/**
 	 * Constructor.
@@ -71,6 +89,9 @@ class AgaviWebRouting extends AgaviRouting
 			// fragment identifier (#foo)
 			'fragment' => null,
 		));
+		
+		$this->argSeparatorInput = str_split(ini_get('arg_separator.input'));
+		$this->argSeparatorOutput = ini_get('arg_separator.output');
 	}
 
 	/**
@@ -264,14 +285,18 @@ class AgaviWebRouting extends AgaviRouting
 
 		$options = $this->resolveGenOptions($options);
 
-		$aso = ini_get('arg_separator.output');
+		$aso = $this->argSeparatorOutput;
 		if($options['separator'] != $aso) {
 			$aso = $options['separator'];
 		}
 
 		if($route === null && empty($params)) {
 			$retval = $req->getRequestUri();
-			$retval = str_replace(array('[', ']', '\'', ini_get('arg_separator.input')), array('%5B', '%5D', '%27', $aso), $retval);
+			$retval = str_replace(array('[', ']', '\''), array('%5B', '%5D', '%27'), $retval);
+			// much quicker than str_replace($this->argSeparatorInput, array_fill(0, count($this->argSeparatorInput), $aso), $retval)
+			foreach($this->argSeparatorInput as $char) {
+				$retval = str_replace($char, $aso, $retval);
+			}
 		} else {
 			if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
 				$params = array_merge($params, array(session_name() => session_id()));
