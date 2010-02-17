@@ -31,7 +31,7 @@
 
 define('BUILD_DIRECTORY', realpath(dirname(__FILE__) . '/../..'));
 define('START_DIRECTORY', getcwd());
-define('MIN_PHING_VERSION', '2.3.1');
+define('MIN_PHING_VERSION', '2.4.0');
 
 require('phing/Phing.php');
 

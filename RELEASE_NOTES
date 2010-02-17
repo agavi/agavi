@@ -4,6 +4,8 @@ AGAVI RELEASE NOTES
 Version 1.0.3 - February ?, 2010
 ================================
 
+This release bumps the minimum required version of Phing to 2.4.0; this was necessary to fix some bugs with the build system that were next to impossible to fix for both 2.3 and 2.4 (which drastically changed some internals structures) at the same time.
+
 
 Version 1.0.2 - January 27, 2010
 ================================
