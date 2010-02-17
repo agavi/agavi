@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.3 RC1 - February ?, 2010
 ----------------------------
 
+FIX: AgaviTranslationManager->getDefaultLocale() is broken and throws a notice (#1229) (Dominik)
 FIX: AgaviWebRouting::gen(null) fails when multiple chars are defined as separators in arg_separator.input (#1227) (David)
 FIX: Generated action cache configs have caching enabled by default (#1223) (David)
 
