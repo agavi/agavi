@@ -3,7 +3,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -56,7 +56,6 @@ try {
 			exit(1);
 		}
 	} catch(Exception $e) {
-		$GLOBALS['ERROR']->write(sprintf('Error: Phing version could not be determined; Phing %s or later required', MIN_PHING_VERSION) . PHP_EOL);
 		$GLOBALS['ERROR']->write(sprintf('Error: Phing version could not be determined; Phing %s or later required', MIN_PHING_VERSION) . PHP_EOL);
 		exit(1);
 	}
@@ -267,7 +266,6 @@ try {
 	
 	$logger = new $GLOBALS['LOGGER']();
 	$logger->setMessageOutputLevel($GLOBALS['VERBOSE'] ? Project::MSG_VERBOSE : Project::MSG_INFO);
-	//$logger->setMessageOutputLevel(Project::MSG_DEBUG);
 	$logger->setOutputStream($GLOBALS['OUTPUT']);
 	$logger->setErrorStream($GLOBALS['ERROR']);
 	
@@ -286,6 +284,7 @@ try {
 	
 	$project->init();
 	ProjectConfigurator::configureProject($project, $GLOBALS['BUILD']);
+
 	Phing::setCurrentProject($project);
 	
 	if($GLOBALS['SHOW_LIST'] === true) {
