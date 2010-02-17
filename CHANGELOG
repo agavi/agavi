@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 CHG: Require Phing 2.4 or newer (#1232) (David)
 
+FIX: Project build.xml not used with Phing 2.4.0+ (#1231) (Felix)
 FIX: AgaviTranslationManager->getDefaultLocale() is broken and throws a notice (#1229) (Dominik)
 FIX: AgaviWebRouting::gen(null) fails when multiple chars are defined as separators in arg_separator.input (#1227) (David)
 FIX: Generated action cache configs have caching enabled by default (#1223) (David)
