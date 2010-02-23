@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.3 RC1 - February ?, 2010
 ----------------------------
 
+CHG: Allow "extension" parameter to be an array in file validators (#1235) (David)
+CHG: File extension comparison should be case-insensitive in file validators (#1234) (David)
 CHG: Require Phing 2.4 or newer (#1232) (David)
 
 FIX: Project build.xml not used with Phing 2.4.0+ (#1231) (Felix)
