@@ -32,15 +32,37 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 
 	public function onNotMatched(AgaviExecutionContainer $container)
 	{
-		// the pattern didn't matcb, or onMatched() returned false.
+		// the pattern didn't match, or onMatched() returned false.
 		// that's sad. let's see if there's a locale set in a cookie from an earlier visit.
-		$cookie = $this->context->getRequest()->getRequestData()->getCookie('locale');
+		$rd = $this->context->getRequest()->getRequestData();
+		
+		// no locale matched. that's sad. let's see if there's a locale set in a cookie, from an earlier visit.
+		$cookie = $rd->getCookie('locale');
 		if($cookie !== null) {
 			try {
 				$this->translationManager->setLocale($cookie);
+				return;
 			} catch(AgaviException $e) {
 				// bad cookie :<
 				$this->context->getController()->getGlobalResponse()->unsetCookie('locale');
+			}
+		}
+		
+		if($rd->hasHeader('Accept-Language')) {
+			$hasIntl = function_exists('locale_accept_from_http');
+			// try to find the best match for the locale
+			$locales = self::parseAcceptLanguage($rd->getHeader('Accept-Language'));
+			foreach($locales as $locale) {
+				try {
+					if($hasIntl) {
+						// we don't use this directly on Accept-Language because we might not have the preferred locale, but another one
+						// in any case, it might help clean up the value a bit further
+						$locale = locale_accept_from_http($locale);
+					}
+					$this->translationManager->setLocale($locale);
+					return;
+				} catch(AgaviException $e) {
+				}
 			}
 		}
 	}
@@ -68,6 +90,20 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 		} else {
 			return $short;
 		}
+	}
+	
+	protected static function parseAcceptLanguage($acceptLanguage)
+	{
+		$locales = array();
+		
+		if(preg_match_all('/(^|\s*,\s*)([a-zA-Z]{1,8}(-[a-zA-Z]{1,8})*)\s*(;\s*q\s*=\s*(1(\.0{,3})?|0(\.[0-9]{,3})))?/i', $acceptLanguage, $matches)) {
+			$matches[2] = array_map(function($part) { return str_replace('-', '_', $part); }, $matches[2]);
+			$matches[5] = array_map(function($part) { return $part === '' ? 1 : $part; }, $matches[5]);
+			$locales = array_combine($matches[2], $matches[5]);
+			arsort($locales, SORT_NUMERIC);
+		}
+		
+		return array_keys($locales);
 	}
 }
 
