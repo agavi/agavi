@@ -36,7 +36,6 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 		// that's sad. let's see if there's a locale set in a cookie from an earlier visit.
 		$rd = $this->context->getRequest()->getRequestData();
 		
-		// no locale matched. that's sad. let's see if there's a locale set in a cookie, from an earlier visit.
 		$cookie = $rd->getCookie('locale');
 		if($cookie !== null) {
 			try {
