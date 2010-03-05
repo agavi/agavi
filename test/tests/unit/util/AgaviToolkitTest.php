@@ -14,31 +14,10 @@ if(!class_exists('AgaviException')) {
 class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 {
 
-	public function __construct($name = NULL, array $data = array(), $dataName = '')
+	public function __construct($name = NULL, $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
 		// $this->setRunTestInSeparateProcess(true);
-	}
-
-	public function testIsPathAbsolute()
-	{
-		$this->assertTrue(AgaviToolkit::isPathAbsolute("/path"));
-		$this->assertTrue(AgaviToolkit::isPathAbsolute("\path"));
-		$this->assertTrue(AgaviToolkit::isPathAbsolute("\\path"));
-		$this->assertTrue(AgaviToolkit::isPathAbsolute("\\\\\\\path"));
-		$this->assertTrue(AgaviToolkit::isPathAbsolute("h:\path"));
-		$this->assertTrue(AgaviToolkit::isPathAbsolute("h:/path"));
-		$this->assertTrue(AgaviToolkit::isPathAbsolute("h://path"));
-		$this->assertTrue(AgaviToolkit::isPathAbsolute("h:/"));
-		$this->assertFalse(AgaviToolkit::isPathAbsolute("h:"));
-		$this->assertFalse(AgaviToolkit::isPathAbsolute("h:path"));
-		$this->assertFalse(AgaviToolkit::isPathAbsolute("path"));
-		$this->assertFalse(AgaviToolkit::isPathAbsolute("h/path"));
-		$this->assertFalse(AgaviToolkit::isPathAbsolute("h:path"));
-		$this->assertFalse(AgaviToolkit::isPathAbsolute("h\path"));
-		$this->assertFalse(AgaviToolkit::isPathAbsolute(":/path"));
-		$this->assertFalse(AgaviToolkit::isPathAbsolute("hh:path"));
-		$this->assertFalse(AgaviToolkit::isPathAbsolute("h:p"));
 	}
 
 	public function testNormalizePath()
@@ -79,25 +58,6 @@ class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('{bbq}', AgaviToolkit::expandVariables($string));
 		$this->assertEquals('${foo}', AgaviToolkit::expandVariables('$foo'));
 		$this->assertEquals('${foo}', AgaviToolkit::expandVariables('{$foo}'));
-	}
-
-	public function testLiteralize()
-	{
-		$this->assertEquals(NULL, AgaviToolkit::literalize(NULL));
-		$this->assertEquals(NULL, AgaviToolkit::literalize(""));
-		$value = array('baz' => 'boo');
-		$this->assertEquals($value, AgaviToolkit::literalize($value));
-		$this->assertEquals(2, AgaviToolkit::literalize(2));
-		$this->assertEquals(true, AgaviToolkit::literalize(true));
-		$this->assertEquals(true, AgaviToolkit::literalize('On'));
-		$this->assertEquals(true, AgaviToolkit::literalize('YES'));
-		$this->assertEquals(false, AgaviToolkit::literalize(false));
-		$this->assertEquals(false, AgaviToolkit::literalize('no'));
-		$this->assertEquals(false, AgaviToolkit::literalize('oFf'));
-		$this->assertEquals("lalala", AgaviToolkit::literalize("lalala"));
-		$this->assertEquals("lAlAla", AgaviToolkit::literalize("lAlAla"));
-		$this->assertEquals("l Al Ala", AgaviToolkit::literalize(" l Al Ala "));
-		$this->assertEquals("2", AgaviToolkit::literalize("2"));
 	}
 
 	public function testExpandDirectives()
@@ -219,6 +179,9 @@ class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 	public function literalizeData()
 	{
 		return array(
+			'null' => array(null, null, array()),
+			'empty string' => array('', null, array()),
+			'array("foo" => "bar")' => array(array('foo' => 'bar'), array('foo' => 'bar'), array()),
 			'(string)true' => array('true', true, array()),
 			'(string)false' => array('false', false, array()),
 			'(string)yes' => array('yes', true, array()),
@@ -255,6 +218,7 @@ class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 			'c:/Windows' => array('c:/Windows', true),
 			'g:/Windows/bar' => array('g:/Windows/bar', true),
 			'c:\\windows\\foo' => array('c:\\windows\\foo', true),
+			':/foo' => array(':/foo', false),
 			// UNC paths are absolute too
 			'(unc)\\\\some.host' => array('\\\\some.host', true),
 			'(unc)\\\\some.host\\foo' => array('\\\\some.host\\foo', true),
@@ -275,6 +239,7 @@ class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 			'c:foo' => array('c:foo', false)
 		);
 	}
+	
 }
 
 ?>
