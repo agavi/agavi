@@ -10,6 +10,7 @@ CHG: Allow "extension" parameter to be an array in file validators (#1235) (Davi
 CHG: File extension comparison should be case-insensitive in file validators (#1234) (David)
 CHG: Require Phing 2.4 or newer (#1232) (David)
 
+FIX: AgaviWebRouting::gen(null) returns url without sid even if use_trans_sid is true (#1238) (David)
 FIX: Implied route matches are repeated in generated urls where route is redefined (#1209) (David)
 FIX: Regression: Form Population Filter strips value attribute from button inputs (#1236) (David)
 FIX: Shiny exception template may produce invalid XHTML (#1240) (David)

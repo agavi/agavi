@@ -282,6 +282,10 @@ class AgaviWebRouting extends AgaviRouting
 			$aso = $options['separator'];
 		}
 
+		if($options['use_trans_sid'] === true && defined('SID') && SID !== '') {
+			$params = array_merge($params, array(session_name() => session_id()));
+		}
+
 		if($route === null && empty($params)) {
 			$retval = $req->getRequestUri();
 			$retval = str_replace(array('[', ']', '\''), array('%5B', '%5D', '%27'), $retval);
@@ -290,10 +294,6 @@ class AgaviWebRouting extends AgaviRouting
 				$retval = str_replace($char, $aso, $retval);
 			}
 		} else {
-			if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
-				$params = array_merge($params, array(session_name() => session_id()));
-			}
-
 			if($this->isEnabled()) {
 				// the route exists and routing is enabled, the parent method handles it
 
