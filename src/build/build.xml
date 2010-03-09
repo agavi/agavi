@@ -389,6 +389,23 @@
 			<mapper type="glob" from="*.php.tmpl" to="*.${template.extension.default}" />
 			<fileset dir="${template.path}">
 				<include name="**/*.php.tmpl" />
+				<exclude name="exceptions/**" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_NAME" value="${project.name}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
+					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		<copy todir="${project.directory}/${project.directory.app.templates}">
+			<mapper type="glob" from="*.php.tmpl" to="*.php" />
+			<fileset dir="${template.path}">
+				<include name="exceptions/**.php.tmpl" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
