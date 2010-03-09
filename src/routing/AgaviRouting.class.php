@@ -347,6 +347,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		// if we are a child route, we need add this route as a child to the parent
 		if($parent !== null) {
 			foreach($this->routes[$parent]['opt']['childs'] as $name) {
+				if($name == $routeName) {
+					// we're overwriting a route, so unlike when first adding the route, there are more routes after this that might also be non-stopping, but we obviously don't want those, so we need to bail out at this point
+					break;
+				}
 				$route = $this->routes[$name];
 				if(!$route['opt']['stop']) {
 					$options['nostops'][] = $name;
@@ -355,11 +359,18 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			$this->routes[$parent]['opt']['childs'][] = $routeName;
 		} else {
 			foreach($this->routes as $name => $route) {
+				if($name == $routeName) {
+					// we're overwriting a route, so unlike when first adding the route, there are more routes after this that might also be non-stopping, but we obviously don't want those, so we need to bail out at this point
+					break;
+				}
 				if(!$route['opt']['stop'] && !$route['opt']['parent']) {
 					$options['nostops'][] = $name;
 				}
 			}
 		}
+		
+		// make sure we have no duplicates in the nostops (can happen when a route is overwritten)
+		$options['nostops'] = array_unique($options['nostops']);
 
 		$route = array('rxp' => $regexp, 'par' => $params, 'opt' => $options, 'matches' => array());
 		$this->routes[$routeName] = $route;
