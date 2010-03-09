@@ -10,6 +10,7 @@ CHG: Allow "extension" parameter to be an array in file validators (#1235) (Davi
 CHG: File extension comparison should be case-insensitive in file validators (#1234) (David)
 CHG: Require Phing 2.4 or newer (#1232) (David)
 
+FIX: AgaviLoggerAppender::write() lacks type hint (#1221) (David)
 FIX: AgaviStringValidator trimming fails on newlines (#1243) (David)
 FIX: Build script generates exception templates with non .php extension (#1179) (David)
 FIX: AgaviWebRouting::gen(null) returns url without sid even if use_trans_sid is true (#1238) (David)
