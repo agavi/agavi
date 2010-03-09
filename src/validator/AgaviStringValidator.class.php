@@ -61,9 +61,9 @@ class AgaviStringValidator extends AgaviValidator
 		
 		if($this->getParameter('trim', false)) {
 			if($utf8) {
-				$pattern = '/^\p{Z}*(?P<trimmed>.*?)\p{Z}*$/Du';
+				$pattern = '/^[\pZ\pC]*+(?P<trimmed>.*?)[\pZ\pC]*+$/usDS';
 			} else {
-				$pattern = '/^\s*(?P<trimmed>.*?)\s*$/D';
+				$pattern = '/^\s*+(?P<trimmed>.*?)\s*+$/sDS';
 			}
 			if(preg_match($pattern, $originalValue, $matches)) {
 				$originalValue = $matches['trimmed'];
