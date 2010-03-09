@@ -109,7 +109,7 @@ class AgaviException extends Exception
 			}
 			switch(gettype($param)) {
 				case 'array':
-					$retval[] = $key . 'array(' . buildParamList($param) . ')';
+					$retval[] = $key . 'array(' . self::buildParamList($param) . ')';
 					break;
 				case 'object':
 					if($html) {
