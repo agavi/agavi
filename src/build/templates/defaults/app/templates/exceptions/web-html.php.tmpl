@@ -17,3 +17,4 @@ header('Content-Type: text/html; charset=utf-8');
 		<p>An error ocurred.</p>
 	</body>
 </html>
+<?php if(!ini_get('display_errors')) throw $e; ?>
