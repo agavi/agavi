@@ -6,4 +6,4 @@ Agavi läuft standardmäßig im Debug-Modus, was bedeutet, dass bei jedem Seiten
 
 <br/><br/>
 
-<strong>Hinweis:</strong> Wenn der Debug-Modus wöhrend der Entwicklung abgeschaltet ist, lassen sich viele Fehler auf ungültige Konfigurationsdateien zurückführen. Deshalb wird empfohlen, solange mit aktiviertem Debugging zu entwickeln, bis die Applikation vollständig funktioniert.
+<strong>Hinweis:</strong> Wenn der Debug-Modus während der Entwicklung abgeschaltet ist, lassen sich viele Fehler auf ungültige Konfigurationsdateien zurückführen. Deshalb wird empfohlen, solange mit aktiviertem Debugging zu entwickeln, bis die Applikation vollständig funktioniert.
