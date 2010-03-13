@@ -10,6 +10,7 @@ CHG: Allow "extension" parameter to be an array in file validators (#1235) (Davi
 CHG: File extension comparison should be case-insensitive in file validators (#1234) (David)
 CHG: Require Phing 2.4 or newer (#1232) (David)
 
+FIX: XML config namespace copying broken on PHP 5.2.12/5.3.2 (#1244) (David)
 FIX: Relative path passed to AgaviConfigCache::checkConfig() may result in misleading exception message (#1220) (David)
 FIX: AgaviToolkit::isPathAbsolute accepts invalid values (#1204) (David)
 FIX: AgaviLoggerAppender::write() lacks type hint (#1221) (David)
