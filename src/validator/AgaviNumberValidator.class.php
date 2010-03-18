@@ -44,6 +44,7 @@ class AgaviNumberValidator extends AgaviValidator
 	 * @return     bool The input is valid number according to given parameters.
 	 * 
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.11.0
 	 */
 	protected function validate()
@@ -56,17 +57,21 @@ class AgaviNumberValidator extends AgaviValidator
 			return false;
 		}
 
-		$locale = null;
-		if(AgaviConfig::get('core.use_translation') && !$this->getParameter('no_locale', false)) {
-			if($locale = $this->getParameter('in_locale')) {
-				$locale = $this->getContext()->getTranslationManager()->getLocale($locale);
-			} else {
-				$locale = $this->getContext()->getTranslationManager()->getCurrentLocale();
-			}
-		}
-		
 		$hasExtraChars = false;
-		$parsedValue = AgaviDecimalFormatter::parse($value, $locale, $hasExtraChars);
+		if(!is_int($value) && !is_float($value)) {
+			$locale = null;
+			if(AgaviConfig::get('core.use_translation') && !$this->getParameter('no_locale', false)) {
+				if($locale = $this->getParameter('in_locale')) {
+					$locale = $this->getContext()->getTranslationManager()->getLocale($locale);
+				} else {
+					$locale = $this->getContext()->getTranslationManager()->getCurrentLocale();
+				}
+			}
+			
+			$parsedValue = AgaviDecimalFormatter::parse($value, $locale, $hasExtraChars);
+		} else {
+			$parsedValue = $value;
+		}
 		
 		switch(strtolower($this->getParameter('type'))) {
 			case 'int':
@@ -94,6 +99,16 @@ class AgaviNumberValidator extends AgaviValidator
 				}
 		}
 
+		if($this->hasParameter('min') && $parsedValue < $this->getParameter('min')) {
+			$this->throwError('min');
+			return false;
+		}
+
+		if($this->hasParameter('max') && $parsedValue > $this->getParameter('max')) {
+			$this->throwError('max');
+			return false;
+		}
+		
 		switch(strtolower($this->getParameter('cast_to', $this->getParameter('type')))) {
 			case 'int':
 			case 'integer':
@@ -106,16 +121,6 @@ class AgaviNumberValidator extends AgaviValidator
 				break;
 		}
 
-		if($this->hasParameter('min') && $parsedValue < $this->getParameter('min')) {
-			$this->throwError('min');
-			return false;
-		}
-
-		if($this->hasParameter('max') && $parsedValue > $this->getParameter('max')) {
-			$this->throwError('max');
-			return false;
-		}
-		
 		if($this->hasParameter('export')) {
 			$this->export($parsedValue);
 		} else {
