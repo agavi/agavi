@@ -43,7 +43,11 @@ class AgaviDecimalFormatterTest extends AgaviPhpUnitTestCase
 			),
 			array(
 				'00',
-				00,
+				0,
+			),
+			array(
+				'010',
+				10,
 			),
 			array(
 				'1',
@@ -173,17 +177,26 @@ class AgaviDecimalFormatterTest extends AgaviPhpUnitTestCase
 				true,
 			),
 			array(
-				'1,1.',
-				11,
-				false,
-			),
-			array(
 				'1,1,.',
 				11,
 				true,
 			),
 			array(
+				'1,1.',
+				11,
+				false,
+			),
+			array(
+				'1,1.,',
+				11,
+				true,
+			),
+			array(
 				'3,.,3',
+				3.3,
+			),
+			array(
+				',3.,3',
 				3.3,
 			),
 		);

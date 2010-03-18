@@ -644,6 +644,7 @@ class AgaviDecimalFormatter
 				// we need a copy of the format with a minus prefix
 				$decimalFormatList[1] = '-' . $decimalFormatList[0];
 			}
+			foreach(array(true, false) as $withFraction):
 			foreach($decimalFormatList as $decimalFormat) {
 				// we need to make three parts: number, decimal part and minus sign
 				$decimalFormatChunks = preg_split('/([\.\-])/', $decimalFormat, 0, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
@@ -654,19 +655,32 @@ class AgaviDecimalFormatter
 						$decimalFormatChunk = '(?P<minus>' . preg_quote($minusSign, '#') . ')';
 					} elseif($decimalFormatChunk == '.') {
 						$pastDecimalSeparator = true;
-						$decimalFormatChunk = preg_quote($decimalSeparator, '#') . '?';
-					} else {
-						$decimalFormatChunk = preg_replace('/[#0,]+/u', '[\d' . preg_quote($groupingSeparator, '#') . ']', $decimalFormatChunk);
-						if(!$pastDecimalSeparator) {
-							$decimalFormatChunk = '(?P<num>' . $decimalFormatChunk . '*(\d(?![' . preg_quote($decimalSeparator, '#') . '\d,])|,(?!\.\d))|' . $decimalFormatChunk . '*(?=' . preg_quote($decimalSeparator, '#') . $decimalFormatChunk . '*))';
+						if($withFraction) {
+							$decimalFormatChunk = preg_quote($decimalSeparator, '#');
 						} else {
-							$decimalFormatChunk = '(?P<dec>(?<=' . preg_quote($decimalSeparator, '#') . ')' . $decimalFormatChunk . '*\d)?';
+							$decimalFormatChunk = '';
+						}
+					} else {
+						$decimalFormatChunk = preg_replace('/[#0,]+/u', '[\d' . preg_quote($groupingSeparator, '#') . ']*', $decimalFormatChunk);
+						if(!$pastDecimalSeparator) {
+							if($withFraction) {
+								$decimalFormatChunk = '(?P<num>(?=[\d,]*\d)' . $decimalFormatChunk . '(\d|' . $decimalFormatChunk . '(?=\.[\d,]*\d)))?';
+							} else {
+								$decimalFormatChunk = '(?P<num>(?=[\d,]*\d)' . $decimalFormatChunk . '\d)';
+							}
+						} else {
+							if($withFraction) {
+								$decimalFormatChunk = '(?P<dec>' . $decimalFormatChunk . '\d)?';
+							} else {
+								$decimalFormatChunk = '';
+							}
 						}
 					}
 				}
 				
 				$patterns[] = implode('', $decimalFormatChunks);
 			}
+			endforeach;
 		}
 		
 		return $patternCache[$localeId] = '#(?J)^(' . implode('|', $patterns) . ')#u';
@@ -698,19 +712,35 @@ class AgaviDecimalFormatter
 			$groupingSeparator = ',';
 		}
 		
-		var_dump($string, $pattern);
 		if(preg_match($pattern, $string, $matches)) {
-			var_dump($matches);
+			$num = '';
+			if(isset($matches['num']) && $matches['num'] !== '') {
+				$num = str_replace($groupingSeparator, '', $matches['num']);
+			}
+			$dec = '';
+			if(isset($matches['dec']) && $matches['dec'] !== '') {
+				$dec = str_replace($groupingSeparator, '', $matches['dec']);
+			}
+			
 			if(strlen($matches[0]) < strlen($string)) {
 				$hasExtraChars = true;
 			}
 
-			$num = 0;
-			if(!empty($matches['num'])) {
-				$num = (int) str_replace($groupingSeparator, '', $matches['num']);
+			if($num === '' && $dec === '') {
+				if(strlen($string) > 0) {
+					$hasExtraChars = true;
+				}
+				return false;
 			}
-			if(!empty($matches['dec'])) {
-				$num += (float) ('0.' . (int) str_replace($groupingSeparator, '', $matches['dec']));
+			
+			if($num === '') {
+				$num = 0;
+			}
+			// don't cast to int... this here will cast the string to a float if it's too big
+			$num += 0;
+			
+			if($dec !== '') {
+				$num += (float) ('0.' . (int) $dec);
 			}
 
 			if(!empty($matches['minus'])) {
