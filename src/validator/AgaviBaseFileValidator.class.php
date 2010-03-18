@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -91,12 +91,21 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 			}
 			
 			if($this->hasParameter('extension')) {
-				$fileinfo = pathinfo($file->getName());
-				$ext = isset($fileinfo['extension']) ? $fileinfo['extension'] : '';
-				if(!in_array($ext, explode(' ', $this->getParameter('extension')))) {
-					$this->throwError('extension');
-					return false;
+				$fileinfo = pathinfo($file->getName()) + array('extension' => '');
+				
+				$extensions = $this->getParameter('extension', array());
+				if(!is_array($extensions)) {
+					$extensions = explode(' ', $this->getParameter('extension'));
 				}
+				
+				foreach($extensions as $extension) {
+					if(strtolower($extension) == strtolower($fileinfo['extension'])) {
+						return true;
+					}
+				}
+				
+				$this->throwError('extension');
+				return false;
 			}
 		}
 		

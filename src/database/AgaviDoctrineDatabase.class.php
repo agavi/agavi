@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -89,8 +89,12 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			require('Doctrine.php');
 		}
 		
+		$is12 = version_compare(Doctrine::VERSION, '1.2', '>=');
+		
 		// in any case, it's loaded now. maybe we need to register the autoloading stuff for it!
-		if(!in_array(array('Doctrine', 'autoload'), spl_autoload_functions())) {
+		// we need this list further down
+		$splAutoloadFunctions = spl_autoload_functions();
+		if(!in_array(array('Doctrine', 'autoload'), $splAutoloadFunctions) && !in_array(array('Doctrine_Core', 'autoload'), $splAutoloadFunctions)) {
 			// we do
 			spl_autoload_register(array('Doctrine', 'autoload'));
 		}
@@ -118,6 +122,7 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			
 			// charset
 			if($this->hasParameter('charset')) {
+				// TODO: this will force a connection, could be done using doctrine events
 				$this->connection->setCharset($this->getParameter('charset'));
 			}
 			
@@ -131,12 +136,34 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 				$this->connection->setOption($optionName, $optionValue);
 			}
 			
-			foreach((array)$this->getParameter('attributes', array()) as $attributeName => $attributeValue) {
-				$this->connection->setAttribute($attributeName, $attributeValue);
-			}
-			
-			foreach((array)$this->getParameter('manager_attributes', array()) as $attributeName => $attributeValue) {
-				$this->doctrineManager->setAttribute($attributeName, $attributeValue);
+			foreach(array(
+				'manager_attributes' => $this->doctrineManager,
+				'attributes' => $this->connection,
+			) as $attributesKey => $attributesDestination) {
+				foreach((array)$this->getParameter($attributesKey, array()) as $attributeName => $attributeValue) {
+					if($is12) {
+						if(!strpos($attributeName, '::')) {
+							throw new AgaviDatabaseException(sprintf('For Doctrine 1.2 and newer, attribute names (and, if desired to be resolved against a constant, values) must be fully qualified, e.g. "Doctrine_Core::ATTR_VALIDATE" and "Doctrine_Core::VALIDATE_NONE". Given attribute with name "%s" in collection "%s" does not match this condition.', $attributeName, $attributesKey));
+						}
+						if(!defined($attributeName)) {
+							throw new AgaviDatabaseException(sprintf('Unknown Attribute "%s"', $attributeName));
+						}
+					}
+					
+					// resolve from constant if possible
+					if(strpos($attributeName, '::') && defined($attributeName)) {
+						$attributeName = constant($attributeName);
+					}
+					
+					// resolve from constant if possible
+					if(strpos($attributeValue, '::') && defined($attributeValue)) {
+						$attributeValue = constant($attributeValue);
+					} elseif(ctype_digit($attributeValue)) {
+						$attributeValue = (int)$attributeValue;
+					}
+					
+					$attributesDestination->setAttribute($attributeName, $attributeValue);
+				}
 			}
 			
 			foreach((array)$this->getParameter('impls', array()) as $templateName => $className) {
@@ -147,12 +174,43 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 				$this->doctrineManager->setImpl($templateName, $className);
 			}
 			
-			Doctrine::loadModels($this->getParameter('load_models')); 
+			// load models (that'll just work with empty values too)
+			Doctrine::loadModels($this->getParameter('load_models'));
+			
+			// for 1.2, handle model autoloading and base paths
+			if($is12 && ($this->hasParameter('load_models') || $this->hasParameter('models_directory'))) {
+				if(!in_array(array('Doctrine', 'modelsAutoload'), $splAutoloadFunctions) && !in_array(array('Doctrine_Core', 'modelsAutoload'), $splAutoloadFunctions)) {
+					spl_autoload_register(array('Doctrine_Core', 'modelsAutoload'));
+				}
+				
+				if($this->hasParameter('models_directory')) {
+					Doctrine_Core::setModelsDirectory($this->getParameter('models_directory'));
+				}
+			}
+			
+			// for 1.2, handle extension autoloading, base paths and registration
+			if($is12 && ($this->hasParameter('extensions_path') || $this->hasParameter('register_extensions'))) {
+				if(!in_array(array('Doctrine', 'extensionsAutoload'), $splAutoloadFunctions) && !in_array(array('Doctrine_Core', 'extensionsAutoload'), $splAutoloadFunctions)) {
+					spl_autoload_register(array('Doctrine_Core', 'extensionsAutoload'));
+				}
+				
+				if($this->hasParameter('extensions_path')) {
+					Doctrine_Core::setExtensionsPath($this->getParameter('extensions_path'));
+				}
+				foreach((array)$this->getParameter('register_extensions', array()) as $extensionName) {
+					if(is_array($extensionName)) {
+						call_user_func_array(array($this->doctrineManager, 'registerExtension'), $extensionName);
+					} else {
+						$this->doctrineManager->registerExtension($extensionName);
+					}
+				}
+			}
 			
 			foreach((array)$this->getParameter('bind_components', array()) as $componentName) {
 				$this->doctrineManager->bindComponent($componentName, $name);
 			}
 			
+			// TODO: this will force a connection, could be done using doctrine events
 			foreach((array)$this->getParameter('init_queries') as $query) {
 				$this->connection->exec($query);
 			}

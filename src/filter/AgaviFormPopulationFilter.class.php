@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -298,7 +298,35 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$remember = array();
 
 			// build the XPath query
-			$query = sprintf('descendant::%1$stextarea[@name] | descendant::%1$sselect[@name] | descendant::%1$sbutton[@name and @type="submit"] | descendant::%1$sinput[@name and (not(@type) or @type="text" or (@type="checkbox" and not(contains(@name, "[]"))) or (@type="checkbox" and contains(@name, "[]") and @value) or @type="radio" or @type="password" or @type="file" or @type="submit" %2$s)]', $this->xmlnsPrefix, $cfg['include_hidden_inputs'] ? 'or @type="hidden"' : '');
+			// we select descendants of the given form
+			// as well as any element in the document associated with the form using a "form" attribute that contains the ID of the current form
+			// provided they match the following criteria:
+			// * <textarea> with a "name" attribute
+			// * <select> with a "name" attribute
+			// * <button type="submit"> with a "name" attribute
+			// * <input> with a "name" attribute except for the following:
+			//  * <input type="checkbox"> elements with a "name" attribute that contains the character sequence "[]" and no "value" attribute
+			//  * <input type="hidden"> unless config option "include_hidden_inputs" is true (defaults to true)
+			$query = sprintf('
+				descendant::%1$stextarea[@name] |
+				descendant::%1$sselect[@name] |
+				descendant::%1$sbutton[@name and @type="submit"] |
+				descendant::%1$sinput[@name and (not(@type="checkbox") or (not(contains(@name, "[]")) or (contains(@name, "[]") and @value)))]',
+				$this->xmlnsPrefix
+			);
+			
+			if(($formId = $form->hasAttribute('id')) != "") {
+				// find elements associated with this form as well
+				$query .= sprintf(' |
+					//%1$stextarea[@form="%2$s" and @name] |
+					//%1$sselect[@form="%2$s" and @name] |
+					//%1$sbutton[@form="%2$s" and @name and @type="submit"] |
+					//%1$sinput[@form="%2$s" and @name and (not(@type="checkbox") or (not(contains(@name, "[]")) or (contains(@name, "[]") and @value)))]',
+					$this->xmlnsPrefix,
+					$formId
+				);
+			}
+			
 			foreach($this->xpath->query($query, $form) as $element) {
 
 				$pname = $name = $element->getAttribute('name');
@@ -375,7 +403,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					}
 					// and all explicit labels
 					if(($id = $element->getAttribute('id')) != '') {
-						foreach($this->xpath->query(sprintf('descendant::%1$slabel[@for="%2$s"]', $this->xmlnsPrefix, $id), $form) as $label) {
+						// we use // and not descendant: because it doesn't have to be a child of the form element
+						foreach($this->xpath->query(sprintf('//%1$slabel[@for="%2$s"]', $this->xmlnsPrefix, $id), $form) as $label) {
 							$errorClassElements[] = $label;
 						}
 					}
@@ -453,16 +482,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				}
 
 				if($element->nodeName == 'input') {
+					$inputType = $element->getAttribute('type');
 
-					if(!$element->hasAttribute('type') || $element->getAttribute('type') == 'text' || $element->getAttribute('type') == 'hidden') {
-
-						// text inputs
-						$element->removeAttribute('value');
-						if($p->hasParameter($pname)) {
-							$element->setAttribute('value', $value);
-						}
-
-					} elseif($element->getAttribute('type') == 'checkbox' || $element->getAttribute('type') == 'radio') {
+					if($inputType == 'checkbox' || $inputType == 'radio') {
 
 						// checkboxes and radios
 						$element->removeAttribute('checked');
@@ -481,12 +503,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 							$element->setAttribute('checked', 'checked');
 						}
 
-					} elseif($element->getAttribute('type') == 'password') {
-
-						// passwords
-						$element->removeAttribute('value');
-						if($cfg['include_password_inputs'] && $p->hasParameter($pname)) {
-							$element->setAttribute('value', $value);
+					} elseif($inputType != 'button' && $inputType != 'submit') {
+						
+						// everything else
+						
+						// unless "include_hidden_inputs" is false and it's a hidden input...
+						if($cfg['include_hidden_inputs'] || $inputType != 'hidden') {
+							// remove original value
+							$element->removeAttribute('value');
+							
+							// and set a new one if it's there and unless it's a password field (or we actually want to refill those)
+							if($p->hasParameter($pname) && ($cfg['include_password_inputs'] || $inputType != 'password')) {
+								$element->setAttribute('value', $value);
+							}
 						}
 					}
 
@@ -659,10 +688,12 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				continue;
 			}
 			foreach($incident->getErrors() as $error) {
-				$errorMessages[] = $error->getMessage();
+				if(($errorMessage = $error->getMessage()) !== null && $errorMessage !== '') {
+					$errorMessages[] = $errorMessage;
+				}
 			}
 		}
-
+		
 		if(!$errorMessages) {
 			// nothing to do here
 			return true;

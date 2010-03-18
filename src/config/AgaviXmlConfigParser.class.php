@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -51,6 +51,8 @@ class AgaviXmlConfigParser
 	const NAMESPACE_SCHEMATRON_ISO = 'http://purl.oclc.org/dsdl/schematron';
 	
 	const NAMESPACE_SVRL_ISO = 'http://purl.oclc.org/dsdl/svrl';
+	
+	const NAMESPACE_XMLNS_2000 = 'http://www.w3.org/2000/xmlns/';
 	
 	const NAMESPACE_XSL_1999 = 'http://www.w3.org/1999/XSL/Transform';
 	
@@ -275,7 +277,7 @@ class AgaviXmlConfigParser
 					$namespaces = $doc->getXPath()->query('namespace::*');
 					foreach($namespaces as $namespace) {
 						if($namespace->localName !== 'xml' && $namespace->localName != 'xmlns') {
-							$retval->documentElement->setAttribute('xmlns:' . $namespace->localName, $namespace->namespaceURI);
+							$retval->documentElement->setAttributeNS(self::NAMESPACE_XMLNS_2000, 'xmlns:' . $namespace->localName, $namespace->namespaceURI);
 						}
 					}
 					foreach($doc->documentElement->attributes as $attribute) {
@@ -309,13 +311,6 @@ class AgaviXmlConfigParser
 					}
 				}
 			}
-			
-			// reload the doc
-			// this must be done because further up, we create attributes with names like xmlns:foo on the document element, copied from parent <configurations> blocks
-			// those will, internally, be normal attributes, not namespace nodes, and thus cannot be accessed through the namespace:: axis in XML stylesheets
-			// a reload fixes that, because they are then parsed as normal xml namespace declaration nodes
-			// thank you, ext/dom, for not exposing your internal DOMNameSpaceNode shit
-			$retval->loadXML($retval->saveXML());
 			
 			// run the compilation stage parser
 			$retval = self::executeCompilation($retval, $environment, $context, $transformationInfo[self::STAGE_COMPILATION], $validationInfo[self::STAGE_COMPILATION]);

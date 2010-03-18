@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -43,7 +43,11 @@ final class AgaviToolkit
 	 */
 	public static function isPathAbsolute($path)
 	{
-		if($path[0] == '/' || $path[0] == '\\' ||
+		if(strpos($path, "file://") === 0) {
+			$path = substr($path, 7);
+		}
+		
+		if($path[0] == '/' || substr($path, 0, 2) == '\\\\' ||
 			(
 				strlen($path) >= 3 && ctype_alpha($path[0]) &&
 				$path[1] == ':' &&

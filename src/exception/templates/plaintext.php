@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -39,10 +39,7 @@ if(!headers_sent()) {
 }
 
 // fix stack trace in case it doesn't contain the exception origin as the first entry
-$fixedTrace = $e->getTrace();
-if(isset($fixedTrace[0]['file']) && !($fixedTrace[0]['file'] == $e->getFile() && $fixedTrace[0]['line'] == $e->getLine())) {
-	$fixedTrace = array_merge(array(array('file' => $e->getFile(), 'line' => $e->getLine())), $fixedTrace);
-}
+$fixedTrace = AgaviException::getFixedTrace($e);
 
 ?>
 ===============<?php echo str_repeat('=', strlen(get_class($e))); ?>
@@ -57,9 +54,8 @@ This is an internal Agavi exception. Please consult the documentation for
 assistance with solving this issue.
 <?php endif; ?>
 
-An exception of type *<?php echo get_class($e); ?>* was thrown, but did not get
-caught during the execution of the request. You will find information provided
-by the exception along with a stack trace below.
+<?php echo wordwrap(sprintf('An exception of type *%s* was thrown, but did not get caught during the execution of the request. You will find information provided by the exception along with a stack trace below.', get_class($e)), 80, "\n"); ?>
+
 
   Message
 ===========

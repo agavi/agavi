@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -102,9 +102,9 @@ EOD;
 		$p2->addMaintainer('developer', 'impl', 'Noah Fontes', 'nfontes@cynigram.com');
 		$p2->addMaintainer('developer', 'v-dogg', 'Veikko Mäkinen', 'mail@veikkomakinen.com');
 		$p2->setChannel('pear.agavi.org');
-		$p2->setReleaseVersion('1.0.2RC3');
-		$p2->setAPIVersion('1.0.2RC3');
-		$p2->setReleaseStability('beta');
+		$p2->setReleaseVersion('1.0.3RC1');
+		$p2->setAPIVersion('1.0.3RC1');
+		$p2->setReleaseStability('stable');
 		$p2->setAPIStability('stable');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);

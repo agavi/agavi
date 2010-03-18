@@ -1,14 +1,52 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.2 RC4 (January ?, 2010)
----------------------------
+1.0.3 RC1 - February ?, 2010
+----------------------------
 
+CHG: Standard production exception templates should log errors (#1239) (David)
+CHG: Refactor exception rendering (#1242) (David)
+CHG: Allow "extension" parameter to be an array in file validators (#1235) (David)
+CHG: File extension comparison should be case-insensitive in file validators (#1234) (David)
+CHG: Require Phing 2.4 or newer (#1232) (David)
+
+FIX: XML config namespace copying broken on PHP 5.2.12/5.3.2 (#1244) (David)
+FIX: Relative path passed to AgaviConfigCache::checkConfig() may result in misleading exception message (#1220) (David)
+FIX: AgaviToolkit::isPathAbsolute accepts invalid values (#1204) (David)
+FIX: AgaviLoggerAppender::write() lacks type hint (#1221) (David)
+FIX: AgaviStringValidator trimming fails on newlines (#1243) (David)
+FIX: Build script generates exception templates with non .php extension (#1179) (David)
+FIX: AgaviWebRouting::gen(null) returns url without sid even if use_trans_sid is true (#1238) (David)
+FIX: Implied route matches are repeated in generated urls where route is redefined (#1209) (David)
+FIX: Regression: Form Population Filter strips value attribute from button inputs (#1236) (David)
+FIX: Shiny exception template may produce invalid XHTML (#1240) (David)
+FIX: Project build.xml not used with Phing 2.4.0+ (#1231) (Felix)
+FIX: AgaviTranslationManager->getDefaultLocale() is broken and throws a notice (#1229) (Dominik)
+FIX: AgaviWebRouting::gen(null) fails when multiple chars are defined as separators in arg_separator.input (#1227) (David)
+FIX: Generated action cache configs have caching enabled by default (#1223) (David)
+
+
+1.0.2 (January 27, 2010)
+------------------------
+
+CHG: Update timezone database to 2010b (#1219) (David)
+CHG: Update ISO Schematron to version 2010-01-25 (#1217) (David)
+
+FIX: Build system is incompatible with Phing 2.4.0 (#1216) (David)
+FIX: Form Population Filter doesn't filter out empty error messages (#1214) (David)
+
+
+1.0.2 RC4 (January 19, 2010)
+----------------------------
+
+ADD: Support for HTML 5 forms (#1213) (David)
+ADD: Support for Doctrine 1.2 (#1210) (David)
 ADD: Include error type and code when reporting libxml errors (#1202) (David)
 
 CHG: Update timezone database to 2009u (#1207) (David)
 CHG: Move error suppression operator for XML validation calls to wrapper methods (#1201) (David)
 
+FIX: ICU Bug 6814 (#1211) (David)
 FIX: AgaviTimeZoneDataParser doesn't support "-" as a time value (#1208) (David)
 FIX: Several method existence checks don't deal with visibility (#1205) (David)
 FIX: Configuration parameter whitespace handling is inconsistent (#1203) (David)
@@ -56,6 +94,7 @@ FIX: agavi.php erroneously always assumes it is a symlink if project.directory i
 ADD: Accept optional argument identifier in AgaviValidator::getArgument() (#1142) (David)
 ADD: Support for PHPTAL 1.2 (#1141) (David)
 ADD: Allow optional strict comparison in AgaviEqualsValidator (#1128) (David, Dennis Meckel)
+ADD: Allow optional strict comparison of elements in AgaviInarrayValidator (#1107) (David)
 
 CHG: Update timezone database to 2009m (#1154) (David)
 CHG: Update old tests to use bundled PHPUnit (#1153) (Felix)
@@ -66,7 +105,6 @@ CHG: Support PHP namespaces in configuration schemas (#1133) (David)
 CHG: Validator shortcut "arraylength" should default to minimum of one element (#1123) (David)
 CHG: Backport any necessary ICU changes and fixes (#858) (Dominik)
 CHG: Remove unnecessary use of create_function() in AgaviInarrayValidator (#1112) (David)
-CHG: Allow optional strict comparison of elements in AgaviInarrayValidator (#1107) (David)
 CHG: Update ISO Schematron to version 2009-05-18 (#1103) (David)
 CHG: Routing callback parameters should be set before initialize method is called (#1105) (David)
 

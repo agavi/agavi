@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Swift_Current".
- * Compiled from olson file "northamerica", version 8.28.
+ * Compiled from olson file "northamerica", version 8.30.
  *
  * @package    agavi
  * @subpackage translation
@@ -191,7 +191,7 @@ return array (
     'startYear' => 1973,
   ),
   'source' => 'northamerica',
-  'version' => '8.28',
+  'version' => '8.30',
   'name' => 'America/Swift_Current',
 );
 

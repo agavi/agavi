@@ -1,28 +1,44 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.2 - January ??, 2009
+Version 1.0.3 - February ?, 2010
+================================
+
+This release bumps the minimum required version of Phing to 2.4.0; this was necessary to fix some bugs with the build system that were next to impossible to fix for both 2.3 and 2.4 (which drastically changed some internals structures) at the same time.
+
+
+Version 1.0.2 - January 27, 2010
 ================================
 
 This maintenance release fixes a number of issues over Agavi 1.0.1 and brings a couple of minor enhancements.
+
+Important enhancements and changes:
+- Support for HTML 5 forms in AgaviFormPopulationFilter.
+- Support for Doctrine 1.2.
+- Support for Propel 1.4.
+- Support for Phing 2.4.0.
+- Support for PHPTAL 1.2.
+- Optional strict comparison of elements in AgaviInarrayValidator and AgaviEqualsValidator.
+- Validator shortcut "arraylength" now defaults to minimum of one element.
+- Routing callback parameters are now set before initialize method is called.
+- Lots of ICU bugfix and change backports to the date and translation system. As a result, custom time zones now have identifiers like "GMT+0200".
+- Support for PHP 5.3 namespaces in all configuration files.
+- AgaviValidator::getArgument() now accepts an argument identifier.
 
 The following fixes are worth mentioning:
 - AgaviArraylengthValidator didn't work with files.
 - AgaviValidationManager::clear() didn't clear validation errors.
 - Multiple settings blocks and settings prefixes were not allowed in module configs.
-- AgaviNumberValidator does not mutate invalid input anymore.
 - Several ICU bugfixes have been ported.
-- Configuration parameter values containing only whitespace are now converted to NULL instead of to an empty string.
+- Validation used to drop the first element when exporting multi-dimensional arrays.
+- Configuration parameter values containing only whitespace are now converted to NULL instead of an empty string.
+- FPF will now discard empty error messages.
 
-Important Changes:
-- Optional strict comparison of elements in AgaviInarrayValidator now possible.
-- Validator shortcut "arraylength" now defaults to minimum of one element.
-- Routing callback parameters are now set before initialize method is called.
-- Lots of ICU bugfix and change backports to the date and translation system. As a result, custom time zones now have identifiers like "GMT+0200".
-- Namespaced class identifiers can now be used in all configuration files.
-- AgaviValidator::getArgument() now accepts an argument identifier.
-- Support for PHPTAL 1.2.
-- Support for Propel 1.4.
+Due to changes in Doctrine 1.2 that broke backwards compatibility without prior notice, attribute names and values must now be specified using fully qualified constant names, for example:
+<ae:parameter name="attributes">
+  <ae:parameter name="Doctrine_Core::ATTR_PORTABILITY">Doctrine_Core::PORTABILITY_RTRIM</ae:parameter>
+</ae:parameter>
+The new model autoloading modes are also supported, as are extensions.
 
 For Propel 1.4, the format of the keys for the "overrides" parameter has changed. It's now mandatory to use Propel's internal config syntax with the full parameter name. Examples
 <ae:parameter name="overrides">
@@ -42,9 +58,9 @@ For older Propel versions, the old-style syntax still applies:
 </ae:parameter>
 
 Bundle updates:
-- The timezone database has been updated to version 2009q.
+- The timezone database has been updated to version 2010b.
 - PHPUnit has been updated to version 3.4.2.
-- ISO Schematron has been updated to version 2009-05-18.
+- ISO Schematron has been updated to the final version 2010-01-25.
 
 Please refer to CHANGELOG for a full list of changes.
 

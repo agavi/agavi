@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Juneau".
- * Compiled from olson file "northamerica", version 8.28.
+ * Compiled from olson file "northamerica", version 8.30.
  *
  * @package    agavi
  * @subpackage translation
@@ -535,7 +535,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'northamerica',
-  'version' => '8.28',
+  'version' => '8.30',
   'name' => 'America/Juneau',
 );
 

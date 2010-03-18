@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -31,7 +31,7 @@ AgaviConfig::set('agavi.name', 'Agavi');
 
 AgaviConfig::set('agavi.major_version', '1');
 AgaviConfig::set('agavi.minor_version', '0');
-AgaviConfig::set('agavi.micro_version', '2');
+AgaviConfig::set('agavi.micro_version', '3');
 AgaviConfig::set('agavi.status', 'dev');
 AgaviConfig::set('agavi.branch', '1.0');
 

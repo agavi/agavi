@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   This file is part of the Agavi package.
-  Copyright (c) 2005-2009 the Agavi Project.
+  Copyright (c) 2005-2010 the Agavi Project.
   Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.
 
   For the full copyright and license information, please view the LICENSE file
@@ -23,9 +23,7 @@
 
 	<!-- Load tasks relative to the build system. -->
 	<taskdef name="agavi.input" classname="org.agavi.build.tasks.AgaviInputTask" classpath="phing" />
-
-	<taskdef name="agavi.import" classname="org.agavi.build.tasks.AgaviImportTask" classpath="phing" />
-
+	
 	<taskdef name="agavi.transform-path" classname="org.agavi.build.tasks.AgaviTransformpathTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoidentifierTask" classpath="phing" />
 	<taskdef name="agavi.transform-namespace-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtoidentifierTask" classpath="phing" />
@@ -133,7 +131,7 @@
 
 	<taskdef name="agavi.read-configuration" classname="org.agavi.build.tasks.AgaviReadconfigurationTask" classpath="phing" />
 	<taskdef name="agavi.write-configuration" classname="org.agavi.build.tasks.AgaviWriteconfigurationTask" classpath="phing" />
-
+	
 	<!-- Load some basic configuration values. -->
 	<agavi.read-configuration property="agavi.version" configurationValue="agavi.version" />
 	<agavi.read-configuration property="agavi.url" configurationValue="agavi.url" />
@@ -391,6 +389,23 @@
 			<mapper type="glob" from="*.php.tmpl" to="*.${template.extension.default}" />
 			<fileset dir="${template.path}">
 				<include name="**/*.php.tmpl" />
+				<exclude name="exceptions/**" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_NAME" value="${project.name}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
+					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		<copy todir="${project.directory}/${project.directory.app.templates}">
+			<mapper type="glob" from="*.php.tmpl" to="*.php" />
+			<fileset dir="${template.path}">
+				<include name="exceptions/**.php.tmpl" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
@@ -1438,8 +1453,8 @@
 		<isset property="project.directory" />
 		<then>
 			<property userProperty="true" file="${project.directory}/build.properties" />
-			<agavi.import file="${project.directory}/build.xml" />
+			<import file="${project.directory}/build.xml" optional="true"/>
 		</then>
 	</if>
-
+	
 </project>

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -84,6 +84,13 @@ class AgaviConfigCache
 			$handlerInfo = self::getHandlerInfo($name);
 		}
 
+		if($handlerInfo === null) {
+			// we do not have a registered handler for this file
+			$error = 'Configuration file "%s" does not have a registered handler';
+			$error = sprintf($error, $name);
+			throw new AgaviConfigurationException($error);
+		}
+		
 		$data = self::executeHandler($config, $context, $handlerInfo);
 		self::writeCacheFile($config, $cache, $data, false);
 	}
@@ -166,15 +173,8 @@ class AgaviConfigCache
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since        1.0.0
 	 */
-	protected static function executeHandler($config, $context, $handlerInfo)
+	protected static function executeHandler($config, $context, array $handlerInfo)
 	{
-		if($handlerInfo === null) {
-			// we do not have a registered handler for this file
-			$error = 'Configuration file "%s" does not have a registered handler';
-			$error = sprintf($error, $config);
-			throw new AgaviConfigurationException($error);
-		}
-		
 		// call the handler and retrieve the cache data
 		$handler = new $handlerInfo['class'];
 		if($handler instanceof AgaviIXmlConfigHandler) {

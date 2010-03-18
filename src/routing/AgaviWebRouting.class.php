@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2009 the Agavi Project.                                |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -46,6 +46,16 @@ class AgaviWebRouting extends AgaviRouting
 	protected $inputParameters = array();
 
 	/**
+	 * @var        array arg_separator.input as defined in php.ini, exploded
+	 */
+	protected $argSeparatorInput = array('&');
+
+	/**
+	 * @var        string arg_separator.output as defined in php.ini
+	 */
+	protected $argSeparatorOutput = '&amp;';
+
+	/**
 	 * Constructor.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
@@ -71,6 +81,9 @@ class AgaviWebRouting extends AgaviRouting
 			// fragment identifier (#foo)
 			'fragment' => null,
 		));
+		
+		$this->argSeparatorInput = str_split(ini_get('arg_separator.input'));
+		$this->argSeparatorOutput = ini_get('arg_separator.output');
 	}
 
 	/**
@@ -264,19 +277,23 @@ class AgaviWebRouting extends AgaviRouting
 
 		$options = $this->resolveGenOptions($options);
 
-		$aso = ini_get('arg_separator.output');
+		$aso = $this->argSeparatorOutput;
 		if($options['separator'] != $aso) {
 			$aso = $options['separator'];
 		}
 
+		if($options['use_trans_sid'] === true && defined('SID') && SID !== '') {
+			$params = array_merge($params, array(session_name() => session_id()));
+		}
+
 		if($route === null && empty($params)) {
 			$retval = $req->getRequestUri();
-			$retval = str_replace(array('[', ']', '\'', ini_get('arg_separator.input')), array('%5B', '%5D', '%27', $aso), $retval);
-		} else {
-			if(defined('SID') && SID !== '' && $options['use_trans_sid'] === true) {
-				$params = array_merge($params, array(session_name() => session_id()));
+			$retval = str_replace(array('[', ']', '\''), array('%5B', '%5D', '%27'), $retval);
+			// much quicker than str_replace($this->argSeparatorInput, array_fill(0, count($this->argSeparatorInput), $aso), $retval)
+			foreach($this->argSeparatorInput as $char) {
+				$retval = str_replace($char, $aso, $retval);
 			}
-
+		} else {
 			if($this->isEnabled()) {
 				// the route exists and routing is enabled, the parent method handles it
 
