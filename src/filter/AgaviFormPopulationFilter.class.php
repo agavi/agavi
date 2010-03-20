@@ -482,8 +482,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				}
 
 				if($element->nodeName == 'input') {
+					$inputType = $element->getAttribute('type');
 
-					if($element->getAttribute('type') == 'checkbox' || $element->getAttribute('type') == 'radio') {
+					if($inputType == 'checkbox' || $inputType == 'radio') {
 
 						// checkboxes and radios
 						$element->removeAttribute('checked');
@@ -502,17 +503,17 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 							$element->setAttribute('checked', 'checked');
 						}
 
-					} else {
+					} elseif($inputType != 'button' && $inputType != 'submit') {
 						
 						// everything else
 						
 						// unless "include_hidden_inputs" is false and it's a hidden input...
-						if($cfg['include_hidden_inputs'] || $element->getAttribute('type') != 'hidden') {
+						if($cfg['include_hidden_inputs'] || $inputType != 'hidden') {
 							// remove original value
 							$element->removeAttribute('value');
 							
 							// and set a new one if it's there and unless it's a password field (or we actually want to refill those)
-							if($p->hasParameter($pname) && ($cfg['include_password_inputs'] || $element->getAttribute('type') != 'password')) {
+							if($p->hasParameter($pname) && ($cfg['include_password_inputs'] || $inputType != 'password')) {
 								$element->setAttribute('value', $value);
 							}
 						}

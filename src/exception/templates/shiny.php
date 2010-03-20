@@ -28,48 +28,6 @@
  * @version    $Id$
  */
 
-if(!function_exists('buildParamList')) {
-	/**
-	 * Build a list of parameters passed to a method. Example:
-	 * array([object AgaviFilter], 'baz' => array(1, 2), 'log' => [resource stream])
-	 *
-	 * @param      array An (associative) array of variables.
-	 *
-	 * @return     string A string, possibly formatted using HTML "em" tags.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	function buildParamList($params)
-	{
-		$retval = array();
-		foreach($params as $key => $param) {
-			if(is_string($key)) {
-				$key = htmlspecialchars(var_export($key, true) . ' => ');
-			} else {
-				$key = '';
-			}
-			switch(gettype($param)) {
-				case 'array':
-					$retval[] = $key . 'array(' . buildParamList($param) . ')';
-					break;
-				case 'object':
-					$retval[] = $key . '[object <em>' . get_class($param) . '</em>]';
-					break;
-				case 'resource':
-					$retval[] = $key . '[resource <em>' . htmlspecialchars(get_resource_type($param)) . '</em>]';
-					break;
-				case 'string':
-					$retval[] = $key . htmlspecialchars(var_export(strlen($param) > 51 ? substr_replace($param, ' … ', 25, -25) : $param, true));
-					break;
-				default:
-					$retval[] = $key . htmlspecialchars(var_export($param, true));
-			}
-		}
-		return implode(', ', $retval);
-	}
-}
-
 // we're not supposed to display errors
 // let's throw the exception so it shows up in error logs
 if(!ini_get('display_errors')) {
@@ -107,11 +65,7 @@ if($svg) {
 	header('Content-Type: text/html; charset=utf-8');
 }
 
-// fix stack trace in case it doesn't contain the exception origin as the first entry
-$fixedTrace = $e->getTrace();
-if(isset($fixedTrace[0]['file']) && !($fixedTrace[0]['file'] == $e->getFile() && $fixedTrace[0]['line'] == $e->getLine())) {
-	$fixedTrace = array_merge(array(array('file' => $e->getFile(), 'line' => $e->getLine())), $fixedTrace);
-}
+$fixedTrace = AgaviException::getFixedTrace($e);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -592,38 +546,13 @@ foreach(array(
 foreach($fixedTrace as $trace):
 	$i++;
 	if(isset($trace['file']) && !isset($highlights[$trace['file']])) {
-		$highlights[$trace['file']] = highlight_string(str_replace('	', '  ', file_get_contents($trace['file'])), true);
-		$highlights[$trace['file']] = str_replace(array("\r\n", "\n", "\r"), array('', '', ''), $highlights[$trace['file']]);
-		$highlights[$trace['file']] = str_replace(array('<code><span style="color: #000000">', '</span></code>', '&nbsp;'), array('', '', '&#160;'), $highlights[$trace['file']]);
-		$highlights[$trace['file']] = explode('<br />', $highlights[$trace['file']]);
+		$highlights[$trace['file']] = AgaviException::highlightFile($trace['file']);
 	}
 ?>
-			<li id="frame<?php echo $i; ?>"<?php if($i != 2): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo preg_replace(array_keys($filepaths), $filepaths, $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php
+			<li id="frame<?php echo $i; ?>"<?php if($i != 2): ?> class="hidecode"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?><?php if(isset($trace['args'])): ?>(<?php echo AgaviException::buildParamList($trace['args']); ?>)<?php endif; ?></strong><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo preg_replace(array_keys($filepaths), $filepaths, $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'hidecode' ? '' : 'hidecode'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php
 $lines = array_slice($highlights[$trace['file']], $start - 1, 7, true);
 foreach($lines as $key => &$line) {
 	if($key + 1 == $trace['line']): ?><li class="highlight"><?php if($svg): ?><div style="float:left; width:1em; height:1em; margin-left:-1.35em; background-color:#FFF;"><svg:svg viewBox="2 1 45 43" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#stopSign" /></svg:svg></div><?php endif; else: ?><li><?php endif; ?><code><?php
-	if($line == '') {
-		$line = '&#160;';
-	}
-	if(strpos($line, '</span>') === 0) {
-		$line = substr($line, 7);
-	}
-	if(strpos($line, '</span>') < strpos($line, '<span') || strpos($line, '<span') === false) {
-		for($j = $key; $j >= 0; $j--) {
-			if(($pos = strrpos($highlights[$trace['file']][$j], '<span')) !== false && strrpos($highlights[$trace['file']][$j], '</span>') < $pos) {
-				$line = substr($highlights[$trace['file']][$j], $pos, 29) . $line; break;
-			}
-		}
-	}
-	if((strrpos($line, '</span>') < strrpos($line, '<span') || strpos($line, '</span>') === false) && strpos($line, '<span') !== false) {
-		$line .= '</span>';
-	}
-	// Whoever figures out what the point of this is gets a free Agavi t-shirt shipped right to his doorstep.
-	// It shall be left here, commented out, to serve as a reminder for any programmer to comment their code properly.
-	// http://trac.agavi.org/ticket/1009 is the associated ticket, patiently waiting for an explanation.
-	// if(strpos($line, ' ', 20) == 29) {
-	// 	$line = substr_replace($line, '&#160;', 29, 1);
-	// }
 	echo $line;
 ?></code></li>
 <?php } ?></ol><?php else: // no info about origin file ?><em>unknown</em><?php endif; ?></li>

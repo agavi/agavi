@@ -43,7 +43,11 @@ final class AgaviToolkit
 	 */
 	public static function isPathAbsolute($path)
 	{
-		if($path[0] == '/' || $path[0] == '\\' ||
+		if(strpos($path, "file://") === 0) {
+			$path = substr($path, 7);
+		}
+		
+		if($path[0] == '/' || substr($path, 0, 2) == '\\\\' ||
 			(
 				strlen($path) >= 3 && ctype_alpha($path[0]) &&
 				$path[1] == ':' &&

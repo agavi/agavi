@@ -212,7 +212,7 @@ class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 	
 	public function pathData()
 	{
-		return array(
+		$data = array(
 			'c:/' => array('c:/', true),
 			'c:\\' => array('c:\\', true),
 			'c:/Windows' => array('c:/Windows', true),
@@ -238,6 +238,10 @@ class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 			's/foo/bar' => array('s/foo/bar', false),
 			'c:foo' => array('c:foo', false)
 		);
+		foreach($data as $key => $value) {
+			$data['file://' . $key] = array('file://' . $value[0], $value[1]);
+		}
+		return $data;
 	}
 	
 }

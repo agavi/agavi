@@ -18,11 +18,10 @@
  * parameter.
  * 
  * Parameters:
- *   'min'       string should be at least this long
- *   'min_error' error message when string is shorter then 'min'
- *   'max'       string should be at most this long
- *   'max_error' error message when string is longer then 'max'
- *   'trim'      trim whitespace before length checks
+ *   'min'  string should be at least this long
+ *   'max'  string should be at most this long
+ *   'trim' trim whitespace before length checks
+ *   'utf8' whether or not to treat input as UTF-8 (defaults to true)
  *
  * @package    agavi
  * @subpackage validator
@@ -61,9 +60,9 @@ class AgaviStringValidator extends AgaviValidator
 		
 		if($this->getParameter('trim', false)) {
 			if($utf8) {
-				$pattern = '/^\p{Z}*(?P<trimmed>.*?)\p{Z}*$/Du';
+				$pattern = '/^[\pZ\pC]*+(?P<trimmed>.*?)[\pZ\pC]*+$/usDS';
 			} else {
-				$pattern = '/^\s*(?P<trimmed>.*?)\s*$/D';
+				$pattern = '/^\s*+(?P<trimmed>.*?)\s*+$/sDS';
 			}
 			if(preg_match($pattern, $originalValue, $matches)) {
 				$originalValue = $matches['trimmed'];

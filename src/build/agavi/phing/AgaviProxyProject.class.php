@@ -56,8 +56,6 @@ class AgaviProxyProject extends Project
 		
 		parent::__construct();
 		
-		ProjectConfigurator::configureProject($this, $GLOBALS['BUILD']);
-		
 		foreach($proxied->getBuildListeners() as $listener) {
 			parent::addBuildListener($listener);
 		}

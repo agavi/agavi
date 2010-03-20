@@ -23,9 +23,7 @@
 
 	<!-- Load tasks relative to the build system. -->
 	<taskdef name="agavi.input" classname="org.agavi.build.tasks.AgaviInputTask" classpath="phing" />
-
-	<taskdef name="agavi.import" classname="org.agavi.build.tasks.AgaviImportTask" classpath="phing" />
-
+	
 	<taskdef name="agavi.transform-path" classname="org.agavi.build.tasks.AgaviTransformpathTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoidentifierTask" classpath="phing" />
 	<taskdef name="agavi.transform-namespace-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtoidentifierTask" classpath="phing" />
@@ -140,7 +138,7 @@
 
 	<taskdef name="agavi.read-configuration" classname="org.agavi.build.tasks.AgaviReadconfigurationTask" classpath="phing" />
 	<taskdef name="agavi.write-configuration" classname="org.agavi.build.tasks.AgaviWriteconfigurationTask" classpath="phing" />
-
+	
 	<taskdef name="agavi.resolve-configuration" classname="org.agavi.build.tasks.AgaviResolveconfigurationTask" classpath="phing" />
 
 	<!-- Load some basic configuration values. -->
@@ -410,6 +408,7 @@
 			<mapper type="glob" from="*.php.tmpl" to="*.${template.extension.default}" />
 			<fileset dir="${template.path}">
 				<include name="**/*.php.tmpl" />
+				<exclude name="exceptions/**" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="%%" endtoken="%%">
@@ -422,8 +421,24 @@
 				</replacetokens>
 			</filterchain>
 		</copy>
-
-		<!-- Stuff from the pub directory. -->
+		<copy todir="${project.directory}/${project.directory.app.templates}">
+			<mapper type="glob" from="*.php.tmpl" to="*.php" />
+			<fileset dir="${template.path}">
+				<include name="exceptions/**.php.tmpl" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="%%" endtoken="%%">
+					<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
+					<token key="PROJECT_LOCATION" value="${project.directory}" />
+					<token key="PROJECT_NAME" value="${project.name}" />
+					<token key="PROJECT_PREFIX" value="${project.prefix}" />
+					<token key="TEMPLATE_EXTENSION" value="${template.extension.default}" />
+					<token key="TEMPLATES_LOCATION" value="${templates.directory}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<!-- stuff from the pub directory -->
 		<agavi.select-path property="template.path" path="${templates.directory.defaults.pub}">
 			<from path="${templates.directory}" />
 			<from path="${agavi.directory.src.build.templates}" />
@@ -1647,8 +1662,8 @@
 		<isset property="project.directory" />
 		<then>
 			<property userProperty="true" file="${project.directory}/build.properties" />
-			<agavi.import file="${project.directory}/build.xml" />
+			<import file="${project.directory}/build.xml" optional="true"/>
 		</then>
 	</if>
-
+	
 </project>

@@ -113,12 +113,12 @@ abstract class AgaviLoggerAppender extends AgaviParameterHolder
 	/**
 	 * Write log data to this appender.
 	 *
-	 * @param      string Log data to be written.
+	 * @param      AgaviLoggerMessage Log data to be written.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @since      0.9.0
 	 */
-	abstract function write($message);
+	abstract function write(AgaviLoggerMessage $message);
 }
 
 ?>
