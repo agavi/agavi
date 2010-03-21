@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Santiago".
- * Compiled from olson file "southamerica", version 8.40.
+ * Compiled from olson file "southamerica", version 8.43.
  *
  * @package    agavi
  * @subpackage translation
@@ -576,6 +576,26 @@ return array (
       'time' => 1237086000,
       'type' => 2,
     ),
+    105 => 
+    array (
+      'time' => 1255230000,
+      'type' => 4,
+    ),
+    106 => 
+    array (
+      'time' => 1270350000,
+      'type' => 2,
+    ),
+    107 => 
+    array (
+      'time' => 1286679600,
+      'type' => 4,
+    ),
+    108 => 
+    array (
+      'time' => 1299985200,
+      'type' => 2,
+    ),
   ),
   'finalRule' => 
   array (
@@ -599,10 +619,10 @@ return array (
       'time' => 10800000,
       'type' => 2,
     ),
-    'startYear' => 2009,
+    'startYear' => 2011,
   ),
   'source' => 'southamerica',
-  'version' => '8.40',
+  'version' => '8.43',
   'name' => 'America/Santiago',
 );
 

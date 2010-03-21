@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Australia/Darwin".
- * Compiled from olson file "australasia", version 8.15.
+ * Compiled from olson file "australasia", version 8.16.
  *
  * @package    agavi
  * @subpackage translation
@@ -97,7 +97,7 @@ return array (
     'startYear' => 1945,
   ),
   'source' => 'australasia',
-  'version' => '8.15',
+  'version' => '8.16',
   'name' => 'Australia/Darwin',
 );
 

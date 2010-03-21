@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Damascus".
- * Compiled from olson file "asia", version 8.51.
+ * Compiled from olson file "asia", version 8.55.
  *
  * @package    agavi
  * @subpackage translation
@@ -534,7 +534,7 @@ return array (
     'startYear' => 2009,
   ),
   'source' => 'asia',
-  'version' => '8.51',
+  'version' => '8.55',
   'name' => 'Asia/Damascus',
 );
 
