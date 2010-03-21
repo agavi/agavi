@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.3 RC1 - February ?, 2010
 ----------------------------
 
+CHG: Update timezone database to 2010e (#1248) (David)
 CHG: Standard production exception templates should log errors (#1239) (David)
 CHG: Refactor exception rendering (#1242) (David)
 CHG: Allow "extension" parameter to be an array in file validators (#1235) (David)

@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2010-01-25T15:28:40+00:00.
+ * Generated on 2010-03-21T17:09:19+00:00.
  *
  * @package    agavi
  * @subpackage translation

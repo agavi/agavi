@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Noumea".
- * Compiled from olson file "australasia", version 8.15.
+ * Compiled from olson file "australasia", version 8.16.
  *
  * @package    agavi
  * @subpackage translation
@@ -76,7 +76,7 @@ return array (
     'startYear' => 1998,
   ),
   'source' => 'australasia',
-  'version' => '8.15',
+  'version' => '8.16',
   'name' => 'Pacific/Noumea',
 );
 

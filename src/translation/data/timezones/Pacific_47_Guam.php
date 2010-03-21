@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Guam".
- * Compiled from olson file "australasia", version 8.15.
+ * Compiled from olson file "australasia", version 8.16.
  *
  * @package    agavi
  * @subpackage translation
@@ -63,7 +63,7 @@ return array (
     'startYear' => 2001,
   ),
   'source' => 'australasia',
-  'version' => '8.15',
+  'version' => '8.16',
   'name' => 'Pacific/Guam',
 );
 
