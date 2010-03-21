@@ -4,6 +4,11 @@ AGAVI CHANGELOG
 1.0.3 RC1 - February ?, 2010
 ----------------------------
 
+ADD: Allow exporting of values in AgaviNumberValidator (#1160)
+
+CHG: Make AgaviDecimalFormatter::parse() behavior more lenient and consistent with ICU's NumberFormatter (#1254)
+CHG: AgaviNumberValidator should cast to desired type (#1250) (David)
+CHG: Allow validation of non-string values in AgaviNumberValidator (#1249) (David)
 CHG: Update timezone database to 2010e (#1248) (David)
 CHG: Standard production exception templates should log errors (#1239) (David)
 CHG: Refactor exception rendering (#1242) (David)
@@ -11,6 +16,9 @@ CHG: Allow "extension" parameter to be an array in file validators (#1235) (Davi
 CHG: File extension comparison should be case-insensitive in file validators (#1234) (David)
 CHG: Require Phing 2.4 or newer (#1232) (David)
 
+FIX: Integer over/underflow problem in AgaviDecimalFormatter::parse() (#1253) (David)
+FIX: Integer over/underflow problem in AgaviNumberValidator (#1252) (David)
+FIX: AgaviNumberValidator mutates value on error (#1251) (David)
 FIX: XML config namespace copying broken on PHP 5.2.12/5.3.2 (#1244) (David)
 FIX: Relative path passed to AgaviConfigCache::checkConfig() may result in misleading exception message (#1220) (David)
 FIX: AgaviToolkit::isPathAbsolute accepts invalid values (#1204) (David)
