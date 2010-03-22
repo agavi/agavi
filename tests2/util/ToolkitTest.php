@@ -14,9 +14,8 @@ class ToolkitTest extends AgaviTestCase
 		$this->assertTrue(AgaviToolkit::isPathAbsolute('/'));
 		$this->assertTrue(AgaviToolkit::isPathAbsolute('/root'));
 		$this->assertTrue(AgaviToolkit::isPathAbsolute('/FoO/bAR'));
-		// shouldn't these 2 result in false (does php support backslashes on *nix?)
-		$this->assertTrue(AgaviToolkit::isPathAbsolute('\\foo'));
-		$this->assertTrue(AgaviToolkit::isPathAbsolute('\\foo\\bar'));
+		$this->assertFalse(AgaviToolkit::isPathAbsolute('\\foo'));
+		$this->assertFalse(AgaviToolkit::isPathAbsolute('\\foo\\bar'));
 
 		$this->assertfalse(AgaviToolkit::isPathAbsolute('c:'));
 		$this->assertFalse(AgaviToolkit::isPathAbsolute('s/foo/bar'));
