@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.3 RC1 - February ?, 2010
-----------------------------
+1.0.3 RC1 - March 22, 2010
+--------------------------
 
 ADD: Allow exporting of values in AgaviNumberValidator (#1160)
 
@@ -30,7 +30,7 @@ FIX: Implied route matches are repeated in generated urls where route is redefin
 FIX: Regression: Form Population Filter strips value attribute from button inputs (#1236) (David)
 FIX: Shiny exception template may produce invalid XHTML (#1240) (David)
 FIX: Project build.xml not used with Phing 2.4.0+ (#1231) (Felix)
-FIX: AgaviTranslationManager->getDefaultLocale() is broken and throws a notice (#1229) (Dominik)
+FIX: AgaviTranslationManager::getDefaultLocale() is broken and throws a notice (#1229) (Dominik)
 FIX: AgaviWebRouting::gen(null) fails when multiple chars are defined as separators in arg_separator.input (#1227) (David)
 FIX: Generated action cache configs have caching enabled by default (#1223) (David)
 
