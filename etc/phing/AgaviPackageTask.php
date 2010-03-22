@@ -104,7 +104,7 @@ EOD;
 		$p2->setChannel('pear.agavi.org');
 		$p2->setReleaseVersion('1.0.3RC1');
 		$p2->setAPIVersion('1.0.3RC1');
-		$p2->setReleaseStability('stable');
+		$p2->setReleaseStability('beta');
 		$p2->setAPIStability('stable');
 		$p2->setSummary($shortDesc);
 		$p2->setDescription($longDesc);
