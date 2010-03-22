@@ -39,7 +39,7 @@ class TestAppender extends AgaviLoggerAppender
 	}
 
 	public function shutdown() {}
-	public function write($message) {}
+	public function write(AgaviLoggerMessage $message) {}
 }
 
 class TestAppender1 extends TestAppender { }

@@ -11,7 +11,7 @@ class SampleAppender extends AgaviLoggerAppender
 {
 	public function initialize(AgaviContext $context, array $params = array()) {}
 	public function shutdown() {}
-	public function write($message) {}
+	public function write(AgaviLoggerMessage $message) {}
 }
 
 class AppenderTest extends AgaviTestCase
