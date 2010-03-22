@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Vostok".
- * Compiled from olson file "antarctica", version 8.7.
+ * Compiled from olson file "antarctica", version 8.8.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
     'startYear' => 1958,
   ),
   'source' => 'antarctica',
-  'version' => '8.7',
+  'version' => '8.8',
   'name' => 'Antarctica/Vostok',
 );
 

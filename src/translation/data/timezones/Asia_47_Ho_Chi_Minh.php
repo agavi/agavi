@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Ho_Chi_Minh".
- * Compiled from olson file "asia", version 8.55.
+ * Compiled from olson file "asia", version 8.56.
  *
  * @package    agavi
  * @subpackage translation
@@ -68,7 +68,7 @@ return array (
     'startYear' => 1932,
   ),
   'source' => 'asia',
-  'version' => '8.55',
+  'version' => '8.56',
   'name' => 'Asia/Ho_Chi_Minh',
 );
 

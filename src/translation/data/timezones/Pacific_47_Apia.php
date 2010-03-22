@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Apia".
- * Compiled from olson file "australasia", version 8.16.
+ * Compiled from olson file "australasia", version 8.17.
  *
  * @package    agavi
  * @subpackage translation
@@ -62,7 +62,7 @@ return array (
     ),
     3 => 
     array (
-      'time' => 1287918000,
+      'time' => 1285498800,
       'type' => 3,
     ),
     4 => 
@@ -79,7 +79,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'australasia',
-  'version' => '8.16',
+  'version' => '8.17',
   'name' => 'Pacific/Apia',
 );
 

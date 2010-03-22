@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Kabul".
- * Compiled from olson file "asia", version 8.55.
+ * Compiled from olson file "asia", version 8.56.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1945,
   ),
   'source' => 'asia',
-  'version' => '8.55',
+  'version' => '8.56',
   'name' => 'Asia/Kabul',
 );
 

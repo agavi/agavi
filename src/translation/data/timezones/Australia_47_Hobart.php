@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Australia/Hobart".
- * Compiled from olson file "australasia", version 8.16.
+ * Compiled from olson file "australasia", version 8.17.
  *
  * @package    agavi
  * @subpackage translation
@@ -524,7 +524,7 @@ return array (
     'startYear' => 2008,
   ),
   'source' => 'australasia',
-  'version' => '8.16',
+  'version' => '8.17',
   'name' => 'Australia/Hobart',
 );
 

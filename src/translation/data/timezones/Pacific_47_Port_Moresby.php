@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Port_Moresby".
- * Compiled from olson file "australasia", version 8.16.
+ * Compiled from olson file "australasia", version 8.17.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1895,
   ),
   'source' => 'australasia',
-  'version' => '8.16',
+  'version' => '8.17',
   'name' => 'Pacific/Port_Moresby',
 );
 
