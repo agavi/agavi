@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.3 RC2 - March ??, 2010
+--------------------------
+
+FIX: Regression: AgaviDecimalFormatter fraction error (#1257) (David)
+
+
 1.0.3 RC1 - March 22, 2010
 --------------------------
 

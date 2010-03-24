@@ -740,7 +740,7 @@ class AgaviDecimalFormatter
 			$num += 0;
 			
 			if($dec !== '') {
-				$num += (float) ('0.' . sprintf("%02d", $dec));
+				$num += (float) ('0.' . $dec);
 			}
 
 			if(!empty($matches['minus'])) {

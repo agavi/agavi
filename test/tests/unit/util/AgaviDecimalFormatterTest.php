@@ -66,6 +66,26 @@ class AgaviDecimalFormatterTest extends AgaviPhpUnitTestCase
 				0.1,
 			),
 			array(
+				'0.01',
+				0.01,
+			),
+			array(
+				'0.001',
+				0.001,
+			),
+			array(
+				'1.2',
+				1.2,
+			),
+			array(
+				'1.02',
+				1.02,
+			),
+			array(
+				'1.002',
+				1.002,
+			),
+			array(
 				'10',
 				10,
 			),
