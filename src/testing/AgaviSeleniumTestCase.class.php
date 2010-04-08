@@ -28,7 +28,7 @@
  *
  * @version    $Id$
  */
-abstract class AgaviSeleniumTestCase extends PHPUnit_Framework_SeleniumTestCase implements AgaviIRemoteTestCase
+abstract class AgaviSeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase implements AgaviIRemoteTestCase
 {
 }
 
