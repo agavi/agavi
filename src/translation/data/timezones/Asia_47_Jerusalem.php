@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Jerusalem".
- * Compiled from olson file "asia", version 8.56.
+ * Compiled from olson file "asia", version 8.59.
  *
  * @package    agavi
  * @subpackage translation
@@ -774,7 +774,7 @@ return array (
     'startYear' => 2038,
   ),
   'source' => 'asia',
-  'version' => '8.56',
+  'version' => '8.59',
   'name' => 'Asia/Jerusalem',
 );
 

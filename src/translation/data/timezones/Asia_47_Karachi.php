@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Karachi".
- * Compiled from olson file "asia", version 8.56.
+ * Compiled from olson file "asia", version 8.59.
  *
  * @package    agavi
  * @subpackage translation
@@ -109,30 +109,12 @@ return array (
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
+    'type' => 'none',
     'offset' => 18000,
-    'name' => 'PK%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 3,
-      'date' => '15',
-      'day_of_week' => 0,
-      'time' => 0,
-      'type' => 0,
-    ),
-    'end' => 
-    array (
-      'month' => 10,
-      'date' => '1',
-      'day_of_week' => 0,
-      'time' => 0,
-      'type' => 0,
-    ),
-    'startYear' => 2009,
+    'startYear' => 2010,
   ),
   'source' => 'asia',
-  'version' => '8.56',
+  'version' => '8.59',
   'name' => 'Asia/Karachi',
 );
 

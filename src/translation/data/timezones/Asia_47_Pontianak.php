@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Pontianak".
- * Compiled from olson file "asia", version 8.56.
+ * Compiled from olson file "asia", version 8.59.
  *
  * @package    agavi
  * @subpackage translation
@@ -106,7 +106,7 @@ return array (
     'startYear' => 1988,
   ),
   'source' => 'asia',
-  'version' => '8.56',
+  'version' => '8.59',
   'name' => 'Asia/Pontianak',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Ashgabat".
- * Compiled from olson file "asia", version 8.56.
+ * Compiled from olson file "asia", version 8.59.
  *
  * @package    agavi
  * @subpackage translation
@@ -190,7 +190,7 @@ return array (
     'startYear' => 1992,
   ),
   'source' => 'asia',
-  'version' => '8.56',
+  'version' => '8.59',
   'name' => 'Asia/Ashgabat',
 );
 

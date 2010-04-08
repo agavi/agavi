@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Phnom_Penh".
- * Compiled from olson file "asia", version 8.56.
+ * Compiled from olson file "asia", version 8.59.
  *
  * @package    agavi
  * @subpackage translation
@@ -68,7 +68,7 @@ return array (
     'startYear' => 1932,
   ),
   'source' => 'asia',
-  'version' => '8.56',
+  'version' => '8.59',
   'name' => 'Asia/Phnom_Penh',
 );
 
