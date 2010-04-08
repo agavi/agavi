@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.3 RC2 - March ??, 2010
 --------------------------
 
+ADD: Make DOMDocument::saveXML() options configurable (#1262) (David)
+
 FIX: AgaviSeleniumTestCase extends non-existent PHPUnit_Framework_SeleniumTestCase (#1260) (David)
 FIX: Sample app incompatible with PHP 5.2 (#1258) (David)
 FIX: Regression: AgaviDecimalFormatter fraction error (#1257) (David)
