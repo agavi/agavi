@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Kamchatka".
- * Compiled from olson file "europe", version 8.25.
+ * Compiled from olson file "europe", version 8.26.
  *
  * @package    agavi
  * @subpackage translation
@@ -229,7 +229,7 @@ return array (
   'finalRule' => 
   array (
     'type' => 'dynamic',
-    'offset' => 43200,
+    'offset' => 39600,
     'name' => 'PET%sT',
     'save' => 3600,
     'start' => 
@@ -251,7 +251,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.25',
+  'version' => '8.26',
   'name' => 'Asia/Kamchatka',
 );
 

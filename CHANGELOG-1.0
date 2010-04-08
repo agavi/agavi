@@ -1,6 +1,40 @@
 AGAVI CHANGELOG (1.0.x)
 =======================
 
+1.0.3 RC1 - March 22, 2010
+--------------------------
+
+ADD: Allow exporting of values in AgaviNumberValidator (#1160)
+
+CHG: Update timezone database to 2010f (#1255) (David)
+CHG: Make AgaviDecimalFormatter::parse() behavior more lenient and consistent with ICU's NumberFormatter (#1254)
+CHG: AgaviNumberValidator should cast to desired type (#1250) (David)
+CHG: Allow validation of non-string values in AgaviNumberValidator (#1249) (David)
+CHG: Standard production exception templates should log errors (#1239) (David)
+CHG: Refactor exception rendering (#1242) (David)
+CHG: Allow "extension" parameter to be an array in file validators (#1235) (David)
+CHG: File extension comparison should be case-insensitive in file validators (#1234) (David)
+CHG: Require Phing 2.4 or newer (#1232) (David)
+
+FIX: Integer over/underflow problem in AgaviDecimalFormatter::parse() (#1253) (David)
+FIX: Integer over/underflow problem in AgaviNumberValidator (#1252) (David)
+FIX: AgaviNumberValidator mutates value on error (#1251) (David)
+FIX: XML config namespace copying broken on PHP 5.2.12/5.3.2 (#1244) (David)
+FIX: Relative path passed to AgaviConfigCache::checkConfig() may result in misleading exception message (#1220) (David)
+FIX: AgaviToolkit::isPathAbsolute accepts invalid values (#1204) (David)
+FIX: AgaviLoggerAppender::write() lacks type hint (#1221) (David)
+FIX: AgaviStringValidator trimming fails on newlines (#1243) (David)
+FIX: Build script generates exception templates with non .php extension (#1179) (David)
+FIX: AgaviWebRouting::gen(null) returns url without sid even if use_trans_sid is true (#1238) (David)
+FIX: Implied route matches are repeated in generated urls where route is redefined (#1209) (David)
+FIX: Regression: Form Population Filter strips value attribute from button inputs (#1236) (David)
+FIX: Shiny exception template may produce invalid XHTML (#1240) (David)
+FIX: Project build.xml not used with Phing 2.4.0+ (#1231) (Felix)
+FIX: AgaviTranslationManager::getDefaultLocale() is broken and throws a notice (#1229) (Dominik)
+FIX: AgaviWebRouting::gen(null) fails when multiple chars are defined as separators in arg_separator.input (#1227) (David)
+FIX: Generated action cache configs have caching enabled by default (#1223) (David)
+
+
 1.0.2 (January 27, 2010)
 ------------------------
 

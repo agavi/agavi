@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/El_Aaiun".
- * Compiled from olson file "africa", version 8.23.
+ * Compiled from olson file "africa", version 8.24.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1977,
   ),
   'source' => 'africa',
-  'version' => '8.23',
+  'version' => '8.24',
   'name' => 'Africa/El_Aaiun',
 );
 

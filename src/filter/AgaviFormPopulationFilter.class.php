@@ -600,7 +600,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					$this->doc->documentElement->setAttributeNode($attribute);
 				}
 			}
-			$out = $this->doc->saveXML();
+			$out = $this->doc->saveXML(null, $cfg['savexml_options']);
 			if((!$cfg['parse_xhtml_as_xml'] || !$properXhtml) && $cfg['cdata_fix']) {
 				// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
 				// http://www.456bereastreet.com/archive/200501/the_perils_of_using_xhtml_properly/
@@ -952,6 +952,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			'dom_validate_on_parse'      => false,
 			'dom_preserve_white_space'   => true,
 			'dom_format_output'          => false,
+			'savexml_options'            => array(),
 
 			'error_class'                => 'error',
 			'error_class_map'            => array(),
@@ -980,6 +981,16 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 		if($ot = $this->getParameter('output_types')) {
 			$this->setParameter('output_types', (array) $ot);
 		}
+		
+		$savexmlOptions = 0;
+		foreach((array)$this->getParameter('savexml_options', array()) as $option) {
+			if(is_numeric($option)) {
+				$savexmlOptions |= (int)$option;
+			} elseif(defined($option)) {
+				$savexmlOptions |= constant($option);
+			}
+		}
+		$this->setParameter('savexml_options', $savexmlOptions);
 
 		// and now copy all that to the request namespace so it can all be modified at runtime, not just overwritten
 		$this->context->getRequest()->setAttributes($this->getParameters(), 'org.agavi.filter.FormPopulationFilter');

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Damascus".
- * Compiled from olson file "asia", version 8.51.
+ * Compiled from olson file "asia", version 8.59.
  *
  * @package    agavi
  * @subpackage translation
@@ -508,6 +508,11 @@ return array (
       'time' => 1256850000,
       'type' => 0,
     ),
+    95 => 
+    array (
+      'time' => 1270159200,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
@@ -517,9 +522,9 @@ return array (
     'save' => 3600,
     'start' => 
     array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 6,
+      'month' => 3,
+      'date' => '1',
+      'day_of_week' => -6,
       'time' => 0,
       'type' => 0,
     ),
@@ -531,10 +536,10 @@ return array (
       'time' => 0,
       'type' => 0,
     ),
-    'startYear' => 2009,
+    'startYear' => 2010,
   ),
   'source' => 'asia',
-  'version' => '8.51',
+  'version' => '8.59',
   'name' => 'Asia/Damascus',
 );
 

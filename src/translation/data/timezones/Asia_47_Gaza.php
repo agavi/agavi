@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Gaza".
- * Compiled from olson file "asia", version 8.51.
+ * Compiled from olson file "asia", version 8.59.
  *
  * @package    agavi
  * @subpackage translation
@@ -501,6 +501,11 @@ return array (
       'time' => 1252018800,
       'type' => 0,
     ),
+    90 => 
+    array (
+      'time' => 1269640860,
+      'type' => 2,
+    ),
   ),
   'finalRule' => 
   array (
@@ -512,8 +517,8 @@ return array (
     array (
       'month' => 2,
       'date' => -1,
-      'day_of_week' => 6,
-      'time' => 0,
+      'day_of_week' => 7,
+      'time' => 60000,
       'type' => 0,
     ),
     'end' => 
@@ -524,10 +529,10 @@ return array (
       'time' => 7200000,
       'type' => 0,
     ),
-    'startYear' => 2009,
+    'startYear' => 2010,
   ),
   'source' => 'asia',
-  'version' => '8.51',
+  'version' => '8.59',
   'name' => 'Asia/Gaza',
 );
 

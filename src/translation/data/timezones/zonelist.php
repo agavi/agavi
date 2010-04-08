@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2010-01-25T15:28:40+00:00.
+ * Generated on 2010-04-08T00:48:19+00:00.
  *
  * @package    agavi
  * @subpackage translation
@@ -1845,6 +1845,11 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'Antarctica_47_Mawson.php',
+  ),
+  'Antarctica/Macquarie' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'Antarctica_47_Macquarie.php',
   ),
   'Indian/Kerguelen' => 
   array (

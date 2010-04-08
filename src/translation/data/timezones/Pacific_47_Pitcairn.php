@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Pitcairn".
- * Compiled from olson file "australasia", version 8.15.
+ * Compiled from olson file "australasia", version 8.17.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1999,
   ),
   'source' => 'australasia',
-  'version' => '8.15',
+  'version' => '8.17',
   'name' => 'Pacific/Pitcairn',
 );
 

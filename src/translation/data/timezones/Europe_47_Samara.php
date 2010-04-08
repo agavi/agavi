@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Samara".
- * Compiled from olson file "europe", version 8.25.
+ * Compiled from olson file "europe", version 8.26.
  *
  * @package    agavi
  * @subpackage translation
@@ -269,7 +269,7 @@ return array (
   'finalRule' => 
   array (
     'type' => 'dynamic',
-    'offset' => 14400,
+    'offset' => 10800,
     'name' => 'SAM%sT',
     'save' => 3600,
     'start' => 
@@ -291,7 +291,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.25',
+  'version' => '8.26',
   'name' => 'Europe/Samara',
 );
 

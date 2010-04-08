@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Mawson".
- * Compiled from olson file "antarctica", version 8.7.
+ * Compiled from olson file "antarctica", version 8.8.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 2010,
   ),
   'source' => 'antarctica',
-  'version' => '8.7',
+  'version' => '8.8',
   'name' => 'Antarctica/Mawson',
 );
 

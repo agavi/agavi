@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Budapest".
- * Compiled from olson file "europe", version 8.25.
+ * Compiled from olson file "europe", version 8.26.
  *
  * @package    agavi
  * @subpackage translation
@@ -430,7 +430,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.25',
+  'version' => '8.26',
   'name' => 'Europe/Budapest',
 );
 

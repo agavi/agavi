@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Asuncion".
- * Compiled from olson file "southamerica", version 8.40.
+ * Compiled from olson file "southamerica", version 8.43.
  *
  * @package    agavi
  * @subpackage translation
@@ -375,6 +375,56 @@ return array (
       'time' => 1129435200,
       'type' => 3,
     ),
+    66 => 
+    array (
+      'time' => 1142132400,
+      'type' => 1,
+    ),
+    67 => 
+    array (
+      'time' => 1160884800,
+      'type' => 3,
+    ),
+    68 => 
+    array (
+      'time' => 1173582000,
+      'type' => 1,
+    ),
+    69 => 
+    array (
+      'time' => 1192939200,
+      'type' => 3,
+    ),
+    70 => 
+    array (
+      'time' => 1205031600,
+      'type' => 1,
+    ),
+    71 => 
+    array (
+      'time' => 1224388800,
+      'type' => 3,
+    ),
+    72 => 
+    array (
+      'time' => 1236481200,
+      'type' => 1,
+    ),
+    73 => 
+    array (
+      'time' => 1255838400,
+      'type' => 3,
+    ),
+    74 => 
+    array (
+      'time' => 1270954800,
+      'type' => 1,
+    ),
+    75 => 
+    array (
+      'time' => 1286078400,
+      'type' => 3,
+    ),
   ),
   'finalRule' => 
   array (
@@ -385,23 +435,23 @@ return array (
     'start' => 
     array (
       'month' => 9,
-      'date' => '15',
+      'date' => '1',
       'day_of_week' => -1,
       'time' => 0,
       'type' => 0,
     ),
     'end' => 
     array (
-      'month' => 2,
+      'month' => 3,
       'date' => '8',
       'day_of_week' => -1,
       'time' => 0,
       'type' => 0,
     ),
-    'startYear' => 2005,
+    'startYear' => 2010,
   ),
   'source' => 'southamerica',
-  'version' => '8.40',
+  'version' => '8.43',
   'name' => 'America/Asuncion',
 );
 

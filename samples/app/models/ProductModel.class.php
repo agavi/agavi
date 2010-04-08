@@ -59,12 +59,12 @@ class ProductModel extends AgaviSampleAppBaseModel
 	
 	public function setName($name)
 	{
-		return $this->name;
+		$this->name = $name;
 	}
 	
 	public function setPrice($price)
 	{
-		return $this->price;
+		$this->price = $price;
 	}
 	
 	public function isAvailable()

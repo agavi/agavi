@@ -96,8 +96,14 @@ class AgaviSampleAppLanguageRoutingCallback extends AgaviRoutingCallback
 		$locales = array();
 		
 		if(preg_match_all('/(^|\s*,\s*)([a-zA-Z]{1,8}(-[a-zA-Z]{1,8})*)\s*(;\s*q\s*=\s*(1(\.0{,3})?|0(\.[0-9]{,3})))?/i', $acceptLanguage, $matches)) {
-			$matches[2] = array_map(function($part) { return str_replace('-', '_', $part); }, $matches[2]);
-			$matches[5] = array_map(function($part) { return $part === '' ? 1 : $part; }, $matches[5]);
+			foreach($matches[2] as &$language) {
+				$language = str_replace('-', '_', $language);
+			}
+			foreach($matches[5] as &$quality) {
+				if($quality === '') {
+					$quality = '1';
+				}
+			}
 			$locales = array_combine($matches[2], $matches[5]);
 			arsort($locales, SORT_NUMERIC);
 		}

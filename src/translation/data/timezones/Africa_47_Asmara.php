@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Asmara".
- * Compiled from olson file "africa", version 8.23.
+ * Compiled from olson file "africa", version 8.24.
  *
  * @package    agavi
  * @subpackage translation
@@ -63,7 +63,7 @@ return array (
     'startYear' => 1937,
   ),
   'source' => 'africa',
-  'version' => '8.23',
+  'version' => '8.24',
   'name' => 'Africa/Asmara',
 );
 
