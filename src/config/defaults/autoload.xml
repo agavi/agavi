@@ -204,6 +204,7 @@
 			<autoload name="AgaviPostgresqlSessionStorage">%core.agavi_dir%/storage/AgaviPostgresqlSessionStorage.class.php</autoload>
 			<autoload name="AgaviSessionStorage">%core.agavi_dir%/storage/AgaviSessionStorage.class.php</autoload>
 			<autoload name="AgaviStorage">%core.agavi_dir%/storage/AgaviStorage.class.php</autoload>
+			<autoload name="AgaviWindowsazureSessionStorage">%core.agavi_dir%/storage/AgaviWindowsazureSessionStorage.class.php</autoload>
 
 			<!-- agavi/translation -->
 			<autoload name="AgaviBasicTranslator">%core.agavi_dir%/translation/AgaviBasicTranslator.class.php</autoload>
