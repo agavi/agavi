@@ -72,7 +72,7 @@ class AgaviWindowsazureSessionStorage extends AgaviSessionStorage
 			$this->getParameter('account_key', Microsoft_WindowsAzure_Credentials::DEVSTORE_KEY)
 		);
 		
-		$sessionHandler = new Microsoft_WindowsAzure_SessionHandler($table, $this->getParameter('session_table', 'php-sessions'), $this->getParameter('session_table_partition', 'sessions'));
+		$sessionHandler = new Microsoft_WindowsAzure_SessionHandler($table, $this->getParameter('session_table', 'phpsessions'), $this->getParameter('session_table_partition', 'sessions'));
 		// this will do session_set_save_handler
 		$sessionHandler->register();
 	}
