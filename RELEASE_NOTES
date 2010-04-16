@@ -1,7 +1,7 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.3 - March ??, 2010
+Version 1.0.3 - April 16, 2010
 ==============================
 
 This maintenance release fixes a number of issues over Agavi 1.0.2 and features a few minor enhancements.
@@ -18,7 +18,7 @@ A couple of minor fixes have been made to the routing; most notably, overwriting
 
 Some default code templates have been updated; most notably, caching configuration files now explicitly disable caching, as otherwise, Actions that do not use a View would be cached automatically.
 
-The timezone database has been updated to version 2010f.
+The timezone database has been updated to version 2010h.
 
 For a full list of changes, please refer to the CHANGELOG.
 
