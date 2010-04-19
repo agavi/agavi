@@ -75,6 +75,7 @@
 			<autoload name="AgaviPdoDatabase">%core.agavi_dir%/database/AgaviPdoDatabase.class.php</autoload>
 			<autoload name="AgaviPostgresqlDatabase">%core.agavi_dir%/database/AgaviPostgresqlDatabase.class.php</autoload>
 			<autoload name="AgaviPropelDatabase">%core.agavi_dir%/database/AgaviPropelDatabase.class.php</autoload>
+			<autoload name="AgaviSqlsrvDatabase">%core.agavi_dir%/database/AgaviSqlsrvDatabase.class.php</autoload>
 			<autoload name="Propel">%core.agavi_dir%/database/AgaviPropelAutoload.php</autoload>
 
 			<!-- agavi/date -->
@@ -204,6 +205,7 @@
 			<autoload name="AgaviPostgresqlSessionStorage">%core.agavi_dir%/storage/AgaviPostgresqlSessionStorage.class.php</autoload>
 			<autoload name="AgaviSessionStorage">%core.agavi_dir%/storage/AgaviSessionStorage.class.php</autoload>
 			<autoload name="AgaviStorage">%core.agavi_dir%/storage/AgaviStorage.class.php</autoload>
+			<autoload name="AgaviWindowsazureSessionStorage">%core.agavi_dir%/storage/AgaviWindowsazureSessionStorage.class.php</autoload>
 
 			<!-- agavi/translation -->
 			<autoload name="AgaviBasicTranslator">%core.agavi_dir%/translation/AgaviBasicTranslator.class.php</autoload>

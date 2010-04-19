@@ -1,6 +1,14 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.4 RC1 - April ??, 2010
+--------------------------
+
+ADD: Windows Azure Session Storage (#1266) (David)
+ADD: Support for IIS7 (#1265) (David)
+ADD: Database adapter for ext/sqlsrv (#1264) (David)
+
+
 1.0.3 - April 16, 2010
 ----------------------
 

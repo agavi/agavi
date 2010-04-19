@@ -1,0 +1,99 @@
+<?php
+
+// +---------------------------------------------------------------------------+
+// | This file is part of the Agavi package.                                   |
+// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// |                                                                           |
+// | For the full copyright and license information, please view the LICENSE   |
+// | file that was distributed with this source code. You can also view the    |
+// | LICENSE file online at http://www.agavi.org/LICENSE.txt                   |
+// |   vi: set noexpandtab:                                                    |
+// |   Local Variables:                                                        |
+// |   indent-tabs-mode: t                                                     |
+// |   End:                                                                    |
+// +---------------------------------------------------------------------------+
+
+/**
+ * AgaviSqlsrvDatabase provides connectivity for the Microsoft SQL Server driver
+ * for PHP.
+ *
+ * @package    agavi
+ * @subpackage database
+ *
+ * @author     David Zülke <david.zuelke@bitextender.com>
+ * @copyright  Authors
+ * @copyright  The Agavi Project
+ *
+ * @since      1.1.0
+ *
+ * @version    $Id$
+ */
+class AgaviSqlsrvDatabase extends AgaviDatabase
+{
+	/**
+	 * Connect to the database.
+	 *
+	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
+	 *                                           created.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	protected function connect()
+	{
+		$serverName = $this->getParameter('server_name');
+		if($serverName == null) {
+			// missing required server_name parameter
+			$error = 'Database configuration is missing "server_name" parameter';
+			throw new AgaviDatabaseException($error);
+		}
+
+		$settings = array();
+		if($this->hasParameter('settings')) {
+			foreach((array)$this->getParameter('settings') as $key => $value) {
+				if(!sqlsrv_configure($key, is_string($value) && strpos($value, 'SQLSRV_') === 0 && defined($value) ? constant($value) : (is_numeric($value) ? (int)$value : $value))) {
+					throw new AgaviDatabaseException(sprintf('Unsupported key or value for setting "%s".', $key));
+				}
+			}
+		}
+
+		$connectionInfo = $this->getParameter('connection_info');
+		foreach($connectionInfo as $key => &$value) {
+			$value = is_string($value) && strpos($value, 'SQLSRV_') === 0 && defined($value) ? constant($value) : (is_numeric($value) ? (int)$value : $value);
+		}
+		
+		$this->connection = sqlsrv_connect($serverName, $connectionInfo);
+		if(!$this->connection) {
+			$this->connection = null;
+			$errors = sqlsrv_errors();
+			foreach($errors as &$error) {
+				// even when UTF-8 is specified as the encoding for the connection, error messages will be returned in the local codepage
+				// (not just for connection failures, but also for failed queries etc)
+				$error = sprintf('SQLSTATE %s (code %d): %s', $error['SQLSTATE'], $error['code'], utf8_encode($error['message']));
+			}
+			throw new AgaviDatabaseException(sprintf("%s\n\n%s", sprintf('Could not open database connection "%s".', $this->getName()), implode("\n", $errors)));
+		}
+
+		foreach((array)$this->getParameter('init_queries') as $query) {
+			sqlsrv_query($this->connection, $query);
+		}
+	}
+	
+	/**
+	 * Execute the shutdown procedure.
+	 *
+	 * @throws     <b>AgaviDatabaseException</b> If an error occurs while shutting
+	 *                                           down this database.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function shutdown()
+	{
+		if($this->connection) {
+			sqlsrv_close($this->connection);
+		}
+	}
+}
+
+?>
