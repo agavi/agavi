@@ -259,7 +259,7 @@ try {
 			(isset($_SERVER['TERM_PROGRAM']) && $_SERVER['TERM_PROGRAM'] == 'Apple_Terminal') ||
 			(isset($_ENV['TERM_PROGRAM']) && $_ENV['TERM_PROGRAM'] == 'Apple_Terminal')
 		) &&
-		version_compare(preg_replace('/.*ProductVersion:\s*([0-9\.]+).*/s', '$1', shell_exec('sw_vers')), '10.5', 'ge') && 
+		version_compare(preg_replace('/^ProductVersion:\s*([0-9]+\.[0-9]+)/ms', '$1', shell_exec('sw_vers')), '10.5', 'eq') && 
 		!Phing::getProperty('phing.logger.defaults')
 	) {
 		Phing::setProperty('phing.logger.defaults', new PhingFile(BUILD_DIRECTORY . '/agavi/phing/ansicolorlogger_osxleopard.properties'));
