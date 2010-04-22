@@ -8,6 +8,7 @@ ADD: Windows Azure Session Storage (#1266) (David)
 ADD: Support for IIS7 (#1265) (David)
 ADD: Database adapter for ext/sqlsrv (#1264) (David)
 
+CHG: Update timezone database to 2010i (#1268) (David)
 CHG: Decrease default verbosity of project configuration system (#1269) (Simon, David)
 
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Samarkand".
- * Compiled from olson file "asia", version 8.59.
+ * Compiled from olson file "asia", version 8.60.
  *
  * @package    agavi
  * @subpackage translation
@@ -201,7 +201,7 @@ return array (
     'startYear' => 1992,
   ),
   'source' => 'asia',
-  'version' => '8.59',
+  'version' => '8.60',
   'name' => 'Asia/Samarkand',
 );
 
