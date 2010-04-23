@@ -177,6 +177,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 	{
 		$this->locale = $newLocale;
 		$this->domainData = array();
+		$this->pluralFormFunc = null;
 	}
 
 	/**
@@ -236,6 +237,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 			}
 		}
 
+		$this->pluralFormFunc = null;
 		if(isset($headers['Plural-Forms'])) {
 			$pf = $headers['Plural-Forms'];
 			if(preg_match('#nplurals=\d+;\s+plural=(.*)$#D', $pf, $match)) {
