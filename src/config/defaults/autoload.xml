@@ -70,6 +70,7 @@
 			<autoload name="AgaviDatabase">%core.agavi_dir%/database/AgaviDatabase.class.php</autoload>
 			<autoload name="AgaviDatabaseManager">%core.agavi_dir%/database/AgaviDatabaseManager.class.php</autoload>
 			<autoload name="AgaviDoctrineDatabase">%core.agavi_dir%/database/AgaviDoctrineDatabase.class.php</autoload>
+			<autoload name="AgaviDoctrineDatabaseEventListener">%core.agavi_dir%/database/doctrine/AgaviDoctrineDatabaseEventListener.class.php</autoload>
 			<autoload name="AgaviMysqlDatabase">%core.agavi_dir%/database/AgaviMysqlDatabase.class.php</autoload>
 			<autoload name="AgaviMysqliDatabase">%core.agavi_dir%/database/AgaviMysqliDatabase.class.php</autoload>
 			<autoload name="AgaviPdoDatabase">%core.agavi_dir%/database/AgaviPdoDatabase.class.php</autoload>
