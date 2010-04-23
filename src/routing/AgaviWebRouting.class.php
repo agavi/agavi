@@ -157,8 +157,8 @@ class AgaviWebRouting extends AgaviRouting
 				$this->input = $input;
 			}
 
-			if(!isset($_SERVER['SERVER_SOFTWARE']) || strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/1') === false) {
-				// don't do that for Apache 1, it's already rawurldecode()d there
+			if(!(isset($_SERVER['SERVER_SOFTWARE']) && (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/1') !== false || (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false && isset($_SERVER['UNENCODED_URL']))))) {
+				// don't do that for Apache 1 or IIS 7 with URL Rewrite Module, it's already rawurldecode()d there
 				$this->input = rawurldecode($this->input);
 			}
 

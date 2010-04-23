@@ -98,5 +98,5 @@ until agavi_directory_exists; do
 done
 
 # Call build script.
-${PHP_EXECUTABLE} -d memory_limit=4294967295 -f "${AGAVI_SOURCE_DIRECTORY}/build/agavi/script/agavi.php" -- --agavi-source-directory "${AGAVI_SOURCE_DIRECTORY}" "$@"
+`which rlwrap` ${PHP_EXECUTABLE} -d memory_limit=4294967295 -f "${AGAVI_SOURCE_DIRECTORY}/build/agavi/script/agavi.php" -- --agavi-source-directory "${AGAVI_SOURCE_DIRECTORY}" "$@"
 

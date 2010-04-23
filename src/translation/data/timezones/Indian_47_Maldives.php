@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Indian/Maldives".
- * Compiled from olson file "asia", version 8.59.
+ * Compiled from olson file "asia", version 8.60.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1960,
   ),
   'source' => 'asia',
-  'version' => '8.59',
+  'version' => '8.60',
   'name' => 'Indian/Maldives',
 );
 

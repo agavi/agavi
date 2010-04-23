@@ -4,7 +4,6 @@ AGAVI CHANGELOG
 1.1.0 beta1 (June ??, 2009)
 ---------------------------
 
-ADD: Create an AgaviBooleanValidator (#1196) (Felix)
 ADD: Improve the build system for actions, views and models (#1106) (Felix)
 ADD: Allow array syntax for slot names (#1110) (David)
 ADD: Add support for custom filesystem layouts for modules to the project configuration system (#874) (Noah)

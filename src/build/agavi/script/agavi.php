@@ -67,7 +67,7 @@ try {
 
 $GLOBALS['PROPERTIES'] = array();
 $GLOBALS['SHOW_LIST'] = false;
-$GLOBALS['VERBOSE'] = false;
+$GLOBALS['MESSAGE_OUTPUT_LEVEL'] = Project::MSG_WARN;
 $GLOBALS['LOGGER'] = 'phing.listener.AnsiColorLogger';
 $GLOBALS['BUILD'] = new PhingFile(BUILD_DIRECTORY . '/build.xml');
 
@@ -81,6 +81,7 @@ function input_help_display()
 	$GLOBALS['OUTPUT']->write('  -l --list --targets              Displays the list of available targets' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  -D --define <property> <value>   Defines a configuration property' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  --verbose                        Provides more verbose configuration information' . PHP_EOL);
+	$GLOBALS['OUTPUT']->write('  --very-verbose                   Provides very verbose configuration information' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  --agavi-source-directory <path>  Sets the Agavi source directory to <path>' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  --include-path <path>            Appends <path> to the PHP include path' . PHP_EOL);
 	$GLOBALS['OUTPUT']->write('  --logger <class>                 Sets the configuration logger class to <class>' . PHP_EOL);
@@ -114,7 +115,12 @@ function input_define(AgaviOptionParser $parser, $name, $arguments, $scriptArgum
 
 function input_verbose(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
 {
-	$GLOBALS['VERBOSE'] = true;
+	$GLOBALS['MESSAGE_OUTPUT_LEVEL'] = Project::MSG_INFO;
+}
+
+function input_very_verbose(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
+{
+	$GLOBALS['MESSAGE_OUTPUT_LEVEL'] = Project::MSG_VERBOSE;
 }
 
 function input_agavi_source_directory(AgaviOptionParser $parser, $name, $arguments, $scriptArguments)
@@ -147,6 +153,7 @@ $parser->addOption('version', array('v'), array('version'), 'input_version');
 $parser->addOption('list', array('l'), array('list', 'targets'), 'input_list');
 $parser->addOption('define', array('D'), array('define'), 'input_define', 2);
 $parser->addOption('verbose', array(), array('verbose'), 'input_verbose');
+$parser->addOption('very_verbose', array(), array('very-verbose'), 'input_very_verbose');
 $parser->addOption('agavi_source_directory', array(), array('agavi-source-directory'), 'input_agavi_source_directory', 1);
 $parser->addOption('include_path', array(), array('include-path'), 'input_include_path', 1);
 $parser->addOption('logger', array(), array('logger'), 'input_logger', 1);
@@ -252,7 +259,7 @@ try {
 			(isset($_SERVER['TERM_PROGRAM']) && $_SERVER['TERM_PROGRAM'] == 'Apple_Terminal') ||
 			(isset($_ENV['TERM_PROGRAM']) && $_ENV['TERM_PROGRAM'] == 'Apple_Terminal')
 		) &&
-		version_compare(preg_replace('/.*ProductVersion:\s*([0-9\.]+).*/s', '$1', shell_exec('sw_vers')), '10.5', 'ge') && 
+		version_compare(preg_replace('/^ProductVersion:\s*([0-9]+\.[0-9]+)/ms', '$1', shell_exec('sw_vers')), '10.5', 'eq') && 
 		!Phing::getProperty('phing.logger.defaults')
 	) {
 		Phing::setProperty('phing.logger.defaults', new PhingFile(BUILD_DIRECTORY . '/agavi/phing/ansicolorlogger_osxleopard.properties'));
@@ -265,7 +272,7 @@ try {
 	$GLOBALS['LOGGER'] = Phing::import($GLOBALS['LOGGER']);
 	
 	$logger = new $GLOBALS['LOGGER']();
-	$logger->setMessageOutputLevel($GLOBALS['VERBOSE'] ? Project::MSG_VERBOSE : Project::MSG_INFO);
+	$logger->setMessageOutputLevel($GLOBALS['MESSAGE_OUTPUT_LEVEL']);
 	$logger->setOutputStream($GLOBALS['OUTPUT']);
 	$logger->setErrorStream($GLOBALS['ERROR']);
 	

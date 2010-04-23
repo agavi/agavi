@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Manila".
- * Compiled from olson file "asia", version 8.59.
+ * Compiled from olson file "asia", version 8.60.
  *
  * @package    agavi
  * @subpackage translation
@@ -103,7 +103,7 @@ return array (
     'startYear' => 1979,
   ),
   'source' => 'asia',
-  'version' => '8.59',
+  'version' => '8.60',
   'name' => 'Asia/Manila',
 );
 

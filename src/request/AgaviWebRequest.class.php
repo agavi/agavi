@@ -389,7 +389,10 @@ class AgaviWebRequest extends AgaviRequest
 			);
 		}
 
-		if(isset($_SERVER['HTTP_X_REWRITE_URL']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
+		if(isset($_SERVER['UNENCODED_URL']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
+			// Microsoft IIS 7 with URL Rewrite Module
+			$this->requestUri = $_SERVER['UNENCODED_URL'];
+		} elseif(isset($_SERVER['HTTP_X_REWRITE_URL']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
 			// Microsoft IIS with ISAPI_Rewrite
 			$this->requestUri = $_SERVER['HTTP_X_REWRITE_URL'];
 		} elseif(!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {

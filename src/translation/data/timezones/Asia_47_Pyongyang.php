@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Pyongyang".
- * Compiled from olson file "asia", version 8.59.
+ * Compiled from olson file "asia", version 8.60.
  *
  * @package    agavi
  * @subpackage translation
@@ -78,7 +78,7 @@ return array (
     'startYear' => 1962,
   ),
   'source' => 'asia',
-  'version' => '8.59',
+  'version' => '8.60',
   'name' => 'Asia/Pyongyang',
 );
 
