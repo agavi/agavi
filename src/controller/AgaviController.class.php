@@ -545,6 +545,7 @@ class AgaviController extends AgaviParameterHolder
 			}
 			$config = ($module == '*' ? AgaviConfig::get('core.config_dir') : AgaviConfig::get('core.module_dir') . '/' . $module . '/config') . '/' . $which . '_filters.xml';
 			if(is_readable($config)) {
+				$this_ = $this;
 				require(AgaviConfigCache::checkConfig($config, $this->context->getName()));
 			}
 		} else {

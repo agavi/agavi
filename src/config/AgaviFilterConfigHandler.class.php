@@ -89,7 +89,7 @@ class AgaviFilterConfigHandler extends AgaviXmlConfigHandler
 					throw new AgaviFactoryException('Filter "' . $name . '" does not implement interface "' . $if . '"');
 				}
 				$data[] = '$filter = new ' . $filter['class'] . '();';
-				$data[] = '$filter->initialize($this->context, ' . var_export($filter['params'], true) . ');';
+				$data[] = '$filter->initialize($this_->context, ' . var_export($filter['params'], true) . ');';
 				$data[] = '$filters[] = $filter;';
 			}
 		}
