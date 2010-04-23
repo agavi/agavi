@@ -31,7 +31,7 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      1.1.0
+ * @since      1.0.4
  *
  * @version    $Id$
  */
@@ -43,7 +43,7 @@ class AgaviBooleanValidator extends AgaviValidator
 	 * @return     bool The value is a valid boolean
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.1.0
+	 * @since      1.0.4
 	 */
 	protected function validate()
 	{
