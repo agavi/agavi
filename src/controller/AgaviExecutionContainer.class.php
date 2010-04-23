@@ -615,6 +615,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		if(is_readable($validationConfig)) {
 			// load validation configuration
 			// do NOT use require_once
+			$this_ = $this;
 			require(AgaviConfigCache::checkConfig($validationConfig, $this->context->getName()));
 		}
 

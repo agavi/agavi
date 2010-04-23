@@ -119,12 +119,12 @@ class AgaviLoggingConfigHandler extends AgaviXmlConfigHandler
 		if(count($loggers) > 0) {
 			foreach($layouts as $name => $layout) {
 				$code[] = sprintf('${%s} = new %s();', var_export('_layout_' . $name, true), $layout['class']);
-				$code[] = sprintf('${%s}->initialize($this->context, %s);', var_export('_layout_' . $name, true), var_export($layout['params'], true));
+				$code[] = sprintf('${%s}->initialize($this_->getContext(), %s);', var_export('_layout_' . $name, true), var_export($layout['params'], true));
 			}
 
 			foreach($appenders as $name => $appender) {
 				$code[] = sprintf('${%s} = new %s();', var_export('_appender_' . $name, true), $appender['class']);
-				$code[] = sprintf('${%s}->initialize($this->context, %s);', var_export('_appender_' . $name, true), var_export($appender['params'], true));
+				$code[] = sprintf('${%s}->initialize($this_->getContext(), %s);', var_export('_appender_' . $name, true), var_export($appender['params'], true));
 				$code[] = sprintf('${%s}->setLayout(${%s});', var_export('_appender_' . $name, true), var_export('_layout_' . $appender['layout'], true));
 			}
 
@@ -136,9 +136,9 @@ class AgaviLoggingConfigHandler extends AgaviXmlConfigHandler
 				if($logger['level'] !== null) {
 					$code[] = sprintf('${%s}->setLevel(%s);', var_export('_logger_' . $name, true), $logger['level']);
 				}
-				$code[] = sprintf('$this->setLogger(%s, ${%s});', var_export($name, true), var_export('_logger_' . $name, true));
+				$code[] = sprintf('$this_->setLogger(%s, ${%s});', var_export($name, true), var_export('_logger_' . $name, true));
 			}
-			$code[] = sprintf('$this->setDefaultLoggerName(%s);', var_export($defaultLogger, true));
+			$code[] = sprintf('$this_->setDefaultLoggerName(%s);', var_export($defaultLogger, true));
 		}
 
 		return $this->generate($code, $document->documentURI);

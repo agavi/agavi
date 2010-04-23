@@ -193,7 +193,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 					$class
 				),
 				sprintf(
-					'${%s}->initialize($this->getContext(), %s, %s, %s);',
+					'${%s}->initialize($this_->getContext(), %s, %s, %s);',
 					var_export('_validator_' . $name, true),
 					var_export($parameters, true),
 					var_export($arguments, true),

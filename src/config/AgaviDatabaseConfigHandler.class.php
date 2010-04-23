@@ -108,8 +108,8 @@ class AgaviDatabaseConfigHandler extends AgaviXmlConfigHandler
 		foreach($databases as $name => $db) {
 			// append new data
 			$data[] = sprintf('$database = new %s();', $db['class']);
-			$data[] = sprintf('$this->databases[%s] = $database;', var_export($name, true));
-			$data[] = sprintf('$database->initialize($this, %s);', var_export($db['parameters'], true));
+			$data[] = sprintf('$this_->databases[%s] = $database;', var_export($name, true));
+			$data[] = sprintf('$database->initialize($this_, %s);', var_export($db['parameters'], true));
 		}
 
 		if(!isset($databases[$default])) {
@@ -118,7 +118,7 @@ class AgaviDatabaseConfigHandler extends AgaviXmlConfigHandler
 			throw new AgaviConfigurationException($error);
 		}
 
-		$data[] = sprintf('$this->defaultDatabaseName = %s;', var_export($default, true));
+		$data[] = sprintf('$this_->defaultDatabaseName = %s;', var_export($default, true));
 
 		return $this->generate($data, $document->documentURI);
 	}
