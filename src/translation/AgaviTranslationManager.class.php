@@ -43,7 +43,7 @@ class AgaviTranslationManager
 	/**
 	 * @var        array An array of the translator instances for the domains.
 	 */
-	protected $translators = array();
+	public $translators = array();
 
 	/**
 	 * @var        AgaviLocale The current locale.
@@ -63,18 +63,18 @@ class AgaviTranslationManager
 	/**
 	 * @var        string The default locale identifier.
 	 */
-	protected $defaultLocaleIdentifier = null;
+	public $defaultLocaleIdentifier = null;
 
 	/**
 	 * @var        string The default domain which shall be used for translation.
 	 */
-	protected $defaultDomain = null;
+	public $defaultDomain = null;
 
 	/**
 	 * @var        array The available locales which have been defined in the 
 	 *                   translation.xml config file.
 	 */
-	protected $availableConfigLocales = array();
+	public $availableConfigLocales = array();
 
 	/**
 	 * @var        array All available locales. Just stores the info for lazyload.
@@ -115,7 +115,7 @@ class AgaviTranslationManager
 	 * @var        string The default time zone. If not set the timezone php 
 	 *                    will be used as default.
 	 */
-	protected $defaultTimeZone = null;
+	public $defaultTimeZone = null;
 
 	/**
 	 * Initialize this TranslationManager.
@@ -130,6 +130,7 @@ class AgaviTranslationManager
 	{
 		$this->context = $context;
 
+		$this_ = $this;
 		include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/translation.xml'));
 		$this->loadSupplementalData();
 		$this->loadTimeZoneData();

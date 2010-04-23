@@ -39,7 +39,7 @@ class AgaviController extends AgaviParameterHolder
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
-	protected $context = null;
+	public $context = null;
 	
 	/**
 	 * @var        AgaviResponse The global response.
@@ -62,7 +62,7 @@ class AgaviController extends AgaviParameterHolder
 	/**
 	 * @var        string The default Output Type.
 	 */
-	protected $defaultOutputType = null;
+	public $defaultOutputType = null;
 	
 	/**
 	 * @var        array An array of registered Output Types.
@@ -492,8 +492,8 @@ class AgaviController extends AgaviParameterHolder
 		
 		$this->response = $this->context->createInstanceFor('response');
 		
-		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
-		require(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
+		$this_ = $this;
+		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/output_types.xml', $this->context->getName()));
 		
 		if(AgaviConfig::get('core.use_security', false)) {
 			$this->filters['security'] = $this->context->createInstanceFor('security_filter');

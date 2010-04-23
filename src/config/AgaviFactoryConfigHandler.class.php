@@ -236,7 +236,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 				if($info['var'] !== null) {
 					// we have to make an instance
 					$code[] = sprintf(
-						'$this->%1$s = new %2$s();' . "\n" . '$this->%1$s->initialize($this, %3$s);',
+						'$this_->%1$s = new %2$s();' . "\n" . '$this_->%1$s->initialize($this_, %3$s);',
 						$info['var'],
 						$data[$factory]['class'],
 						var_export($data[$factory]['params'], true)
@@ -244,7 +244,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 				} else {
 					// it's a factory info
 					$code[] = sprintf(
-						'$this->factories[%1$s] = %2$s;',
+						'$this_->factories[%1$s] = %2$s;',
 						var_export($factory, true),
 						var_export(array(
 							'class' => $data[$factory]['class'],
@@ -254,13 +254,13 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 				}
 			} else {
 				if($factories[$info]['required']) {
-					$code[] = sprintf('$this->%s->startup();', $factories[$info]['var']);
-					array_unshift($shutdownSequence, sprintf('$this->%s', $factories[$info]['var']));
+					$code[] = sprintf('$this_->%s->startup();', $factories[$info]['var']);
+					array_unshift($shutdownSequence, sprintf('$this_->%s', $factories[$info]['var']));
 				}
 			}
 		}
 		
-		$code[] = sprintf('$this->shutdownSequence = array(%s);', implode(",\n", $shutdownSequence));
+		$code[] = sprintf('$this_->shutdownSequence = array(%s);', implode(",\n", $shutdownSequence));
 		
 		return $this->generate($code, $config);
 	}
