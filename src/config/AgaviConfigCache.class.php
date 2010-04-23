@@ -227,7 +227,7 @@ class AgaviConfigCache
 	 */
 	public static function checkConfig($config, $context = null)
 	{
-		$config = AgaviToolkit::normalizePath($config);
+		$config = realpath(AgaviToolkit::normalizePath($config));
 		// the full filename path to the config, which might not be what we were given.
 		$filename = AgaviToolkit::isPathAbsolute($config) ? $config : AgaviToolkit::normalizePath(AgaviConfig::get('core.app_dir')) . '/' . $config;
 
