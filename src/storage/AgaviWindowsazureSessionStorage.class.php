@@ -34,7 +34,7 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      1.1.0
+ * @since      1.0.4
  *
  * @version    $Id$
  */
@@ -55,7 +55,7 @@ class AgaviWindowsazureSessionStorage extends AgaviSessionStorage
 	 *                                                 initializing this Storage.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com
-	 * @since      1.1.0
+	 * @since      1.0.4
 	 */
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{

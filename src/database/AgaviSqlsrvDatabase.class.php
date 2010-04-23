@@ -24,7 +24,7 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
- * @since      1.1.0
+ * @since      1.0.4
  *
  * @version    $Id$
  */
@@ -37,7 +37,7 @@ class AgaviSqlsrvDatabase extends AgaviDatabase
 	 *                                           created.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
-	 * @since      1.1.0
+	 * @since      1.0.4
 	 */
 	protected function connect()
 	{
@@ -86,7 +86,7 @@ class AgaviSqlsrvDatabase extends AgaviDatabase
 	 *                                           down this database.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
-	 * @since      1.1.0
+	 * @since      1.0.4
 	 */
 	public function shutdown()
 	{
