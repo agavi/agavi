@@ -91,7 +91,7 @@ class AgaviUploadedFile extends ArrayObject
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __call($name, array $arguments)
+	public function __call($name, $arguments)
 	{
 		if(substr($name, 0, 3) == 'get') {
 			return $this[self::$indexMap[substr($name, 3)]];

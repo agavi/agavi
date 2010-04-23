@@ -69,7 +69,7 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __call($name, array $args)
+	public function __call($name, $args)
 	{
 		$matches = array();
 		if(preg_match('/^(has|get|set|remove)(.+)$/', $name, $matches)) {
