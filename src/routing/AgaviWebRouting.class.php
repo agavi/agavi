@@ -173,7 +173,7 @@ class AgaviWebRouting extends AgaviRouting
 				$parsedRuQuery = AgaviWebRequest::clearMagicQuotes($parsedRuQuery);
 				$parsedInput = AgaviWebRequest::clearMagicQuotes($parsedInput, false /* start on the first level */);
 			}
-			foreach(array_diff(array_keys($parsedInput), array_keys($parsedRuQuery)) as $unset) {
+			foreach(array_diff(array_keys($parsedInput), array_keys((array)$parsedRuQuery)) as $unset) {
 				// our element is in $_GET
 				unset($_GET[$unset]);
 				unset($GLOBALS['HTTP_GET_VARS'][$unset]);
