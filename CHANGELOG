@@ -9,6 +9,7 @@ ADD: Windows Azure Session Storage (#1266) (David)
 ADD: Support for IIS7 (#1265) (David)
 ADD: Database adapter for ext/sqlsrv (#1264) (David)
 
+CHG: Eliminate use of create_function() in AgaviTranslationManager::getLocaleIdentifier() (#1274) (David)
 CHG: Make charset configuration and init queries event based in AgaviDoctrineDatabase (#1272) (David)
 CHG: Optionally use readline wrapper for agavi script (#1271) (Simon, David)
 CHG: Restore default Phing ANSI colors for Mac OS X Snow Leopard (#1270) (David)
