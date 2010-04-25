@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Casablanca".
- * Compiled from olson file "africa", version 8.24.
+ * Compiled from olson file "africa", version 8.26.
  *
  * @package    agavi
  * @subpackage translation
@@ -154,15 +154,25 @@ return array (
       'time' => 1250809200,
       'type' => 0,
     ),
+    23 => 
+    array (
+      'time' => 1272758400,
+      'type' => 1,
+    ),
+    24 => 
+    array (
+      'time' => 1281222000,
+      'type' => 0,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'none',
     'offset' => 0,
-    'startYear' => 2010,
+    'startYear' => 2011,
   ),
   'source' => 'africa',
-  'version' => '8.24',
+  'version' => '8.26',
   'name' => 'Africa/Casablanca',
 );
 

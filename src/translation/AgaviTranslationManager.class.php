@@ -629,27 +629,30 @@ class AgaviTranslationManager
 			return $this->localeIdentifierCache[$identifier];
 		}
 		
-		$comparisons = array();
-		if($idData['language']) {
-			$comparisons[] = sprintf('%s == $a["identifierData"]["language"]', var_export($idData['language'], true));
+		$matchingLocales = array();
+		// iterate over all available locales
+		foreach($this->availableLocales as $availableLocaleIdentifier => $availableLocale) {
+			$matched = false;
+			// iterate over possible properties to compare against (all given ones must match)
+			foreach(array('language', 'script', 'territory', 'variant') as $propertyName) {
+				// only perform check if property was in $identifier
+				if(isset($idData[$propertyName])) {
+					// compare against data in locale
+					if($idData[$propertyName] == $availableLocale['identifierData'][$propertyName]) {
+						// fine, continue with next
+						$matched = true;
+					} else {
+						// failed, so we can bail out early and declare as non-matched
+						$matched = false;
+						break;
+					}
+				}
+			}
+			if($matched) {
+				$matchingLocales[$availableLocaleIdentifier] = $availableLocale;
+			}
 		}
-		if($idData['script']) {
-			$comparisons[] = sprintf('%s == $a["identifierData"]["script"]', var_export($idData['script'], true));
-		}
-		if($idData['territory']) {
-			$comparisons[] = sprintf('%s == $a["identifierData"]["territory"]', var_export($idData['territory'], true));
-		}
-		if($idData['variant']) {
-			$comparisons[] = sprintf('%s == $a["identifierData"]["variant"]', var_export($idData['variant'], true));
-		}
-		/*
-		if(count($idData['options'])) {
-			$comparisons[] = sprintf('count(array_diff(%s, (array)$a["identifierData"]["options"])) == 0', var_export($idData['options'], true));
-		}*/
-
-		$code = sprintf('return (%s);', implode(' && ', $comparisons));
-
-		$matchingLocales = array_filter($this->availableLocales, create_function('$a', $code));
+		
 		switch(count($matchingLocales)) {
 			case 1:
 				$availableLocale = current($matchingLocales);

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Johannesburg".
- * Compiled from olson file "africa", version 8.24.
+ * Compiled from olson file "africa", version 8.26.
  *
  * @package    agavi
  * @subpackage translation
@@ -77,7 +77,7 @@ return array (
     'startYear' => 1945,
   ),
   'source' => 'africa',
-  'version' => '8.24',
+  'version' => '8.26',
   'name' => 'Africa/Johannesburg',
 );
 

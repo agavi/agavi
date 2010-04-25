@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Belem".
- * Compiled from olson file "southamerica", version 8.43.
+ * Compiled from olson file "southamerica", version 8.44.
  *
  * @package    agavi
  * @subpackage translation
@@ -192,7 +192,7 @@ return array (
     'startYear' => 1989,
   ),
   'source' => 'southamerica',
-  'version' => '8.43',
+  'version' => '8.44',
   'name' => 'America/Belem',
 );
 

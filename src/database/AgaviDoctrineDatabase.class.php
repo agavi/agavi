@@ -117,14 +117,11 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			// do not assign the resource here. that would connect to the database
 			// $this->resource = $this->connection->getDbh();
 			
+			// set our event listener that, on connect, sets the configured charset and runs init queries
+			$this->connection->setListener(new AgaviDoctrineDatabaseEventListener($this));
+			
 			// set the context instance as a connection parameter
 			$this->connection->setParam('context', $databaseManager->getContext(), 'org.agavi');
-			
-			// charset
-			if($this->hasParameter('charset')) {
-				// TODO: this will force a connection, could be done using doctrine events
-				$this->connection->setCharset($this->getParameter('charset'));
-			}
 			
 			// date format
 			if($this->hasParameter('date_format')) {
@@ -208,11 +205,6 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			
 			foreach((array)$this->getParameter('bind_components', array()) as $componentName) {
 				$this->doctrineManager->bindComponent($componentName, $name);
-			}
-			
-			// TODO: this will force a connection, could be done using doctrine events
-			foreach((array)$this->getParameter('init_queries') as $query) {
-				$this->connection->exec($query);
 			}
 		} catch(Doctrine_Exception $e) {
 			// the connection's foobar'd

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Indian/Chagos".
- * Compiled from olson file "asia", version 8.59.
+ * Compiled from olson file "asia", version 8.60.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'asia',
-  'version' => '8.59',
+  'version' => '8.60',
   'name' => 'Indian/Chagos',
 );
 
