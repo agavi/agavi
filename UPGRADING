@@ -8,3 +8,12 @@ Response
 --------
 If you are using custom implementations of AgaviResponse, please make sure to update the merge() method to call parent::merge(). This method was previously declared abstract, but since Agavi 1.1 it contains the necessary code to perform merging of response attributes.
 
+AgaviReturnArrayConfigHandler
+-----------------------------
+RACH has been ported to the new-style configuration handler system introduced in Agavi 1.0, and expects your configuration contents to be wrapped in <ae:configurations>/<ae:configuration> elements, like all other Agavi configuration files. The actual content elements must be in no namespace, unless configured otherwise.
+To preserve backward compatibility for existing XML files handled by AgaviReturnArrayConfigHandler, Agavi will insert the necessary transformation rules for <handler class="AgaviReturnArrayConfigHandler"> declarations in config_handlers.xml that have no <transformation> children. If you have already <transformation> rules defined for a <handler class="AgaviReturnArrayConfigHandler"> whose configuration files need transforming from old versions, please add
+  <transformation>%core.agavi_dir%/config/xsl/rach.xsl</transformation>
+to these elements yourself.
+The handler is also namespace-aware. By default, it will assume your configuration file's actual contents will be in no XML namespace. If you wish to use an XML namespace for those elements, define the corresponding namespace URI using
+  <ae:parameter name="namespace_uri">urn:com.acme.rockets</ae:parameter>
+on the affected <handler> elements.

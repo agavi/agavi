@@ -19,13 +19,22 @@
 			<xsl:apply-templates />
 		</xsl:element>
 	</xsl:template>
-	
 	<xsl:template match="envelope_0_11:handler[@validate]">
 		<xsl:element name="{local-name()}" namespace="{$config_handlers_1_0}">
 			<xsl:copy-of select="@*[local-name() != 'validate']" />
 			<config_handlers_1_0:validation for="single" step="transformations_before">
 				<xsl:value-of select="@validate" />
 			</config_handlers_1_0:validation>
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+	
+	<!-- Agavi 1.1 -->
+	<!-- for AgaviReturnArrayConfigHandler definitions, we need to copy the necessary transformation for Agavi 1.1+ -->
+	<xsl:template match="config_handlers_1_0:handler[@class = 'AgaviReturnArrayConfigHandler' and not(.//config_handlers_1_0:transformation)]">
+		<xsl:element name="{local-name()}" namespace="{$config_handlers_1_0}">
+			<xsl:copy-of select="@*" />
+			<config_handlers_1_0:transformation>%core.agavi_dir%/config/xsl/rach.xsl</config_handlers_1_0:transformation>
 			<xsl:apply-templates />
 		</xsl:element>
 	</xsl:template>

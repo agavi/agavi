@@ -15,12 +15,16 @@
 
 /**
  * AgaviReturnArrayConfigHandler allows you to retrieve the contents of a config
- * file as an array
+ * file as an array.
+ * Assumes that the content elements are in no XML namespace; if you want to use
+ * an XML namespace for your elements, define the namespace URI using the
+ * "namespace_uri" parameter.
  *
  * @package    agavi
  * @subpackage config
  *
- * @author     David Zülke <dz@bitxtender.com>
+ * @author     David Zülke <david.zuelke@bitextender.com>
+ * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -28,45 +32,46 @@
  *
  * @version    $Id$
  */
-class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
+class AgaviReturnArrayConfigHandler extends AgaviXmlConfigHandler
 {
 	/**
-	 * @see        AgaviIniConfigHandler::execute()
+	 * Execute this configuration handler.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.10.0
+	 * @param      AgaviXmlConfigDomDocument The document to parse.
+	 *
+	 * @return     string Data to be written to a cache file.
+	 *
+	 * @author     David Zülke <david.zuelke@bitxtender.com>
+	 * @since      0.11.0
 	 */
-	public function execute($config, $context = null)
+	public function execute(AgaviXmlConfigDomDocument $document)
 	{
-		$parsed = AgaviConfigCache::parseConfig($config, false, $this->getValidationFile(), $this->parser);
-		if(!isset($parsed->configurations)) {
-			$error = 'Configuration file "%s" is not in the Agavi 0.11 legacy namespace (http://agavi.org/agavi/1.0/config) and/or does not contain a <configurations> element as root node.';
-			$error = sprintf($error, $config);
-			throw new AgaviConfigurationException($error);
-		}
-		$configurations = $this->orderConfigurations($parsed->configurations, AgaviConfig::get('core.environment'), $context);
+		$document->setDefaultNamespace($this->getParameter('namespace_uri', ''));
+		
 		$data = array();
-		foreach($configurations as $cfg) {
+		foreach($document->getConfigurationElements() as $cfg) {
 			$data = array_merge($data, $this->convertToArray($cfg, true));
 		}
-
+		
 		// compile data
 		$code = 'return ' . var_export($data, true) . ';';
-
-		return $this->generate($code, $config);
+		
+		return $this->generate($code, $document->documentURI);
 	}
 
 	/**
-	 * Converts an AgaviConfigValueHolder into an array.
+	 * Converts an AgaviXmlConfigDomElement into an array.
 	 *
-	 * @param      AgaviConfigValueHolder The config value to convert.
+	 * @param      AgaviXmlConfigDomElement The configuration element to convert.
+	 * @param      bool                     Whether this is a top level element.
 	 *
-	 * @return     array The config values as an array.
+	 * @return     array The configuration values as an array.
 	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     Dominik del Bondio <dominik.del.bondio@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	protected function convertToArray(AgaviConfigValueHolder $item, $topLevel = false)
+	protected function convertToArray(AgaviXmlConfigDomElement $item, $topLevel = false)
 	{
 		$idAttribute = $this->getParameter('id_attribute', 'name');
 		$valueKey = $this->getParameter('value_key', 'value');
@@ -98,7 +103,7 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 			}
 		}
 		
-		if(!$item->hasChildren()) {
+		if(!(int)$item->ownerDocument->getXpath()->evaluate(sprintf('count(*[namespace-uri() = "%s"])', $item->ownerDocument->getDefaultNamespaceUri()), $item)) {
 			$val = $item->getValue();
 			if($literalize) {
 				$val = AgaviToolkit::literalize($val);
@@ -110,13 +115,13 @@ class AgaviReturnArrayConfigHandler extends AgaviConfigHandler
 			
 			if(!$topLevel && ($numAttribs || $forceArrayValues)) {
 				$data[$valueKey] = $val;
-			} else {
+			} elseif(!$topLevel) {
 				$data = $val;
 			}
 			
 		} else {
 			$names = array();
-			$children = $item->getChildren();
+			$children = $item->ownerDocument->getXpath()->query(sprintf('*[namespace-uri() = "%s"]', $item->ownerDocument->getDefaultNamespaceUri()), $item);
 			foreach($children as $child) {
 				$names[] = $child->getName();
 			}
