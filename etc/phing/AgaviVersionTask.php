@@ -30,13 +30,13 @@ class AgaviVersionTask extends Task
 			AgaviConfig::get('agavi.major_version'), 
 			AgaviConfig::get('agavi.minor_version'), 
 			AgaviConfig::get('agavi.micro_version'), 
-			AgaviConfig::has('agavi.status') ? AgaviConfig::get('agavi.status') : 'stable'
+			AgaviConfig::has('agavi.status') ? AgaviConfig::get('agavi.status') : ''
 		));
 		
 		$status = AgaviConfig::get('agavi.status');
 		
 		if($status == 'dev') {
-			$status = 'snapshot';
+			$status = 'devel';
 		} elseif(strpos($status, 'alpha')) {
 			$status = 'alpha';
 		} elseif(strpos($status, 'beta')) {
@@ -48,14 +48,6 @@ class AgaviVersionTask extends Task
 		}
 		
 		$this->project->setUserProperty('agavi.status', $status);
-		
-		
-		$this->project->setUserProperty('agavi.pear.filename', sprintf("agavi-%d.%d.%d%s", 
-			AgaviConfig::get('agavi.major_version'), 
-			AgaviConfig::get('agavi.minor_version'), 
-			AgaviConfig::get('agavi.micro_version'), 
-			($status == 'stable') ? '' : $status 
-		));
 	}
 }
 

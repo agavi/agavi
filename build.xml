@@ -254,7 +254,7 @@
 		
 		<!-- create .tgz file -->
 		<echo msg="Creating gzip file for PEAR." />
-		<tar destfile="${agavi.pear.filename}.tgz" basedir="${basedir}" compression="gzip" />
+		<tar destfile="agavi-${agavi.pear.version}.tgz" basedir="${basedir}" compression="gzip" />
 	</target>
 	
 	<target name="package-release" depends="generate-properties">
@@ -271,7 +271,7 @@
 			<fileset dir="./package-build" />
 		</tar>
 		
-		<zip destfile="${agavi.pear.version}.zip">
+		<zip destfile="agavi-${agavi.pear.version}.zip">
 			<fileset dir="./package-build" />
 		</zip>
 	</target>
