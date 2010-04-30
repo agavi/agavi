@@ -267,11 +267,11 @@
 		
 		<delete dir="./package-build/${agavi.pear.version}/package-build" includeemptydirs="true" quiet="true" failonerror="false" />
 		
-		<tar destfile="agavi-${agavi.pear.version}.tgz" compression="gzip">
+		<tar destfile="${agavi.pear.version}.tgz" compression="gzip">
 			<fileset dir="./package-build" />
 		</tar>
 		
-		<zip destfile="agavi-${agavi.pear.version}.zip">
+		<zip destfile="${agavi.pear.version}.zip">
 			<fileset dir="./package-build" />
 		</zip>
 	</target>
