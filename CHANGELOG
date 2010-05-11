@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.4 RC1 - April ??, 2010
 --------------------------
 
+ADD: Allow extraction of subpatterns in regex validator (#1283) (David)
 ADD: Create an AgaviBooleanValidator (#1196) (Felix)
 ADD: Windows Azure Session Storage (#1266) (David)
 ADD: Support for IIS7 (#1265) (David)
