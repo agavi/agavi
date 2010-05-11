@@ -11,9 +11,11 @@ Azure support consists of AgaviSqlsrvDatabase as a database adapter for ext/sqls
 
 AgaviDoctrineDatabase now uses Doctrine event listeners to set the configured charset and run the configured initialization queries after Doctrine opened a connection; this will prevent Doctrine from always connecting on initialization of the adapter if either a charset or init queries are configured.
 
+AgaviBooleanValidator is new, and AgaviRegexValidator now allows the extraction of matched subpatterns.
+
 The timezone database has been updated to 2010i.
 
-For a complete list of changes and fixes, including the new AgaviBooleanValidator, please check the CHANGELOG.
+For a complete list of changes and fixes, please refer to the CHANGELOG.
 
 
 Version 1.0.3 - April 16, 2010
