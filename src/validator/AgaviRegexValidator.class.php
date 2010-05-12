@@ -20,6 +20,7 @@
  * Parameters:
  *   'pattern'  PCRE to be used in preg_match
  *   'match'    input should match or not
+ *   'extract'  Name of subpattern to extract and set or export on match
  * 
  * @package    agavi
  * @subpackage validator
@@ -45,21 +46,29 @@ class AgaviRegexValidator extends AgaviValidator
 	 */
 	protected function validate()
 	{
-		$data = $this->getData($this->getArgument());
+		$value = $data =& $this->getData($this->getArgument());
 		if(!is_scalar($data)) {
 			// non scalar values would cause notices
 			$this->throwError();
 			return false;
 		}
 		
-		$result = preg_match($this->getParameter('pattern'), $data);
+		$result = preg_match($this->getParameter('pattern'), $data, $matches);
 		
 		if($result != $this->getParameter('match')) {
 			$this->throwError();
 			return false;
 		}
 		
-		$this->export($data);
+		if($result && ($extract = $this->getParameter('extract')) !== null && isset($matches[$extract])) {
+			$value = $matches[$extract];
+		}
+		
+		if($this->hasParameter('export')) {
+			$this->export($value);
+		} else {
+			$data = $value;
+		}
 		
 		return true;
 	}
