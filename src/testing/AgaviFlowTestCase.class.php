@@ -38,7 +38,7 @@ abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIF
 	/**
 	 * @var        string the name of the action to use
 	 */
-	protected $acionName;
+	protected $actionName;
 	
 	/**
 	 * @var        string the name of the module the action resides in
