@@ -1010,6 +1010,12 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 */
 	public function gen($route, array $params = array(), $options = array())
 	{
+		if(array_key_exists('prefix', $options)) {
+			$prefix = (string) $options['prefix'];
+		} else {
+			$prefix = $this->getPrefix();
+		}
+		
 		$routes = $route;
 		$isNullRoute = false;
 		$routes = $this->getAffectedRoutes($route, $isNullRoute);
@@ -1071,7 +1077,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		}
 
 		$uri = str_replace($from, $to, $assembledInformation['uri']);
-		return array($this->prefix . $uri, $params, $options, $extras, $isNullRoute);
+		return array($prefix . $uri, $params, $options, $extras, $isNullRoute);
 	}
 	
 	
