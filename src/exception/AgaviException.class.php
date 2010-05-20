@@ -223,6 +223,16 @@ class AgaviException extends Exception
 				}
 				// append closing tag
 				$line .= '</span>';
+				$closingSpanCount++;
+			}
+			
+			// in case things still are not right...
+			// can happen for instance when the first line of the file is HTML and we drop the first span, since that is a wrapper for everything
+			if($openingSpanCount < $closingSpanCount) {
+				$line = sprintf('%1$s%2$s', str_repeat('<span color="%3s">', $closingSpanCount - $openingSpanCount), $line, ini_get('highlight.html'));
+			}
+			if($closingSpanCount < $openingSpanCount) {
+				$line = sprintf('%s%s', $line, str_repeat('</span>', $openingSpanCount - $closingSpanCount), $line);
 			}
 		}
 		
