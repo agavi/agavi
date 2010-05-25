@@ -238,7 +238,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 		}
 
 		$this->pluralFormFunc = null;
-		if(isset($headers['Plural-Forms'])) {
+		/*if(isset($headers['Plural-Forms'])) {
 			$pf = $headers['Plural-Forms'];
 			if(preg_match('#nplurals=\d+;\s+plural=(.*)$#D', $pf, $match)) {
 				$funcCode = $match[1];
@@ -293,7 +293,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 				$funcCode = 'return ' . str_replace('n', '$n', $funcCode);
 				$this->pluralFormFunc = create_function('$n', $funcCode);
 			}
-		}
+		}*/
 
 		$this->domainData[$domain] = array('headers' => $headers, 'msgs' => $data);
 	}
