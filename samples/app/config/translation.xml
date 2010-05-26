@@ -4,39 +4,39 @@
 		
 		<available_locales default_locale="en_US@currency=GBP">
 			<!-- German, Germany -->
-			<available_locale identifier="de_DE">
+			<available_locale identifier="de_DE@currency=GBP">
 				<ae:parameter name="description">Deutsch</ae:parameter>
 			</available_locale>
 			<!-- English, United States -->
-			<available_locale identifier="en_US">
+			<available_locale identifier="en_US@currency=GBP">
 				<ae:parameter name="description">English</ae:parameter>
 			</available_locale>
 			<!-- Farsi, Iran -->
-			<available_locale identifier="fa_IR">
+			<available_locale identifier="fa_IR@currency=GBP">
 				<ae:parameter name="description">فارسی</ae:parameter>
 			</available_locale>
 			<!-- Finnish, Finland -->
-			<available_locale identifier="fi_FI">
+			<available_locale identifier="fi_FI@currency=GBP">
 				<ae:parameter name="description">Suomi</ae:parameter>
 			</available_locale>
 			<!-- Dutch, Belgium -->
-			<available_locale identifier="nl_BE">
+			<available_locale identifier="nl_BE@currency=GBP">
 				<ae:parameter name="description">Nederlands (België)</ae:parameter>
 			</available_locale>
 			<!-- Dutch, The Netherlands -->
-			<available_locale identifier="nl_NL">
+			<available_locale identifier="nl_NL@currency=GBP">
 				<ae:parameter name="description">Nederlands</ae:parameter>
 			</available_locale>
 			<!-- Polish, Poland -->
-			<available_locale identifier="pl_PL">
+			<available_locale identifier="pl_PL@currency=GBP">
 				<ae:parameter name="description">Polski</ae:parameter>
 			</available_locale>
 			<!-- Chinese Simplified, China (alias for zh_Hans_CN, Simplified Han) -->
-			<available_locale identifier="zh_CN">
+			<available_locale identifier="zh_CN@currency=GBP">
 				<ae:parameter name="description">简体中文</ae:parameter>
 			</available_locale>
 			<!-- Chinese Traditional, Taiwan (alias for zh_Hant_TW, Traditional Han) -->
-			<available_locale identifier="zh_TW">
+			<available_locale identifier="zh_TW@currency=GBP">
 				<ae:parameter name="description">繁體中文</ae:parameter>
 			</available_locale>
 		</available_locales>

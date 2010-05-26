@@ -58,6 +58,7 @@
 	<ae:configuration environment="development.*">
 		<settings>
 			<setting name="debug">true</setting>
+			<setting name="use_logging">true</setting>
 		</settings>
 	</ae:configuration>
 	

@@ -77,7 +77,7 @@ class AgaviBooleanValidatorTest extends AgaviUnitTestCase
 		$result = $validator->execute($rd);
 		$this->assertEquals(AgaviValidator::SUCCESS, $result, 'Failed asserting that the validation succeeded.');
 		$this->assertEquals($expectedResult, $rd->getParameter('exported'), 'Failed asserting that the exported value is the expected value');
-		$this->assertEquals($value, $rd->getParameter('bool'), 'Failed asserting that the validated value is the orginal value');
+		$this->assertEquals($value, $rd->getParameter('bool'), 'Failed asserting that the validated value is the original value');
 	}
 }
 
