@@ -85,7 +85,6 @@ class AgaviLoggerManager
 		}
 		
 		// load logging configuration
-		$this_ = $this;
 		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/logging.xml', $context->getName()));
 	}
 

@@ -39,7 +39,7 @@ class AgaviController extends AgaviParameterHolder
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
 	 */
-	public $context = null;
+	protected $context = null;
 	
 	/**
 	 * @var        AgaviResponse The global response.
@@ -62,7 +62,7 @@ class AgaviController extends AgaviParameterHolder
 	/**
 	 * @var        string The default Output Type.
 	 */
-	public $defaultOutputType = null;
+	protected $defaultOutputType = null;
 	
 	/**
 	 * @var        array An array of registered Output Types.
@@ -492,8 +492,8 @@ class AgaviController extends AgaviParameterHolder
 		
 		$this->response = $this->context->createInstanceFor('response');
 		
-		$this_ = $this;
-		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/output_types.xml', $this->context->getName()));
+		$cfg = AgaviConfig::get('core.config_dir') . '/output_types.xml';
+		require(AgaviConfigCache::checkConfig($cfg, $this->context->getName()));
 		
 		if(AgaviConfig::get('core.use_security', false)) {
 			$this->filters['security'] = $this->context->createInstanceFor('security_filter');
@@ -545,7 +545,6 @@ class AgaviController extends AgaviParameterHolder
 			}
 			$config = ($module == '*' ? AgaviConfig::get('core.config_dir') : AgaviConfig::get('core.module_dir') . '/' . $module . '/config') . '/' . $which . '_filters.xml';
 			if(is_readable($config)) {
-				$this_ = $this;
 				require(AgaviConfigCache::checkConfig($config, $this->context->getName()));
 			}
 		} else {

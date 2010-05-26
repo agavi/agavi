@@ -88,14 +88,14 @@ class AgaviTranslationConfigHandler extends AgaviXmlConfigHandler
 
 		$data = array();
 
-		$data[] = sprintf('$this_->defaultDomain = %s;', var_export($defaultDomain, true));
-		$data[] = sprintf('$this_->defaultLocaleIdentifier = %s;', var_export($defaultLocale, true));
-		$data[] = sprintf('$this_->defaultTimeZone = %s;', var_export($defaultTimeZone, true));
+		$data[] = sprintf('$this->defaultDomain = %s;', var_export($defaultDomain, true));
+		$data[] = sprintf('$this->defaultLocaleIdentifier = %s;', var_export($defaultLocale, true));
+		$data[] = sprintf('$this->defaultTimeZone = %s;', var_export($defaultTimeZone, true));
 
 		foreach($localeData as $locale) {
 			// TODO: fallback stuff
 
-			$data[] = sprintf('$this_->availableConfigLocales[%s] = array(\'identifier\' => %s, \'identifierData\' => %s, \'parameters\' => %s);', var_export($locale['name'], true), var_export($locale['name'], true), var_export(AgaviLocale::parseLocaleIdentifier($locale['name']), true), var_export($locale['params'], true));
+			$data[] = sprintf('$this->availableConfigLocales[%s] = array(\'identifier\' => %s, \'identifierData\' => %s, \'parameters\' => %s);', var_export($locale['name'], true), var_export($locale['name'], true), var_export(AgaviLocale::parseLocaleIdentifier($locale['name']), true), var_export($locale['params'], true));
 		}
 
 		foreach($translatorData as $domain => $translator) {
@@ -105,9 +105,9 @@ class AgaviTranslationConfigHandler extends AgaviXmlConfigHandler
 						throw new AgaviConfigurationException(sprintf('The Translator or Formatter class "%s" for domain "%s" could not be found.', $translator[$type]['class'], $domain));
 					}
 					$data[] = join("\n", array(
-						sprintf('$this_->translators[%s][%s] = new %s();', var_export($domain, true), var_export($type, true), $translator[$type]['class']),
-						sprintf('$this_->translators[%s][%s]->initialize($this_->getContext(), %s);', var_export($domain, true), var_export($type, true), var_export($translator[$type]['params'], true)),
-						sprintf('$this_->translatorFilters[%s][%s] = %s;', var_export($domain, true), var_export($type, true), var_export($translator[$type]['filters'], true)),
+						sprintf('$this->translators[%s][%s] = new %s();', var_export($domain, true), var_export($type, true), $translator[$type]['class']),
+						sprintf('$this->translators[%s][%s]->initialize($this->getContext(), %s);', var_export($domain, true), var_export($type, true), var_export($translator[$type]['params'], true)),
+						sprintf('$this->translatorFilters[%s][%s] = %s;', var_export($domain, true), var_export($type, true), var_export($translator[$type]['filters'], true)),
 					));
 				}
 			}

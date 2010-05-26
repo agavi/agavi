@@ -44,12 +44,12 @@ class AgaviContext
 	/**
 	 * @var        AgaviController A Controller instance.
 	 */
-	public $controller = null;
+	protected $controller = null;
 	
 	/**
 	 * @var        array An array of class names for frequently used factories.
 	 */
-	public $factories = array(
+	protected $factories = array(
 		'dispatch_filter' => null,
 		'execution_container' => null,
 		'execution_filter' => null,
@@ -62,42 +62,42 @@ class AgaviContext
 	/**
 	 * @var        AgaviDatabaseManager A DatabaseManager instance.
 	 */
-	public $databaseManager = null;
+	protected $databaseManager = null;
 	
 	/**
 	 * @var        AgaviLoggerManager A LoggerManager instance.
 	 */
-	public $loggerManager = null;
+	protected $loggerManager = null;
 	
 	/**
 	 * @var        AgaviRequest A Request instance.
 	 */
-	public $request = null;
+	protected $request = null;
 	
 	/**
 	 * @var        AgaviRouting A Routing instance.
 	 */
-	public $routing = null;
+	protected $routing = null;
 	
 	/**
 	 * @var        AgaviStorage A Storage instance.
 	 */
-	public $storage = null;
+	protected $storage = null;
 	
 	/**
 	 * @var        AgaviTranslationManager A TranslationManager instance.
 	 */
-	public $translationManager = null;
+	protected $translationManager = null;
 	
 	/**
 	 * @var        AgaviUser A User instance.
 	 */
-	public $user = null;
+	protected $user = null;
 	
 	/**
 	 * @var        array The array used for the shutdown sequence.
 	 */
-	public $shutdownSequence = array();
+	protected $shutdownSequence = array();
 	
 	/**
 	 * @var        array An array of AgaviContext instances.
@@ -318,7 +318,6 @@ class AgaviContext
 	public function initialize()
 	{
 		try {
-			$this_ = $this;
 			include(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/factories.xml', $this->name));
 		} catch(Exception $e) {
 			AgaviException::render($e, $this);

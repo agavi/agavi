@@ -144,7 +144,7 @@ class AgaviOutputTypeConfigHandler extends AgaviXmlConfigHandler
 		foreach($data as $outputTypeName => $outputType) {
 			$code[] = '$ot = new AgaviOutputType();';
 			$code[] = sprintf(
-				'$ot->initialize($this_->context, %s, %s, %s, %s, %s, %s, %s);',
+				'$ot->initialize($this->context, %s, %s, %s, %s, %s, %s, %s);',
 				var_export($outputType['parameters'], true),
 				var_export($outputTypeName, true),
 				var_export($outputType['renderers'], true),
@@ -153,9 +153,9 @@ class AgaviOutputTypeConfigHandler extends AgaviXmlConfigHandler
 				var_export($outputType['default_layout'], true),
 				var_export($outputType['exception_template'], true)
 			);
-			$code[] = sprintf('$this_->outputTypes[%s] = $ot;', var_export($outputTypeName, true));
+			$code[] = sprintf('$this->outputTypes[%s] = $ot;', var_export($outputTypeName, true));
 		}
-		$code[] = sprintf('$this_->defaultOutputType = %s;', var_export($defaultOt, true));
+		$code[] = sprintf('$this->defaultOutputType = %s;', var_export($defaultOt, true));
 		
 		return $this->generate($code, $config);
 	}

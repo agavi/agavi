@@ -36,12 +36,12 @@ class AgaviDatabaseManager
 	/**
 	 * @var        string The name of the default database.
 	 */
-	public $defaultDatabaseName = null;
+	protected $defaultDatabaseName = null;
 	
 	/**
 	 * @var        array An array of AgaviDatabases.
 	 */
-	public $databases = array();
+	protected $databases = array();
 
 	/**
 	 * @var        AgaviContext An AgaviContext instance.
@@ -139,7 +139,6 @@ class AgaviDatabaseManager
 		$this->context = $context;
 
 		// load database configuration
-		$this_ = $this;
 		require(AgaviConfigCache::checkConfig(AgaviConfig::get('core.config_dir') . '/databases.xml'));
 	}
 
