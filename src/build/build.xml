@@ -1087,7 +1087,7 @@
 			</or>
 			<then>
 				<agavi.input property="public.base" message="Document-root-relative path to '${project.directory}/${project.directory.pub}/'" default="/" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
-				<copy tofile="${project.directory}/${project.directory.pub}/.htaccess" file="${project.directory}/${project.directory.dev.pub}/.htaccess">
+				<copy tofile="${project.directory}/${project.directory.pub}/.htaccess" file="${project.directory}/${project.directory.dev.pub}/.htaccess" overwrite="true">
 					<filterchain>
 						<replacetokens begintoken="%%" endtoken="%%">
 							<token key="AGAVI_SOURCE_LOCATION" value="${agavi.directory.src}" />
@@ -1101,7 +1101,7 @@
 			</then>
 		</if>
 
-		<copy todir="${project.directory}/${project.directory.pub}">
+		<copy todir="${project.directory}/${project.directory.pub}" overwrite="true">
 			<mapper type="regexp" from="^(?!\.htaccess).+" to="\0" />
 			<fileset dir="${project.directory}/${project.directory.dev.pub}">
 				<include name="**/*" />
