@@ -6,7 +6,30 @@ Version 1.0.4 - May ??, 2010
 
 This release adds support for the Windows Azure platform and brings a couple of enhancements.
 
-Azure support consists of AgaviSqlsrvDatabase as a database adapter for ext/sqlsrv to access SQL Server 2010 and SQL Azure. In addition to that, IIS7 is supported as a web server for web requests and routing, and AgaviWindowsazureSessionStorage allows you to have a distributed storage in the cloud. Using this storage implementation is the only configuration change you will need in order to deploy an application on Azure. To rewrite all requests to the pub/ directory and to correctly dispatch Agavi with the requested path, use the following web.config:
+Azure support consists of support for IIS7 as a web server in AgaviWebRouting and AgaviWebRequest, AgaviSqlsrvDatabase as a database adapter for ext/sqlsrv (to access SQL Server 2010 and SQL Azure), and AgaviWindowsazureSessionStorage for storing sessions in the cloud.
+To run an Agavi application on Azure, you need to follow two simple steps.
+First, adjust app/config/factories.xml to configure a different storage class (for sessions), and instruct AgaviWebRequest to use a fixed value for the server port (Azure instances run behind a load balancer, and the instance servers have ports other than 80):
+<ae:configuration environment="development-david" context="web">
+	<storage class="AgaviWindowsazureSessionStorage" />
+	<request class="AgaviWebRequest">
+		<ae:parameter name="sources">
+			<ae:parameter name="SERVER_PORT">81</ae:parameter>
+		</ae:parameter>
+	</request>
+</ae:configuration>
+<ae:configuration environment="production" context="web">
+	<storage class="AgaviWindowsazureSessionStorage">
+		<ae:parameter name=""
+	</storage>
+	<request class="AgaviWebRequest">
+		<ae:parameter name="sources">
+			<ae:parameter name="SERVER_NAME">www.servername.com</ae:parameter>
+			<ae:parameter name="SERVER_PORT">81</ae:parameter>
+		</ae:parameter>
+	</request>
+</ae:configuration>
+
+Using this storage implementation is the only configuration change you will need in order to deploy an application on Azure. To rewrite all requests to the pub/ directory and to correctly dispatch Agavi with the requested path, use the following web.config:
 
 
 AgaviDoctrineDatabase now uses Doctrine event listeners to set the configured charset and run the configured initialization queries after Doctrine opened a connection; this will prevent Doctrine from always connecting on initialization of the adapter if either a charset or init queries are configured.
