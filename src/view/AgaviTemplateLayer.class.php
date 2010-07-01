@@ -69,14 +69,14 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __call($name, $args)
+	public function __call($name, array $args)
 	{
 		$matches = array();
 		if(preg_match('/^(has|get|set|remove)(.+)$/', $name, $matches)) {
 			$method = $matches[1] . 'Parameter';
 			// transform "FooBarBaz" (from "setTemplateDir" etc) to "foo_bar_baz"
 			$parameter = strtolower(preg_replace('/((?<!\A)[A-Z])/u', '_$1', $matches[2]));
-			return call_user_func_array(array($this, $method), array_merge(array($parameter), (array)$args));
+			return call_user_func_array(array($this, $method), array_merge(array($parameter), $args));
 		}
 	}
 	

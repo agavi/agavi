@@ -141,7 +141,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		if($validator->hasAttribute('name')) {
 			$name = $validator->getAttribute('name');
 		} else {
-			$name = str_replace('.', '_', AgaviToolkit::uniqid());
+			$name = AgaviToolkit::uniqid();
 			$validator->setAttribute('name', $name);
 		}
 
