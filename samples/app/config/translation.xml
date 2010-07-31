@@ -19,6 +19,10 @@
 			<available_locale identifier="fi_FI@currency=GBP">
 				<ae:parameter name="description">Suomi</ae:parameter>
 			</available_locale>
+			<!-- Japanese, Japan -->
+			<available_locale identifier="ja_JP@currency=JPY">
+				<ae:parameter name="description">日本語</ae:parameter>
+			</available_locale>
 			<!-- Dutch, Belgium -->
 			<available_locale identifier="nl_BE@currency=GBP">
 				<ae:parameter name="description">Nederlands (België)</ae:parameter>
