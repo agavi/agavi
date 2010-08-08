@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.4 RC1 - August ?, 2010
 --------------------------
 
+ADD: AgaviXsltRenderer (#1299)
 ADD: Add Japanese translation for sample app (#1298) (TANAKA Koichi)
 ADD: Allow configuration of prefix for route generation through options (#1285) (David)
 ADD: Allow extraction of subpatterns in regex validator (#1283) (David)
