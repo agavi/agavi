@@ -7,30 +7,13 @@ Version 1.0.4 - August ??, 2010
 This release adds support for the Windows Azure platform and brings a couple of enhancements.
 
 Azure support consists of support for IIS7 as a web server in AgaviWebRouting and AgaviWebRequest, AgaviSqlsrvDatabase as a database adapter for ext/sqlsrv (to access SQL Server 2010 and SQL Azure), and AgaviWindowsazureSessionStorage for storing sessions in the cloud.
-To run an Agavi application on Azure, you need to follow two simple steps.
-First, adjust app/config/factories.xml to configure a different storage class (for sessions), and instruct AgaviWebRequest to use a fixed value for the server port (Azure instances run behind a load balancer, and the instance servers have ports other than 80):
-<ae:configuration environment="development-david" context="web">
-	<storage class="AgaviWindowsazureSessionStorage" />
-	<request class="AgaviWebRequest">
-		<ae:parameter name="sources">
-			<ae:parameter name="SERVER_PORT">81</ae:parameter>
-		</ae:parameter>
-	</request>
-</ae:configuration>
-<ae:configuration environment="production" context="web">
-	<storage class="AgaviWindowsazureSessionStorage">
-		<ae:parameter name=""
-	</storage>
-	<request class="AgaviWebRequest">
-		<ae:parameter name="sources">
-			<ae:parameter name="SERVER_NAME">www.servername.com</ae:parameter>
-			<ae:parameter name="SERVER_PORT">81</ae:parameter>
-		</ae:parameter>
-	</request>
-</ae:configuration>
+To run an Agavi application on Azure, you need to follow three simple steps.
+1) adjust app/config/factories.xml to configure a different storage class (for sessions). An example can be found in http://trac.agavi.org/ticket/1266.
+2) instruct AgaviWebRequest to use fixed values for the server port and (at least for production) server name. This is because Azure instances run behind a load balancer that doesn't forward the necessary request details in additional headers. An example can be found in http://trac.agavi.org/ticket/1265.
+3) edit web.config (in your WebRole root) to rewrite all requests to the pub/ subdirectory and correctly dispatch Agavi with the requested path. An example can be found in http://trac.agavi.org/ticket/1265.
+Example configurations for AgaviSqlsrvDatabase can be found in http://trac.agavi.org/ticket/1264. Ticket http://trac.agavi.org/ticket/1265 also contains an example for plain IIS7 deployments without Windows Azure, where unlike in an Azure deployment, you can set the document root for a site to pub/.
 
-Using this storage implementation is the only configuration change you will need in order to deploy an application on Azure. To rewrite all requests to the pub/ directory and to correctly dispatch Agavi with the requested path, use the following web.config:
-
+The new AgaviXsltRenderer takes the inner content of the rendering process as its input document and transforms it using the given XSLT stylesheet. That means that you should return the document you would like to transform from your view. By default, the renderer creates an envelope document containing wrappers for the inner document as well as for the slots. In many cases though, you want to use XSLT only for the content layer to transform some XML document (e.g. as returned from a Web service), and use regular PHP templates for the other layers. In these cases, you can tell the renderer to deliver the original input document straight to the XSL template by setting the "envelope" parameter on the renderer to false. http://trac.agavi.org/ticket/1265 has more details and examples on how to use AgaviXsltRenderer.
 
 AgaviDoctrineDatabase now uses Doctrine event listeners to set the configured charset and run the configured initialization queries after Doctrine opened a connection; this will prevent Doctrine from always connecting on initialization of the adapter if either a charset or init queries are configured.
 
