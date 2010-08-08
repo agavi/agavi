@@ -63,6 +63,33 @@ nginx Rewrite Rules
 rewrite ^/([^?]*)$ /index.php?/$1 last;
 
 
+Microsoft IIS7 Rewrite Rules (URL Rewrite Module 2.0)
+-----------------------------------------------------
+<configuration>
+  <system.webServer>
+    <security>
+      <requestFiltering allowDoubleEscaping="true" />
+    </security>
+    <rewrite>
+      <rules>
+        <rule name="Agavi Dispatcher for /" stopProcessing="true">
+          <match url="^$" />
+          <action type="Rewrite" url="index.php?/" />
+        </rule>
+        <rule name="Agavi Dispatcher" stopProcessing="true">
+          <match url="^(.*)$" />
+          <conditions logicalGrouping="MatchAll">
+                <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="index.php?/{R:1}" />
+        </rule>
+      </rules>
+    </rewrite>
+  </system.webServer>
+</configuration>
+
+
 Microsoft IIS + ISAPIRewrite Rules
 ----------------------------------
 UriMatchPrefix /users/cbrown/projects/win-a-baseball-match/pub/
