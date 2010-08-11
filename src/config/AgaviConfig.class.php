@@ -137,12 +137,12 @@ class AgaviConfig
 	/**
 	 * Import a list of configuration directives.
 	 *
-	 * @param      string An array of configuration directives.
+	 * @param      array An array of configuration directives.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function fromArray($data)
+	public static function fromArray(array $data)
 	{
 		// array_merge would reindex numeric keys, so we use the + operator
 		// mind the operand order: keys that exist in the left one aren't overridden
