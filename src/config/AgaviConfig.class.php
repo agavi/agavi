@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-final class AgaviConfig
+class AgaviConfig
 {
 	/**
 	 * @var        array
