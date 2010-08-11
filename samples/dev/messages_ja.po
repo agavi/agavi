@@ -1,0 +1,165 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Agavi Sample App, ja\n"
+"POT-Creation-Date: 2006-10-13 16:20+0200\n"
+"PO-Revision-Date: 2007-05-14 09:25+0900\n"
+"Last-Translator: MugeSo <mugeso@mugeso.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Language: Japanese\n"
+
+#: ../app/modules/Default/templates/Error404Success.php:1
+msgid "File not found."
+msgstr "ファイルが見つかりません。"
+
+#: ../app/modules/Default/templates/LoginInput.php:3
+msgid "Username:"
+msgstr "ユーザー名:"
+
+#: ../app/modules/Default/templates/LoginInput.php:5
+msgid "Password:"
+msgstr "パスワード:"
+
+#: ../app/modules/Default/templates/LoginInput.php:8
+msgid "Log me in automatically."
+msgstr "自動ログイン"
+
+#: ../app/modules/Default/templates/LoginInput.php:10
+#: ../app/modules/Default/templates/Master.php:145
+#: ../app/modules/Default/views/LoginInputView.class.php:33
+msgid "Login"
+msgstr "ログイン"
+
+#: ../app/modules/Default/templates/LoginSuccess.php:1
+msgid "Thank you for logging in!"
+msgstr "ログインありがとう！"
+
+#: ../app/modules/Default/templates/LogoutSuccess.php:1
+msgid "Thank you for logging out!"
+msgstr "ログアウトありがとう！"
+
+#: ../app/modules/Default/templates/Master.php:5
+msgid "Default Agavi Module"
+msgstr "デフォルトAgaviモジュール"
+
+#: ../app/modules/Default/templates/Master.php:124
+msgid "Agavi Sample Application"
+msgstr "Agavi サンプルアプリケーション"
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Current language:"
+msgstr "現在の言語:"
+
+#: ../app/modules/Default/templates/Master.php:136
+msgid "Alternative language:"
+msgid_plural "Alternative languages:"
+msgstr[0] "代替言語:"
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "You are logged in."
+msgstr "ログイン中"
+
+#: ../app/modules/Default/templates/Master.php:138
+msgid "Log Out"
+msgstr "ログアウト"
+
+#: ../app/modules/Default/templates/Master.php:141
+msgid "Menu"
+msgstr "メニュー"
+
+#: ../app/modules/Default/templates/Master.php:143
+msgid "Home"
+msgstr "ホーム"
+
+#: ../app/modules/Default/templates/Master.php:147
+msgid "A Secure Action"
+msgstr "セキュアアクション"
+
+#: ../app/modules/Default/templates/Master.php:148
+msgid "Another Secure Action"
+msgstr "もうひとつのセキュアアクション"
+
+#: ../app/modules/Default/templates/Master.php:149
+msgid "Call invalid URL"
+msgstr "不正なURL呼び出し"
+
+#: ../app/modules/Default/templates/Master.php:150
+msgid "Try Disabled Module"
+msgstr "無効なモジュールを試す"
+
+#: ../app/modules/Default/templates/Master.php:151
+msgid "Search Engine Spam"
+msgstr "サーチエンジンスパム"
+
+#: ../app/modules/Default/templates/ModuleDisabledSuccess.php:1
+msgid "I'm sorry, this module has been disabled."
+msgstr "申し訳ありません、このモジュールは無効になっています。"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:1
+#, php-format
+msgid "You just found the #1 place to buy <strong>%s</strong> at low prices!"
+msgstr "<strong>%s</strong>を低価格で購入できる一番の場所を見つけました！"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:4
+msgid "Product Name"
+msgstr "製品名"
+
+#: ../app/modules/Default/templates/SearchEngineSpamSuccess.php:5
+msgid "Price"
+msgstr "価格"
+
+#: ../app/modules/Default/templates/Secure1Success.php:1
+msgid "You found the secret!"
+msgstr "秘密を見つけました！"
+
+#: ../app/modules/Default/templates/Secure2Success.php:1
+msgid "You'll never see this."
+msgstr "二度とこれを見ることは無いでしょう。"
+
+#: ../app/modules/Default/templates/SecureSuccess.php:1
+msgid "You do not have sufficient credentials to execute this Action."
+msgstr "あなたにはこのアクションを実行する権限はありません。"
+
+#: ../app/modules/Default/templates/UnavailableSuccess.php:1
+msgid "This application is currently unavailable."
+msgstr "このアプリケーションは現在利用できません。"
+
+#: ../app/modules/Default/views/Error404SuccessView.class.php:33
+msgid "404 Not Found"
+msgstr "404 Not Found"
+
+#: ../app/modules/Default/views/IndexSuccessView.class.php:33
+msgid "Welcome to the Agavi Sample Application"
+msgstr "Agaviサンプルアプリケーションへようこそ"
+
+#: ../app/modules/Default/views/LoginSuccessView.class.php:63
+msgid "Login Successful"
+msgstr "ログイン成功"
+
+#: ../app/modules/Default/views/LogoutSuccessView.class.php:33
+msgid "Logout Successful"
+msgstr "ログアウト成功"
+
+#: ../app/modules/Default/views/ModuleDisabledSuccessView.class.php:33
+msgid "This Module is Disabled"
+msgstr "このモジュールは無効です。"
+
+#: ../app/modules/Default/views/SearchEngineSpamSuccessView.class.php:17
+msgid "Congratulations!"
+msgstr "おめでとう！"
+
+#: ../app/modules/Default/views/Secure1SuccessView.class.php:17
+#: ../app/modules/Default/views/Secure2SuccessView.class.php:17
+msgid "Secure Action"
+msgstr "セキュアアクション"
+
+#: ../app/modules/Default/views/SecureSuccessView.class.php:33
+msgid "Permission Denied"
+msgstr "アクセス拒否"
+
+#: ../app/modules/Default/views/UnavailableSuccessView.class.php:33
+msgid "This Application is Unavailable"
+msgstr "このアプリケーションは利用できません"
