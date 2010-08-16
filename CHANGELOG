@@ -28,6 +28,7 @@ CHG: Optionally use readline wrapper for agavi script (#1271) (Simon, David)
 CHG: Restore default Phing ANSI colors for Mac OS X Snow Leopard (#1270) (David)
 CHG: Update timezone database to 2010i (#1268) (David)
 
+FIX: Statically forcing the URL scheme to https in AgaviWebRequest is not possible (#1281) (David)
 FIX: Regression: Invalid XHTML in shiny exception template when first line in stack frame is HTML (#1284) (David)
 FIX: PHP 5.2.6 bug breaks FPF (#1279) (David)
 FIX: AgaviGettextTranslator doesn't reset plural form function when switching locales (#1273) (David)
