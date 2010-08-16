@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.4 RC1 - August ?, 2010
 --------------------------
 
+ADD: AgaviJsonLoggerLayout (#1304) (David)
 ADD: Configuration options for AgaviPassthruLoggerLayout (#1303) (David)
 ADD: AgaviXsltRenderer (#1299)
 ADD: Add Japanese translation for sample app (#1298) (TANAKA Koichi)
