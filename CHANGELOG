@@ -13,6 +13,7 @@ ADD: Windows Azure Session Storage (#1266) (David)
 ADD: Support for IIS7 (#1265) (David)
 ADD: Database adapter for ext/sqlsrv (#1264) (David)
 
+CHG: Rename internal AgaviLoggerMessage parameters (#1302) (David)
 CHG: Make AgaviConfig non-final (#1300) (David)
 CHG: Build target "public-create" should overwrite existing files (#1288) (David)
 CHG: Move check for default output type to end of config file compilation (#1286) (David)
