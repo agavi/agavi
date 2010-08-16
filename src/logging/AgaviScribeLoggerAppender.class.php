@@ -18,6 +18,8 @@
  * interface using the Scribe Thrift protocol (Facebook Scribe, Cloudera Flume).
  *
  * Configuration parameters:
+ *  'buffer'                 - Whether or not to buffer all messages and only
+ *                             send them on shutdown. Defaults to false.
  *  'default_category'       - Default scribe category for messages ("default"),
  *                             can be overriden in a message using parameter
  *                             "scribe_category".
@@ -65,7 +67,13 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 			$this->transport = new TFramedTransport($socket);
 			$protocol = new TBinaryProtocol($this->transport, $this->getParameter('transport_strict_read', false), $this->getParameter('transport_strict_write', true));
 			$this->scribeClient = new scribeClient($protocol, $protocol);
-			$this->transport->open();
+			try {
+				$this->transport->open();
+			} catch(TException $e) {
+				$this->scribeClient = null;
+				$this->transport = null;
+				throw new AgaviLoggingException(sprintf("Failed to connect to Scribe server:\n\n%s", $e->getMessage()), 1, $e);
+			}
 		}
 		
 		return $this->scribeClient;
@@ -82,7 +90,12 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 	 */
 	public function shutdown()
 	{
-		if($this->scribeClient) {
+		try {
+			$this->flush();
+		} catch(AgaviLoggingException $e) {
+			// not much we can do at this point...
+		}
+		if($this->transport) {
 			$this->transport->close();
 		}
 	}
@@ -105,10 +118,26 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 			throw new AgaviLoggingException('No Layout set');
 		}
 		
-		$this->getScribeClient()->Log(array(new LogEntry(array(
+		$this->buffer[] = new LogEntry(array(
 			'category' => $message->getParameter('scribe_category', $this->getParameter('default_category', 'default')),
 			'message' => (string)$this->getLayout()->format($message),
-		))));
+		));
+		
+		if(!$this->getParameter('buffer', false)) {
+			$this->flush();
+		}
+	}
+	
+	protected function flush()
+	{
+		if(!$this->buffer) {
+			// nothing to send
+			return;
+		}
+		
+		$this->getScribeClient()->Log($this->buffer);
+		
+		$this->buffer = array();
 	}
 }
 
