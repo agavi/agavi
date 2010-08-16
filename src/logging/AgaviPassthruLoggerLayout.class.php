@@ -14,8 +14,19 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviPassthruLoggerLayout is an AgaviLoggerLayout that will return the 
- * AgaviLoggerMessage text unaltered.
+ * AgaviPassthruLoggerLayout is an AgaviLoggerLayout that will return the entire
+ * AgaviLoggerMessage or parts of it, depending on the configuration.
+ * 
+ * Parameter "mode" controls the mode of operation. Three are possible:
+ *   'to_string' - return AgaviLoggerMessage::__toString() (default)
+ *   'full'      - return the full AgaviLoggerMessage object
+ *   'message'   - return AgaviLoggerMessage::getMessage()
+ *   'parameter' - return only one parameter of the object. By default, this is
+ *                 "message"; can be changed using parameter "parameter".
+ * Parameter "parameter" controls which parameter of the AgaviLoggerMessage
+ * object is used when "mode" is "parameter". Defaults to "message".
+ *
+ * AgaviLoggerMessage text as returned by the __toString() method.
  *
  * @package    agavi
  * @subpackage logging
@@ -42,7 +53,16 @@ class AgaviPassthruLoggerLayout extends AgaviLoggerLayout
 	 */
 	public function format(AgaviLoggerMessage $message)
 	{
-		return $message->__toString();
+		switch($this->getParameter('mode', 'to_string')) {
+			case 'full':
+				return $message;
+			case 'message':
+				return $message->getMessage();
+			case 'parameter':
+				return $message->getParameter($this->getParameter('parameter', 'message'));
+			default:
+				return $message->__toString();
+		}
 	}
 }
 
