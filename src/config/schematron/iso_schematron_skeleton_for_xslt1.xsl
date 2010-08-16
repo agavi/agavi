@@ -66,6 +66,8 @@
     attributes "true" | "false"  (Autodetecting) Use only when the schema has no attributes as the context nodes
     only-child-elements "true" | "false" (Autodetecting) Use only when the schema has no comments
     or PI  as the context nodes
+     terminate= yes | no | true | false | assert  Terminate on the first failed assertion or successful report
+                                         Note: whether any output at all is generated depends on the XSLT implementation.
     
   The following parameters can be specified as Schematron variables in diagnostics, assertions and so on.
     fileNameParameter string	  
@@ -81,7 +83,7 @@
  Conventions: Meta-stylesheets that override this may use the following parameters
     generate-paths=true|false   generate the @location attribute with XPaths
     diagnose= yes | no    Add the diagnostics to the assertion test in reports
-    terminate= yes | no   Terminate on the first failed assertion or successful report
+ 
 -->
 
 <!-- 
@@ -138,7 +140,7 @@
    complex compared to making the outer process more complex.)
              
   This version has so far been tested with
-     Saxon 8
+     Saxon 9
      MSXML 4 (or 6?)   
 
  Please note that if you are using SAXON and JAXP, then you should use 
@@ -152,7 +154,7 @@
 <!--
  LEGAL INFORMATION
  
- Copyright (c) 2000-2008 Rick Jelliffe and Academia Sinica Computing Center, Taiwan
+ Copyright (c) 2000-2010 Rick Jelliffe and Academia Sinica Computing Center, Taiwan
 
  This software is provided 'as-is', without any express or implied warranty. 
  In no event will the authors be held liable for any damages arising from 
@@ -179,7 +181,12 @@
      3) pattern/@documents
 
   VERSION INFORMATION 
-
+   Note that several enhancements for the SAXON/XSLT2 version have not been put in place 
+   in this XSLT1 version. Therefore even if the two stylesheets are of the same date, they
+   may not have matching functionality.
+     2010-04-14
+     	* RJ Reorder call-template in exslt case only, report by BD
+        * Add command line parameter 'terminate' which will terminate on first failed 
      2010-01-24 RJ
      	* Allow let elements to have direct content instead of @value 
    2009-02-25 RJ
@@ -481,6 +488,9 @@
 
 
 <xsl:param name="output-encoding"/>
+
+<xsl:param name="terminate">false</xsl:param>
+
 <!-- e.g. saxon file.xml file.xsl "sch.exslt.imports=.../string.xsl;.../math.xsl" -->
 <xsl:param name="sch.exslt.imports"/>
 
@@ -552,7 +562,7 @@
 </xsl:template>
 
 
-<!-- Default uses XSLT 1 -->
+<!-- Uses unknown query language binding -->
 <xsl:template match="iso:schema" priority="-1">
 	<xsl:message terminate="yes" >Fail: This implementation of ISO Schematron does not work with 
 	schemas using the "<xsl:value-of select="@queryBinding"/>" query language.</xsl:message>        
@@ -569,12 +579,12 @@
    for ZIP archives.
 	-->
 
+    <xsl:call-template name="iso:exslt.add.imports" /> <!-- RJ moved report BH -->
 	<axsl:param name="archiveDirParameter" />
 	<axsl:param name="archiveNameParameter" />
 	<axsl:param name="fileNameParameter" />
 	<axsl:param name="fileDirParameter" />
 
-    <xsl:call-template name="iso:exslt.add.imports" />
     <xsl:text>&#10;&#10;</xsl:text><xsl:comment>PHASES</xsl:comment><xsl:text>&#10;</xsl:text>
 	<xsl:call-template name="handle-phase"/>
     <xsl:text>&#10;&#10;</xsl:text><xsl:comment>PROLOG</xsl:comment><xsl:text>&#10;</xsl:text>
@@ -1659,6 +1669,13 @@
 		</xsl:call-template>
 		
 		
+		<xsl:if test=" $terminate = 'yes' or $terminate = 'true' ">
+		   <axsl:message terminate="yes">TERMINATING</axsl:message>
+		</xsl:if>
+	    <xsl:if test=" $terminate = 'assert' ">
+		   <axsl:message terminate="yes">TERMINATING</axsl:message>
+		</xsl:if>
+		
 	</xsl:template>
 
 	<xsl:template name="process-report">
@@ -1682,6 +1699,12 @@
 			<xsl:with-param name="pattern" select="$test"/>
 			<xsl:with-param name="role" select="$role"/>
 		</xsl:call-template>
+		
+		
+		<xsl:if test=" $terminate = 'yes' or $terminate = 'true' ">
+		   <axsl:message terminate="yes">TERMINATING</axsl:message>
+		</xsl:if>
+	    
 	</xsl:template>
 
 	<xsl:template name="process-diagnostic">

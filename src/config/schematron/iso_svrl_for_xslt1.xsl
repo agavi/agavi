@@ -29,7 +29,10 @@
   validate with schemas from either namespace.
   
 
-  History:  
+  History:
+    2010-04-14
+        * Add command line parameter 'terminate' which will terminate on first failed 
+        assert and (optionally) successful report.   
     2009-03-18
     	* Fix atrribute with space "see " which generates wrong name in some processors
     2008-08-11
@@ -90,7 +93,7 @@
 <!--
  Derived from Conformance1-5.xsl.
 
- Copyright (c) 2001, 2006 Rick Jelliffe and Academia Sinica Computing Center, Taiwan
+ Copyright (c) 2001-2010 Rick Jelliffe and Academia Sinica Computing Center, Taiwan
 
  This software is provided 'as-is', without any express or implied warranty. 
  In no event will the authors be held liable for any damages arising from 
@@ -121,7 +124,8 @@
             sch.exslt.imports semi-colon delimited string of filenames for some EXSLT implementations          
    		 optimize        "visit-no-attributes"     Use only when the schema has no attributes as the context nodes
 		 generate-fired-rule "true"(default) | "false"  Generate fired-rule elements
-            
+               terminate= yes | no | true | false | assert  Terminate on the first failed assertion or successful report
+                                         Note: whether any output at all is generated depends on the XSLT implementation.          
 -->
 
 <xsl:stylesheet
@@ -294,6 +298,14 @@
 				</xsl:call-template>
 			</xsl:if>
 	</svrl:failed-assert>
+	
+	
+		<xsl:if test=" $terminate = 'yes' or $terminate = 'true' ">
+		   <axsl:message terminate="yes">TERMINATING</axsl:message>
+		</xsl:if>
+	    <xsl:if test=" $terminate = 'assert' ">
+		   <axsl:message terminate="yes">TERMINATING</axsl:message>
+		</xsl:if>
 </xsl:template>
 
 <xsl:template name="process-report">
@@ -352,6 +364,11 @@
 				</xsl:call-template>
 			</xsl:if>
 	</svrl:successful-report>
+	
+	
+		<xsl:if test=" $terminate = 'yes' or $terminate = 'true' ">
+		   <axsl:message terminate="yes">TERMINATING</axsl:message>
+		</xsl:if>
 </xsl:template>
 
 

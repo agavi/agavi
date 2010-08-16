@@ -1,8 +1,8 @@
-ISO SCHEMATRON 2010
+<h1>ISO SCHEMATRON 2010</h1>
 
 XSLT implementation by Rick Jelliffe with assistance from members of Schematron-love-in maillist.
 
-2010-01-25
+2010-04-21
 
 Two distributions are available. One is for XSLT1 engines. 
 The other is for XSLT2 engines, such as SAXON 9.
@@ -13,6 +13,7 @@ This version of Schematron splits the process into a pipeline of several differe
 1) First, preprocess your Schematron schema with iso_dsdl_include.xsl.  
 This is a macro processor to assemble the schema from various parts. 
 If your schema is not in separate parts, you can skip this stage.
+This stage also generates error messages for some common XPath syntax problems.
 
 2) Second, preprocess the output from stage 1 with iso_abstract_expand.xsl.  
 This is a macro processor to convert abstract patterns to real patterns. 
@@ -81,3 +82,20 @@ To give an example of how to process a document, here is a sample ANT task.
 		   				</classpath>
 	</xslt>
 		</target>
+		
+EXTRACTION SCHEMATRON FROM XSD OR RELAX NG
+
+The following files allow extracting of embedded schematron patterns
+in XML Schemas or RELAX NG schemas. For details, see the at
+  article http://www.topologi.com/resources/schtrn_xsd_paper.html
+  
+The following files are provided:
+  ExtractSchFromRNG.xsl      Generate a Schematron schema from patterns
+                  embedded in a RELAX NG schema. The schema uses XSLT1.                 
+  ExtractSchFromXSD.xsl      Generate a Schematron schema from patterns
+                  embedded in a W3C XML Schemas schema. The schema uses XSLT1.
+                  
+  ExtractSchFromRNG-2.xsl      Generate a Schematron schema from patterns
+                  embedded in a RELAX NG schema. The schema uses XSLT2.                 
+  ExtractSchFromXSD-2.xsl      Generate a Schematron schema from patterns
+                  embedded in a W3C XML Schemas schema. The schema uses XSLT2.
