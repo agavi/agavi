@@ -17,6 +17,8 @@ The new AgaviXsltRenderer takes the inner content of the rendering process as it
 
 AgaviDoctrineDatabase now uses Doctrine event listeners to set the configured charset and run the configured initialization queries after Doctrine opened a connection; this will prevent Doctrine from always connecting on initialization of the adapter if either a charset or init queries are configured.
 
+AgaviLoggerMessage now uses "message" and "level" as the internal parameter names. AgaviPassthruLoggerLayout can be configured to return the raw message contents, a specific parameter from the message object or the full object. AgaviJsonLoggerLayout encodes all message parameters as a JSON string, and AgaviScribeLoggerAppender logs to Facebook Scribe or a compatible Thrift interface like Cloudera Flume.
+
 AgaviBooleanValidator is new, and AgaviRegexValidator now allows the extraction of matched subpatterns.
 
 The timezone database has been updated to 2010i.
