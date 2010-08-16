@@ -128,6 +128,7 @@
 			<!-- agavi/logging -->
 			<autoload name="AgaviFileLoggerAppender">%core.agavi_dir%/logging/AgaviFileLoggerAppender.class.php</autoload>
 			<autoload name="AgaviILogger">%core.agavi_dir%/logging/AgaviILogger.interface.php</autoload>
+			<autoload name="AgaviJsonLoggerLayout">%core.agavi_dir%/logging/AgaviJsonLoggerLayout.class.php</autoload>
 			<autoload name="AgaviLogger">%core.agavi_dir%/logging/AgaviLogger.class.php</autoload>
 			<autoload name="AgaviLoggerAppender">%core.agavi_dir%/logging/AgaviLoggerAppender.class.php</autoload>
 			<autoload name="AgaviLoggerLayout">%core.agavi_dir%/logging/AgaviLoggerLayout.class.php</autoload>
@@ -135,6 +136,7 @@
 			<autoload name="AgaviLoggerMessage">%core.agavi_dir%/logging/AgaviLoggerMessage.class.php</autoload>
 			<autoload name="AgaviPassthruLoggerLayout">%core.agavi_dir%/logging/AgaviPassthruLoggerLayout.class.php</autoload>
 			<autoload name="AgaviRotatingFileLoggerAppender">%core.agavi_dir%/logging/AgaviRotatingFileLoggerAppender.class.php</autoload>
+			<autoload name="AgaviScribeLoggerAppender">%core.agavi_dir%/logging/AgaviScribeLoggerAppender.class.php</autoload>
 			<autoload name="AgaviStderrLoggerAppender">%core.agavi_dir%/logging/AgaviStderrLoggerAppender.class.php</autoload>
 			<autoload name="AgaviStdoutLoggerAppender">%core.agavi_dir%/logging/AgaviStdoutLoggerAppender.class.php</autoload>
 			<autoload name="AgaviStreamLoggerAppender">%core.agavi_dir%/logging/AgaviStreamLoggerAppender.class.php</autoload>
