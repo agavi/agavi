@@ -51,7 +51,12 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 	 * @var        TTransport The Thrift transport instance to use.
 	 */
 	protected $transport = null;
-
+	
+	/**
+	 * @var        array A buffer of messages to log
+	 */
+	protected $buffer = array();
+	
 	/**
 	 * Retrieve the scribeClient instance to write to.
 	 *
