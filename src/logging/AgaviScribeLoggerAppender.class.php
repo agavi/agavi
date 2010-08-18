@@ -133,6 +133,12 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 		}
 	}
 	
+	/**
+	 * Send buffer contents if there are any.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.4
+	 */
 	protected function flush()
 	{
 		if(!$this->buffer) {
