@@ -68,10 +68,18 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 	protected function getScribeClient()
 	{
 		if(!$this->scribeClient) {
-			$socket = new TSocket($this->getParameter('socket_host', 'localhost'), $this->getParameter('socket_port', 1463), $this->getParameter('socket_persist', false));
-			$this->transport = new TFramedTransport($socket);
-			$protocol = new TBinaryProtocol($this->transport, $this->getParameter('transport_strict_read', false), $this->getParameter('transport_strict_write', true));
-			$this->scribeClient = new scribeClient($protocol, $protocol);
+			$socketClass = $this->getParameter('socket_class', 'TSocket');
+			$socket = new $socketClass($this->getParameter('socket_host', 'localhost'), $this->getParameter('socket_port', 1463), $this->getParameter('socket_persist', false));
+			
+			$transportClass = $this->getParameter('transport_class', 'TFramedTransport');
+			$this->transport = new $transportClass($socket);
+			
+			$protocolClass = $this->getParameter('protocol_class', 'TBinaryProtocol');
+			$protocol = new $protocolClass($this->transport, $this->getParameter('transport_strict_read', false), $this->getParameter('transport_strict_write', true));
+			
+			$clientClass = $this->getParameter('client_class', 'scribeClient');
+			$this->scribeClient = new $clientClass($protocol, $protocol);
+			
 			try {
 				$this->transport->open();
 			} catch(TException $e) {
