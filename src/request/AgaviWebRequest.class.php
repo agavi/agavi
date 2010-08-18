@@ -356,9 +356,9 @@ class AgaviWebRequest extends AgaviRequest
 		
 		$this->protocol = self::getSourceValue($sources['SERVER_PROTOCOL'], $sourceDefaults['SERVER_PROTOCOL']);
 		
-		$HTTPS = self::getSourceValue($sources['HTTPS'], $sourceDefaults['HTTPS']);
+		$HTTPS = in_array(self::getSourceValue($sources['HTTPS'], $sourceDefaults['HTTPS']), array('on', 'On', 'oN', 'ON', 1, true), true);
 
-		$this->urlScheme = 'http' . (strtolower($HTTPS) == 'on' ? 's' : '');
+		$this->urlScheme = 'http' . ($HTTPS ? 's' : '');
 
 		$this->urlPort = (int)self::getSourceValue($sources['SERVER_PORT'], $sourceDefaults['SERVER_PORT']);
 

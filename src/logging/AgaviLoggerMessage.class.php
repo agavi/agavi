@@ -41,8 +41,8 @@ class AgaviLoggerMessage extends AgaviParameterHolder
 	 */
 	public function __construct($message = null, $level = AgaviLogger::INFO)
 	{
-		$this->setParameter('m', $message);
-		$this->setParameter('l', $level);
+		$this->setParameter('message', $message);
+		$this->setParameter('level', $level);
 	}
 
 	/**
@@ -55,7 +55,7 @@ class AgaviLoggerMessage extends AgaviParameterHolder
 	 */
 	public function __toString()
 	{
-		return(is_array($this->getParameter('m')) ? implode("\n", $this->getParameter('m')) : (string) $this->getParameter('m'));
+		return(is_array($this->getParameter('message')) ? implode("\n", $this->getParameter('message')) : (string) $this->getParameter('message'));
 	}
 
 	/**
@@ -70,7 +70,7 @@ class AgaviLoggerMessage extends AgaviParameterHolder
 	 */
 	public function setMessage($message)
 	{
-		$this->setParameter('m', $message);
+		$this->setParameter('message', $message);
 		return $this;
 	}
 
@@ -86,7 +86,7 @@ class AgaviLoggerMessage extends AgaviParameterHolder
 	 */
 	public function appendMessage($message)
 	{
-		$this->appendParameter('m', $message);
+		$this->appendParameter('message', $message);
 		return $this;
 	}
 
@@ -102,7 +102,7 @@ class AgaviLoggerMessage extends AgaviParameterHolder
 	 */
 	public function setLevel($level)
 	{
-		$this->setParameter('l', $level);
+		$this->setParameter('level', $level);
 		return $this;
 	}
 
@@ -116,7 +116,7 @@ class AgaviLoggerMessage extends AgaviParameterHolder
 	 */
 	public function getLevel()
 	{
-		return $this->getParameter('l');
+		return $this->getParameter('level');
 	}
 
 	/**
@@ -129,7 +129,7 @@ class AgaviLoggerMessage extends AgaviParameterHolder
 	 */
 	public function getMessage()
 	{
-		return $this->getParameter('m');
+		return $this->getParameter('message');
 	}
 }
 
