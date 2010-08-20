@@ -382,7 +382,7 @@ class AgaviXmlConfigParser
 			$this->doc = new AgaviXmlConfigDomDocument();
 			$this->doc->load($path);
 		} catch(DOMException $dome) {
-			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $path, $dome->getMessage()), 0, $e);
+			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $path, $dome->getMessage()), 0, $dome);
 		}
 	}
 	
@@ -501,7 +501,7 @@ class AgaviXmlConfigParser
 		try {
 			$document->xinclude();
 		} catch(DOMException $dome) {
-			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $document->documentURI, $dome->getMessage()), 0, $e);
+			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $document->documentURI, $dome->getMessage()), 0, $dome);
 		}
 		
 		// remove all xml:base attributes inserted by XIncludes
@@ -572,7 +572,7 @@ class AgaviXmlConfigParser
 				$xsl = new AgaviXmlConfigDomDocument();
 				$xsl->load($href);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()), 0, $e);
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()), 0, $dome);
 			}
 			
 			// add them to the list of transformations to be done
@@ -661,7 +661,7 @@ class AgaviXmlConfigParser
 							$xsl = new AgaviXmlConfigDomDocument();
 							$xsl->appendChild($xsl->importNode($stylesheets->item(0), true));
 						} catch(DOMException $dome) {
-							throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()), 0, $e);
+							throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()), 0, $dome);
 						}
 						
 						// and append to the list of XSLs to process
@@ -809,7 +809,7 @@ class AgaviXmlConfigParser
 			try {
 				$document->schemaValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()), 0, $e);
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()), 0, $dome);
 			}
 		}
 	}
@@ -830,7 +830,7 @@ class AgaviXmlConfigParser
 			try {
 				$document->schemaValidateSource($validationSource);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()), 0, $e);
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()), 0, $dome);
 			}
 		}
 	}
@@ -855,7 +855,7 @@ class AgaviXmlConfigParser
 			try {
 				$document->relaxNGValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()), 0, $e);
+				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()), 0, $dome);
 			}
 		}
 	}
@@ -901,7 +901,7 @@ class AgaviXmlConfigParser
 				$sch = new AgaviXmlConfigDomDocument();
 				$sch->load($href);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not load schema file "%s": %s', $document->documentURI, $href, $dome->getMessage()), 0, $e);
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not load schema file "%s": %s', $document->documentURI, $href, $dome->getMessage()), 0, $dome);
 			}
 			
 			// perform the validation transformation
