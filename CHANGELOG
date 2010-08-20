@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.4 RC1 - August ?, 2010
 --------------------------
 
+ADD: Use and render PHP 5.3 linked exceptions (#1308) (David)
 ADD: AgaviScribeLoggerAppender (#1305) (David)
 ADD: AgaviJsonLoggerLayout (#1304) (David)
 ADD: Configuration options for AgaviPassthruLoggerLayout (#1303) (David)
@@ -16,6 +17,7 @@ ADD: Windows Azure Session Storage (#1266) (David)
 ADD: Support for IIS7 (#1265) (David)
 ADD: Database adapter for ext/sqlsrv (#1264) (David)
 
+CHG: Change Tango Icon Theme license information (#1309) (David)
 CHG: Update ISO Schematron to version 2010-04-21 (#1306) (David)
 CHG: Rename internal AgaviLoggerMessage parameters (#1302) (David)
 CHG: Make AgaviConfig non-final (#1300) (David)

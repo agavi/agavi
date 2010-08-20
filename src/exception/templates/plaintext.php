@@ -38,59 +38,69 @@ if(!headers_sent()) {
 	header('Content-Type: text/plain');	
 }
 
-// fix stack trace in case it doesn't contain the exception origin as the first entry
-$fixedTrace = AgaviException::getFixedTrace($e);
+$cols = 80;
+if(function_exists('posix_isatty') && !posix_isatty(STDOUT)) {
+	// if output is redirected, do not wrap lines after just 80 characters
+	$cols = false;
+} elseif(file_exists('/bin/stty') && is_executable('/bin/stty') && $sttySize = exec('/bin/stty size 2>/dev/null')) {
+	// grab the terminal width for line wrapping if possible
+	list(, $cols) = explode(' ', $sttySize);
+}
 
 ?>
-===============<?php echo str_repeat('=', strlen(get_class($e))); ?>
 
-  Exception: <?php echo get_class($e); ?>
+#####################
+# Application Error #
+#####################
 
-===============<?php echo str_repeat('=', strlen(get_class($e))); ?>
+<?php if(count($exceptions) > 1): ?>
+<?php $msg = sprintf('The %s was caused by %s. A full chain of exceptions is listed below.', get_class($e), ((count($exceptions) == 2) ? 'another exception' : 'other exceptions')); echo $cols ? wordwrap($msg, $cols, "\n") : $msg; ?>
 
 
-<?php if($e instanceof AgaviException): ?>
-This is an internal Agavi exception. Please consult the documentation for
-assistance with solving this issue.
 <?php endif; ?>
+<?php foreach($exceptions as $ei => $e): ?>
 
-<?php echo wordwrap(sprintf('An exception of type *%s* was thrown, but did not get caught during the execution of the request. You will find information provided by the exception along with a stack trace below.', get_class($e)), 80, "\n"); ?>
+  <?php echo get_class($e); ?> 
+==<?php echo str_repeat("=", strlen(get_class($e))); ?>==
 
+<?php
+$lines = explode("\n", trim($e->getMessage()));
+foreach($lines as $line):
+?>
+  <?php echo $cols ? wordwrap($line, $cols-2, "\n  ", true) : $line; ?>
 
-  Message
-===========
-<?php echo wordwrap(html_entity_decode($e->getMessage()), 80, "\n"); ?>
-
+<?php endforeach; ?>
 
   Stack Trace
-===============
+  -----------
 <?php
-foreach($fixedTrace as $no => $trace) {
-	echo "$no: ";
+$i = 0;
+$traceLines = AgaviException::getFixedTrace($e, isset($exceptions[$ei+1]) ? $exceptions[$ei+1] : null);
+$traceCount = count($traceLines);
+foreach($traceLines as $trace) {
+	$i++;
+	echo sprintf("  %" . strlen($traceCount) . "s: ", $i);
 	if(isset($trace['file'])) {
-		echo $trace['file'];
+		$msg = $trace['file'] . (isset($trace['line']) ? ':' . $trace['line'] : ''); echo $cols ? wordwrap($msg, $cols - 4 - strlen($traceCount), "\n" . str_repeat(' ', 4 + strlen($traceCount)), true) : $msg;
 	} else {
 		echo "Unknown file";
 	}
-
-	if(isset($trace['line'])) {
-		echo " (line: " .$trace['line'] .')';
-	} else {
-		echo "(Unknown line)";
-	}
 	echo "\n";
 }
+
+endforeach;
 ?>
 
 
   Version Information
 =======================
-Agavi:     <?php echo AgaviConfig::get('agavi.version'); ?>
 
-PHP:       <?php echo phpversion(); ?>
+  Agavi:     <?php echo $cols ? wordwrap(AgaviConfig::get('agavi.version'), $cols-13, "\n             ", true) : AgaviConfig::get('agavi.version'); ?>
 
-System:    <?php echo php_uname(); ?>
+  PHP:       <?php echo $cols ? wordwrap(phpversion(), $cols-13, "\n             ", true) : phpversion(); ?>
 
-Timestamp: <?php echo gmdate(DATE_ISO8601); ?>
+  System:    <?php echo $cols ? wordwrap(php_uname(), $cols-13, "\n             ", true): php_uname(); ?>
+
+  Timestamp: <?php echo $cols ? wordwrap(gmdate(DATE_ISO8601), $cols-13, "\n             ", true) : gmdate(DATE_ISO8601); ?>
 
 

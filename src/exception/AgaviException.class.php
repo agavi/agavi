@@ -57,19 +57,33 @@ class AgaviException extends Exception
 	 * appears to happen from time to time or with certain PHP/XDebug versions.
 	 *
 	 * @param      Exception The exception to pull the trace from.
+	 * @param      Exception Optionally, the next exception to display (pulled
+	 *                       from Exception::getPrevious() and displayed in
+	 *                       reverse order), which will then result in identical
+	 *                       parts of the stack trace not being returned.
 	 *
 	 * @return     array The trace containing the exception origin as first item.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.3
 	 */
-	public static function getFixedTrace(Exception $e)
+	public static function getFixedTrace(Exception $e, Exception $next = null)
 	{
 		// fix stack trace in case it doesn't contain the exception origin as the first entry
 		$fixedTrace = $e->getTrace();
 		
 		if(isset($fixedTrace[0]['file']) && !($fixedTrace[0]['file'] == $e->getFile() && $fixedTrace[0]['line'] == $e->getLine())) {
 			$fixedTrace = array_merge(array(array('file' => $e->getFile(), 'line' => $e->getLine())), $fixedTrace);
+		}
+		
+		if($next) {
+			$nextTrace = self::getFixedTrace($next);
+			foreach($fixedTrace as $i => $fixedTraceItem) {
+				if($fixedTraceItem == $nextTrace[1]) {
+					$fixedTrace = array_slice($fixedTrace, 0, $i);
+					break;
+				}
+			}
 		}
 		
 		return $fixedTrace;
@@ -254,6 +268,18 @@ class AgaviException extends Exception
 		// exit code is 70, EX_SOFTWARE, according to /usr/include/sysexits.h: http://cvs.opensolaris.org/source/xref/on/usr/src/head/sysexits.h
 		// nice touch: an exception template can change this value :)
 		$exitCode = 70;
+		
+		$exceptions = array();
+		if(version_compare(PHP_VERSION, '5.3', 'ge')) {
+			// reverse order of exceptions
+			$ce = $e;
+			while($ce) {
+				array_unshift($exceptions, $ce);
+				$ce = $ce->getPrevious();
+			}
+		} else {
+			$exceptions[] = $e;
+		}
 		
 		// discard any previous output waiting in the buffer
 		while(@ob_end_clean());
