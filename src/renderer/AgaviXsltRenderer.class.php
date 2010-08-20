@@ -56,15 +56,19 @@ class AgaviXsltRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 		libxml_clear_errors();
 		
 		$result = new DOMDocument();
-		$result->loadXML($source, $options);
+		$loaded = @$result->loadXML($source, $options);
 		
-		if(libxml_get_last_error() !== false) {
+		if(libxml_get_last_error() !== false || !$loaded) {
 			$errors = array();
 			foreach(libxml_get_errors() as $error) {
 				$errors[] = sprintf('[%s #%d] Line %d: %s', $error->level == LIBXML_ERR_WARNING ? 'Warning' : ($error->level == LIBXML_ERR_ERROR ? 'Error' : 'Fatal'), $error->code, $error->line, $error->message);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
+			
+			if(!$errors) {
+				$errors = array('Unknown error (document empty?)');
+			}
 			throw new DOMException(
 				sprintf(
 					'Error%s occurred while parsing the document: ' . "\n\n%s",
@@ -106,6 +110,10 @@ class AgaviXsltRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
+			
+			if(!$errors) {
+				$errors = array('Unknown error (document empty?)');
+			}
 			throw new DOMException(
 				sprintf(
 					'Error%s occurred while parsing the document: ' . "\n\n%s",
@@ -141,7 +149,7 @@ class AgaviXsltRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 				try {
 					$inner = $this->loadDomDocumentXml($moreAssigns['inner']);
 				} catch(DOMException $e) {
-					throw new AgaviRenderException(sprintf('Unable to load input document for layer "%s".', $layer->getName()), 123, $e);
+					throw new AgaviRenderException(sprintf("Unable to load input document for layer '%s'.\n\n%s", $layer->getName(), $e->getMessage()), 0, $e);
 				}
 			} else {
 				$inner = $moreAssigns['inner'];
@@ -163,8 +171,11 @@ class AgaviXsltRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 			$flattenedSlots = AgaviArrayPathDefinition::flatten($slots);
 			foreach($flattenedSlots as $slotName => $slotContent) {
 				if(!($slotContent instanceof DOMDocument)) {
-					$slot = new DOMDocument();
-					$slot->loadXML($slotContent);
+					try {
+						$slot = $this->loadDomDocumentXml($slotContent);
+					} catch(Exception $e) {
+						throw new AgaviRenderException(sprintf("Unable to load contents for slot '%s'.\n\n%s", $slotName, $e->getMessage()), 0, $e);
+					}
 				} else {
 					$slot = $slotContent;
 				}
@@ -193,7 +204,11 @@ class AgaviXsltRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 			// }
 		}
 		
-		$xslt = $this->loadDomDocument($layer->getResourceStreamIdentifier());
+		try {
+			$xslt = $this->loadDomDocument($layer->getResourceStreamIdentifier());
+		} catch(DOMException $e) {
+			throw new AgaviRenderException(sprintf("Unable to load template '%s'.\n\n%s", $layer->getResourceStreamIdentifier(), $e->getMessage()), 0, $e);
+		}
 		
 		$xsl = new XSLTProcessor();
 		$xsl->importStylesheet($xslt);
