@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 1.0.4 RC1 - August ?, 2010
 --------------------------
 
-ADD: Use and render PHP 5.3 linked exceptions (#1308) (David)
+ADD: Render PHP 5.3 linked exceptions (#1308) (David)
 ADD: AgaviScribeLoggerAppender (#1305) (David)
 ADD: AgaviJsonLoggerLayout (#1304) (David)
 ADD: Configuration options for AgaviPassthruLoggerLayout (#1303) (David)

@@ -143,7 +143,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 				$initialProcessor->removeParameter('', $parameter);
 			}
 		} catch(Exception $e) {
-			throw new AgaviParseException(sprintf('Could not transform schema file "%s": %s', $schema->documentURI, $e->getMessage()), 0, $e);
+			throw new AgaviParseException(sprintf('Could not transform schema file "%s": %s', $schema->documentURI, $e->getMessage()));
 		}
 		
 		// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
@@ -156,14 +156,14 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 			$validator = new AgaviXmlConfigXsltProcessor();
 			$validator->importStylesheet($validatorImpl);
 		} catch(Exception $e) {
-			throw new AgaviParseException(sprintf('Could not process the schema file "%s": %s', $schema->documentURI, $e->getMessage()), 0, $e);
+			throw new AgaviParseException(sprintf('Could not process the schema file "%s": %s', $schema->documentURI, $e->getMessage()));
 		}
 		
 		// run the validation by transforming our document using the generated validation stylesheet
 		try {
 			$result = $validator->transformToDoc($this->node);
 		} catch(Exception $e) {
-			throw new AgaviParseException(sprintf('Could not validate the document against the schema file "%s": %s', $schema->documentURI, $e->getMessage()), 0, $e);
+			throw new AgaviParseException(sprintf('Could not validate the document against the schema file "%s": %s', $schema->documentURI, $e->getMessage()));
 		}
 		
 		return $result;

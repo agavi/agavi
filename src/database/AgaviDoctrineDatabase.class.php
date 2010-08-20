@@ -208,7 +208,7 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			}
 		} catch(Doctrine_Exception $e) {
 			// the connection's foobar'd
-			throw new AgaviDatabaseException($e->getMessage(), 0, $e);
+			throw new AgaviDatabaseException($e->getMessage());
 		}
 	}
 	
