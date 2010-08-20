@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "America/Mexico_City".
+ * Data file for timezone "America/Bahia_Banderas".
  * Compiled from olson file "northamerica", version 8.34.
  *
  * @package    agavi
@@ -32,21 +32,15 @@ return array (
     ),
     2 => 
     array (
-      'rawOffset' => -21600,
+      'rawOffset' => -28800,
       'dstOffset' => 0,
-      'name' => 'CT',
+      'name' => 'PST',
     ),
     3 => 
     array (
-      'rawOffset' => -21600,
+      'rawOffset' => -25200,
       'dstOffset' => 3600,
-      'name' => 'CDT',
-    ),
-    4 => 
-    array (
-      'rawOffset' => -21600,
-      'dstOffset' => 3600,
-      'name' => 'CWT',
+      'name' => 'MDT',
     ),
   ),
   'rules' => 
@@ -79,127 +73,92 @@ return array (
     5 => 
     array (
       'time' => -1191344400,
-      'type' => 2,
+      'type' => 1,
     ),
     6 => 
     array (
-      'time' => -975261600,
-      'type' => 3,
+      'time' => -873828000,
+      'type' => 0,
     ),
     7 => 
     array (
-      'time' => -963169200,
-      'type' => 1,
+      'time' => -661539600,
+      'type' => 2,
     ),
     8 => 
     array (
-      'time' => -917114400,
-      'type' => 3,
+      'time' => 28800,
+      'type' => 0,
     ),
     9 => 
     array (
-      'time' => -907354800,
-      'type' => 1,
+      'time' => 828867600,
+      'type' => 3,
     ),
     10 => 
     array (
-      'time' => -821901600,
-      'type' => 4,
+      'time' => 846403200,
+      'type' => 0,
     ),
     11 => 
     array (
-      'time' => -810068400,
-      'type' => 1,
+      'time' => 860317200,
+      'type' => 3,
     ),
     12 => 
     array (
-      'time' => -627501600,
-      'type' => 3,
+      'time' => 877852800,
+      'type' => 0,
     ),
     13 => 
     array (
-      'time' => -612990000,
-      'type' => 1,
+      'time' => 891766800,
+      'type' => 3,
     ),
     14 => 
     array (
-      'time' => 828864000,
-      'type' => 3,
+      'time' => 909302400,
+      'type' => 0,
     ),
     15 => 
     array (
-      'time' => 846399600,
-      'type' => 1,
+      'time' => 923216400,
+      'type' => 3,
     ),
     16 => 
     array (
-      'time' => 860313600,
-      'type' => 3,
+      'time' => 941356800,
+      'type' => 0,
     ),
     17 => 
     array (
-      'time' => 877849200,
-      'type' => 1,
+      'time' => 954666000,
+      'type' => 3,
     ),
     18 => 
     array (
-      'time' => 891763200,
-      'type' => 3,
+      'time' => 972806400,
+      'type' => 0,
     ),
     19 => 
     array (
-      'time' => 909298800,
-      'type' => 1,
+      'time' => 989139600,
+      'type' => 3,
     ),
     20 => 
     array (
-      'time' => 923212800,
-      'type' => 3,
+      'time' => 1001836800,
+      'type' => 0,
     ),
     21 => 
     array (
-      'time' => 941353200,
-      'type' => 1,
+      'time' => 1018170000,
+      'type' => 3,
     ),
     22 => 
     array (
-      'time' => 954662400,
-      'type' => 3,
-    ),
-    23 => 
-    array (
-      'time' => 972802800,
-      'type' => 1,
-    ),
-    24 => 
-    array (
-      'time' => 989136000,
-      'type' => 3,
-    ),
-    25 => 
-    array (
-      'time' => 1001833200,
-      'type' => 1,
-    ),
-    26 => 
-    array (
-      'time' => 1001836800,
-      'type' => 1,
-    ),
-    27 => 
-    array (
-      'time' => 1014184800,
-      'type' => 1,
-    ),
-    28 => 
-    array (
-      'time' => 1018166400,
-      'type' => 3,
-    ),
-    29 => 
-    array (
-      'time' => 1035702000,
-      'type' => 1,
+      'time' => 1035705600,
+      'type' => 0,
     ),
   ),
   'finalRule' => 
@@ -224,11 +183,11 @@ return array (
       'time' => 7200000,
       'type' => 0,
     ),
-    'startYear' => 2003,
+    'startYear' => 2002,
   ),
   'source' => 'northamerica',
   'version' => '8.34',
-  'name' => 'America/Mexico_City',
+  'name' => 'America/Bahia_Banderas',
 );
 
 ?>

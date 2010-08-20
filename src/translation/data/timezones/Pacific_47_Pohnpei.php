@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Data file for timezone "Pacific/Truk".
- * Compiled from olson file "australasia", version 8.17.
+ * Data file for timezone "Pacific/Pohnpei".
+ * Compiled from olson file "australasia", version 8.18.
  *
  * @package    agavi
  * @subpackage translation
@@ -20,29 +20,29 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 36000,
+      'rawOffset' => 39600,
       'dstOffset' => 0,
-      'name' => 'TRUT',
+      'name' => 'PONT',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2177489228,
+      'time' => -2177490772,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'TRUT',
-    'offset' => 36000,
+    'name' => 'PONT',
+    'offset' => 39600,
     'startYear' => 1901,
   ),
   'source' => 'australasia',
-  'version' => '8.17',
-  'name' => 'Pacific/Truk',
+  'version' => '8.18',
+  'name' => 'Pacific/Pohnpei',
 );
 
 ?>

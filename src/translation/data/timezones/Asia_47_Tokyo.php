@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Tokyo".
- * Compiled from olson file "asia", version 8.60.
+ * Compiled from olson file "asia", version 8.61.
  *
  * @package    agavi
  * @subpackage translation
@@ -108,7 +108,7 @@ return array (
     'startYear' => 1952,
   ),
   'source' => 'asia',
-  'version' => '8.60',
+  'version' => '8.61',
   'name' => 'Asia/Tokyo',
 );
 

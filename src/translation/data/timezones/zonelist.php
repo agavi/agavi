@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2010-04-22T15:21:27+00:00.
+ * Generated on 2010-08-20T18:44:53+00:00.
  *
  * @package    agavi
  * @subpackage translation
@@ -605,6 +605,11 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'America_47_Mazatlan.php',
+  ),
+  'America/Bahia_Banderas' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'America_47_Bahia_Banderas.php',
   ),
   'America/Tijuana' => 
   array (
@@ -1386,15 +1391,15 @@ return array (
     'type' => 'zone',
     'filename' => 'Pacific_47_Kwajalein.php',
   ),
-  'Pacific/Truk' => 
+  'Pacific/Chuuk' => 
   array (
     'type' => 'zone',
-    'filename' => 'Pacific_47_Truk.php',
+    'filename' => 'Pacific_47_Chuuk.php',
   ),
-  'Pacific/Ponape' => 
+  'Pacific/Pohnpei' => 
   array (
     'type' => 'zone',
-    'filename' => 'Pacific_47_Ponape.php',
+    'filename' => 'Pacific_47_Pohnpei.php',
   ),
   'Pacific/Kosrae' => 
   array (
@@ -2739,7 +2744,17 @@ return array (
   'Pacific/Yap' => 
   array (
     'type' => 'link',
-    'to' => 'Pacific/Truk',
+    'to' => 'Pacific/Chuuk',
+  ),
+  'Pacific/Truk' => 
+  array (
+    'type' => 'link',
+    'to' => 'Pacific/Chuuk',
+  ),
+  'Pacific/Ponape' => 
+  array (
+    'type' => 'link',
+    'to' => 'Pacific/Pohnpei',
   ),
   'Poland' => 
   array (

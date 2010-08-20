@@ -17,6 +17,7 @@ ADD: Windows Azure Session Storage (#1266) (David)
 ADD: Support for IIS7 (#1265) (David)
 ADD: Database adapter for ext/sqlsrv (#1264) (David)
 
+CHG: Update timezone database to 2010l (#1310) (David)
 CHG: Change Tango Icon Theme license information (#1309) (David)
 CHG: Update ISO Schematron to version 2010-04-21 (#1306) (David)
 CHG: Rename internal AgaviLoggerMessage parameters (#1302) (David)
@@ -29,7 +30,6 @@ CHG: Eliminate use of create_function() in AgaviTranslationManager::getLocaleIde
 CHG: Make charset configuration and init queries event based in AgaviDoctrineDatabase (#1272) (David)
 CHG: Optionally use readline wrapper for agavi script (#1271) (Simon, David)
 CHG: Restore default Phing ANSI colors for Mac OS X Snow Leopard (#1270) (David)
-CHG: Update timezone database to 2010i (#1268) (David)
 
 FIX: Statically forcing the URL scheme to https in AgaviWebRequest is not possible (#1281) (David)
 FIX: Regression: Invalid XHTML in shiny exception template when first line in stack frame is HTML (#1284) (David)

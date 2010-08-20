@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Norfolk".
- * Compiled from olson file "australasia", version 8.17.
+ * Compiled from olson file "australasia", version 8.18.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1951,
   ),
   'source' => 'australasia',
-  'version' => '8.17',
+  'version' => '8.18',
   'name' => 'Pacific/Norfolk',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Madrid".
- * Compiled from olson file "europe", version 8.26.
+ * Compiled from olson file "europe", version 8.27.
  *
  * @package    agavi
  * @subpackage translation
@@ -497,7 +497,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.26',
+  'version' => '8.27',
   'name' => 'Europe/Madrid',
 );
 
