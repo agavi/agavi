@@ -141,7 +141,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 			$stmt->executeUpdate();
 		} catch(SQLException $e) {
 			$error = 'Creole SQLException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
-			throw new AgaviDatabaseException($error);
+			throw new AgaviDatabaseException($error, 0, $e);
 		}
 	}
 
@@ -190,7 +190,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 			return true;
 		} catch(SQLException $e) {
 			$error = 'Creole SQLException was thrown when trying to manipulate session data. Message: ' . $e->getMessage();
-			throw new AgaviDatabaseException($error);
+			throw new AgaviDatabaseException($error, 0, $e);
 		}
 	}
 
@@ -267,7 +267,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 			}
 		} catch(SQLException $e) {
 			$error = 'Creole SQLException was thrown when trying to read session data. Message: ' . $e->getMessage();
-			throw new AgaviDatabaseException($error);
+			throw new AgaviDatabaseException($error, 0, $e);
 		}
 	}
 
@@ -315,7 +315,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 			$count = $stmt->executeUpdate();
 		} catch(SQLException $e) {
 			$error = 'Creole SQLException was thrown when trying to update session data. Message: ' . $e->getMessage();
-			throw new AgaviDatabaseException($error);
+			throw new AgaviDatabaseException($error, 0, $e);
 		}
 		
 		if($count == 0) {
@@ -335,7 +335,7 @@ class AgaviCreoleSessionStorage extends AgaviSessionStorage
 				return true;
 			} catch(SQLException $e) {
 				$error = 'Creole SQLException was thrown when trying to create session data. Message: ' . $e->getMessage();
-				throw new AgaviDatabaseException($error);
+				throw new AgaviDatabaseException($error, 0, $e);
 			}
 		}
 	}

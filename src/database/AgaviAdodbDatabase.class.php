@@ -144,7 +144,7 @@ class AgaviAdodbDatabase extends AgaviDatabase
 			}
 		} catch(ADODB_Exception $e) {
 			// the connection's foobar'd
-			throw new AgaviDatabaseException($e->getMessage());
+			throw new AgaviDatabaseException($e->getMessage(), 0, $e);
 		}
 	}
 
