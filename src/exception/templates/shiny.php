@@ -168,13 +168,13 @@ if($svg) {
 
 			section h2 a:before {
 				content:						'▾ ';
-/*				float:							left;*/
+				display:						inline-block;
 				width:							1em;
 			}
 
 			section.closed h2 a:before {
 				content:						'▸ ';
-				float:							left;
+				display:						inline-block;
 				width:							1em;
 			}
 
@@ -348,7 +348,7 @@ if($svg) {
 <?php endif; ?>
 <?php foreach($exceptions as $ei => $e): ?>
 		<section id="exception<?php echo $ei; ?>" class="<?php if($ei+1 != count($exceptions)): ?>closed<?php endif; ?>">
-			<h2 class="exception"><a href="#exception<?php echo $ei; ?>" title="Toggle source code snippet" onclick="this.parentNode.parentNode.className = this.parentNode.parentNode.className == 'closed' ? '' : 'closed'; return false;"><?php echo get_class($e); ?></a></h2>
+			<h2 class="exception"><a href="#exception<?php echo $ei; ?>" title="Toggle exception information" onclick="this.parentNode.parentNode.className = this.parentNode.parentNode.className == 'closed' ? '' : 'closed'; return false;"><?php echo get_class($e); ?></a></h2>
 			<div class="container" id="exception<?php echo $ei; ?>container">
 <?php $msg = nl2br(htmlspecialchars($e->getMessage())); ?>
 <?php if($msg != ''): ?>
