@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Guadeloupe".
- * Compiled from olson file "northamerica", version 8.30.
+ * Compiled from olson file "northamerica", version 8.34.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
     'startYear' => 1912,
   ),
   'source' => 'northamerica',
-  'version' => '8.30',
+  'version' => '8.34',
   'name' => 'America/Guadeloupe',
 );
 

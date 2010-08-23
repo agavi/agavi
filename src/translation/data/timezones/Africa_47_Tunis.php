@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Tunis".
- * Compiled from olson file "africa", version 8.26.
+ * Compiled from olson file "africa", version 8.28.
  *
  * @package    agavi
  * @subpackage translation
@@ -217,7 +217,7 @@ return array (
     'startYear' => 2009,
   ),
   'source' => 'africa',
-  'version' => '8.26',
+  'version' => '8.28',
   'name' => 'Africa/Tunis',
 );
 

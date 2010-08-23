@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Tehran".
- * Compiled from olson file "asia", version 8.60.
+ * Compiled from olson file "asia", version 8.61.
  *
  * @package    agavi
  * @subpackage translation
@@ -570,7 +570,7 @@ return array (
     'startYear' => 2038,
   ),
   'source' => 'asia',
-  'version' => '8.60',
+  'version' => '8.61',
   'name' => 'Asia/Tehran',
 );
 

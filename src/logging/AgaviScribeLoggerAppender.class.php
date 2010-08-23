@@ -68,16 +68,24 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 	protected function getScribeClient()
 	{
 		if(!$this->scribeClient) {
-			$socket = new TSocket($this->getParameter('socket_host', 'localhost'), $this->getParameter('socket_port', 1463), $this->getParameter('socket_persist', false));
-			$this->transport = new TFramedTransport($socket);
-			$protocol = new TBinaryProtocol($this->transport, $this->getParameter('transport_strict_read', false), $this->getParameter('transport_strict_write', true));
-			$this->scribeClient = new scribeClient($protocol, $protocol);
+			$socketClass = $this->getParameter('socket_class', 'TSocket');
+			$socket = new $socketClass($this->getParameter('socket_host', 'localhost'), $this->getParameter('socket_port', 1463), $this->getParameter('socket_persist', false));
+			
+			$transportClass = $this->getParameter('transport_class', 'TFramedTransport');
+			$this->transport = new $transportClass($socket);
+			
+			$protocolClass = $this->getParameter('protocol_class', 'TBinaryProtocol');
+			$protocol = new $protocolClass($this->transport, $this->getParameter('transport_strict_read', false), $this->getParameter('transport_strict_write', true));
+			
+			$clientClass = $this->getParameter('client_class', 'scribeClient');
+			$this->scribeClient = new $clientClass($protocol, $protocol);
+			
 			try {
 				$this->transport->open();
 			} catch(TException $e) {
 				$this->scribeClient = null;
 				$this->transport = null;
-				throw new AgaviLoggingException(sprintf("Failed to connect to Scribe server:\n\n%s", $e->getMessage()), 1, $e);
+				throw new AgaviLoggingException(sprintf("Failed to connect to Scribe server:\n\n%s", $e->getMessage()));
 			}
 		}
 		
@@ -124,7 +132,7 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 		}
 		
 		$this->buffer[] = new LogEntry(array(
-			'category' => $message->getParameter('scribe_category', $this->getParameter('default_category', 'default')),
+			'category' => $message->getParameter('scribe.category', $this->getParameter('default_category', 'default')),
 			'message' => (string)$this->getLayout()->format($message),
 		));
 		
@@ -133,6 +141,12 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 		}
 	}
 	
+	/**
+	 * Send buffer contents if there are any.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.4
+	 */
 	protected function flush()
 	{
 		if(!$this->buffer) {

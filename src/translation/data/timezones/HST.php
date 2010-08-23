@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "HST".
- * Compiled from olson file "northamerica", version 8.30.
+ * Compiled from olson file "northamerica", version 8.34.
  *
  * @package    agavi
  * @subpackage translation
@@ -30,7 +30,7 @@ return array (
     'startYear' => -2147483647,
   ),
   'source' => 'northamerica',
-  'version' => '8.30',
+  'version' => '8.34',
   'name' => 'HST',
 );
 

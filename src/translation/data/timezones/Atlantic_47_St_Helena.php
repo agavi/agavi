@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Atlantic/St_Helena".
- * Compiled from olson file "africa", version 8.26.
+ * Compiled from olson file "africa", version 8.28.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1952,
   ),
   'source' => 'africa',
-  'version' => '8.26',
+  'version' => '8.28',
   'name' => 'Atlantic/St_Helena',
 );
 
