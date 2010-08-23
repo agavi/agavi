@@ -26,8 +26,6 @@
  * Parameter "parameter" controls which parameter of the AgaviLoggerMessage
  * object is used when "mode" is "parameter". Defaults to "message".
  *
- * AgaviLoggerMessage text as returned by the __toString() method.
- *
  * @package    agavi
  * @subpackage logging
  *
