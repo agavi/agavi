@@ -14,7 +14,18 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviJsonLoggerLayout converts all parameters of the message to JSON.
+ * AgaviJsonLoggerLayout is an AgaviLoggerLayout that will return a JSON
+ * representation of the AgaviLoggerMessage or parts of it, depending on the
+ * configuration.
+ * 
+ * Parameter "mode" controls the four possible modes of operation:
+ *   'parameters' - serialize all parameters of the message
+ *   'full'       - serialize the entire AgaviLoggerMessage object
+ *   'message'    - serialize the value of AgaviLoggerMessage::getMessage()
+ *   'parameter'  - serialize only one parameter of the object. By default, this
+ *                  is "message"; can be changed using parameter "parameter".
+ * Parameter "parameter" controls which parameter of the AgaviLoggerMessage
+ * object is used when "mode" is "parameter". Defaults to "message".
  *
  * @package    agavi
  * @subpackage logging
@@ -41,7 +52,21 @@ class AgaviJsonLoggerLayout extends AgaviLoggerLayout
 	 */
 	public function format(AgaviLoggerMessage $message)
 	{
-		return json_encode($message->getParameters());
+		switch($this->getParameter('mode', 'parameters')) {
+			case 'full':
+				$value = $message;
+				break;
+			case 'message':
+				$value = $message->getMessage();
+				break;
+			case 'parameter':
+				$value = $message->getParameter($this->getParameter('parameter', 'message'));
+				break;
+			default:
+				$value = $message->getParameters();
+		}
+		
+		return json_encode($value);
 	}
 }
 

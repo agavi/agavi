@@ -17,7 +17,7 @@
  * AgaviPassthruLoggerLayout is an AgaviLoggerLayout that will return the entire
  * AgaviLoggerMessage or parts of it, depending on the configuration.
  * 
- * Parameter "mode" controls the mode of operation. Three are possible:
+ * Parameter "mode" controls the four possible modes of operation:
  *   'to_string' - return AgaviLoggerMessage::__toString() (default)
  *   'full'      - return the full AgaviLoggerMessage object
  *   'message'   - return AgaviLoggerMessage::getMessage()
@@ -25,8 +25,6 @@
  *                 "message"; can be changed using parameter "parameter".
  * Parameter "parameter" controls which parameter of the AgaviLoggerMessage
  * object is used when "mode" is "parameter". Defaults to "message".
- *
- * AgaviLoggerMessage text as returned by the __toString() method.
  *
  * @package    agavi
  * @subpackage logging
