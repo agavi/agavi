@@ -132,7 +132,7 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 		}
 		
 		$this->buffer[] = new LogEntry(array(
-			'category' => $message->getParameter('scribe_category', $this->getParameter('default_category', 'default')),
+			'category' => $message->getParameter('scribe.category', $this->getParameter('default_category', 'default')),
 			'message' => (string)$this->getLayout()->format($message),
 		));
 		
