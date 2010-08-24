@@ -39,7 +39,7 @@ if(!headers_sent()) {
 }
 
 $cols = 80;
-if(function_exists('posix_isatty') && !posix_isatty(STDOUT)) {
+if(!defined('STDOUT') || (function_exists('posix_isatty') && !posix_isatty(STDOUT))) {
 	// if output is redirected, do not wrap lines after just 80 characters
 	$cols = false;
 } elseif(file_exists('/bin/stty') && is_executable('/bin/stty') && $sttySize = exec('/bin/stty size 2>/dev/null')) {
