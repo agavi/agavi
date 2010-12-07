@@ -163,3 +163,16 @@ msgstr "アクセス拒否"
 #: ../app/modules/Default/views/UnavailableSuccessView.class.php:33
 msgid "This Application is Unavailable"
 msgstr "このアプリケーションは利用できません"
+
+#: ../app/modules/Default/views/Widgets/MenuSuccessView.class.php:31
+msgid ""
+"You will now be redirected to an invalid URL. If no rewrite rules are in "
+"place, this means you will see a standard 404 page of your web server, "
+"unless you configured an ErrorDocument 404 or some similar setting. If "
+"rewrite rules are in place (i.e. no index.php part in the URL), you will be "
+"shown the Agavi 404 document. This is correct and expected behavior."
+msgstr ""
+"不正なURLにリダイレクトされようとしています。(mod_rewriteなどの)書き換えルールがない場合"
+"ウェブサーバの標準404ページが表示されます。ErrorDocument 404設定をしている場合などはそれに従います。"
+"書き換えルールがある場合(この時 index.php がURLに含まれません)、Agaviの404ドキュメントが表示されます。"
+"これは正しく予想された動作です。"
