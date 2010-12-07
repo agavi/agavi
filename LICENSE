@@ -32,21 +32,6 @@ The corresponding license can be found in LICENSE-AGAVI.
 --
 
 
-PHPUnit
--------
-
-This software bundles the PHPUnit library to facilitate software testing.
-This version of PHPUnit also bundles a part of the Symfony framework to handle
-the YAML data serialization language.
-
-For more information about PHPUnit, visit the homepage:
-http://phpunit.de/
-
-The corresponding licenses can be found in LICENSE-PHPUNIT.
-
---
-
-
 International Components for Unicode
 ------------------------------------
 

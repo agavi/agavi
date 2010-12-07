@@ -21,6 +21,8 @@ AgaviLoggerMessage now uses "message" and "level" as the internal parameter name
 
 AgaviBooleanValidator is new, and AgaviRegexValidator now allows the extraction of matched subpatterns.
 
+PHPUnit is no longer bundled; please install PHPUnit via PEAR. Only PHPUnit 3.4.x is supported at this point.
+
 The timezone database has been updated to 2010i.
 
 For a complete list of changes and fixes, please refer to the CHANGELOG.
