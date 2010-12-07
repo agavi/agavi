@@ -140,7 +140,11 @@ class AgaviException extends Exception
 					}
 					break;
 				case 'string':
-					$val = var_export(strlen($param) > 51 ? substr_replace($param, ' … ', 25, -25) : $param, true);
+					$val = $param;
+					if(preg_match('/^(.{20}).{3,}(.{20})$/u', $val, $matches)) {
+						$val = $matches[1] . ' … ' . $matches[2];
+					}
+					$val = var_export($val);
 					if($html) {
 						$retval[] = $key . htmlspecialchars($val);
 					} else {
