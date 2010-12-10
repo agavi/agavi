@@ -245,6 +245,10 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				$val = '0';
 			}
 			
+			if(!is_scalar($val)) {
+				throw new AgaviUncacheableException('Group value is not a scalar, cannot construct a meaningful string representation.');
+			}
+			
 			$retval[] = $val;
 		}
 
