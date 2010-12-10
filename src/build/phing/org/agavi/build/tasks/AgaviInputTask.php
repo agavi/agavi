@@ -14,6 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once(dirname(__FILE__) . '/AgaviTask.php');
+require_once('phing/input/InputRequest.php');
 
 /**
  * Requests an input value from the user.
