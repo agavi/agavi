@@ -32,6 +32,7 @@ CHG: Make charset configuration and init queries event based in AgaviDoctrineDat
 CHG: Optionally use readline wrapper for agavi script (#1271) (Simon, David)
 CHG: Restore default Phing ANSI colors for Mac OS X Snow Leopard (#1270) (David)
 
+FIX: Query string arguments in incoming URL cannot be unset using null when generating current route (#1294) (David)
 FIX: AgaviException::buildParamList breaks multibyte string parameter (#1315) (David)
 FIX: RbacSecurityUser doesn't handle users without roles properly (#1325) (David)
 FIX: AgaviValidationReportQuery::getErrors() does only return first error message of each incident (#1321) (David)
