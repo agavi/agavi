@@ -32,6 +32,7 @@ CHG: Make charset configuration and init queries event based in AgaviDoctrineDat
 CHG: Optionally use readline wrapper for agavi script (#1271) (Simon, David)
 CHG: Restore default Phing ANSI colors for Mac OS X Snow Leopard (#1270) (David)
 
+FIX: AgaviNumberValidator fails with swedish locale for negative numbers (#1293) (David)
 FIX: Phing 2.4.4 causes fatal error (#1333) (David)
 FIX: AgaviExecutionFilter throws PHP warning if cache group value is not a scalar (#1314) (David)
 FIX: Query string arguments in incoming URL cannot be unset using null when generating current route (#1294) (David)
