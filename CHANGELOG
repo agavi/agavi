@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.4 RC1 - August ?, 2010
---------------------------
+1.0.4 RC1 (December ??, 2010)
+-----------------------------
 
 ADD: Render PHP 5.3 linked exceptions (#1308) (David)
 ADD: AgaviScribeLoggerAppender (#1305) (David)
@@ -47,7 +47,7 @@ FIX: PHP 5.2.6 bug breaks FPF (#1279) (David)
 FIX: AgaviGettextTranslator doesn't reset plural form function when switching locales (#1273) (David)
 
 
-1.0.3 - April 16, 2010
+1.0.3 (April 16, 2010)
 ----------------------
 
 ADD: Make DOMDocument::saveXML() options configurable (#1262) (David)
@@ -59,7 +59,7 @@ FIX: Sample app incompatible with PHP 5.2 (#1258) (David)
 FIX: Regression: AgaviDecimalFormatter fraction error (#1257) (David)
 
 
-1.0.3 RC1 - March 22, 2010
+1.0.3 RC1 (March 22, 2010)
 --------------------------
 
 ADD: Allow exporting of values in AgaviNumberValidator (#1160)
