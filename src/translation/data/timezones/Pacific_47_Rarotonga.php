@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Rarotonga".
- * Compiled from olson file "australasia", version 8.18.
+ * Compiled from olson file "australasia", version 8.20.
  *
  * @package    agavi
  * @subpackage translation
@@ -188,7 +188,7 @@ return array (
     'startYear' => 1992,
   ),
   'source' => 'australasia',
-  'version' => '8.18',
+  'version' => '8.20',
   'name' => 'Pacific/Rarotonga',
 );
 

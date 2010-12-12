@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Pohnpei".
- * Compiled from olson file "australasia", version 8.18.
+ * Compiled from olson file "australasia", version 8.20.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
     'startYear' => 1901,
   ),
   'source' => 'australasia',
-  'version' => '8.18',
+  'version' => '8.20',
   'name' => 'Pacific/Pohnpei',
 );
 

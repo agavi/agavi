@@ -1,6 +1,28 @@
 AGAVI RELEASE NOTES (1.0.x)
 ===========================
 
+Version 1.0.3 - April 16, 2010
+==============================
+
+This maintenance release fixes a number of issues over Agavi 1.0.2 and features a few minor enhancements.
+
+Several issues and inconsistencies have been fixed in AgaviNumberValidator and AgaviDecimalFormatter::parse(). Parsing behavior is now consistent with the NumberFormatter implementations of ICU and ext/intl. No integer overflow occurs when checking against min and max values, and the validator accepts non-strings as input. Exporting of the validated value is now possible, in which case the original argument is not mutated. Please note that the "number" validator shortcut definition specifies "int" as the default value for the "type" parameter. No value for "type" will automatically lead to integer or float values, depending on the size of the number in the input string. A cast to the specified type is now automatically performed if no "cast_to" parameter is given.
+
+All file validators now perform case-insensitive checks against the list of allowed file extensions, which may now also be a parameter array instead of a space-separated list of values.
+
+This release bumps the minimum required version of Phing to 2.4.0; this was necessary to fix some bugs with the build system that were next to impossible to fix for both 2.3 and 2.4 (which drastically changed some internals structures) at the same time.
+
+An issue relating to the behavior of DOM in PHP 5.1.12 and PHP 5.2.3 has been addressed. Running Agavi 1.0.3 might be necessary under certain circumstances when using these versions of PHP.
+
+A couple of minor fixes have been made to the routing; most notably, overwriting of routes in other <ae:configuration> blocks now always works as expected, even when using implied routes.
+
+Some default code templates have been updated; most notably, caching configuration files now explicitly disable caching, as otherwise, Actions that do not use a View would be cached automatically.
+
+The timezone database has been updated to version 2010h.
+
+For a full list of changes, please refer to the CHANGELOG.
+
+
 Version 1.0.2 - January 27, 2010
 ================================
 

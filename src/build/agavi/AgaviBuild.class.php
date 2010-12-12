@@ -54,6 +54,7 @@ final class AgaviBuild
 		'AgaviIEvent' => 'event/AgaviIEvent.interface.php',
 		'AgaviEvent' => 'event/AgaviEvent.class.php',
 		'AgaviProxyProject' => 'phing/AgaviProxyProject.class.php',
+		'AgaviProxyXmlContext' => 'phing/AgaviProxyXmlContext.class.php',
 		'AgaviProxyTarget' => 'phing/AgaviProxyTarget.class.php',
 		'AgaviPhingEventDispatcherManager' => 'phing/AgaviPhingEventDispatcherManager.class.php',
 		'AgaviPhingEventDispatcher' => 'phing/AgaviPhingEventDispatcher.class.php',

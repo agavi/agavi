@@ -831,8 +831,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 							$param = clone $defaultParams[$name];
 						}
 						$finalParams[$name] = $param;
-					} elseif(isset($availableParamsAsKeys[$name]) || array_key_exists($name, $availableParamsAsKeys) || $param === null) {
-						// when the parameter was available in one of the routes or has explicitly been unset
+					} elseif(isset($availableParamsAsKeys[$name])) {
+						// when the parameter was available in one of the routes
 						$finalParams[$name] = $param;
 					}
 				}
@@ -1052,7 +1052,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		// but since the values are expected as plain values and not routing values, convert the routing values back to 
 		// 'plain' values
 		foreach($extras as &$extra) {
-			$extra = $extra->getValue();
+			$extra = ($extra instanceof AgaviIRoutingValue) ? $extra->getValue() : $extra;
 		}
 
 		$params = $finalParams;

@@ -275,7 +275,6 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 			foreach($incident->getErrors() as $error) {
 				if(!$this->errorNameFilter || in_array($error->getName(), $this->errorNameFilter)) {
 					$errors[] = $error;
-					break;
 				}
 			}
 		}

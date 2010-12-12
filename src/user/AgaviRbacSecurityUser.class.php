@@ -165,7 +165,7 @@ class AgaviRbacSecurityUser extends AgaviSecurityUser implements AgaviISecurityU
 
 		$this->loadDefinitions();
 		
-		$this->roles = $this->context->getStorage()->read(self::ROLES_NAMESPACE);
+		$this->roles = (array) $this->context->getStorage()->read(self::ROLES_NAMESPACE);
 
 		if(!$this->authenticated) {
 			$this->roles = array();

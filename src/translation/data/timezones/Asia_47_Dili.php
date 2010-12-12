@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Dili".
- * Compiled from olson file "asia", version 8.61.
+ * Compiled from olson file "asia", version 8.62.
  *
  * @package    agavi
  * @subpackage translation
@@ -79,7 +79,7 @@ return array (
     'startYear' => 2001,
   ),
   'source' => 'asia',
-  'version' => '8.61',
+  'version' => '8.62',
   'name' => 'Asia/Dili',
 );
 
