@@ -23,7 +23,9 @@
 
 	<!-- Load tasks relative to the build system. -->
 	<taskdef name="agavi.input" classname="org.agavi.build.tasks.AgaviInputTask" classpath="phing" />
-	
+
+	<taskdef name="agavi.import" classname="org.agavi.build.tasks.AgaviImportTask" classpath="phing" />
+
 	<taskdef name="agavi.transform-path" classname="org.agavi.build.tasks.AgaviTransformpathTask" classpath="phing" />
 	<taskdef name="agavi.transform-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformstringtoidentifierTask" classpath="phing" />
 	<taskdef name="agavi.transform-namespace-string-to-identifier" classname="org.agavi.build.tasks.AgaviTransformnamespacestringtoidentifierTask" classpath="phing" />
@@ -131,7 +133,7 @@
 
 	<taskdef name="agavi.read-configuration" classname="org.agavi.build.tasks.AgaviReadconfigurationTask" classpath="phing" />
 	<taskdef name="agavi.write-configuration" classname="org.agavi.build.tasks.AgaviWriteconfigurationTask" classpath="phing" />
-	
+
 	<!-- Load some basic configuration values. -->
 	<agavi.read-configuration property="agavi.version" configurationValue="agavi.version" />
 	<agavi.read-configuration property="agavi.url" configurationValue="agavi.url" />
@@ -1453,8 +1455,8 @@
 		<isset property="project.directory" />
 		<then>
 			<property userProperty="true" file="${project.directory}/build.properties" />
-			<import file="${project.directory}/build.xml" optional="true"/>
+			<agavi.import file="${project.directory}/build.xml" />
 		</then>
 	</if>
-	
+
 </project>

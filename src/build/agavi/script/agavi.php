@@ -183,13 +183,21 @@ try {
 	}
 	
 	$project->init();
-	ProjectConfigurator::configureProject($project, new PhingFile(BUILD_DIRECTORY . '/build.xml'));
+	ProjectConfigurator::configureProject($project, $GLOBALS['BUILD']);
 	
+	$project->addTaskDefinition('agavi.import', 'org.agavi.build.tasks.AgaviImportTask', 'phing');
+	$project->addTaskDefinition('agavi.locate-project', 'org.agavi.build.tasks.AgaviLocateprojectTask', 'phing');
+	$project->addTaskDefinition('agavi.check-project', 'org.agavi.build.tasks.AgaviCheckprojectTask', 'phing');
 	
 	Phing::setCurrentProject($project);
 	
 	try {
 		$project->fireBuildStarted();
+		
+		$task = $project->createTask('agavi.import');
+		$task->setFile(new PhingFile($GLOBALS['BUILD']->getAbsolutePath()));
+		$task->init();
+		$task->perform();
 		
 		$task = $project->createTask('agavi.locate-project');
 		$task->setProperty('project.directory');
@@ -264,7 +272,7 @@ try {
 	
 	$GLOBALS['LOGGER'] = Phing::import($GLOBALS['LOGGER']);
 	
-	$logger = new $GLOBALS['LOGGER']();
+	$logger = new AgaviProxyBuildLogger(new $GLOBALS['LOGGER']());
 	$logger->setMessageOutputLevel($GLOBALS['VERBOSE'] ? Project::MSG_VERBOSE : Project::MSG_INFO);
 	$logger->setOutputStream($GLOBALS['OUTPUT']);
 	$logger->setErrorStream($GLOBALS['ERROR']);
@@ -284,7 +292,6 @@ try {
 	
 	$project->init();
 	ProjectConfigurator::configureProject($project, $GLOBALS['BUILD']);
-
 	Phing::setCurrentProject($project);
 	
 	if($GLOBALS['SHOW_LIST'] === true) {
