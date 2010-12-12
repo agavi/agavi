@@ -38,7 +38,7 @@ class AgaviProxyXmlContext extends PhingXMLContext
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      1.0.4
 	 */
-    	public function startConfigure($configurator)
+	public function startConfigure($configurator)
 	{
 		parent::startConfigure($configurator);
 		$this->getProject()->fireConfigureStarted($configurator);
