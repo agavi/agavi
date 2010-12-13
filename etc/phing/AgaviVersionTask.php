@@ -37,11 +37,11 @@ class AgaviVersionTask extends Task
 		
 		if($status == 'dev') {
 			$status = 'devel';
-		} elseif(strpos($status, 'alpha')) {
+		} elseif(strpos($status, 'alpha') !== false) {
 			$status = 'alpha';
-		} elseif(strpos($status, 'beta')) {
+		} elseif(strpos($status, 'beta') !== false) {
 			$status = 'beta';
-		} elseif(strpos($status, 'RC')) {
+		} elseif(strpos($status, 'RC') !== false) {
 			$status = 'beta';
 		} else {
 			$status = 'stable';
