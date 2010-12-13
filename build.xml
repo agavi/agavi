@@ -219,7 +219,6 @@
 		
 		<copy todir="${builddir}/samples">
 			<fileset dir="samples/">
-				<exclude name="**/*.svn" />
 				<include name="**/*" />
 			</fileset>
 		</copy>
@@ -239,14 +238,12 @@
 
 		<copy todir="${builddir}">
 			<fileset dir="src/">
-				<exclude name="**/*.svn" />
 				<include name="**/*" />
 			</fileset>
 		</copy>
 
 		<copy todir="${builddir}/bin">
 			<fileset dir="bin/">
-				<exclude name="**/*.svn" />
 				<include name="**/*" />
 			</fileset>
 		</copy>
