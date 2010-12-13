@@ -261,9 +261,9 @@
 		<delete file="${agavi.pear.version}.tgz" verbose="false" failonerror="true" />
 		<delete file="${agavi.pear.version}.zip" verbose="false" failonerror="true" />
 		
-		<mkdir dir="./package-build/${agavi.pear.version}" />
+		<mkdir dir="./package-build/agavi-${agavi.pear.version}" />
 		
-		<copy todir="./package-build/${agavi.pear.version}">
+		<copy todir="./package-build/agavi-${agavi.pear.version}">
 			<fileset dir=".">
 				<exclude name="*-build/**" />
 				<exclude name="*.tgz*" />
