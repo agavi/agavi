@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.4 RC1 (December ??, 2010)
+1.0.4 RC1 (December 13, 2010)
 -----------------------------
 
 ADD: Render PHP 5.3 linked exceptions (#1308) (David)
