@@ -20,7 +20,7 @@
 				<ae:parameter name="description">Suomi</ae:parameter>
 			</available_locale>
 			<!-- Japanese, Japan -->
-			<available_locale identifier="ja_JP@currency=JPY">
+			<available_locale identifier="ja_JP@currency=GBP">
 				<ae:parameter name="description">日本語</ae:parameter>
 			</available_locale>
 			<!-- Dutch, Belgium -->
