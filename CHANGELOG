@@ -6,6 +6,8 @@ AGAVI CHANGELOG
 
 ADD: Refine #1283 to allow extraction of multiple subpatterns in regex validator (#1335) (David)
 
+CHG: Overhaul default .htaccess file (#1336) (David)
+
 
 1.0.4 RC1 (December 13, 2010)
 -----------------------------
