@@ -1,7 +1,7 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.4 - December ??, 2010
+Version 1.0.4 - December 19, 2010
 =================================
 
 This release adds support for the Windows Azure platform and brings a couple of enhancements.
@@ -20,6 +20,8 @@ AgaviDoctrineDatabase now uses Doctrine event listeners to set the configured ch
 AgaviLoggerMessage now uses "message" and "level" as the internal parameter names. AgaviPassthruLoggerLayout can be configured to return the raw message contents, a specific parameter from the message object or the full object. AgaviJsonLoggerLayout encodes all message parameters as a JSON string, and AgaviScribeLoggerAppender logs to Facebook Scribe or a compatible Thrift interface like Cloudera Flume.
 
 AgaviBooleanValidator is new, and AgaviRegexValidator now allows the extraction of matched subpatterns.
+
+The default .htaccess file containing rewrite rules to remove the "index.php" portion from the URL on Apache web servers has been improved.
 
 PHPUnit is no longer bundled; please install PHPUnit via PEAR. Only PHPUnit 3.4.x is supported at this point.
 

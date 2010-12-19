@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.4 (December ??. 2010)
+1.0.4 (December 19, 2010)
 -------------------------
 
 ADD: Refine #1283 to allow extraction of multiple subpatterns in regex validator (#1335) (David)
