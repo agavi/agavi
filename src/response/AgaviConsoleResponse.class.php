@@ -49,6 +49,7 @@ class AgaviConsoleResponse extends AgaviResponse
 	 */
 	public function merge(AgaviResponse $otherResponse)
 	{
+		parent::merge($otherResponse);
 	}
 	
 	/**
