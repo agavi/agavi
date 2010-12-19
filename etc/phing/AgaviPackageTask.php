@@ -30,9 +30,7 @@ class AgaviPackageTask extends Task
 	
 	public function main()
 	{
-		if(!@require_once('PEAR/PackageFileManager2.php')) {
-			throw new BuildException('Requires PEAR_PackageFileManager >=1.6.0a1');
-		}
+		require_once('PEAR/PackageFileManager2.php');
 		require_once('PEAR/Exception.php');
 		PEAR::setErrorHandling(PEAR_ERROR_CALLBACK,'PEAR_ErrorToPEAR_Exception');
 		if(!$this->baseDir || !file_exists($this->baseDir)) {
@@ -101,7 +99,7 @@ EOD;
 				'LICENSE' => 'doc',
 				'LICENSE-AGAVI' => 'doc',
 				'LICENSE-ICU' => 'doc',
-				'LICENSE-TANGO_ICON_THEME' => 'doc',
+				'LICENSE-SCHEMATRON' => 'doc',
 				'LICENSE-UNICODE_CLDR' => 'doc',
 				'RELEASE_NOTES' => 'doc',
 				'TODO' => 'doc',

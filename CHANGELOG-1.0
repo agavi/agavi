@@ -1,6 +1,62 @@
 AGAVI CHANGELOG (1.0.x)
 =======================
 
+1.0.4 (December 19, 2010)
+-------------------------
+
+ADD: Refine #1283 to allow extraction of multiple subpatterns in regex validator (#1335) (David)
+
+CHG: Overhaul default .htaccess file (#1336) (David)
+
+FIX: Non-string values for "export" parameter cause fatal error in AgaviValidator (#1337) (David)
+
+
+1.0.4 RC1 (December 13, 2010)
+-----------------------------
+
+ADD: Render PHP 5.3 linked exceptions (#1308) (David)
+ADD: AgaviScribeLoggerAppender (#1305) (David)
+ADD: AgaviJsonLoggerLayout (#1304) (David)
+ADD: Configuration options for AgaviPassthruLoggerLayout (#1303) (David)
+ADD: AgaviXsltRenderer (#1299) (David)
+ADD: Add Japanese translation for sample app (#1298, #1319) (TANAKA Koichi)
+ADD: Allow configuration of prefix for route generation through options (#1285) (David)
+ADD: Allow extraction of subpatterns in regex validator (#1283) (David)
+ADD: Create an AgaviBooleanValidator (#1196) (Felix)
+ADD: Windows Azure Session Storage (#1266) (David)
+ADD: Support for IIS7 (#1265) (David)
+ADD: Database adapter for ext/sqlsrv (#1264) (David)
+
+CHG: Update timezone database to 2010o (#1332) (David)
+CHG: Unbundle PHPUnit and move dependency to PEAR (#1158) (David)
+CHG: Change Tango Icon Theme license information (#1309) (David)
+CHG: Update ISO Schematron to version 2010-04-21 (#1306) (David)
+CHG: Rename internal AgaviLoggerMessage parameters (#1302) (David)
+CHG: Make AgaviConfig non-final (#1300) (David)
+CHG: Build target "public-create" should overwrite existing files (#1288) (David)
+CHG: Move check for default output type to end of config file compilation (#1286) (David)
+CHG: Add packages and package-release Phing targets (#1276) (Simon)
+CHG: Change package-pear Phing target to auto-generate tarball (#1275) (Simon)
+CHG: Eliminate use of create_function() in AgaviTranslationManager::getLocaleIdentifier() (#1274) (David)
+CHG: Make charset configuration and init queries event based in AgaviDoctrineDatabase (#1272) (David)
+CHG: Optionally use readline wrapper for agavi script (#1271) (Simon, David)
+CHG: Restore default Phing ANSI colors for Mac OS X Snow Leopard (#1270) (David)
+
+FIX: Custom taskdef in project build.xml breaks script (#1280) (Noah)
+FIX: AgaviNumberValidator fails with swedish locale for negative numbers (#1293) (David)
+FIX: Phing 2.4.4 causes fatal error (#1333) (David)
+FIX: AgaviExecutionFilter throws PHP warning if cache group value is not a scalar (#1314) (David)
+FIX: Query string arguments in incoming URL cannot be unset using null when generating current route (#1294) (David)
+FIX: AgaviException::buildParamList breaks multibyte string parameter (#1315) (David)
+FIX: RbacSecurityUser doesn't handle users without roles properly (#1325) (David)
+FIX: AgaviValidationReportQuery::getErrors() does only return first error message of each incident (#1321) (David)
+FIX: Sample app Accept-Language header parsing is broken (#1324) (David)
+FIX: Statically forcing the URL scheme to https in AgaviWebRequest is not possible (#1281) (David)
+FIX: Regression: Invalid XHTML in shiny exception template when first line in stack frame is HTML (#1284) (David)
+FIX: PHP 5.2.6 bug breaks FPF (#1279) (David)
+FIX: AgaviGettextTranslator doesn't reset plural form function when switching locales (#1273) (David)
+
+
 1.0.3 (April 16, 2010)
 ----------------------
 

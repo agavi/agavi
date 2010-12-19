@@ -1,19 +1,20 @@
 DirectoryIndex index.php
 Options -MultiViews -Indexes +FollowSymLinks
 
-<IfDefine APACHE2>
-	AcceptPathInfo On
-</IfDefine>
+# For Apache2 without rewrites, so /index.php/foobar works.
+AcceptPathInfo On
 
-<IfModule rewrite_module>
+<IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteBase %%PUBLIC_BASE%%
-
-	# If the requested URL does not exist (it's likely an agavi route),
-	# pass it as path info to index.php, the Agavi dispatch script.
-	RewriteRule ^$ index.php?/ [QSA,L]
+	
+	# Special rule for calls to index.php so it can't be called directly, also prevents an infinite loop.
+	# Redirect target *must* be "./index.php" or else mod_rewrite thinks the URL is the same and skips.
+	# The check on REDIRECT_STATUS makes sure it's a direct request and not an internal redirect.
+	# "NC" flag is for case insensitivity on OS X and Windows.
+	RewriteCond %{ENV:REDIRECT_STATUS} ^$
+	RewriteRule ^index.php.*$ ./index.php?/$0 [NC,QSA,L]
+	# If the requested URL doesn't exist, let Agavi handle it
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule (.*) index.php?/$1 [QSA,L]
 </IfModule>
-

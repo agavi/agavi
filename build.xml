@@ -24,10 +24,8 @@
 		<echo msg="  apidocs         : regenerate API docs" />
 		<echo msg="  manuals         : regenerate manuals (-Doutput=html|html-onepage|fo)" />
 		<echo msg=" packages         : generate all packages" />
-		<echo msg="  package-zip     : generate .zip package" />
 		<echo msg="  package-pear    : generate PEAR package" />
-		<echo msg="  package-apidocs : generate API docs package" />
-		<echo msg="  package-manuals : generate manuals package" />
+		<echo msg="  package-release : generate API docs package" />
 		<echo msg=" test    : run unit test suite" />
 		<echo msg=" clean   : clean out cruft" />
 	</target>
@@ -213,12 +211,14 @@
 		<!-- prepare -->
 		<property name="basedir" value="pear-build" override="true" />
 		<property name="builddir" value="${basedir}/agavi-${agavi.pear.version}" override="true" />
-		<delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="false" />
+		
+		<delete dir="${builddir}" includeemptydirs="true" verbose="false" failonerror="true" />
+		<delete file="agavi-${agavi.pear.version}.tgz" verbose="false" failonerror="true" />
+		
 		<mkdir dir="${builddir}" />
-
+		
 		<copy todir="${builddir}/samples">
 			<fileset dir="samples/">
-				<exclude name="**/*.svn" />
 				<include name="**/*" />
 			</fileset>
 		</copy>
@@ -230,21 +230,20 @@
 		<copy file="LICENSE" todir="${builddir}" />
 		<copy file="LICENSE-AGAVI" todir="${builddir}" />
 		<copy file="LICENSE-ICU" todir="${builddir}" />
-		<copy file="LICENSE-TANGO_ICON_THEME" todir="${builddir}" />
+		<copy file="LICENSE-SCHEMATRON" todir="${builddir}" />
 		<copy file="LICENSE-UNICODE_CLDR" todir="${builddir}" />
 		<copy file="RELEASE_NOTES" todir="${builddir}" />
 		<copy file="TODO" todir="${builddir}" />
+		<copy file="UPGRADING" todir="${builddir}" />
 
 		<copy todir="${builddir}">
 			<fileset dir="src/">
-				<exclude name="**/*.svn" />
 				<include name="**/*" />
 			</fileset>
 		</copy>
 
 		<copy todir="${builddir}/bin">
 			<fileset dir="bin/">
-				<exclude name="**/*.svn" />
 				<include name="**/*" />
 			</fileset>
 		</copy>
@@ -258,14 +257,20 @@
 	</target>
 	
 	<target name="package-release" depends="generate-properties">
-		<echo msg="Creating build directory." />
+		<delete dir="./package-build" includeemptydirs="true" verbose="false" failonerror="true" />
+		<delete file="${agavi.pear.version}.tgz" verbose="false" failonerror="true" />
+		<delete file="${agavi.pear.version}.zip" verbose="false" failonerror="true" />
 		
-		<mkdir dir="./package-build/${agavi.pear.version}" />
-		<copy todir="./package-build/${agavi.pear.version}">
-			<fileset dir="." />
+		<mkdir dir="./package-build/agavi-${agavi.pear.version}" />
+		
+		<copy todir="./package-build/agavi-${agavi.pear.version}">
+			<fileset dir=".">
+				<exclude name="*-build/**" />
+				<exclude name="*.tgz*" />
+				<exclude name="*.zip*" />
+				<include name="**/*" />
+			</fileset>
 		</copy>
-		
-		<delete dir="./package-build/${agavi.pear.version}/package-build" includeemptydirs="true" quiet="true" failonerror="false" />
 		
 		<tar destfile="${agavi.pear.version}.tgz" compression="gzip">
 			<fileset dir="./package-build" />
