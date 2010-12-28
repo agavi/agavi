@@ -1,6 +1,17 @@
 AGAVI RELEASE NOTES
 ===================
 
+Version 1.0.5 - December ??, 2010
+=================================
+
+This release improves the robustness of AgaviFormPopulationFilter and adds support for a number of new third party libraries.
+
+AgaviFormPopulationFilter can now recover from various non-fatal parse errors, such as unknown tags or malformed markup in HTML parsing mode, and undefined entities in XML parsing mode.
+This marks an end to issues with non-XML entities like "&nbsp;" in XML parsing mode, and allows the use of HTML5 elements (which libxml does not know yet) in HTML parsing mode (i.e. without using the XML serialization of HTML5).
+Instead of a boolean true or false, the configuration parameter "ignore_parse_errors" now takes the possible values "LIBXML_ERR_NONE" (equivalent to boolean false), "LIBXML_ERR_WARNING" (quite useless), "LIBXML_ERR_ERROR" (the new default) and "LIBXML_ERR_FATAL" (equivalent to boolean true). FPF will suppress errors and continue operation if the errors encountered during parsing do not exceed the configured maximum ignore level. In the event of a fatal error, such as malformed markup in XML parsing mode, FPF will silently abort execution if "LIBXML_ERR_FATAL" is configured, as fatal errors are not recoverable. In all other cases, FPF will throw an exception or recover from the error, depending on the configured ignore level and the highest error level encountered during parsing.
+The new default ignore level "LIBXML_ERR_ERROR" means that users will see significantly fewer errors during development; it also means, however, that in HTML parsing mode in particular, well-formedness errors may remain unnoticed. For this reason, FPF will continue to log errors (if logging is enabled), and map the error level of the parse error (LIBXML_ERR_WARNING, LIBXML_ERR_ERROR or LIBXML_ERR_FATAL) to the error level of the logging system (AgaviILogger::WARN, AgaviILogger::ERROR or AgaviILogger::FATAL). As a consequence, the "logging_severity" configuration parameter has been removed.
+
+
 Version 1.0.4 - December 19, 2010
 =================================
 
