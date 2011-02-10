@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Havana".
- * Compiled from olson file "northamerica", version 8.34.
+ * Compiled from olson file "northamerica", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -566,7 +566,7 @@ return array (
     'startYear' => 2009,
   ),
   'source' => 'northamerica',
-  'version' => '8.34',
+  'version' => '8.40',
   'name' => 'America/Havana',
 );
 
