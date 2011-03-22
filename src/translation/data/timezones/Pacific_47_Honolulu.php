@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Honolulu".
- * Compiled from olson file "northamerica", version 8.34.
+ * Compiled from olson file "northamerica", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -32,18 +32,6 @@ return array (
     ),
     2 => 
     array (
-      'rawOffset' => -37800,
-      'dstOffset' => 3600,
-      'name' => 'HWT',
-    ),
-    3 => 
-    array (
-      'rawOffset' => -37800,
-      'dstOffset' => 3600,
-      'name' => 'HPT',
-    ),
-    4 => 
-    array (
       'rawOffset' => -36000,
       'dstOffset' => 0,
       'name' => 'HST',
@@ -53,7 +41,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2208907714,
+      'time' => -2334101314,
       'type' => 0,
     ),
     1 => 
@@ -63,28 +51,23 @@ return array (
     ),
     2 => 
     array (
-      'time' => -1155472200,
+      'time' => -1155436200,
       'type' => 0,
     ),
     3 => 
     array (
       'time' => -880198200,
-      'type' => 2,
+      'type' => 1,
     ),
     4 => 
-    array (
-      'time' => -769395600,
-      'type' => 3,
-    ),
-    5 => 
     array (
       'time' => -765376200,
       'type' => 0,
     ),
-    6 => 
+    5 => 
     array (
       'time' => -712150200,
-      'type' => 4,
+      'type' => 2,
     ),
   ),
   'finalRule' => 
@@ -95,7 +78,7 @@ return array (
     'startYear' => 1948,
   ),
   'source' => 'northamerica',
-  'version' => '8.34',
+  'version' => '8.40',
   'name' => 'Pacific/Honolulu',
 );
 

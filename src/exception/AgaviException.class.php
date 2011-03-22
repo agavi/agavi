@@ -101,7 +101,7 @@ class AgaviException extends Exception
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public static function buildParamList($params, $html = true)
+	public static function buildParamList($params, $html = true, $level = 1)
 	{
 		if($html) {
 			$oem = '<em>';
@@ -114,6 +114,9 @@ class AgaviException extends Exception
 		$retval = array();
 		foreach($params as $key => $param) {
 			if(is_string($key)) {
+				if(preg_match('/^(.{5}).{2,}(.{5})$/us', $key, $matches)) {
+					$key = $matches[1] . '…' . $matches[2];
+				}
 				$key = var_export($key, true) . ' => ';
 				if($html) {
 					$key = htmlspecialchars($key);
@@ -123,7 +126,7 @@ class AgaviException extends Exception
 			}
 			switch(gettype($param)) {
 				case 'array':
-					$retval[] = $key . 'array(' . self::buildParamList($param) . ')';
+					$retval[] = $key . 'array(' . ($level < 2 ? self::buildParamList($param, $html, ++$level) : (count($param) ? '…' : '')) . ')';
 					break;
 				case 'object':
 					if($html) {
@@ -141,10 +144,10 @@ class AgaviException extends Exception
 					break;
 				case 'string':
 					$val = $param;
-					if(preg_match('/^(.{20}).{3,}(.{20})$/u', $val, $matches)) {
+					if(preg_match('/^(.{20}).{3,}(.{20})$/us', $val, $matches)) {
 						$val = $matches[1] . ' … ' . $matches[2];
 					}
-					$val = var_export($val);
+					$val = var_export($val, true);
 					if($html) {
 						$retval[] = $key . htmlspecialchars($val);
 					} else {

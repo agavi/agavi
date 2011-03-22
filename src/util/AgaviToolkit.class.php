@@ -142,7 +142,7 @@ final class AgaviToolkit
 	 */
 	public static function clearCache($path = '')
 	{
-		$ignores = array('.', '..', '.svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr');
+		$ignores = array('.', '..', '.svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.gitignore', '.gitkeep');
 		$path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $path));
 		$path = realpath(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . $path);
 		if($path === false) {

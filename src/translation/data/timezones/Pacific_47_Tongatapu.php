@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Tongatapu".
- * Compiled from olson file "australasia", version 8.20.
+ * Compiled from olson file "australasia", version 8.22.
  *
  * @package    agavi
  * @subpackage translation
@@ -92,7 +92,7 @@ return array (
     'startYear' => 2003,
   ),
   'source' => 'australasia',
-  'version' => '8.20',
+  'version' => '8.22',
   'name' => 'Pacific/Tongatapu',
 );
 

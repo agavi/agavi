@@ -179,30 +179,49 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		if(libxml_get_last_error() !== false) {
 			$errors = array();
+			$maxError = LIBXML_ERR_NONE;
 			foreach(libxml_get_errors() as $error) {
 				$errors[] = sprintf('[%s #%d] Line %d: %s', $error->level == LIBXML_ERR_WARNING ? 'Warning' : ($error->level == LIBXML_ERR_ERROR ? 'Error' : 'Fatal'), $error->code, $error->line, $error->message);
+				$maxError = max($maxError, $error->level);
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors($luie);
 			$emsg = sprintf(
-				'Form Population Filter could not parse the document due to the following error%s: ' . "\n\n%s",
+				"Form Population Filter encountered the following error%s while parsing the document:\n\n"
+				. "%s\n\n"
+				. "Non-fatal errors are typically recoverable; you may set the 'ignore_parse_errors' configuration parameter to LIBXML_ERR_WARNING or LIBXML_ERR_ERROR (default) to suppress them.\n"
+				. "If you set 'ignore_parse_errors' to LIBXML_ERR_FATAL (recommended for production), Form Population Filter will silently abort execution in the event of fatal errors.\n"
+				. "Regardless of the setting, all errors encountered will be logged.",
 				count($errors) > 1 ? 's' : '',
 				implode("\n", $errors)
 			);
 			if(AgaviConfig::get('core.use_logging') && $cfg['log_parse_errors']) {
+				$severity = AgaviLogger::INFO;
+				switch($maxError) {
+					case LIBXML_ERR_WARNING:
+						$severity = AgaviLogger::WARN;
+						break;
+					case LIBXML_ERR_ERROR:
+						$severity = AgaviLogger::ERROR;
+						break;
+					case LIBXML_ERR_FATAL:
+						$severity = AgaviLogger::FATAL;
+						break;
+				}
 				$lmsg = $emsg . "\n\nResponse content:\n\n" . $response->getContent();
 				$lm = $this->context->getLoggerManager();
 				$mc = $lm->getDefaultMessageClass();
-				$m = new $mc($lmsg, $cfg['logging_severity']);
+				$m = new $mc($lmsg, $severity);
 				$lm->log($m, $cfg['logging_logger']);
 			}
 			
-			// all in all, that didn't go so well. let's see if we should just silently abort instead of throwing an exception
-			if($cfg['ignore_parse_errors']) {
+			// should we throw an exception, or carry on?
+			if($maxError > $cfg['ignore_parse_errors']) {
+				throw new AgaviParseException($emsg);
+			} elseif($maxError == LIBXML_ERR_FATAL) {
+				// for fatal errors, we cannot continue populating, so we must silently abort
 				return;
 			}
-			
-			throw new AgaviParseException($emsg);
 		}
 
 		libxml_clear_errors();
@@ -960,9 +979,8 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			'field_error_messages'       => array(),
 			'multi_field_error_messages' => array(),
 
-			'ignore_parse_errors'        => false,
+			'ignore_parse_errors'        => LIBXML_ERR_ERROR,
 			'log_parse_errors'           => true,
-			'logging_severity'           => AgaviLogger::FATAL,
 			'logging_logger'             => null,
 		));
 
@@ -991,6 +1009,17 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			}
 		}
 		$this->setParameter('savexml_options', $savexmlOptions);
+
+		$ignoreParseErrors =& $this->getParameter('ignore_parse_errors');
+		if(is_string($ignoreParseErrors) && defined($ignoreParseErrors)) {
+			$ignoreParseErrors = constant($ignoreParseErrors);
+		}
+		// BC
+		if($ignoreParseErrors === true) {
+			$ignoreParseErrors = LIBXML_ERR_FATAL;
+		} elseif($ignoreParseErrors === false) {
+			$ignoreParseErrors = LIBXML_ERR_NONE;
+		}
 
 		// and now copy all that to the request namespace so it can all be modified at runtime, not just overwritten
 		$this->context->getRequest()->setAttributes($this->getParameters(), 'org.agavi.filter.FormPopulationFilter');

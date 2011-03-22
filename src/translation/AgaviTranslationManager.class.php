@@ -251,7 +251,7 @@ class AgaviTranslationManager
 	 */
 	public function getDefaultLocale()
 	{
-		$this->getLocale($this->defaultLocaleIdentifier);
+		return $this->getLocale($this->getDefaultLocaleIdentifier());
 	}
 
 	/**

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Kiritimati".
- * Compiled from olson file "australasia", version 8.20.
+ * Compiled from olson file "australasia", version 8.22.
  *
  * @package    agavi
  * @subpackage translation
@@ -63,7 +63,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'australasia',
-  'version' => '8.20',
+  'version' => '8.22',
   'name' => 'Pacific/Kiritimati',
 );
 

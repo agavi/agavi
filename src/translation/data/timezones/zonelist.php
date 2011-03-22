@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2010-12-07T08:10:23+00:00.
+ * Generated on 2011-02-10T17:07:01+00:00.
  *
  * @package    agavi
  * @subpackage translation
@@ -315,6 +315,11 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'America_47_North_Dakota_47_New_Salem.php',
+  ),
+  'America/North_Dakota/Beulah' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'America_47_North_Dakota_47_Beulah.php',
   ),
   'America/Denver' => 
   array (
