@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.5 RC1 (December ??, 2010)
 -----------------------------
 
+ADD: Add plaintext exception output to bottom of shiny.php (#1350) (David)
 ADD: Zend_Cloud_DocumentService database adapter (#1349) (David)
 ADD: Support for X-Forwarded-Proto style HTTPS indicators (#1345) (David)
 
