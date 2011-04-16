@@ -13,6 +13,8 @@ The new default ignore level "LIBXML_ERR_ERROR" means that users will see signif
 
 AgaviZendclouddocumentserviceDatabase is a database adapter for Zend Framework's Zend_Cloud_DocumentService. It has a convenience interface mirroring most of the Zend_Cloud_DocumentService_Adapter functions in such a way that the collection/domain/database name does not have to be passed to every call. The collection name can then be configured in databases.xml.
 
+The timezone database has been updated to 2010f.
+
 
 Version 1.0.4 - December 19, 2010
 =================================

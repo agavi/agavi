@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Vilnius".
- * Compiled from olson file "europe", version 8.27.
+ * Compiled from olson file "europe", version 8.31.
  *
  * @package    agavi
  * @subpackage translation
@@ -326,7 +326,7 @@ return array (
     'startYear' => 1998,
   ),
   'source' => 'europe',
-  'version' => '8.27',
+  'version' => '8.31',
   'name' => 'Europe/Vilnius',
 );
 

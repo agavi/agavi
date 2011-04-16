@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Pago_Pago".
- * Compiled from olson file "australasia", version 8.22.
+ * Compiled from olson file "australasia", version 8.23.
  *
  * @package    agavi
  * @subpackage translation
@@ -85,7 +85,7 @@ return array (
     'startYear' => 1984,
   ),
   'source' => 'australasia',
-  'version' => '8.22',
+  'version' => '8.23',
   'name' => 'Pacific/Pago_Pago',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Chongqing".
- * Compiled from olson file "asia", version 8.62.
+ * Compiled from olson file "asia", version 8.64.
  *
  * @package    agavi
  * @subpackage translation
@@ -123,7 +123,7 @@ return array (
     'startYear' => 1992,
   ),
   'source' => 'asia',
-  'version' => '8.62',
+  'version' => '8.64',
   'name' => 'Asia/Chongqing',
 );
 

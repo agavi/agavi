@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Indiana/Marengo".
- * Compiled from olson file "northamerica", version 8.40.
+ * Compiled from olson file "northamerica", version 8.42.
  *
  * @package    agavi
  * @subpackage translation
@@ -324,7 +324,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'northamerica',
-  'version' => '8.40',
+  'version' => '8.42',
   'name' => 'America/Indiana/Marengo',
 );
 

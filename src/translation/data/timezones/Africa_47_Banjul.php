@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Banjul".
- * Compiled from olson file "africa", version 8.28.
+ * Compiled from olson file "africa", version 8.30.
  *
  * @package    agavi
  * @subpackage translation
@@ -63,7 +63,7 @@ return array (
     'startYear' => 1965,
   ),
   'source' => 'africa',
-  'version' => '8.28',
+  'version' => '8.30',
   'name' => 'Africa/Banjul',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Bogota".
- * Compiled from olson file "southamerica", version 8.44.
+ * Compiled from olson file "southamerica", version 8.48.
  *
  * @package    agavi
  * @subpackage translation
@@ -67,7 +67,7 @@ return array (
     'startYear' => 1994,
   ),
   'source' => 'southamerica',
-  'version' => '8.44',
+  'version' => '8.48',
   'name' => 'America/Bogota',
 );
 

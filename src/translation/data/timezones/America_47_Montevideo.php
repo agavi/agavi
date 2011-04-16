@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Montevideo".
- * Compiled from olson file "southamerica", version 8.44.
+ * Compiled from olson file "southamerica", version 8.48.
  *
  * @package    agavi
  * @subpackage translation
@@ -444,7 +444,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'southamerica',
-  'version' => '8.44',
+  'version' => '8.48',
   'name' => 'America/Montevideo',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Indian/Mauritius".
- * Compiled from olson file "africa", version 8.28.
+ * Compiled from olson file "africa", version 8.30.
  *
  * @package    agavi
  * @subpackage translation
@@ -66,7 +66,7 @@ return array (
     'startYear' => 2010,
   ),
   'source' => 'africa',
-  'version' => '8.28',
+  'version' => '8.30',
   'name' => 'Indian/Mauritius',
 );
 

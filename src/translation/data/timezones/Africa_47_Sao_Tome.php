@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Sao_Tome".
- * Compiled from olson file "africa", version 8.28.
+ * Compiled from olson file "africa", version 8.30.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1913,
   ),
   'source' => 'africa',
-  'version' => '8.28',
+  'version' => '8.30',
   'name' => 'Africa/Sao_Tome',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Taipei".
- * Compiled from olson file "asia", version 8.62.
+ * Compiled from olson file "asia", version 8.64.
  *
  * @package    agavi
  * @subpackage translation
@@ -252,7 +252,7 @@ return array (
     'startYear' => 1980,
   ),
   'source' => 'asia',
-  'version' => '8.62',
+  'version' => '8.64',
   'name' => 'Asia/Taipei',
 );
 
