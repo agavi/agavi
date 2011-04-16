@@ -19,6 +19,8 @@
  * using Zend Framework's Zend_Cloud_DocumentService functionality.
  *
  * Parameters:
+ *   'factory_class'    Name of the factory class to use; the default value is
+ *                      "Zend_Cloud_DocumentService_Factory".
  *   'factory_options'  Array of options for Zend_Cloud_DocumentService_Factory,
  *                      must at least contain one sub-element with the key
  *                      Zend_Cloud_DocumentService_Factory::DOCUMENT_ADAPTER_KEY
@@ -58,8 +60,15 @@ class AgaviZendclouddocumentserviceDatabase extends AgaviDatabase
 	{
 		parent::initialize($databaseManager, $parameters);
 		
-		if(!class_exists('Zend_Cloud_DocumentService_Factory')) {
-			require('Zend/Cloud/DocumentService/Factory.php');
+		if(!$this->hasParameter('factory_class')) {
+			$this->setParameter('factory_class', 'Zend_Cloud_DocumentService_Factory');
+		}
+		
+		if(!class_exists($this->getParameter('factory_class'))) {
+			if(!class_exists('Zend_Loader')) {
+				require('Zend/Loader.php');
+			}
+			Zend_Loader::loadClass($this->getParameter('factory_class'));
 		}
 		
 		$factoryOptions = array();
@@ -70,10 +79,6 @@ class AgaviZendclouddocumentserviceDatabase extends AgaviDatabase
 			}
 			
 			$factoryOptions[$name] = $value;
-		}
-		
-		if(!isset($factoryOptions[Zend_Cloud_DocumentService_Factory::DOCUMENT_ADAPTER_KEY])) {
-			throw new AgaviDatabaseException('Configuration parameter array "factory_options" must at least have "document_adapter" child for Zend_Cloud_DocumentService to operate.');
 		}
 		
 		$this->setParameter('factory_options', $factoryOptions);
@@ -92,7 +97,7 @@ class AgaviZendclouddocumentserviceDatabase extends AgaviDatabase
 	public function connect()
 	{
 		try {
-			$this->connection = Zend_Cloud_DocumentService_Factory::getAdapter($this->getParameter('factory_options'));
+			$this->connection = call_user_func(array($this->getParameter('factory_class'), 'getAdapter'), $this->getParameter('factory_options'));
 		} catch(Zend_Exception $e) {
 			throw new AgaviDatabaseException(sprintf("Caught exception of type %s while creating adapter instance; details:\n\n%s", get_class($e), $e->getMessage()));
 		}

@@ -413,3 +413,6 @@ endforeach;
 		</section>
 	</body>
 </html>
+<!--
+<?php ob_start(); include('plaintext.php'); $plaintext = ob_get_contents(); ob_end_clean(); echo str_replace('--', '~~', $plaintext); /* or else unclosed comments break XHTML */ ?>
+-->
