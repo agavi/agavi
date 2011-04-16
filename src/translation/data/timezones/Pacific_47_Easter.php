@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Easter".
- * Compiled from olson file "southamerica", version 8.44.
+ * Compiled from olson file "southamerica", version 8.48.
  *
  * @package    agavi
  * @subpackage translation
@@ -430,108 +430,183 @@ return array (
     ),
     73 => 
     array (
+      'time' => 971582400,
+      'type' => 6,
+    ),
+    74 => 
+    array (
       'time' => 984279600,
       'type' => 5,
     ),
-    74 => 
+    75 => 
     array (
       'time' => 1003028400,
       'type' => 6,
     ),
-    75 => 
-    array (
-      'time' => 1015729200,
-      'type' => 5,
-    ),
     76 => 
     array (
-      'time' => 1034478000,
+      'time' => 1003032000,
       'type' => 6,
     ),
     77 => 
     array (
-      'time' => 1047178800,
+      'time' => 1015729200,
       'type' => 5,
     ),
     78 => 
     array (
-      'time' => 1065927600,
+      'time' => 1034478000,
       'type' => 6,
     ),
     79 => 
     array (
-      'time' => 1079233200,
-      'type' => 5,
+      'time' => 1034481600,
+      'type' => 6,
     ),
     80 => 
     array (
-      'time' => 1097377200,
-      'type' => 6,
+      'time' => 1047178800,
+      'type' => 5,
     ),
     81 => 
     array (
-      'time' => 1110682800,
-      'type' => 5,
+      'time' => 1065927600,
+      'type' => 6,
     ),
     82 => 
     array (
-      'time' => 1128826800,
+      'time' => 1065931200,
       'type' => 6,
     ),
     83 => 
     array (
-      'time' => 1142132400,
+      'time' => 1079233200,
       'type' => 5,
     ),
     84 => 
     array (
-      'time' => 1160881200,
+      'time' => 1097377200,
       'type' => 6,
     ),
     85 => 
     array (
-      'time' => 1173582000,
-      'type' => 5,
+      'time' => 1097380800,
+      'type' => 6,
     ),
     86 => 
     array (
-      'time' => 1192330800,
-      'type' => 6,
+      'time' => 1110682800,
+      'type' => 5,
     ),
     87 => 
     array (
-      'time' => 1206846000,
-      'type' => 5,
+      'time' => 1128826800,
+      'type' => 6,
     ),
     88 => 
     array (
-      'time' => 1223780400,
+      'time' => 1128830400,
       'type' => 6,
     ),
     89 => 
     array (
-      'time' => 1237086000,
+      'time' => 1142132400,
       'type' => 5,
     ),
     90 => 
     array (
-      'time' => 1255230000,
+      'time' => 1160881200,
       'type' => 6,
     ),
     91 => 
     array (
+      'time' => 1160884800,
+      'type' => 6,
+    ),
+    92 => 
+    array (
+      'time' => 1173582000,
+      'type' => 5,
+    ),
+    93 => 
+    array (
+      'time' => 1192330800,
+      'type' => 6,
+    ),
+    94 => 
+    array (
+      'time' => 1192334400,
+      'type' => 6,
+    ),
+    95 => 
+    array (
+      'time' => 1206846000,
+      'type' => 5,
+    ),
+    96 => 
+    array (
+      'time' => 1223780400,
+      'type' => 6,
+    ),
+    97 => 
+    array (
+      'time' => 1223784000,
+      'type' => 6,
+    ),
+    98 => 
+    array (
+      'time' => 1237086000,
+      'type' => 5,
+    ),
+    99 => 
+    array (
+      'time' => 1255230000,
+      'type' => 6,
+    ),
+    100 => 
+    array (
+      'time' => 1255233600,
+      'type' => 6,
+    ),
+    101 => 
+    array (
       'time' => 1270350000,
       'type' => 5,
     ),
-    92 => 
+    102 => 
     array (
       'time' => 1286679600,
       'type' => 6,
     ),
-    93 => 
+    103 => 
     array (
-      'time' => 1299985200,
+      'time' => 1286683200,
+      'type' => 6,
+    ),
+    104 => 
+    array (
+      'time' => 1304823600,
       'type' => 5,
+    ),
+    105 => 
+    array (
+      'time' => 1313899200,
+      'type' => 6,
+    ),
+    106 => 
+    array (
+      'time' => 1318129200,
+      'type' => 6,
+    ),
+    107 => 
+    array (
+      'time' => 1331434800,
+      'type' => 5,
+    ),
+    108 => 
+    array (
+      'time' => 1350187200,
+      'type' => 6,
     ),
   ),
   'finalRule' => 
@@ -556,10 +631,10 @@ return array (
       'time' => 10800000,
       'type' => 2,
     ),
-    'startYear' => 2011,
+    'startYear' => 2012,
   ),
   'source' => 'southamerica',
-  'version' => '8.44',
+  'version' => '8.48',
   'name' => 'Pacific/Easter',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Juneau".
- * Compiled from olson file "northamerica", version 8.40.
+ * Compiled from olson file "northamerica", version 8.42.
  *
  * @package    agavi
  * @subpackage translation
@@ -57,10 +57,16 @@ return array (
     6 => 
     array (
       'rawOffset' => -32400,
+      'dstOffset' => 3600,
+      'name' => 'YDT',
+    ),
+    7 => 
+    array (
+      'rawOffset' => -32400,
       'dstOffset' => 0,
       'name' => 'AKST',
     ),
-    7 => 
+    8 => 
     array (
       'rawOffset' => -32400,
       'dstOffset' => 3600,
@@ -222,292 +228,302 @@ return array (
     30 => 
     array (
       'time' => 325677600,
-      'type' => 4,
+      'type' => 5,
     ),
     31 => 
     array (
-      'time' => 341398800,
-      'type' => 1,
+      'time' => 325681200,
+      'type' => 6,
     ),
     32 => 
     array (
-      'time' => 357127200,
-      'type' => 4,
+      'time' => 341402400,
+      'type' => 5,
     ),
     33 => 
     array (
-      'time' => 372848400,
+      'time' => 341406000,
       'type' => 1,
     ),
     34 => 
     array (
-      'time' => 388576800,
+      'time' => 357127200,
       'type' => 4,
     ),
     35 => 
     array (
-      'time' => 404902800,
+      'time' => 372848400,
       'type' => 1,
     ),
     36 => 
     array (
-      'time' => 420026400,
+      'time' => 388576800,
       'type' => 4,
     ),
     37 => 
     array (
-      'time' => 436352400,
+      'time' => 404902800,
       'type' => 1,
     ),
     38 => 
     array (
-      'time' => 436356000,
-      'type' => 5,
+      'time' => 420026400,
+      'type' => 4,
     ),
     39 => 
     array (
-      'time' => 439030800,
-      'type' => 6,
+      'time' => 436352400,
+      'type' => 1,
     ),
     40 => 
     array (
-      'time' => 452084400,
-      'type' => 7,
+      'time' => 436356000,
+      'type' => 5,
     ),
     41 => 
     array (
-      'time' => 467805600,
-      'type' => 6,
+      'time' => 439030800,
+      'type' => 7,
     ),
     42 => 
     array (
-      'time' => 483534000,
-      'type' => 7,
+      'time' => 452084400,
+      'type' => 8,
     ),
     43 => 
     array (
-      'time' => 499255200,
-      'type' => 6,
+      'time' => 467805600,
+      'type' => 7,
     ),
     44 => 
     array (
-      'time' => 514983600,
-      'type' => 7,
+      'time' => 483534000,
+      'type' => 8,
     ),
     45 => 
     array (
-      'time' => 530704800,
-      'type' => 6,
+      'time' => 499255200,
+      'type' => 7,
     ),
     46 => 
     array (
-      'time' => 544618800,
-      'type' => 7,
+      'time' => 514983600,
+      'type' => 8,
     ),
     47 => 
     array (
-      'time' => 562154400,
-      'type' => 6,
+      'time' => 530704800,
+      'type' => 7,
     ),
     48 => 
     array (
-      'time' => 576068400,
-      'type' => 7,
+      'time' => 544618800,
+      'type' => 8,
     ),
     49 => 
     array (
-      'time' => 594208800,
-      'type' => 6,
+      'time' => 562154400,
+      'type' => 7,
     ),
     50 => 
     array (
-      'time' => 607518000,
-      'type' => 7,
+      'time' => 576068400,
+      'type' => 8,
     ),
     51 => 
     array (
-      'time' => 625658400,
-      'type' => 6,
+      'time' => 594208800,
+      'type' => 7,
     ),
     52 => 
     array (
-      'time' => 638967600,
-      'type' => 7,
+      'time' => 607518000,
+      'type' => 8,
     ),
     53 => 
     array (
-      'time' => 657108000,
-      'type' => 6,
+      'time' => 625658400,
+      'type' => 7,
     ),
     54 => 
     array (
-      'time' => 671022000,
-      'type' => 7,
+      'time' => 638967600,
+      'type' => 8,
     ),
     55 => 
     array (
-      'time' => 688557600,
-      'type' => 6,
+      'time' => 657108000,
+      'type' => 7,
     ),
     56 => 
     array (
-      'time' => 702471600,
-      'type' => 7,
+      'time' => 671022000,
+      'type' => 8,
     ),
     57 => 
     array (
-      'time' => 720007200,
-      'type' => 6,
+      'time' => 688557600,
+      'type' => 7,
     ),
     58 => 
     array (
-      'time' => 733921200,
-      'type' => 7,
+      'time' => 702471600,
+      'type' => 8,
     ),
     59 => 
     array (
-      'time' => 752061600,
-      'type' => 6,
+      'time' => 720007200,
+      'type' => 7,
     ),
     60 => 
     array (
-      'time' => 765370800,
-      'type' => 7,
+      'time' => 733921200,
+      'type' => 8,
     ),
     61 => 
     array (
-      'time' => 783511200,
-      'type' => 6,
+      'time' => 752061600,
+      'type' => 7,
     ),
     62 => 
     array (
-      'time' => 796820400,
-      'type' => 7,
+      'time' => 765370800,
+      'type' => 8,
     ),
     63 => 
     array (
-      'time' => 814960800,
-      'type' => 6,
+      'time' => 783511200,
+      'type' => 7,
     ),
     64 => 
     array (
-      'time' => 828874800,
-      'type' => 7,
+      'time' => 796820400,
+      'type' => 8,
     ),
     65 => 
     array (
-      'time' => 846410400,
-      'type' => 6,
+      'time' => 814960800,
+      'type' => 7,
     ),
     66 => 
     array (
-      'time' => 860324400,
-      'type' => 7,
+      'time' => 828874800,
+      'type' => 8,
     ),
     67 => 
     array (
-      'time' => 877860000,
-      'type' => 6,
+      'time' => 846410400,
+      'type' => 7,
     ),
     68 => 
     array (
-      'time' => 891774000,
-      'type' => 7,
+      'time' => 860324400,
+      'type' => 8,
     ),
     69 => 
     array (
-      'time' => 909309600,
-      'type' => 6,
+      'time' => 877860000,
+      'type' => 7,
     ),
     70 => 
     array (
-      'time' => 923223600,
-      'type' => 7,
+      'time' => 891774000,
+      'type' => 8,
     ),
     71 => 
     array (
-      'time' => 941364000,
-      'type' => 6,
+      'time' => 909309600,
+      'type' => 7,
     ),
     72 => 
     array (
-      'time' => 954673200,
-      'type' => 7,
+      'time' => 923223600,
+      'type' => 8,
     ),
     73 => 
     array (
-      'time' => 972813600,
-      'type' => 6,
+      'time' => 941364000,
+      'type' => 7,
     ),
     74 => 
     array (
-      'time' => 986122800,
-      'type' => 7,
+      'time' => 954673200,
+      'type' => 8,
     ),
     75 => 
     array (
-      'time' => 1004263200,
-      'type' => 6,
+      'time' => 972813600,
+      'type' => 7,
     ),
     76 => 
     array (
-      'time' => 1018177200,
-      'type' => 7,
+      'time' => 986122800,
+      'type' => 8,
     ),
     77 => 
     array (
-      'time' => 1035712800,
-      'type' => 6,
+      'time' => 1004263200,
+      'type' => 7,
     ),
     78 => 
     array (
-      'time' => 1049626800,
-      'type' => 7,
+      'time' => 1018177200,
+      'type' => 8,
     ),
     79 => 
     array (
-      'time' => 1067162400,
-      'type' => 6,
+      'time' => 1035712800,
+      'type' => 7,
     ),
     80 => 
     array (
-      'time' => 1081076400,
-      'type' => 7,
+      'time' => 1049626800,
+      'type' => 8,
     ),
     81 => 
     array (
-      'time' => 1099216800,
-      'type' => 6,
+      'time' => 1067162400,
+      'type' => 7,
     ),
     82 => 
     array (
-      'time' => 1112526000,
-      'type' => 7,
+      'time' => 1081076400,
+      'type' => 8,
     ),
     83 => 
     array (
-      'time' => 1130666400,
-      'type' => 6,
+      'time' => 1099216800,
+      'type' => 7,
     ),
     84 => 
     array (
-      'time' => 1143975600,
-      'type' => 7,
+      'time' => 1112526000,
+      'type' => 8,
     ),
     85 => 
     array (
-      'time' => 1162116000,
-      'type' => 6,
+      'time' => 1130666400,
+      'type' => 7,
     ),
     86 => 
     array (
-      'time' => 1173610800,
-      'type' => 7,
+      'time' => 1143975600,
+      'type' => 8,
     ),
     87 => 
     array (
+      'time' => 1162116000,
+      'type' => 7,
+    ),
+    88 => 
+    array (
+      'time' => 1173610800,
+      'type' => 8,
+    ),
+    89 => 
+    array (
       'time' => 1194170400,
-      'type' => 6,
+      'type' => 7,
     ),
   ),
   'finalRule' => 
@@ -535,7 +551,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'northamerica',
-  'version' => '8.40',
+  'version' => '8.42',
   'name' => 'America/Juneau',
 );
 

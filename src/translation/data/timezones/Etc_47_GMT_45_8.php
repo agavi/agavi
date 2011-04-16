@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Etc/GMT-8".
- * Compiled from olson file "etcetera", version 8.2.
+ * Compiled from olson file "etcetera", version 8.3.
  *
  * @package    agavi
  * @subpackage translation
@@ -30,7 +30,7 @@ return array (
     'startYear' => -2147483647,
   ),
   'source' => 'etcetera',
-  'version' => '8.2',
+  'version' => '8.3',
   'name' => 'Etc/GMT-8',
 );
 

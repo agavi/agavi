@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Atikokan".
- * Compiled from olson file "northamerica", version 8.40.
+ * Compiled from olson file "northamerica", version 8.42.
  *
  * @package    agavi
  * @subpackage translation
@@ -106,7 +106,7 @@ return array (
     'startYear' => 1946,
   ),
   'source' => 'northamerica',
-  'version' => '8.40',
+  'version' => '8.42',
   'name' => 'America/Atikokan',
 );
 

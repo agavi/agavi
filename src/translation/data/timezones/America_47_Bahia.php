@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Bahia".
- * Compiled from olson file "southamerica", version 8.44.
+ * Compiled from olson file "southamerica", version 8.48.
  *
  * @package    agavi
  * @subpackage translation
@@ -342,7 +342,7 @@ return array (
     'startYear' => 2004,
   ),
   'source' => 'southamerica',
-  'version' => '8.44',
+  'version' => '8.48',
   'name' => 'America/Bahia',
 );
 

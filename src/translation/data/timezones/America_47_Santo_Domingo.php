@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Santo_Domingo".
- * Compiled from olson file "northamerica", version 8.40.
+ * Compiled from olson file "northamerica", version 8.42.
  *
  * @package    agavi
  * @subpackage translation
@@ -151,7 +151,7 @@ return array (
     'startYear' => 2001,
   ),
   'source' => 'northamerica',
-  'version' => '8.40',
+  'version' => '8.42',
   'name' => 'America/Santo_Domingo',
 );
 

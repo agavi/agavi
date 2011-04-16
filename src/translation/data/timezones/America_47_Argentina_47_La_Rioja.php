@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Argentina/La_Rioja".
- * Compiled from olson file "southamerica", version 8.44.
+ * Compiled from olson file "southamerica", version 8.48.
  *
  * @package    agavi
  * @subpackage translation
@@ -391,7 +391,7 @@ return array (
     'startYear' => 2009,
   ),
   'source' => 'southamerica',
-  'version' => '8.44',
+  'version' => '8.48',
   'name' => 'America/Argentina/La_Rioja',
 );
 
