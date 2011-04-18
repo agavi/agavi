@@ -223,7 +223,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 				} catch(ReflectionException $e) {
 					$error = 'Configuration file "%s" specifies unknown class "%s" for entry "%s"';
 					$error = sprintf($error, $config, $data[$factory]['class'], $factory);
-					throw new AgaviConfigurationException($error);
+					throw new AgaviConfigurationException($error, 0,  $e);
 				}
 				foreach($info['must_implement'] as $interface) {
 					if(!$rc->implementsInterface($interface)) {

@@ -156,7 +156,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			return true;
 		} catch(PDOException $e) {
 			$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
-			throw new AgaviDatabaseException($error);
+			throw new AgaviDatabaseException($error, 0, $e);
 		}
 	}
 
@@ -213,7 +213,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			return true;
 		} catch(PDOException $e) {
 			$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
-			throw new AgaviDatabaseException($error);
+			throw new AgaviDatabaseException($error, 0, $e);
 		}
 	}
 
@@ -301,7 +301,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			return '';
 		} catch(PDOException $e) {
 			$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
-			throw new AgaviDatabaseException($error);
+			throw new AgaviDatabaseException($error, 0, $e);
 		}
 	}
 
@@ -381,7 +381,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		} catch(PDOException $e) {
 			$this->connection->rollback();
 			$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
-			throw new AgaviDatabaseException($error);
+			throw new AgaviDatabaseException($error, 0, $e);
 		}
 			
 		if(!$stmt->rowCount()) {
@@ -414,7 +414,7 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			} catch(PDOException $e) {
 				$this->connection->rollback();
 				$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
-				throw new AgaviDatabaseException($error);
+				throw new AgaviDatabaseException($error, 0, $e);
 			}
 		} else {
 			return true;

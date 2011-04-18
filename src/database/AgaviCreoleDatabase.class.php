@@ -154,7 +154,7 @@ class AgaviCreoleDatabase extends AgaviDatabase
 			
 		} catch(SQLException $e) {
 			// the connection's foobar'd
-			throw new AgaviDatabaseException($e->toString());
+			throw new AgaviDatabaseException($e->toString(), 0, $e);
 		}
 	}
 

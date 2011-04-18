@@ -277,15 +277,11 @@ class AgaviException extends Exception
 		$exitCode = 70;
 		
 		$exceptions = array();
-		if(version_compare(PHP_VERSION, '5.3', 'ge')) {
-			// reverse order of exceptions
-			$ce = $e;
-			while($ce) {
-				array_unshift($exceptions, $ce);
-				$ce = $ce->getPrevious();
-			}
-		} else {
-			$exceptions[] = $e;
+		// reverse order of exceptions for linking
+		$ce = $e;
+		while($ce) {
+			array_unshift($exceptions, $ce);
+			$ce = $ce->getPrevious();
 		}
 		
 		// discard any previous output waiting in the buffer

@@ -92,7 +92,7 @@ class AgaviPdoDatabase extends AgaviDatabase
 				$this->connection->exec($query);
 			}
 		} catch(PDOException $e) {
-			throw new AgaviDatabaseException($e->getMessage());
+			throw new AgaviDatabaseException($e->getMessage(), 0, $e);
 		}
 	}
 

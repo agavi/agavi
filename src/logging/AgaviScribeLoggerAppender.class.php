@@ -90,7 +90,7 @@ class AgaviScribeLoggerAppender extends AgaviLoggerAppender
 			} catch(TException $e) {
 				$this->scribeClient = null;
 				$this->transport = null;
-				throw new AgaviLoggingException(sprintf("Failed to connect to Scribe server:\n\n%s", $e->getMessage()));
+				throw new AgaviLoggingException(sprintf("Failed to connect to Scribe server:\n\n%s", $e->getMessage()), 0, $e);
 			}
 		}
 		

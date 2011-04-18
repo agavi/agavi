@@ -99,7 +99,7 @@ class AgaviZendclouddocumentserviceDatabase extends AgaviDatabase
 		try {
 			$this->connection = call_user_func(array($this->getParameter('factory_class'), 'getAdapter'), $this->getParameter('factory_options'));
 		} catch(Zend_Exception $e) {
-			throw new AgaviDatabaseException(sprintf("Caught exception of type %s while creating adapter instance; details:\n\n%s", get_class($e), $e->getMessage()));
+			throw new AgaviDatabaseException(sprintf("Caught exception of type %s while creating adapter instance; details:\n\n%s", get_class($e), $e->getMessage()), 0, $e);
 		}
 	}
 	

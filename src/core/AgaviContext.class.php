@@ -283,7 +283,7 @@ class AgaviContext
 			}
 			$profile = strtolower($profile);
 			if(!isset(self::$instances[$profile])) {
-				$class = AgaviConfig::get('core.context_implementation', __CLASS__);
+				$class = AgaviConfig::get('core.context_implementation', get_called_class());
 				self::$instances[$profile] = new $class($profile);
 				self::$instances[$profile]->initialize();
 			}
