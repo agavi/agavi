@@ -1,19 +1,19 @@
 <?php
 
 if(!class_exists('AgaviArrayPathDefinition')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviArrayPathDefinition.class.php');
+	include(__DIR__ . '/../../../../src/util/AgaviArrayPathDefinition.class.php');
 }
 
 if(!class_exists('AgaviVirtualArrayPath')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviVirtualArrayPath.class.php');
+	include(__DIR__ . '/../../../../src/util/AgaviVirtualArrayPath.class.php');
 }
 
 if(!class_exists('AgaviParameterHolder')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviParameterHolder.class.php');
+	include(__DIR__ . '/../../../../src/util/AgaviParameterHolder.class.php');
 }
 
 if(!class_exists('AgaviAttributeHolder')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviAttributeHolder.class.php');
+	include(__DIR__ . '/../../../../src/util/AgaviAttributeHolder.class.php');
 }
 
 class MyAgaviAttributeHolder extends AgaviAttributeHolder {}

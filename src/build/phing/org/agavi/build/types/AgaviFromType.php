@@ -13,7 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviType.php');
+require_once(__DIR__ . '/AgaviType.php');
 
 /**
  * Represents a reference to a path from which additional information is

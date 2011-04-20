@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../database/DatabaseManagerTest.php');
+require_once(__DIR__ . '/../database/DatabaseManagerTest.php');
 
 class DatabaseTests
 {

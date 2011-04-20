@@ -59,7 +59,7 @@ class AgaviTesting
 		// bootstrap the framework for autoload, config handlers etc.
 		Agavi::bootstrap($environment);
 		
-		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
+		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(__DIR__));
 		
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}

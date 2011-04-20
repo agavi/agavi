@@ -13,7 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviListenerTask.php');
+require_once(__DIR__ . '/AgaviListenerTask.php');
 
 /**
  * Defines a new listener on tasks for this build environment.

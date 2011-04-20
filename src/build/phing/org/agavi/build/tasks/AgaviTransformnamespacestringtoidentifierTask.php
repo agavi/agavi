@@ -13,8 +13,8 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviTask.php');
-require_once(dirname(__FILE__) . '/AgaviTransformstringtoidentifierTask.php');
+require_once(__DIR__ . '/AgaviTask.php');
+require_once(__DIR__ . '/AgaviTransformstringtoidentifierTask.php');
 
 /**
  * Transforms a string into an identifier suitable for use in PHP in the same

@@ -29,16 +29,16 @@
  * @version    $Id$
  */
 
-define('BUILD_DIRECTORY', realpath(dirname(__FILE__) . '/../..'));
+define('BUILD_DIRECTORY', realpath(__DIR__ . '/../..'));
 define('START_DIRECTORY', getcwd());
 define('MIN_PHING_VERSION', '2.4.0');
 
 require('phing/Phing.php');
 
-require(dirname(__FILE__) . '/../build.php');
+require(__DIR__ . '/../build.php');
 AgaviBuild::bootstrap();
 
-require(dirname(__FILE__) . '/AgaviOptionParser.class.php');
+require(__DIR__ . '/AgaviOptionParser.class.php');
 
 $GLOBALS['OUTPUT'] = new OutputStream(fopen('php://stdout', 'w'));
 $GLOBALS['ERROR'] = new OutputStream(fopen('php://stderr', 'w'));
@@ -163,7 +163,7 @@ try {
 $GLOBALS['TARGETS'] = $parser->getPassedArguments();
 
 if(!isset($GLOBALS['PROPERTIES']['agavi.directory.src'])) {
-	$GLOBALS['PROPERTIES']['agavi.directory.src'] = new PhingFile(realpath(dirname(__FILE__) . '/../../..'));
+	$GLOBALS['PROPERTIES']['agavi.directory.src'] = new PhingFile(realpath(__DIR__ . '/../../..'));
 }
 if(!is_dir($GLOBALS['PROPERTIES']['agavi.directory.src']) || !is_file($GLOBALS['PROPERTIES']['agavi.directory.src'] . DIRECTORY_SEPARATOR . 'agavi.php')) {
 	$GLOBALS['ERROR']->write(sprintf('Error: Agavi source directory expected at %s, but is not present', $GLOBALS['PROPERTIES']['agavi.directory.src']) . PHP_EOL);

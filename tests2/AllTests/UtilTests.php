@@ -1,9 +1,9 @@
 <?php
-require_once(dirname(__FILE__) . '/../util/AttributeHolderTest.php');
-require_once(dirname(__FILE__) . '/../util/ParameterHolderTest.php');
-require_once(dirname(__FILE__) . '/../util/ToolkitTest.php');
-require_once(dirname(__FILE__) . '/../util/DecimalFormatterTest.php');
-//require_once(dirname(__FILE__) . '/../util/PathTest.php');
+require_once(__DIR__ . '/../util/AttributeHolderTest.php');
+require_once(__DIR__ . '/../util/ParameterHolderTest.php');
+require_once(__DIR__ . '/../util/ToolkitTest.php');
+require_once(__DIR__ . '/../util/DecimalFormatterTest.php');
+//require_once(__DIR__ . '/../util/PathTest.php');
 
 class UtilTests
 {

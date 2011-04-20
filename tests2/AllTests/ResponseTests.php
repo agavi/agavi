@@ -1,6 +1,6 @@
 <?php
-require_once(dirname(__FILE__) . '/../response/ResponseTest.php');
-require_once(dirname(__FILE__) . '/../response/WebResponseTest.php');
+require_once(__DIR__ . '/../response/ResponseTest.php');
+require_once(__DIR__ . '/../response/WebResponseTest.php');
 
 class ResponseTests
 {

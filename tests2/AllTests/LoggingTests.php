@@ -1,10 +1,10 @@
 <?php
-require_once(dirname(__FILE__) . '/../logging/AppenderTest.php');
-require_once(dirname(__FILE__) . '/../logging/FileAppenderTest.php');
-require_once(dirname(__FILE__) . '/../logging/LayoutTest.php');
-require_once(dirname(__FILE__) . '/../logging/LoggerManagerTest.php');
-require_once(dirname(__FILE__) . '/../logging/MessageTest.php');
-require_once(dirname(__FILE__) . '/../logging/PassthruLayoutTest.php');
+require_once(__DIR__ . '/../logging/AppenderTest.php');
+require_once(__DIR__ . '/../logging/FileAppenderTest.php');
+require_once(__DIR__ . '/../logging/LayoutTest.php');
+require_once(__DIR__ . '/../logging/LoggerManagerTest.php');
+require_once(__DIR__ . '/../logging/MessageTest.php');
+require_once(__DIR__ . '/../logging/PassthruLayoutTest.php');
 
 class LoggingTests
 {

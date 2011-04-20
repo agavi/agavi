@@ -1,7 +1,7 @@
 <?php
 
 if(!class_exists('AgaviConfig')) {
-	include(dirname(__FILE__) . '/../../../../src/config/AgaviConfig.class.php');
+	include(__DIR__ . '/../../../../src/config/AgaviConfig.class.php');
 }
 
 /**

@@ -39,7 +39,7 @@ abstract class AgaviTask extends Task
 	public function init()
 	{
 		if(!class_exists('AgaviBuild')) {
-			require_once(dirname(__FILE__) . '/../../../../../agavi/build.php');
+			require_once(__DIR__ . '/../../../../../agavi/build.php');
 			AgaviBuild::bootstrap();
 		}
 	}

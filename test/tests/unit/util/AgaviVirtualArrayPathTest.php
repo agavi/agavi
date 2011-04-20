@@ -1,10 +1,10 @@
 <?php
 if(!class_exists('AgaviVirtualArrayPath')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviVirtualArrayPath.class.php');
+	include(__DIR__ . '/../../../../src/util/AgaviVirtualArrayPath.class.php');
 }
 
 if(!class_exists('AgaviArrayPathDefinition')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviArrayPathDefinition.class.php');
+	include(__DIR__ . '/../../../../src/util/AgaviArrayPathDefinition.class.php');
 }
 
 class AgaviVirtualArrayPathTest extends PHPUnit_Framework_TestCase

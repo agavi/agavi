@@ -13,7 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviBuildLogger.php');
+require_once(__DIR__ . '/AgaviBuildLogger.php');
 
 /**
  * Logs events through Agavi's default Phing logger, but ignores all proxy

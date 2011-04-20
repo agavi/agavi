@@ -332,13 +332,13 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$fi = new SplFileInfo(__FILE__);
 		
 		$url = $this->routing->gen('callbacks.object', array('value' => $fi));
-		$this->assertEquals('/callbacks/foo/' . rawurlencode(dirname(__FILE__)), $url);
+		$this->assertEquals('/callbacks/foo/' . rawurlencode(__DIR__), $url);
 		
 		$url = $this->routing->gen('callbacks.object', array('value' => $this->routing->createValue($fi)));
-		$this->assertEquals('/callbacks/foo/' . rawurlencode(dirname(__FILE__)), $url);
+		$this->assertEquals('/callbacks/foo/' . rawurlencode(__DIR__), $url);
 		
 		$url = $this->routing->gen('callbacks.object', array('value' => $this->routing->createValue($fi, false)));
-		$this->assertEquals('/callbacks/foo/' . dirname(__FILE__), $url);
+		$this->assertEquals('/callbacks/foo/' . __DIR__, $url);
 	}
 	
 	public function testRoutingValue()

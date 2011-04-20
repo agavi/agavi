@@ -30,7 +30,7 @@
  */
 
 // load the AgaviConfig class
-require(dirname(__FILE__) . '/config/AgaviConfig.class.php');
+require(__DIR__ . '/config/AgaviConfig.class.php');
 
 // check minimum PHP version
 AgaviConfig::set('core.minimum_php_version', '5.3.0');
@@ -39,7 +39,7 @@ if(!version_compare(PHP_VERSION, AgaviConfig::get('core.minimum_php_version'), '
 }
 
 // define a few filesystem paths
-AgaviConfig::set('core.agavi_dir', $agavi_config_directive_core_agavi_dir = dirname(__FILE__), true, true);
+AgaviConfig::set('core.agavi_dir', $agavi_config_directive_core_agavi_dir = __DIR__, true, true);
 
 // default exception template
 AgaviConfig::set('exception.default_template', $agavi_config_directive_core_agavi_dir . '/exception/templates/shiny.php');

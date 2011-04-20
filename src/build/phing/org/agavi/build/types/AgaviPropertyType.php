@@ -13,7 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviPropertiesType.php');
+require_once(__DIR__ . '/AgaviPropertiesType.php');
 require_once('phing/system/util/Properties.php');
 
 /**

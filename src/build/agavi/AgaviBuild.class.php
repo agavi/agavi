@@ -85,7 +85,7 @@ final class AgaviBuild
 	public static function __autoload($class)
 	{
 		if(isset(self::$autoloads[$class])) {
-			require(dirname(__FILE__) . '/' . self::$autoloads[$class]);
+			require(__DIR__ . '/' . self::$autoloads[$class]);
 		}
 
 		/* If the class isn't loaded by this method, the only other

@@ -13,7 +13,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-require_once(dirname(__FILE__) . '/AgaviType.php');
+require_once(__DIR__ . '/AgaviType.php');
 
 /**
  * Represents an object that persists across the build session.

@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../view/ViewTest.php');
+require_once(__DIR__ . '/../view/ViewTest.php');
 
 class ViewTests
 {

@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../controller/ControllerTest.php');
+require_once(__DIR__ . '/../controller/ControllerTest.php');
 
 class ControllerTests
 {
