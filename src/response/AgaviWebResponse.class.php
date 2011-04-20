@@ -636,13 +636,6 @@ class AgaviWebResponse extends AgaviResponse
 			$outputType = $this->getOutputType();
 		}
 		
-		$file = $line = '';
-		if(headers_sent($file, $line)) {
-			throw new AgaviException('Headers already sent, output started in "' . $file . '" on line "' . $line . '"');
-		} else {
-			unset($file, $line);
-		}
-		
 		// send HTTP status code
 		if(isset($this->httpStatusCode) && isset($this->httpStatusCodes[$this->httpStatusCode])) {
 			header($this->httpStatusCodes[$this->httpStatusCode]);
