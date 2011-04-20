@@ -95,28 +95,25 @@ class AgaviSecurityUser extends AgaviUser implements AgaviISecurityUser
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.9.0
 	 */
-	public function hasCredentials($credential)
+	public function hasCredentials($credentials)
 	{
-		if(is_array($credential)) {
-			$credentials = (array)$credential;
-			foreach($credentials as $credential) {
-				if(is_array($credential)) {
-					foreach($credential as $subcred) {
-						if(in_array($subcred, $this->credentials, true)) {
-							continue 2;
-						}
-					}
-					return false;
-				} else {
-					if(!in_array($credential, $this->credentials, true)) {
-						return false;
+		foreach((array)$credentials as $credential) {
+			if(is_array($credential)) {
+				// OR
+				foreach($credential as $subcred) {
+					if($this->hasCredential($subcred)) {
+						continue 2;
 					}
 				}
+				return false;
+			} else {
+				// AND
+				if(!$this->hasCredential($credential)) {
+					return false;
+				}
 			}
-			return true;
-		} else {
-			return $this->hasCredential($credential);
 		}
+		return true;
 	}
 	
 	/**
