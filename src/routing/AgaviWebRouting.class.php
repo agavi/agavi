@@ -242,19 +242,6 @@ class AgaviWebRouting extends AgaviRouting
 	}
 	
 	/**
-	 * Callback for array_walk_recursive.
-	 *
-	 * @param      mixed The value to decode, passed as a reference.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.1
-	 */
-	protected function rawurldecodeCallback(&$value)
-	{
-		$value = rawurldecode($value);
-	}
-
-	/**
 	 * Generate a formatted Agavi URL.
 	 *
 	 * @param      string A route name.

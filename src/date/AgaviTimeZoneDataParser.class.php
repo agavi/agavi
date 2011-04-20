@@ -88,21 +88,6 @@ class AgaviTimeZoneDataParser
 	}
 
 	/**
-	 * Checks whether a line is all empty or only comment
-	 *
-	 * @param      string The line to check.
-	 *
-	 * @param      bool Whether the line is empty or only consists of a comment.
-	 *
-	 * @author     Dominik del Bondio <ddb@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public static function commentFilter($line)
-	{
-		return !(strlen(trim($line)) == 0 || preg_match('!^\s*#!', $line));
-	}
-
-	/**
 	 * Parses the given file
 	 *
 	 * @param      string The full path to the file to parse.
@@ -126,7 +111,7 @@ class AgaviTimeZoneDataParser
 		
 		$zoneLines = explode("\n", $data);
 		// filter comments
-		$zoneLines = array_filter($zoneLines, array(__CLASS__, 'commentFilter'));
+		$zoneLines = array_filter($zoneLines, function($line) { return !(strlen(trim($line)) == 0 || preg_match('!^\s*#!', $line)); });
 
 		$zones = array();
 		$rules = array();
