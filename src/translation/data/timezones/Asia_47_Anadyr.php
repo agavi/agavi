@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Anadyr".
- * Compiled from olson file "europe", version 8.31.
+ * Compiled from olson file "europe", version 8.32.
  *
  * @package    agavi
  * @subpackage translation
@@ -268,7 +268,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.31',
+  'version' => '8.32',
   'name' => 'Asia/Anadyr',
 );
 

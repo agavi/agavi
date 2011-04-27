@@ -9,9 +9,9 @@ ADD: Add plaintext exception output to top and bottom of shiny.php (#1350) (Davi
 ADD: Zend_Cloud_DocumentService database adapter (#1349) (David)
 ADD: Support for X-Forwarded-Proto style HTTPS indicators (#1345) (David)
 
+CHG: Update timezone database to 2011g (#1359) (David)
 CHG: Add fail-safe to AgaviToolkit::clearCache() (#1357) (David)
 CHG: AgaviSecurityUser::hasCredentials() should use AgaviSecurityUser::hasCredential() for complex lookups (#1356) (David)
-CHG: Update timezone database to 2011f (#1352) (David)
 CHG: Ignore .gitignore and .gitkeep in cache folder (#1346) (David)
 CHG: Make AgaviFormPopulationFilter parsing more lenient (#1307) (David)
 
