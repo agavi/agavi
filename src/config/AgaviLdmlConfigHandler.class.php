@@ -953,7 +953,7 @@ array data format
 	{
 		$output = '';
 		$hex = '[0-9A-Fa-f]';
-		$rx = '\\\\(\\\\|u' . $hex . '{4}|U' . $hex . '{8}|x' . $hex .'{1,2}|[0-7]{1,3}|[abtnvfr]|[a-zA-Z])';
+		$rx = '\\\\(\\\\|u' . $hex . '{4}|U' . $hex . '{8}|x' . $hex .'{1,2}|[0-7]{1,3}|.)';
 		if($handleQuotes) {
 			// needs to be < -1 to not confuse the algorithm in the first run
 			$lastClose = -2;
@@ -1028,7 +1028,7 @@ array data format
 		} elseif(isset($map[$char])) {
 			$res = $map[$char];
 		} else {
-			$res = $match[0];
+			$res = $char; // something like \s or \0 or so, just return the character ("s" or "0")
 		}
 		
 		return $res;
