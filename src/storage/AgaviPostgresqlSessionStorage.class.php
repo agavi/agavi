@@ -292,7 +292,7 @@ class AgaviPostgresqlSessionStorage extends AgaviSessionStorage
 		$id   = addslashes($id);
 		$data = addslashes($data);
 
-		$ts = date($this->getParameter('date_format', 'U'), $time);
+		$ts = date($this->getParameter('date_format', 'U'));
 		if(is_numeric($ts)) {
 			$ts = (int)$ts;
 		} else {
