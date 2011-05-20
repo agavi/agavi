@@ -47,6 +47,24 @@
 class AgaviMysqliDatabase extends AgaviMysqlDatabase
 {
 	/**
+	 * Initialize this Database.
+	 *
+	 * @param      AgaviDatabaseManager The database manager of this instance.
+	 * @param      array                An assoc array of initialization params.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.5
+	 */
+	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
+	{
+		parent::initialize($databaseManager, $parameters);
+		
+		if($matches = preg_grep('/^\s*SET\s+NAMES\b/i', (array)$this->getParameter('init_queries'))) {
+			throw new AgaviDatabaseException(sprintf('Depending on your MySQL server configuration, it may not be safe to use "SET NAMES" to configure the connection encoding, as the underlying MySQL client library will not be aware of the changed character set. As a result, string escaping may be applied incorrectly (even for prepared statements), leading to potential attack vectors in combination with certain multi-byte character sets such as GBK or Big5.' . "\n\n" . 'Please remove the "%s" statement from the "init_queries" configuration parameter in databases.xml and use the configuration parameter "charset" instead.' . "\n\n" . 'The associated PHP bug ticket http://bugs.php.net/47802 contains further information (describes PDO, but the basic issue is the same).', $matches[0]));
+		}
+	}
+
+	/**
 	 * Connect to the database.
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
@@ -109,6 +127,14 @@ class AgaviMysqliDatabase extends AgaviMysqlDatabase
 			// the connection's foobar'd
 			$error = 'Failed to create a AgaviMySQLiDatabase connection';
 			throw new AgaviDatabaseException($error);
+		}
+		
+		if($this->hasParameter('charset')) {
+			if(!$this->connection->set_charset($this->getParameter('charset'))) {
+				$error = 'Failed to set charset "%s"';
+				$error = sprintf($error, $this->getParameter('charset'));
+				throw new AgaviDatabaseException($error);
+			}
 		}
 
 		// select our database
