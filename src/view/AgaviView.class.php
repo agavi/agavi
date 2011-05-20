@@ -237,7 +237,7 @@ abstract class AgaviView
 	public function removeLayer(AgaviTemplateLayer $layer)
 	{
 		if(($pos = array_search($layer, $this->layers, true)) === false) {
-			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
+			throw new AgaviViewException('Layer "' . $layer->getName() . '" not in list');
 		}
 		array_splice($this->layers, $pos, 1);
 	}
