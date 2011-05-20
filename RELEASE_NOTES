@@ -4,7 +4,7 @@ AGAVI RELEASE NOTES
 Version 1.0.5 - December ??, 2010
 =================================
 
-This release improves the robustness of AgaviFormPopulationFilter and adds support for a number of new third party libraries.
+This release improves the robustness of AgaviFormPopulationFilter especially for XHTML and HTML5, and fixes several issues. The database adapters for ext/mysql, ext/mysqli and ext/pdo (when used with MySQL connections) now also prevent potentially unsafe setting of connection encodings.
 
 AgaviFormPopulationFilter can now recover from various non-fatal parse errors, such as unknown tags or malformed markup in HTML parsing mode, and undefined entities in XML parsing mode.
 This marks an end to issues with non-XML entities like "&nbsp;" in XML parsing mode, and allows the use of HTML5 elements (which libxml does not know yet) in HTML parsing mode (i.e. without using the XML serialization of HTML5).
@@ -13,7 +13,10 @@ The new default ignore level "LIBXML_ERR_ERROR" means that users will see signif
 
 AgaviZendclouddocumentserviceDatabase is a database adapter for Zend Framework's Zend_Cloud_DocumentService. It has a convenience interface mirroring most of the Zend_Cloud_DocumentService_Adapter functions in such a way that the collection/domain/database name does not have to be passed to every call. The collection name can then be configured in databases.xml.
 
-The timezone database has been updated to 2010g.
+AgaviMysqlDatabase, AgaviMysqliDatabase and AgaviPdoDatabase now throw errors when attempting to use a statement like "SET NAMES utf8" as an initialization query, since the respective client libraries (libmysql or mysqlnd) will not be aware of this changed character set. For the usual connection encodings like "latin1" or "utf8", this is not a problem, but in combination with multi-byte character sets that use bytes without the most significant bit set in multi-byte character sequences (such as GBK or Big5), this may result in incorrectly quoted strings, which could ultimately result in vulnerabilities in applications.
+For AgaviMysqlDatabase and AgaviMysqliDatabase, the simple fix is to remove the "SET NAMES" query from "init_queries" and use the new option "charset" instead. For AgaviPdoDatabase, a similar approach (specifying the charset in the DSN) works for PHP version 5.3.6 and newer, but in older versions of PHP, the PDO MySQL driver ignores the "charset" option in the DSN. If your my.cnf configuration file specifies "latin1" and you simply switch to UTF-8 using "SET NAMES utf8", this is no problem, but for some charsets, this may result in the quoting issues mentioned above. This is why AgaviPdoDatabase requires you to set "warn_mysql_charset" to false in such environments. With this flag explicitly disabled, it will also be possible to use "SET NAMES" init queries again, but be advised that this is at your own risk. You may mitigate the risks by using native prepared statements (disable PDO::ATTR_EMULATE_PREPARES), but this will not affect calls to PDO::quote() or prepared statements where this flag has been overridden.
+
+The timezone database has been updated to 2011g.
 
 
 Version 1.0.4 - December 19, 2010
