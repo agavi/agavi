@@ -98,7 +98,7 @@ class AgaviMysqlDatabase extends AgaviDatabase
 			case 'env':
 				// construct a connection string from existing $_ENV values
 				// and extract them to local scope
-				$string = $this->loadParameters($_ENV);
+				$parameters = $this->loadParameters($_ENV);
 				extract($parameters);
 				break;
 
