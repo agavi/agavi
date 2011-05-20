@@ -118,7 +118,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	{
 		// do we even have a document?
 		if($this->node === null) {
-			throw new AgaviParseException(sprintf('Schema validation failed because no document is able to be parsed', $document->documentURI));
+			throw new AgaviParseException('Schema validation failed because no document could be parsed');
 		}
 		
 		// is it an ISO Schematron file?
