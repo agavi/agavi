@@ -3,6 +3,8 @@ Options -MultiViews -Indexes +FollowSymLinks
 
 # For Apache2 without rewrites, so /index.php/foobar works.
 AcceptPathInfo On
+# Make sure Apache2 doesn't redirect requests to existing directory names so they contain a trailing slash (kind of messes up the rewrites)
+DirectorySlash Off
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On

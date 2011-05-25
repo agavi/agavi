@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Argentina/Tucuman".
- * Compiled from olson file "southamerica", version 8.48.
+ * Compiled from olson file "southamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -401,7 +401,7 @@ return array (
     'startYear' => 2010,
   ),
   'source' => 'southamerica',
-  'version' => '8.48',
+  'version' => '8.49',
   'name' => 'America/Argentina/Tucuman',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Indian/Antananarivo".
- * Compiled from olson file "africa", version 8.30.
+ * Compiled from olson file "africa", version 8.31.
  *
  * @package    agavi
  * @subpackage translation
@@ -57,7 +57,7 @@ return array (
     'startYear' => 1955,
   ),
   'source' => 'africa',
-  'version' => '8.30',
+  'version' => '8.31',
   'name' => 'Indian/Antananarivo',
 );
 

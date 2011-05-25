@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Indian/Comoro".
- * Compiled from olson file "africa", version 8.30.
+ * Compiled from olson file "africa", version 8.31.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
     'startYear' => 1912,
   ),
   'source' => 'africa',
-  'version' => '8.30',
+  'version' => '8.31',
   'name' => 'Indian/Comoro',
 );
 

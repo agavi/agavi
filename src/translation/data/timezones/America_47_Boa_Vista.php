@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Boa_Vista".
- * Compiled from olson file "southamerica", version 8.48.
+ * Compiled from olson file "southamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -217,7 +217,7 @@ return array (
     'startYear' => 2001,
   ),
   'source' => 'southamerica',
-  'version' => '8.48',
+  'version' => '8.49',
   'name' => 'America/Boa_Vista',
 );
 

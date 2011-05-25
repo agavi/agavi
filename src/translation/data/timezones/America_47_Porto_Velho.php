@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Porto_Velho".
- * Compiled from olson file "southamerica", version 8.48.
+ * Compiled from olson file "southamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -192,7 +192,7 @@ return array (
     'startYear' => 1989,
   ),
   'source' => 'southamerica',
-  'version' => '8.48',
+  'version' => '8.49',
   'name' => 'America/Porto_Velho',
 );
 
