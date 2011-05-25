@@ -619,7 +619,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					$this->doc->documentElement->setAttributeNode($attribute);
 				}
 			}
-			$out = $this->doc->saveXML($this->doc, $cfg['savexml_options']);
+			if(strpos(PHP_VERSION, '5.2.6') === 0) { // check like this so 5.2.6-0.dotdeb.yourmom is also matched
+				// PHP 5.2.6 does not accept null as the first argument to saveXML()
+				// as a workaround, the whole document can be passed, but then it is saved as UTF-8, no matter what, so that won't work for other charsets
+				if(!$cfg['savexml_options']) {
+					$out = $this->doc->saveXML();
+				} elseif($utf8) {
+					$out = $this->doc->saveXML($this->doc, $cfg['savexml_options']);
+				} else {
+					throw new AgaviException("On systems running PHP version 5.2.6, the parameter 'savexml_options' cannot be used in combination with input documents that have a character set other than UTF-8. Please see the following tickets for details:\n\n- http://trac.agavi.org/ticket/1372\n- http://trac.agavi.org/ticket/1279\n- http://bugs.php.net/46191\n- http://trac.agavi.org/ticket/1262");
+				}
+			} else {
+				$out = $this->doc->saveXML(null, $cfg['savexml_options']);
+			}
 			if((!$cfg['parse_xhtml_as_xml'] || !$properXhtml) && $cfg['cdata_fix']) {
 				// these are ugly fixes so inline style and script blocks still work. better don't use them with XHTML to avoid trouble
 				// http://www.456bereastreet.com/archive/200501/the_perils_of_using_xhtml_properly/
