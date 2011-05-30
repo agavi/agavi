@@ -376,7 +376,7 @@ class AgaviWebRouting extends AgaviRouting
 				$options['port'] !== null
 			))
 		) {
-			$scheme = null;
+			$scheme = false;
 			if($options['scheme'] !== false) {
 				$scheme = ($options['scheme'] === null ? $req->getUrlScheme() : $options['scheme']);
 			}
@@ -412,7 +412,18 @@ class AgaviWebRouting extends AgaviRouting
 				$authority = $options['authority'];
 			}
 
-			$retval = ($scheme === null ? '' : $scheme . '://') . $authority . $retval;
+			if($scheme === false) {
+				// nothing at all, e.g. when displaying a URL without the "http://" prefix
+				$scheme = '';
+			} elseif(trim($scheme) === '') {
+				// a protocol-relative URL (see #1224)
+				$scheme = '//';
+			} else {
+				// given scheme plus "://"
+				$scheme = $scheme . '://';
+			}
+			
+			$retval = $scheme . $authority . $retval;
 		}
 
 		if($options['fragment'] !== null) {

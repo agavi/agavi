@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.5 RC1 (December ??, 2010)
 -----------------------------
 
+ADD: Support for protocol-relative URL generation (#1224) (David, Steffen Gransow)
 ADD: Support Thrift socket timeout in AgaviScribeLoggerAppender (#1351) (Dominik)
 ADD: Add plaintext exception output to top and bottom of shiny.php (#1350) (David)
 ADD: Zend_Cloud_DocumentService database adapter (#1349) (David)
