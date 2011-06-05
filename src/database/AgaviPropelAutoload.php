@@ -26,6 +26,8 @@
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
+ * @deprecated To be removed in Agavi 1.1 
+ * 
  * @since      0.10.0
  *
  * @version    $Id$

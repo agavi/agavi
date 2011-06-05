@@ -10,6 +10,7 @@ ADD: Add plaintext exception output to top and bottom of shiny.php (#1350) (Davi
 ADD: Zend_Cloud_DocumentService database adapter (#1349) (David)
 ADD: Support for X-Forwarded-Proto style HTTPS indicators (#1345) (David)
 
+CHG: Deprecate support for Propel versions before 1.3 in AgaviPropelDatabase (#1378) (David)
 CHG: Deprecate AgaviCreoleSessionStorage (#1377) (David)
 CHG: Deprecate AgaviCreoleDatabase (#1376) (David)
 CHG: Prevent usage of SET NAMES for MySQL connections in AgaviMysqliDatabase (#1364) (David)
