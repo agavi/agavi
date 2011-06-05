@@ -10,6 +10,7 @@ ADD: Add plaintext exception output to top and bottom of shiny.php (#1350) (Davi
 ADD: Zend_Cloud_DocumentService database adapter (#1349) (David)
 ADD: Support for X-Forwarded-Proto style HTTPS indicators (#1345) (David)
 
+CHG: Deprecate AgaviCreoleDatabase (#1376) (David)
 CHG: Prevent usage of SET NAMES for MySQL connections in AgaviMysqliDatabase (#1364) (David)
 CHG: Prevent usage of SET NAMES for MySQL connections in AgaviMysqlDatabase (#1363) (David)
 CHG: Prevent usage of SET NAMES for MySQL connections in AgaviPdoDatabase (#1362) (David)
