@@ -18,6 +18,8 @@ For AgaviMysqlDatabase and AgaviMysqliDatabase, the simple fix is to remove the 
 
 Passing an empty string as the scheme in the options array when generating a URL with AgaviWebRouting will now produce a protocol-relative URL starting with "//". This is useful for generated content embedded by third party sites that use both normal and secured HTTP transports.
 
+AgaviMysqlSessionStorage and AgaviPdoSessionStorage have improved update and insert behaviors for MySQL that should eliminate occasional non-critical "exception thrown without a stack frame" errors on shutdown when no session data (including the timestamp) was modified.
+
 The timezone database has been updated to 2011g.
 
 

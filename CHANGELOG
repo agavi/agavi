@@ -20,6 +20,8 @@ CHG: AgaviSecurityUser::hasCredentials() should use AgaviSecurityUser::hasCreden
 CHG: Ignore .gitignore and .gitkeep in cache folder (#1346) (David)
 CHG: Make AgaviFormPopulationFilter parsing more lenient (#1307) (David)
 
+FIX: Exception in AgaviMysqlSessionStorage::sessionWrite() if no data modified on update (#1374) (David)
+FIX: Exception in AgaviPdoSessionStorage::sessionWrite() with MySQL if no data modified on update (#1361) (David)
 FIX: Inconsistent whitespace in code templates (#1373) (David)
 FIX: FormPopulationFilter doesn't work with encodings other than UTF-8 (#1372) (David)
 FIX: Undefined variable notice in AgaviView (#1370) (David)
