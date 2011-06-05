@@ -336,16 +336,13 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 
 		$isOracle = $this->connection->getAttribute(PDO::ATTR_DRIVER_NAME) == 'oracle';
 		$useLob = $this->getParameter('data_as_lob', true);
+		$columnType = ($isOracle || $useLob) ? PDO::PARAM_LOB : PDO::PARAM_STR;
 
 		if($isOracle) {
-			$sql = sprintf('UPDATE %s SET %s = EMPTY_BLOB(), %s = :time WHERE %s = :id RETURNING %s INTO :data', $db_table, $db_data_col, $db_time_col, $db_id_col, $db_data_col);
-
 			$sp = fopen('php://memory', 'r+');
 			fwrite($sp, $data);
 			rewind($sp);
 		} else {
-			$sql = sprintf('UPDATE %s SET %s = :data, %s = :time WHERE %s = :id', $db_table, $db_data_col, $db_time_col, $db_id_col);
-
 			$sp = $data;
 		}
 
@@ -355,7 +352,39 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 		}
 
 		try {
-			$columnType = ($isOracle || $useLob) ? PDO::PARAM_LOB : PDO::PARAM_STR;
+			// pretend the session does not exist and attempt to create it first
+			$sql = sprintf('INSERT INTO %s (%s, %s, %s) VALUES (:id, :data, :time)', $db_table, $db_id_col, $db_data_col, $db_time_col);
+
+			$stmt = $this->connection->prepare($sql);
+			$stmt->bindParam(':id', $id);
+			$stmt->bindParam(':data', $sp, $columnType);
+			if(is_int($ts)) {
+				$stmt->bindValue(':time', $ts, PDO::PARAM_INT);
+			} else {
+				$stmt->bindValue(':time', $ts, PDO::PARAM_STR);
+			}
+			$this->connection->beginTransaction();
+			if(!$stmt->execute()) {
+				$errorInfo = $stmt->errorInfo();
+				$e = new PDOException($errorInfo[2], $errorInfo[0]);
+				$e->errorInfo = $errorInfo;
+				throw $e;
+			}
+			if(!$this->connection->commit()) {
+				$errorInfo = $stmt->errorInfo();
+				$e = new PDOException($errorInfo[2], $errorInfo[0]);
+				$e->errorInfo = $errorInfo;
+				throw $e;
+			}
+		} catch(PDOException $e) {
+			// something went wrong; probably a key collision, which means this session already exists
+			$this->connection->rollback();
+
+			if($isOracle) {
+				$sql = sprintf('UPDATE %s SET %s = EMPTY_BLOB(), %s = :time WHERE %s = :id RETURNING %s INTO :data', $db_table, $db_data_col, $db_time_col, $db_id_col, $db_data_col);
+			} else {
+				$sql = sprintf('UPDATE %s SET %s = :data, %s = :time WHERE %s = :id', $db_table, $db_data_col, $db_time_col, $db_id_col);
+			}
 
 			$stmt = $this->connection->prepare($sql);
 			$stmt->bindParam(':data', $sp, $columnType);
@@ -383,42 +412,8 @@ class AgaviPdoSessionStorage extends AgaviSessionStorage
 			$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
 			throw new AgaviDatabaseException($error, 0, $e);
 		}
-			
-		if(!$stmt->rowCount()) {
-			// session does not exist, create it
-			$sql = sprintf('INSERT INTO %s (%s, %s, %s) VALUES (:id, :data, :time)', $db_table, $db_id_col, $db_data_col, $db_time_col);
-
-			try {
-				$stmt = $this->connection->prepare($sql);
-				$stmt->bindParam(':id', $id);
-				$stmt->bindParam(':data', $sp, $columnType);
-				if(is_int($ts)) {
-					$stmt->bindValue(':time', $ts, PDO::PARAM_INT);
-				} else {
-					$stmt->bindValue(':time', $ts, PDO::PARAM_STR);
-				}
-				$this->connection->beginTransaction();
-				if(!$stmt->execute()) {
-					$errorInfo = $stmt->errorInfo();
-					$e = new PDOException($errorInfo[2], $errorInfo[0]);
-					$e->errorInfo = $errorInfo;
-					throw $e;
-				}
-				if(!$this->connection->commit()) {
-					$errorInfo = $stmt->errorInfo();
-					$e = new PDOException($errorInfo[2], $errorInfo[0]);
-					$e->errorInfo = $errorInfo;
-					throw $e;
-				}
-				return true;
-			} catch(PDOException $e) {
-				$this->connection->rollback();
-				$error = sprintf('PDOException was thrown when trying to manipulate session data. Message: "%s"', $e->getMessage());
-				throw new AgaviDatabaseException($error, 0, $e);
-			}
-		} else {
-			return true;
-		}
+		
+		return true;
 	}
 }
 

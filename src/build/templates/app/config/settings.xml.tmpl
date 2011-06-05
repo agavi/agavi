@@ -1,53 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
+	
 	<ae:configuration>
-
+		
 		<system_actions>
-
 			<system_action name="default">
 				<module>Unknown</module>
 				<action>Unknown</action>
 			</system_action>
-
+			
 			<system_action name="error_404">
 				<module>Unknown</module>
 				<action>Unknown</action>
 			</system_action>
-
+			
 			<system_action name="unavailable">
 				<module>Unknown</module>
 				<action>Unknown</action>
 			</system_action>
-
+			
 			<system_action name="module_disabled">
 				<module>Unknown</module>
 				<action>Unknown</action>
 			</system_action>
-
+			
 			<system_action name="secure">
 				<module>Unknown</module>
 				<action>Unknown</action>
 			</system_action>
-
+			
 			<system_action name="login">
 				<module>Unknown</module>
 				<action>Unknown</action>
 			</system_action>
-
 		</system_actions>
-
+		
 		<settings>
 			<setting name="app_name">%%PROJECT_NAME%%</setting>
-
+			
 			<setting name="available">true</setting>
 			<setting name="debug">false</setting>
-
+			
 			<setting name="use_database">false</setting>
 			<setting name="use_logging">false</setting>
 			<setting name="use_security">true</setting>
 			<setting name="use_translation">false</setting>
 		</settings>
-
+		
 		<exception_templates>
 			<!-- this is the exception template that's used by default unless one for a specific context has been defined, or for the current output type -->
 			<!-- note that exceptions that occur before a context is even fully initialized, or an exception that happens before the output types are loaded and determined, will use a template defined here -->
@@ -56,15 +55,15 @@
 			<!-- per-output-type templates can be set in output_types.xml -->
 			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
 		</exception_templates>
-
+		
 	</ae:configuration>
-
+	
 	<ae:configuration environment="development.*">
 		<settings>
 			<setting name="debug">true</setting>
 		</settings>
 	</ae:configuration>
-
+	
 	<ae:configuration environment="production.*">
 		<exception_templates>
 			<!-- a different exception template for production -->
@@ -74,4 +73,5 @@
 			<exception_template context="web">%core.template_dir%/exceptions/web.php</exception_template>
 		</exception_templates>
 	</ae:configuration>
+	
 </ae:configurations>

@@ -14,7 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * An Agavi Database driver for Propel, derived from the native Creole driver. 
+ * An Agavi Database driver for Propel. Supports all Propel versions. Support
+ * for Propel versions prior to 1.3 will be removed in Agavi 1.1.
  * 
  * <b>Optional parameters:</b>
  *
