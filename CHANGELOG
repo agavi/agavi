@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.5 RC1 (December ??, 2010)
------------------------------
+1.0.5 RC1 (June 6, 2011)
+------------------------
 
 ADD: Support for protocol-relative URL generation (#1224) (David, Steffen Gransow)
 ADD: Support Thrift socket timeout in AgaviScribeLoggerAppender (#1351) (Dominik)
