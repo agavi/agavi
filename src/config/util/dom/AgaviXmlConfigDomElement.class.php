@@ -185,7 +185,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		// tag our element, because older libxmls will mess things up otherwise
 		// http://trac.agavi.org/ticket/1039
 		$marker = uniqid('', true);
-		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker', $marker);
+		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker', $marker);
 		
 		if($pluralMagic) {
 			// we always assume that we either get plural names, or the singular of the singular is not different from the singular :)
@@ -205,7 +205,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		$retval = (int)$this->ownerDocument->getXpath()->evaluate(sprintf($query, $name, $singularName, $namespaceUri, $marker), $this);
 		
-		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker');
+		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker');
 		
 		return $retval;
 	}
@@ -261,7 +261,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		// tag our element, because libxml will mess things up otherwise
 		$marker = uniqid('', true);
-		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker', $marker);
+		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker', $marker);
 		
 		if($pluralMagic) {
 			// we always assume that we either get plural names, or the singular of the singular is not different from the singular :)
@@ -281,7 +281,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		$retval = $this->ownerDocument->getXpath()->query(sprintf($query, $name, $singularName, $namespaceUri, $marker), $this);
 		
-		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker');
+		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker');
 		
 		return $retval;
 	}
@@ -330,7 +330,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		// tag our element, because libxml will mess things up otherwise
 		$marker = uniqid('', true);
-		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker', $marker);
+		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker', $marker);
 		
 		if($namespaceUri) {
 			$query = 'self::node()[count(child::*[local-name() = "%1$s" and namespace-uri() = "%2$s" and ../@agavi_annotations_latest:marker = "%3$s"]) = 1]/*[local-name() = "%1$s" and namespace-uri() = "%2$s" and ../@agavi_annotations_latest:marker = "%3$s"]';
@@ -340,7 +340,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		$retval = $this->ownerDocument->getXpath()->query(sprintf($query, $name, $namespaceUri, $marker), $this)->item(0);
 		
-		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker');
+		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker');
 		
 		return $retval;
 	}
