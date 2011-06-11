@@ -31,8 +31,10 @@
 		
 		<!-- create an element of the same name -->
 		<xsl:element name="{local-name()}" namespace="{$namespace}">
-			<!-- also copy all namespace declarations, except the one of the current element (otherwise, we'd overwrite the namespace in the <element> above if it's just xmlns etc) -->
-			<xsl:copy-of select="namespace::*[not(. = namespace-uri(current()))]" />
+			<!-- also copy all namespace declarations with a prefix (so only xmlns:foo="...", not plain xmlns="..."), except the one of the current element (otherwise, we'd overwrite the namespace in the <element> above if it's just xmlns etc) -->
+			<!-- the not(name() = '') part is to ensure that we don't copy xmlns="..." declarations, since that might give very strange results and isn't necessary anyway -->
+			<!-- the purpose of copying these declarations is to make sure that they remain available as originally declared, which usually is only relevant in cases where element or attribute content refers to the declared prefixes again, think <xs:element type="foo:burp" />. We need that mainly for SOAP, WSDL and stuff like that -->
+			<xsl:copy-of select="namespace::*[not(name() = '') and not(. = namespace-uri(current()))]" />
 			<xsl:copy-of select="@*" />
 			<xsl:copy-of select="exslt-common:node-set($attributes)//@*" />
 			<xsl:apply-templates />
