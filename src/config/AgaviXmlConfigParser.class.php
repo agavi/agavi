@@ -84,8 +84,7 @@ class AgaviXmlConfigParser
 		self::NAMESPACE_AGAVI_ENVELOPE_0_11 => 'agavi_envelope_0_11',
 		self::NAMESPACE_AGAVI_ENVELOPE_1_0 => 'agavi_envelope_1_0',
 		self::NAMESPACE_AGAVI_ENVELOPE_1_1 => 'agavi_envelope_1_1',
-		
-		self::NAMESPACE_AGAVI_ANNOTATIONS_1_0 => 'agavi_annotations_1_0'
+		self::NAMESPACE_AGAVI_ANNOTATIONS_1_0 => 'agavi_annotations_1_0',
 	);
 	
 	/**
