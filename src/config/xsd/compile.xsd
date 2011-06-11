@@ -2,7 +2,7 @@
 <xs:schema
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:compile_1_0="http://agavi.org/agavi/config/parts/compile/1.0"
-	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.1"
 	elementFormDefault="qualified"
 	version="$Id$">
 

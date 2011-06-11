@@ -5,10 +5,13 @@
 	xmlns:exslt-common="http://exslt.org/common"
 	xmlns:saxon="http://icl.com/saxon"
 	xmlns:envelope_0_11="http://agavi.org/agavi/1.0/config"
-	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0">
+	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:envelope_1_1="http://agavi.org/agavi/config/global/envelope/1.1"
+>
 	
 	<xsl:variable name="envelope_0_11" select="'http://agavi.org/agavi/1.0/config'" />
 	<xsl:variable name="envelope_1_0" select="'http://agavi.org/agavi/config/global/envelope/1.0'" />
+	<xsl:variable name="envelope_1_1" select="'http://agavi.org/agavi/config/global/envelope/1.1'" />
 	
 	<!-- callable template for migrating envelope nodes -->
 	<xsl:template name="_common-migrate-envelope-element">
@@ -41,6 +44,7 @@
 		</xsl:element>
 	</xsl:template>
 	
+	<!-- 0.11 to 1.0 -->
 	<xsl:template match="envelope_0_11:configurations">
 		<xsl:call-template name="_common-migrate-envelope-element" />
 	</xsl:template>
@@ -55,6 +59,33 @@
 	</xsl:template>
 	<xsl:template match="envelope_0_11:parameter">
 		<xsl:call-template name="_common-migrate-envelope-element" />
+	</xsl:template>
+	
+	<!-- 1.0 to 1.1 -->
+	<xsl:template match="envelope_1_0:configurations">
+		<xsl:call-template name="_common-migrate-envelope-element">
+			<xsl:with-param name="namespace" select="$envelope_1_1" />
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="envelope_1_0:configuration">
+		<xsl:call-template name="_common-migrate-envelope-element">
+			<xsl:with-param name="namespace" select="$envelope_1_1" />
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="envelope_1_0:sandbox">
+		<xsl:call-template name="_common-migrate-envelope-element">
+			<xsl:with-param name="namespace" select="$envelope_1_1" />
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="envelope_1_0:parameters">
+		<xsl:call-template name="_common-migrate-envelope-element">
+			<xsl:with-param name="namespace" select="$envelope_1_1" />
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="envelope_1_0:parameter">
+		<xsl:call-template name="_common-migrate-envelope-element">
+			<xsl:with-param name="namespace" select="$envelope_1_1" />
+		</xsl:call-template>
 	</xsl:template>
 	
 	<!-- we need to apply templates to sub-elements, just in case someone wrapped a native agavi element and processed that with xsl, for example -->
