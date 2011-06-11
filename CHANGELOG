@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.5 (June ??, 2011)
+---------------------
+
+FIX: _common.xsl copies namespace declarations without prefix (#1384) (David)
+
+
 1.0.5 RC1 (June 6, 2011)
 ------------------------
 
