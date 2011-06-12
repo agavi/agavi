@@ -91,6 +91,9 @@
 
 			<handler pattern="%core.config_dir%/logging.xml" class="AgaviLoggingConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/logging.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/logging.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/logging.xsl</transformation>
 			</handler>
 
