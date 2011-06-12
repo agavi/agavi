@@ -51,6 +51,9 @@
 
 			<handler pattern="%core.config_dir%/factories.xml" class="AgaviFactoryConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/factories.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/factories.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/factories.xsl</transformation>
 			</handler>
 
