@@ -30,7 +30,7 @@
  */
 class AgaviRbacDefinitionConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/rbac_definitions/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/rbac_definitions/1.1';
 	
 	/**
 	 * Execute this configuration handler.

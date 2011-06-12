@@ -99,6 +99,9 @@
 
 			<handler pattern="%core.config_dir%/rbac_definitions.xml" class="AgaviRbacDefinitionConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/rbac_definitions.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/rbac_definitions.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/rbac_definitions.xsl</transformation>
 			</handler>
 
