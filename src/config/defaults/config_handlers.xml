@@ -171,6 +171,9 @@
 
 			<handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/validators.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/validators.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/validators.xsl</transformation>
 			</handler>
 
