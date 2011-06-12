@@ -83,6 +83,9 @@
 
 			<handler pattern="%core.config_dir%/output_types.xml" class="AgaviOutputTypeConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/output_types.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/output_types.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/output_types.xsl</transformation>
 			</handler>
 
