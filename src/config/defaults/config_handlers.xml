@@ -13,11 +13,16 @@
 			-->
 			<handler pattern="%core.config_dir%/autoload.xml" class="AgaviAutoloadConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/autoload.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/autoload.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/autoload.xsl</transformation>
 			</handler>
-			
 			<handler pattern="%core.system_config_dir%/autoload.xml" class="AgaviAutoloadConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/autoload.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/autoload.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/autoload.xsl</transformation>
 			</handler>
 
@@ -102,6 +107,9 @@
 			-->
 			<handler pattern="%core.module_dir%/*/config/autoload.xml" class="AgaviAutoloadConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/autoload.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/autoload.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/autoload.xsl</transformation>
 			</handler>
 
