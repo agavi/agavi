@@ -32,7 +32,7 @@
  */
 class AgaviSettingConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/settings/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/settings/1.1';
 	
 	/**
 	 * Execute this configuration handler.
