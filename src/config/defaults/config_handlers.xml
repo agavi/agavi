@@ -75,6 +75,9 @@
 
 			<handler pattern="%core.config_dir%/global_filters.xml" class="AgaviFilterConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/filters.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/filters.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/filters.xsl</transformation>
 			</handler>
 
@@ -133,6 +136,9 @@
 
 			<handler pattern="%core.module_dir%/*/config/action_filters.xml" class="AgaviFilterConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/filters.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/filters.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/filters.xsl</transformation>
 			</handler>
 
