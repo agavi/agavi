@@ -131,7 +131,8 @@
 
 			<handler pattern="%core.testing_dir%/config/suites.xml" class="AgaviTestSuitesConfigHandler">
 				<!-- <validation>%core.agavi_dir%/config/xsd/module.xsd</validation>-->
-				<!-- <transformation>%core.agavi_dir%/config/xsl/module.xsl</transformation> --> 
+				<!-- 1.0 to 1.1 -->
+				<transformation>%core.agavi_dir%/config/xsl/testing.suites.xsl</transformation> 
 			</handler>
 
 			<!--
