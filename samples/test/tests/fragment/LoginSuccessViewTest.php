@@ -48,7 +48,7 @@ class LoginSuccessViewTest extends AgaviViewTestCase
 		$this->assertViewRedirectsNot();
 		$this->assertContainerAttributeExists('_title');
 		$this->assertViewSetsCookie('autologon[username]', array('value' => 'Chuck Norris', 'lifetime' => '+14 days', 'path' => null, 'domain' => null, 'secure' => null, 'httponly' => null));
-		$this->assertViewSetsCookie('autologon[password]', array('value' => 'd436130cf2f5024cfdb3aa7325322d530336b95f', 'lifetime' => '+14 days', 'path' => null, 'domain' => null, 'secure' => null, 'httponly' => null));
+		$this->assertViewSetsCookie('autologon[password]', array('value' => '$2a$10$2/Gmc4XpwAytFgy3wfrW9OUnkzd6ahgcMqrm4cEc4zD3IFD1GB6IG', 'lifetime' => '+14 days', 'path' => null, 'domain' => null, 'secure' => null, 'httponly' => null));
 	}
 	
 }
