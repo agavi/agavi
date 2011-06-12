@@ -123,6 +123,9 @@
 
 			<handler pattern="%core.config_dir%/translation.xml" class="AgaviTranslationConfigHandler">
 				<validation>%core.agavi_dir%/config/xsd/translation.xsd</validation>
+				<!-- 0.11 to 1.0 -->
+				<transformation>%core.agavi_dir%/config/xsl/translation.xsl</transformation>
+				<!-- 1.0 to 1.1 -->
 				<transformation>%core.agavi_dir%/config/xsl/translation.xsl</transformation>
 			</handler>
 
