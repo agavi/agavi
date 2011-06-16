@@ -133,7 +133,8 @@ EOD;
 		$p2->addInstallAs('bin/agavi-dist', 'agavi');
 		$p2->addIgnoreToRelease('bin/agavi.bat-dist');
 		
-		$p2->addPackageDepWithChannel('required', 'phing', 'pear.phing.info', '2.3.1');
+		$p2->addPackageDepWithChannel('required', 'phing', 'pear.phing.info', '2.4.0');
+		$p2->addPackageDepWithChannel('optional', 'PHPUnit', 'pear.phpunit.de', '3.5.0');
 		
 		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
 		

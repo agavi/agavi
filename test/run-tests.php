@@ -17,7 +17,7 @@ AgaviToolkit::clearCache();
 
 AgaviTesting::bootstrap($env);
 
-PHPUnit_Util_Filter::addDirectoryToFilter(AgaviConfig::get('core.cache_dir'));
+PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(AgaviConfig::get('core.cache_dir'));
 
 AgaviTesting::dispatch($arguments);
 
