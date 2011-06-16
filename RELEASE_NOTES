@@ -1,7 +1,7 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.5 - June ??, 2011
+Version 1.0.5 - June 16, 2011
 =============================
 
 This release improves the robustness of AgaviFormPopulationFilter especially for XHTML and HTML5, and fixes several issues. The database adapters for ext/mysql, ext/mysqli and ext/pdo (when used with MySQL connections) now also prevent potentially unsafe setting of connection encodings.
