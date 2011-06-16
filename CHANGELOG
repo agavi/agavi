@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.5 (June ??, 2011)
 ---------------------
 
+CHG: Use trigger_error() instead of die() in minimum PHP version check (#1387) (David)
 CHG: Support PHPUnit 3.5 and drop compatibility with PHPUnit 3.4 (#1331) (David)
 
 FIX: _common.xsl copies namespace declarations without prefix (#1384) (David)
