@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 CHG: Use trigger_error() instead of die() in minimum PHP version check (#1387) (David)
 CHG: Support PHPUnit 3.5 and drop compatibility with PHPUnit 3.4 (#1331) (David, Markus Lervik)
 
+FIX: AgaviLoggingConfigHandler does not check for existence of declared classes, layouts or appenders (#1386) (David)
 FIX: PEAR package declares Phing 2.3.1 or later as a dependency, but minimum required Phing version is 2.4.0 (#1388) (David)
 FIX: _common.xsl copies namespace declarations without prefix (#1384) (David)
 
