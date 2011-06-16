@@ -172,12 +172,12 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	/**
 	 * Performs custom preparations on the process isolation template.
 	 *
-	 * @param        PHPUnit_Util_Template $template
+	 * @param        Text_Template $template
 	 *
 	 * @author       Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since        1.0.2
 	*/
-	protected function prepareTemplate(PHPUnit_Util_Template $template)
+	protected function prepareTemplate(Text_Template $template)
 	{
 		parent::prepareTemplate($template);
 		
