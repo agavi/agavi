@@ -107,6 +107,8 @@ class AgaviTesting
 	 * @param      string Name of the suite
 	 * @param      array  An array containing information about the suite
 	 *
+	 * @return     AgaviTestSuite The initialized test suite object.
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
