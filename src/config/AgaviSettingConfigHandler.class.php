@@ -87,7 +87,7 @@ class AgaviSettingConfigHandler extends AgaviXmlConfigHandler
 				if($setting->hasAgaviParameters()) {
 					$data[$settingName] = $setting->getAgaviParameters();
 				} else {
-					$data[$settingName] = AgaviToolkit::literalize($setting->getValue());
+					$data[$settingName] = $setting->getLiteralValue();
 				}
 			}
 			

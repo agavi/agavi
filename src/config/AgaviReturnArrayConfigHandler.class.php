@@ -104,9 +104,10 @@ class AgaviReturnArrayConfigHandler extends AgaviXmlConfigHandler
 		}
 		
 		if(!(int)$item->ownerDocument->getXpath()->evaluate(sprintf('count(*[namespace-uri() = "%s"])', $item->ownerDocument->getDefaultNamespaceUri()), $item)) {
-			$val = $item->getValue();
 			if($literalize) {
-				$val = AgaviToolkit::literalize($val);
+				$val = $item->getLiteralValue();
+			} else {
+				$val = $item->getValue();
 			}
 			
 			if($val === null) {

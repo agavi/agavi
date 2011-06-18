@@ -54,6 +54,8 @@ class AgaviXmlConfigParser
 	
 	const NAMESPACE_SVRL_ISO = 'http://purl.oclc.org/dsdl/svrl';
 	
+	const NAMESPACE_XML_1998 = 'http://www.w3.org/XML/1998/namespace'; 
+	
 	const NAMESPACE_XMLNS_2000 = 'http://www.w3.org/2000/xmlns/';
 	
 	const NAMESPACE_XSL_1999 = 'http://www.w3.org/1999/XSL/Transform';

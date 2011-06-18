@@ -12,6 +12,8 @@
 	           schemaLocation="../_types.xsd" />
 	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.1"
 	           schemaLocation="../_envelope.xsd" />
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace"
+	           schemaLocation="../vendor/http/www.w3.org/XML/1998/namespace/2009-01.xsd" />
 
 	<!-- System actions -->
 
@@ -44,6 +46,8 @@
 	<xs:complexType name="setting" mixed="true">
 		<xs:group ref="envelope_1_1:parameters" />
 		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute ref="xml:space" />
+		<xs:attribute ref="envelope_1_1:literalize" />
 	</xs:complexType>
 
 	<xs:complexType name="settings">
