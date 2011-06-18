@@ -947,8 +947,18 @@
 		</if>
 
 		<agavi.execute-target name="action-locate" />
-		<agavi.write-configuration namespace="http://agavi.org/agavi/config/parts/settings/1.0" file="${project.directory}/${project.directory.app.config}/settings.xml" path="/envelope:configurations/envelope:configuration/document:system_actions/document:system_action[@name='${system-action.name}']/document:module" value="${module.name}" />
-		<agavi.write-configuration namespace="http://agavi.org/agavi/config/parts/settings/1.0" file="${project.directory}/${project.directory.app.config}/settings.xml" path="/envelope:configurations/envelope:configuration/document:system_actions/document:system_action[@name='${system-action.name}']/document:action" value="${action.name}" />
+		<agavi.write-configuration
+			namespace="http://agavi.org/agavi/config/parts/settings/1.1"
+			file="${project.directory}/${project.directory.app.config}/settings.xml"
+			path="//*[local-name() = 'configuration' and (namespace-uri() = 'http://agavi.org/agavi/config/global/envelope/1.0' or namespace-uri() = 'http://agavi.org/agavi/config/global/envelope/1.1')]//*[local-name() = 'system_action' and (namespace-uri() = 'http://agavi.org/agavi/config/parts/settings/1.0' or namespace-uri() = 'http://agavi.org/agavi/config/parts/settings/1.1') and @name='${system-action.name}']/*[local-name() = 'module']"
+			value="${module.name}"
+		/>
+		<agavi.write-configuration
+			namespace="http://agavi.org/agavi/config/parts/settings/1.1"
+			file="${project.directory}/${project.directory.app.config}/settings.xml"
+			path="//*[local-name() = 'configuration' and (namespace-uri() = 'http://agavi.org/agavi/config/global/envelope/1.0' or namespace-uri() = 'http://agavi.org/agavi/config/global/envelope/1.1')]//*[local-name() = 'system_action' and (namespace-uri() = 'http://agavi.org/agavi/config/parts/settings/1.0' or namespace-uri() = 'http://agavi.org/agavi/config/parts/settings/1.1') and @name='${system-action.name}']/*[local-name() = 'action']"
+			value="${action.name}"
+		/>
 	</target>
 
 	<!--
