@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/output_types/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/output_types/1.1" xmlns:xi="http://www.w3.org/2001/XInclude">
 
 	<!-- the sandbox. we can put anything in here. very useful for sharing stuff inside the document using XIncludes -->
 	<ae:sandbox>
@@ -34,7 +34,7 @@
 
 					<layout name="default">
 						<!-- include common layer definitions from the sandbox -->
-						<xi:include xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(ot=http://agavi.org/agavi/config/parts/output_types/1.0) xpointer(/ae:configurations/ae:sandbox/ot:layers/*)" />
+						<xi:include xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xmlns(ot=http://agavi.org/agavi/config/parts/output_types/1.1) xpointer(/ae:configurations/ae:sandbox/ot:layers/*)" />
 						<!-- and then define those special tp this layout -->
 						<layer name="decorator">
 							<slot name="header" module="Default" action="Widgets.Header" />
@@ -47,7 +47,7 @@
 
 					<layout name="slot">
 						<!-- include common layer definitions from the sandbox -->
-						<xi:include xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(ot=http://agavi.org/agavi/config/parts/output_types/1.0) xpointer(/ae:configurations/ae:sandbox/ot:layers/*)" />
+						<xi:include xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xmlns(ot=http://agavi.org/agavi/config/parts/output_types/1.1) xpointer(/ae:configurations/ae:sandbox/ot:layers/*)" />
 					</layout>
 
 				</layouts>
