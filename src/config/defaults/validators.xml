@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
 	
 	<ae:configuration>
 		<validator_definitions>

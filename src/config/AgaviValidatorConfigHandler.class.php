@@ -31,7 +31,7 @@
  */
 class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/validators/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/validators/1.1';
 	
 	/**
 	 * @var        array operator => validator mapping

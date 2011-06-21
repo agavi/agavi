@@ -36,7 +36,9 @@ class AgaviXmlConfigParser
 	
 	const NAMESPACE_AGAVI_ENVELOPE_1_0 = 'http://agavi.org/agavi/config/global/envelope/1.0';
 	
-	const NAMESPACE_AGAVI_ENVELOPE_LATEST = self::NAMESPACE_AGAVI_ENVELOPE_1_0;
+	const NAMESPACE_AGAVI_ENVELOPE_1_1 = 'http://agavi.org/agavi/config/global/envelope/1.1';
+	
+	const NAMESPACE_AGAVI_ENVELOPE_LATEST = self::NAMESPACE_AGAVI_ENVELOPE_1_1;
 	
 	const NAMESPACE_AGAVI_ANNOTATIONS_1_0 = 'http://agavi.org/agavi/config/global/annotations/1.0';
 	
@@ -51,6 +53,8 @@ class AgaviXmlConfigParser
 	const NAMESPACE_SCHEMATRON_ISO = 'http://purl.oclc.org/dsdl/schematron';
 	
 	const NAMESPACE_SVRL_ISO = 'http://purl.oclc.org/dsdl/svrl';
+	
+	const NAMESPACE_XML_1998 = 'http://www.w3.org/XML/1998/namespace'; 
 	
 	const NAMESPACE_XMLNS_2000 = 'http://www.w3.org/2000/xmlns/';
 	
@@ -71,6 +75,7 @@ class AgaviXmlConfigParser
 	public static $agaviEnvelopeNamespaces = array(
 		self::NAMESPACE_AGAVI_ENVELOPE_0_11 => 'agavi_envelope_0_11',
 		self::NAMESPACE_AGAVI_ENVELOPE_1_0 => 'agavi_envelope_1_0',
+		self::NAMESPACE_AGAVI_ENVELOPE_1_1 => 'agavi_envelope_1_1',
 	);
 	
 	/**
@@ -80,8 +85,8 @@ class AgaviXmlConfigParser
 	public static $agaviNamespaces = array(
 		self::NAMESPACE_AGAVI_ENVELOPE_0_11 => 'agavi_envelope_0_11',
 		self::NAMESPACE_AGAVI_ENVELOPE_1_0 => 'agavi_envelope_1_0',
-		
-		self::NAMESPACE_AGAVI_ANNOTATIONS_1_0 => 'agavi_annotations_1_0'
+		self::NAMESPACE_AGAVI_ENVELOPE_1_1 => 'agavi_envelope_1_1',
+		self::NAMESPACE_AGAVI_ANNOTATIONS_1_0 => 'agavi_annotations_1_0',
 	);
 	
 	/**

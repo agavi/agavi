@@ -31,7 +31,7 @@
  */
 class AgaviTranslationConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/translation/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/translation/1.1';
 	
 	/**
 	 * Execute this configuration handler.

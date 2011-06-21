@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:envelope_1_1="http://agavi.org/agavi/config/global/envelope/1.1"
 	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
-	xmlns="http://agavi.org/agavi/config/parts/settings/1.0"
-	targetNamespace="http://agavi.org/agavi/config/parts/settings/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/settings/1.1"
+	targetNamespace="http://agavi.org/agavi/config/parts/settings/1.1"
 	elementFormDefault="qualified"
 	version="$Id$">
 
 	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
 	           schemaLocation="../_types.xsd" />
-	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.1"
 	           schemaLocation="../_envelope.xsd" />
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace"
+	           schemaLocation="../vendor/http/www.w3.org/XML/1998/namespace/2009-01.xsd" />
 
 	<!-- System actions -->
 
@@ -42,8 +44,10 @@
 	<!-- Settings -->
 
 	<xs:complexType name="setting" mixed="true">
-		<xs:group ref="envelope_1_0:parameters" />
+		<xs:group ref="envelope_1_1:parameters" />
 		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute ref="xml:space" />
+		<xs:attribute ref="envelope_1_1:literalize" />
 	</xs:complexType>
 
 	<xs:complexType name="settings">

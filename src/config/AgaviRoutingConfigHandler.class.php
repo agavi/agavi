@@ -31,7 +31,7 @@
  */
 class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/routing/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/routing/1.1';
 	
 	/**
 	 * @var        array Stores the generated names of unnamed routes.

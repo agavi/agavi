@@ -33,7 +33,7 @@
  */
 class AgaviLoggingConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/logging/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/logging/1.1';
 	
 	/**
 	 * Execute this configuration handler.

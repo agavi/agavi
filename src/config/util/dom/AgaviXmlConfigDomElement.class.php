@@ -77,6 +77,55 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	}
 	
 	/**
+	 * Returns the literal value. By default, that means whitespace is trimmed,
+	 * boolean literals ("on", "yes", "true", "no", "off", "false") are converted
+	 * and configuration directives ("%core.app_dir%") are expanded.
+	 *
+	 * Takes attributes {http://www.w3.org/XML/1998/namespace}space and
+	 * {http://agavi.org/agavi/config/global/envelope/1.1}literalize into account
+	 * when computing the literal value. This way, users can control the trimming
+	 * and the literalization of values.
+	 * 
+	 * AEP-100 has a list of all the conversion rules that apply.
+	 *
+	 * @return     mixed The element content converted according to the rules
+	 *                   defined in AEP-100.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getLiteralValue()
+	{
+		$value = $this->getValue();
+		// XML specifies [\x9\xA\xD\x20] as whitespace
+		// trim strips more than that
+		// no problem though, because these other chars aren't legal in XML
+		$trimmedValue = trim($value);
+		
+		$preserveWhitespace = $this->getAttributeNS(AgaviXmlConfigParser::NAMESPACE_XML_1998, 'space') == 'preserve';
+		$literalize = AgaviToolkit::literalize($this->getAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST, 'literalize')) !== false;
+		
+		if($literalize) {
+			if($preserveWhitespace && ($trimmedValue === '' || $value != $trimmedValue)) {
+				// we must preserve whitespace, and there is leading or trailing whitespace in the original value, so we won't run AgaviToolkit::literalize(), which trims the input and then converts "true" to a boolean and so forth
+				// however, we should still expand possible occurrences of config directives
+				$value = AgaviToolkit::expandDirectives($value);
+			} else {
+				// no need to preserve whitespace, or no leading/trailing whitespace, which means we can expand "true", "false" and so forth using AgaviToolkit::literalize()
+				$value = AgaviToolkit::literalize($trimmedValue);
+			}
+		} elseif(!$preserveWhitespace) {
+			$value = $trimmedValue;
+			if($value === '') {
+				// with or without literalize, an empty string must be converted to NULL if xml:space is default (see ticket #1203 and AEP-100)
+				$value = null;
+			}
+		}
+		
+		return $value;
+	}
+	
+	/**
 	 * Returns an iterator for the child nodes.
 	 *
 	 * @return     Iterator An iterator.
@@ -185,7 +234,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		// tag our element, because older libxmls will mess things up otherwise
 		// http://trac.agavi.org/ticket/1039
 		$marker = uniqid('', true);
-		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker', $marker);
+		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker', $marker);
 		
 		if($pluralMagic) {
 			// we always assume that we either get plural names, or the singular of the singular is not different from the singular :)
@@ -205,7 +254,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		$retval = (int)$this->ownerDocument->getXpath()->evaluate(sprintf($query, $name, $singularName, $namespaceUri, $marker), $this);
 		
-		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker');
+		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker');
 		
 		return $retval;
 	}
@@ -261,7 +310,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		// tag our element, because libxml will mess things up otherwise
 		$marker = uniqid('', true);
-		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker', $marker);
+		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker', $marker);
 		
 		if($pluralMagic) {
 			// we always assume that we either get plural names, or the singular of the singular is not different from the singular :)
@@ -281,7 +330,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		$retval = $this->ownerDocument->getXpath()->query(sprintf($query, $name, $singularName, $namespaceUri, $marker), $this);
 		
-		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker');
+		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker');
 		
 		return $retval;
 	}
@@ -330,7 +379,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		// tag our element, because libxml will mess things up otherwise
 		$marker = uniqid('', true);
-		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker', $marker);
+		$this->setAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker', $marker);
 		
 		if($namespaceUri) {
 			$query = 'self::node()[count(child::*[local-name() = "%1$s" and namespace-uri() = "%2$s" and ../@agavi_annotations_latest:marker = "%3$s"]) = 1]/*[local-name() = "%1$s" and namespace-uri() = "%2$s" and ../@agavi_annotations_latest:marker = "%3$s"]';
@@ -340,7 +389,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		
 		$retval = $this->ownerDocument->getXpath()->query(sprintf($query, $name, $namespaceUri, $marker), $this)->item(0);
 		
-		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_1_0, 'agavi_annotations_latest:marker');
+		$this->removeAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ANNOTATIONS_LATEST, 'agavi_annotations_latest:marker');
 		
 		return $retval;
 	}
@@ -456,8 +505,6 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 * element.
 	 *
 	 * @param      array An array of existing parameters.
-	 * @param      bool  Whether or not input values should be literalized once
-	 *                   they are read.
 	 *
 	 * @return     array The complete array of parameters.
 	 *
@@ -465,7 +512,7 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function getAgaviParameters(array $existing = array(), $literalize = true)
+	public function getAgaviParameters(array $existing = array())
 	{
 		$result = $existing;
 		$offset = 0;
@@ -483,9 +530,9 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 				
 				if($element->hasAgaviParameters()) {
 					$result[$key] = isset($result[$key]) && is_array($result[$key]) ? $result[$key] : array();
-					$result[$key] = $element->getAgaviParameters($result[$key], $literalize);
+					$result[$key] = $element->getAgaviParameters($result[$key]);
 				} else {
-					$result[$key] = $literalize ? AgaviToolkit::literalize($element->getValue()) : $element->getValue();
+					$result[$key] = $element->getLiteralValue();
 				}
 			}
 		}

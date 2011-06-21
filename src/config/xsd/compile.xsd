@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:compile_1_0="http://agavi.org/agavi/config/parts/compile/1.0"
-	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:compile_1_1="http://agavi.org/agavi/config/parts/compile/1.1"
+	targetNamespace="http://agavi.org/agavi/config/global/envelope/1.1"
 	elementFormDefault="qualified"
 	version="$Id$">
 
-	<xs:import namespace="http://agavi.org/agavi/config/parts/compile/1.0"
+	<xs:import namespace="http://agavi.org/agavi/config/parts/compile/1.1"
 	           schemaLocation="parts/compile.xsd" />
 
 	<xs:redefine schemaLocation="_envelope.xsd">
@@ -14,7 +14,7 @@
 		<xs:complexType name="configuration">
 			<xs:complexContent>
 				<xs:extension base="configuration">
-					<xs:group ref="compile_1_0:configuration" />
+					<xs:group ref="compile_1_1:configuration" />
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>

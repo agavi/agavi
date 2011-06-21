@@ -4,6 +4,10 @@ AGAVI UPGRADING INSTRUCTIONS
 Upgrading to 1.1 Series from 1.0 Series
 =======================================
 
+Configuration
+-------------
+All configuration namespaces got bumped to version 1.1. For example, the envelope namespace is now "http://agavi.org/agavi/config/global/envelope/1.1", and the factories.xml namespace is "http://agavi.org/agavi/config/parts/factories/1.1". XSL transformations will automatically port your existing configuration files to new versions and apply backwards compatibility modifications where necessary. If you do not have the XSL extension installed or if you would like to port the configuration files to the new namespace, adjust the namespace declarations accordingly. Occasionally, you will have to add, change or remove elements; new namespace versions may also affect system behavior. All changes that might affect your application are outlined in this file.
+
 Response
 --------
 If you are using custom implementations of AgaviResponse, please make sure to update the merge() method to call parent::merge(). This method was previously declared abstract, but since Agavi 1.1 it contains the necessary code to perform merging of response attributes.
