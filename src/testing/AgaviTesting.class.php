@@ -100,7 +100,18 @@ class AgaviTesting
 		$runner->doRun($master_suite, $arguments);
 	}
 	
-	protected static function createSuite($name, $suite) 
+	/**
+	 * Initialize a suite from the given instructions and add registered tests.
+	 *
+	 * @param      string Name of the suite
+	 * @param      array  An array containing information about the suite
+	 *
+	 * @return     AgaviTestSuite The initialized test suite object.
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected static function createSuite($name, array $suite) 
 	{
 		$base = (null == $suite['base']) ? 'tests' : $suite['base'];
 		if(!AgaviToolkit::isPathAbsolute($base)) {

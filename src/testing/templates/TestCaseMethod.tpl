@@ -41,7 +41,6 @@ if('' != '{agavi_default_context}') {
 	AgaviConfig::set('core.default_context', '{agavi_default_context}');
 }
 
-require_once 'PHPUnit/Framework.php';
 require_once '{filename}';
 
 
