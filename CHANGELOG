@@ -1,6 +1,12 @@
 AGAVI CHANGELOG
 ===============
 
+1.0.6 (June ??, 2011)
+---------------------
+
+CHG: Move Sample App WSDL serving into web context (#1390) (David)
+
+
 1.0.5 (June 16, 2011)
 ---------------------
 
