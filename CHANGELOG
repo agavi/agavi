@@ -6,6 +6,8 @@ AGAVI CHANGELOG
 
 CHG: Move Sample App WSDL serving into web context (#1390) (David)
 
+FIX: AgaviConfigCache tests failing on Windows (#1391) (David)
+
 
 1.0.5 (June 16, 2011)
 ---------------------

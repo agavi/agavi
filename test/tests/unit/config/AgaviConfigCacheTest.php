@@ -30,14 +30,14 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	{
 		return array(
 			'slashes_null' => array(
-				'foo/bar/back\\slash.xml',
+				'foo/bar/hash#bang.xml',
 				null,
-				'back_slash.xml_'.AgaviConfig::get('core.environment').'__'.sha1('foo/bar/back\\slash.xml_'.AgaviConfig::get('core.environment').'_').'.php',
+				'hash_bang.xml_'.AgaviConfig::get('core.environment').'__'.sha1('foo/bar/hash#bang.xml_'.AgaviConfig::get('core.environment').'_').'.php',
 			),
 			'<contextname>' => array(
-				'foo/bar/back\\slash.xml',
+				'foo/bar/hash#bang.xml',
 				'<contextname>',
-				'back_slash.xml_'.AgaviConfig::get('core.environment').'__contextname__'.sha1('foo/bar/back\\slash.xml_'.AgaviConfig::get('core.environment').'_<contextname>').'.php',
+				'hash_bang.xml_'.AgaviConfig::get('core.environment').'__contextname__'.sha1('foo/bar/hash#bang.xml_'.AgaviConfig::get('core.environment').'_<contextname>').'.php',
 			),
 		);
 	}
@@ -45,6 +45,7 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	public function testCheckConfig()
 	{
 		$config = AgaviConfig::get('core.config_dir').DIRECTORY_SEPARATOR.'autoload.xml';
+		$config = AgaviToolkit::normalizePath($config);
 		$expected = AgaviConfigCache::getCacheName($config);
 		if(file_exists($expected)) {
 			unlink($expected);
