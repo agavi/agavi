@@ -28,15 +28,18 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	
 	public function dataGenerateCacheName()
 	{
-		return array(	'slashes_null' =>     array('foo/bar/back\\slash.xml', 
-													null, 
-													'back_slash.xml_'.AgaviConfig::get('core.environment').'__'.sha1('foo/bar/back\\slash.xml_'.AgaviConfig::get('core.environment').'_').'.php',
-													),
-						'<contextname>' =>    array('foo/bar/back\\slash.xml',
-													'<contextname>',
-													'back_slash.xml_'.AgaviConfig::get('core.environment').'__contextname__'.sha1('foo/bar/back\\slash.xml_'.AgaviConfig::get('core.environment').'_<contextname>').'.php',
-													),
-					);
+		return array(
+			'slashes_null' => array(
+				'foo/bar/back\\slash.xml',
+				null,
+				'back_slash.xml_'.AgaviConfig::get('core.environment').'__'.sha1('foo/bar/back\\slash.xml_'.AgaviConfig::get('core.environment').'_').'.php',
+			),
+			'<contextname>' => array(
+				'foo/bar/back\\slash.xml',
+				'<contextname>',
+				'back_slash.xml_'.AgaviConfig::get('core.environment').'__contextname__'.sha1('foo/bar/back\\slash.xml_'.AgaviConfig::get('core.environment').'_<contextname>').'.php',
+			),
+		);
 	}
 	
 	public function testCheckConfig()
