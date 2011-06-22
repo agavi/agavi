@@ -1,6 +1,12 @@
 AGAVI RELEASE NOTES
 ===================
 
+Version 1.0.6 - June ??, 2011
+=============================
+
+This release adds support for ext/sqlsrv as a session storage via AgaviSqlsrvSessionStorage as an alternative to interfacing with SQL Server via PDO. The session table's data column must be of type "varbinary".
+
+
 Version 1.0.5 - June 16, 2011
 =============================
 
