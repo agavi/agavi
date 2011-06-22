@@ -4,6 +4,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:envelope_0_11="http://agavi.org/agavi/1.0/config"
 	xmlns:factories_1_0="http://agavi.org/agavi/config/parts/factories/1.0"
+	xmlns:factories_1_1="http://agavi.org/agavi/config/parts/factories/1.1"
 >
 	<!--xmlns:factories_1_1="http://agavi.org/agavi/1.1/config/factories"-->
 	
@@ -12,7 +13,7 @@
 	<xsl:include href="_common.xsl" />
 	
 	<xsl:variable name="factories_1_0" select="'http://agavi.org/agavi/config/parts/factories/1.0'" />
-	<!--<xsl:variable name="factories11" select="'http://agavi.org/agavi/1.1/config/factories'" />-->
+	<xsl:variable name="factories_1_1" select="'http://agavi.org/agavi/config/parts/factories/1.1'" />
 	
 	<!-- pre-1.0 backwards compatibility for 1.0 -->
 	<!-- non-"envelope" elements are copied to the 1.0 factories namespace -->
@@ -23,18 +24,12 @@
 		</xsl:element>
 	</xsl:template>
 	
-	<!-- 1.0 BC for 1.1 -->
-	<!-- namespace is simply changed to 1.1 for all elements except <storage> -->
-	<!-- <xsl:template match="factories10:*">
-		<xsl:element name="{local-name()}" namespace="{$factories11}">
+	<!-- 1.0 backwards compatibility for 1.1 -->
+	<xsl:template match="factories_1_0:*">
+		<xsl:element name="{local-name()}" namespace="{$factories_1_1}">
 			<xsl:copy-of select="@*" />
 			<xsl:apply-templates />
 		</xsl:element>
 	</xsl:template>
-	<xsl:template match="agavi10:storage | factories10:storage">
-		<factories11:storage_manager class="AgaviStorageManager">
-			<xsl:apply-templates />
-		</factories11:storage_manager>
-	</xsl:template> -->
 	
 </xsl:stylesheet>

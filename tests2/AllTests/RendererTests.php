@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../renderer/RendererTest.php');
+require_once(__DIR__ . '/../renderer/RendererTest.php');
 
 class RendererTests
 {

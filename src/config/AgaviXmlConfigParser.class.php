@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -36,7 +36,9 @@ class AgaviXmlConfigParser
 	
 	const NAMESPACE_AGAVI_ENVELOPE_1_0 = 'http://agavi.org/agavi/config/global/envelope/1.0';
 	
-	const NAMESPACE_AGAVI_ENVELOPE_LATEST = self::NAMESPACE_AGAVI_ENVELOPE_1_0;
+	const NAMESPACE_AGAVI_ENVELOPE_1_1 = 'http://agavi.org/agavi/config/global/envelope/1.1';
+	
+	const NAMESPACE_AGAVI_ENVELOPE_LATEST = self::NAMESPACE_AGAVI_ENVELOPE_1_1;
 	
 	const NAMESPACE_AGAVI_ANNOTATIONS_1_0 = 'http://agavi.org/agavi/config/global/annotations/1.0';
 	
@@ -51,6 +53,8 @@ class AgaviXmlConfigParser
 	const NAMESPACE_SCHEMATRON_ISO = 'http://purl.oclc.org/dsdl/schematron';
 	
 	const NAMESPACE_SVRL_ISO = 'http://purl.oclc.org/dsdl/svrl';
+	
+	const NAMESPACE_XML_1998 = 'http://www.w3.org/XML/1998/namespace'; 
 	
 	const NAMESPACE_XMLNS_2000 = 'http://www.w3.org/2000/xmlns/';
 	
@@ -71,6 +75,7 @@ class AgaviXmlConfigParser
 	public static $agaviEnvelopeNamespaces = array(
 		self::NAMESPACE_AGAVI_ENVELOPE_0_11 => 'agavi_envelope_0_11',
 		self::NAMESPACE_AGAVI_ENVELOPE_1_0 => 'agavi_envelope_1_0',
+		self::NAMESPACE_AGAVI_ENVELOPE_1_1 => 'agavi_envelope_1_1',
 	);
 	
 	/**
@@ -80,8 +85,8 @@ class AgaviXmlConfigParser
 	public static $agaviNamespaces = array(
 		self::NAMESPACE_AGAVI_ENVELOPE_0_11 => 'agavi_envelope_0_11',
 		self::NAMESPACE_AGAVI_ENVELOPE_1_0 => 'agavi_envelope_1_0',
-		
-		self::NAMESPACE_AGAVI_ANNOTATIONS_1_0 => 'agavi_annotations_1_0'
+		self::NAMESPACE_AGAVI_ENVELOPE_1_1 => 'agavi_envelope_1_1',
+		self::NAMESPACE_AGAVI_ANNOTATIONS_1_0 => 'agavi_annotations_1_0',
 	);
 	
 	/**
@@ -382,7 +387,7 @@ class AgaviXmlConfigParser
 			$this->doc = new AgaviXmlConfigDomDocument();
 			$this->doc->load($path);
 		} catch(DOMException $dome) {
-			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $path, $dome->getMessage()));
+			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $path, $dome->getMessage()), 0, $dome);
 		}
 	}
 	
@@ -501,7 +506,7 @@ class AgaviXmlConfigParser
 		try {
 			$document->xinclude();
 		} catch(DOMException $dome) {
-			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $document->documentURI, $dome->getMessage()));
+			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $document->documentURI, $dome->getMessage()), 0, $dome);
 		}
 		
 		// remove all xml:base attributes inserted by XIncludes
@@ -572,7 +577,7 @@ class AgaviXmlConfigParser
 				$xsl = new AgaviXmlConfigDomDocument();
 				$xsl->load($href);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()), 0, $dome);
 			}
 			
 			// add them to the list of transformations to be done
@@ -586,7 +591,7 @@ class AgaviXmlConfigParser
 				$proc = new AgaviXmlConfigXsltProcessor();
 				$proc->importStylesheet($xsl);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not import XSL stylesheet "%s": %s', $document->documentURI, $xsl->documentURI, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not import XSL stylesheet "%s": %s', $document->documentURI, $xsl->documentURI, $e->getMessage()), 0, $e);
 			}
 			
 			// set some info (config file path, context name, environment name) as params
@@ -602,7 +607,7 @@ class AgaviXmlConfigParser
 				// transform the doc
 				$newdoc = $proc->transformToDoc($document);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not transform the document using the XSL stylesheet "%s": %s', $document->documentURI, $xsl->documentURI, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not transform the document using the XSL stylesheet "%s": %s', $document->documentURI, $xsl->documentURI, $e->getMessage()), 0, $e);
 			}
 			
 			// no errors and we got a document back? excellent. this will be our new baby from now. time to kill the old one
@@ -661,7 +666,7 @@ class AgaviXmlConfigParser
 							$xsl = new AgaviXmlConfigDomDocument();
 							$xsl->appendChild($xsl->importNode($stylesheets->item(0), true));
 						} catch(DOMException $dome) {
-							throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()));
+							throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not load XSL stylesheet "%s": %s', $document->documentURI, $href, $dome->getMessage()), 0, $dome);
 						}
 						
 						// and append to the list of XSLs to process
@@ -809,7 +814,7 @@ class AgaviXmlConfigParser
 			try {
 				$document->schemaValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()), 0, $dome);
 			}
 		}
 	}
@@ -830,7 +835,7 @@ class AgaviXmlConfigParser
 			try {
 				$document->schemaValidateSource($validationSource);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('XML Schema validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()), 0, $dome);
 			}
 		}
 	}
@@ -855,7 +860,7 @@ class AgaviXmlConfigParser
 			try {
 				$document->relaxNGValidate($validationFile);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('RELAX NG validation of configuration file "%s" failed:' . "\n\n%s", $document->documentURI, $dome->getMessage()), 0, $dome);
 			}
 		}
 	}
@@ -901,14 +906,14 @@ class AgaviXmlConfigParser
 				$sch = new AgaviXmlConfigDomDocument();
 				$sch->load($href);
 			} catch(DOMException $dome) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not load schema file "%s": %s', $document->documentURI, $href, $dome->getMessage()));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Could not load schema file "%s": %s', $document->documentURI, $href, $dome->getMessage()), 0, $dome);
 			}
 			
 			// perform the validation transformation
 			try {
 				$result = $schematron->transform($sch);
 			} catch(Exception $e) {
-				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Transformation failed: %s', $document->documentURI, $e->getMessage()));
+				throw new AgaviParseException(sprintf('Schematron validation of configuration file "%s" failed: Transformation failed: %s', $document->documentURI, $e->getMessage()), 0, $e);
 			}
 			
 			// validation ran okay, now we need to look at the result document to see if there are errors

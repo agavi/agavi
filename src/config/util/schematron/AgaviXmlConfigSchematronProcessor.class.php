@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -118,7 +118,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	{
 		// do we even have a document?
 		if($this->node === null) {
-			throw new AgaviParseException(sprintf('Schema validation failed because no document is able to be parsed', $document->documentURI));
+			throw new AgaviParseException('Schema validation failed because no document could be parsed');
 		}
 		
 		// is it an ISO Schematron file?
@@ -143,7 +143,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 				$initialProcessor->removeParameter('', $parameter);
 			}
 		} catch(Exception $e) {
-			throw new AgaviParseException(sprintf('Could not transform schema file "%s": %s', $schema->documentURI, $e->getMessage()));
+			throw new AgaviParseException(sprintf('Could not transform schema file "%s": %s', $schema->documentURI, $e->getMessage()), 0, $e);
 		}
 		
 		// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
@@ -156,14 +156,14 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 			$validator = new AgaviXmlConfigXsltProcessor();
 			$validator->importStylesheet($validatorImpl);
 		} catch(Exception $e) {
-			throw new AgaviParseException(sprintf('Could not process the schema file "%s": %s', $schema->documentURI, $e->getMessage()));
+			throw new AgaviParseException(sprintf('Could not process the schema file "%s": %s', $schema->documentURI, $e->getMessage()), 0, $e);
 		}
 		
 		// run the validation by transforming our document using the generated validation stylesheet
 		try {
 			$result = $validator->transformToDoc($this->node);
 		} catch(Exception $e) {
-			throw new AgaviParseException(sprintf('Could not validate the document against the schema file "%s": %s', $schema->documentURI, $e->getMessage()));
+			throw new AgaviParseException(sprintf('Could not validate the document against the schema file "%s": %s', $schema->documentURI, $e->getMessage()), 0, $e);
 		}
 		
 		return $result;

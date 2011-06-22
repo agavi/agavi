@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -963,18 +963,6 @@ class AgaviTranslationManager
 
 		if($time instanceof DateTime) {
 			$tzName = $time->getTimezone()->getName();
-			if(version_compare(PHP_VERSION, '5.3', '<')) {
-				// when a datetime object is created with an timezone offset like in '2005-02-21 00:00:00+01:00'
-				// php falsely returns the name of the current default timezone as the name of the datetimes timezone
-				// but luckily timezone abbreviation (T) is GMT name (GMT-0200) of the timezone
-				// to not accidentally report dates which are really in the default timezone the name is explicitly checked
-				if($tzName == date_default_timezone_get()) {
-					$abbr = $time->format('T');
-					if(preg_match('/^GMT[+-]\d{4}$/', $abbr)) {
-						$tzName = $abbr;
-					}
-				}
-			}
 
 			if(preg_match('/^[+-0-9]/', $tzName)) {
 				$tzName = 'GMT' . $tzName;

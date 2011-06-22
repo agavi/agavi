@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/ConfigHandlerTestBase.php');
+require_once(__DIR__ . '/ConfigHandlerTestBase.php');
 
 class RbacDefinitionConfigHandlerTest extends ConfigHandlerTestBase
 {

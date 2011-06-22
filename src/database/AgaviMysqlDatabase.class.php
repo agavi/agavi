@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -48,6 +48,24 @@
 class AgaviMysqlDatabase extends AgaviDatabase
 {
 	/**
+	 * Initialize this Database.
+	 *
+	 * @param      AgaviDatabaseManager The database manager of this instance.
+	 * @param      array                An assoc array of initialization params.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.5
+	 */
+	public function initialize(AgaviDatabaseManager $databaseManager, array $parameters = array())
+	{
+		parent::initialize($databaseManager, $parameters);
+		
+		if($matches = preg_grep('/^\s*SET\s+NAMES\b/i', (array)$this->getParameter('init_queries'))) {
+			throw new AgaviDatabaseException(sprintf('Depending on your MySQL server configuration, it may not be safe to use "SET NAMES" to configure the connection encoding, as the underlying MySQL client library will not be aware of the changed character set. As a result, string escaping may be applied incorrectly, leading to potential attack vectors in combination with certain multi-byte character sets such as GBK or Big5.' . "\n\n" . 'Please remove the "%s" statement from the "init_queries" configuration parameter in databases.xml and use the configuration parameter "charset" instead.' . "\n\n" . 'The associated PHP bug ticket http://bugs.php.net/47802 contains further information (describes PDO, but the basic issue is the same).', $matches[0]));
+		}
+	}
+
+	/**
 	 * Connect to the database.
 	 *
 	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
@@ -80,7 +98,7 @@ class AgaviMysqlDatabase extends AgaviDatabase
 			case 'env':
 				// construct a connection string from existing $_ENV values
 				// and extract them to local scope
-				$string = $this->loadParameters($_ENV);
+				$parameters = $this->loadParameters($_ENV);
 				extract($parameters);
 				break;
 
@@ -116,6 +134,14 @@ class AgaviMysqlDatabase extends AgaviDatabase
 			// the connection's foobar'd
 			$error = 'Failed to create a AgaviMySQLDatabase connection';
 			throw new AgaviDatabaseException($error);
+		}
+
+		if($this->hasParameter('charset')) {
+			if(!mysql_set_charset($this->getParameter('charset'), $this->connection)) {
+				$error = 'Failed to set charset "%s"';
+				$error = sprintf($error, $this->getParameter('charset'));
+				throw new AgaviDatabaseException($error);
+			}
 		}
 
 		// select our database

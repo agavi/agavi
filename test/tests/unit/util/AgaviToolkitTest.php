@@ -1,14 +1,14 @@
 <?php
 if(!class_exists('AgaviToolkit')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviToolkit.class.php');
+	include(__DIR__ . '/../../../../src/util/AgaviToolkit.class.php');
 }
 
 if(!class_exists('AgaviConfig')) {
-	include(dirname(__FILE__) . '/../../../../src/config/AgaviConfig.class.php');
+	include(__DIR__ . '/../../../../src/config/AgaviConfig.class.php');
 }
 
 if(!class_exists('AgaviException')) {
-	include(dirname(__FILE__) . '/../../../../src/exception/AgaviException.class.php');
+	include(__DIR__ . '/../../../../src/exception/AgaviException.class.php');
 }
 
 class AgaviToolkitTest extends PHPUnit_Framework_TestCase

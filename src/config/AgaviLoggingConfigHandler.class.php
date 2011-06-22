@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -33,7 +33,7 @@
  */
 class AgaviLoggingConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/logging/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/logging/1.1';
 	
 	/**
 	 * Execute this configuration handler.
@@ -118,19 +118,42 @@ class AgaviLoggingConfigHandler extends AgaviXmlConfigHandler
 
 		if(count($loggers) > 0) {
 			foreach($layouts as $name => $layout) {
+				if(!isset($layout['class'])) {
+					throw new AgaviConfigurationException(sprintf('logging.xml has no class defined for layout "%s".', $name));
+				} elseif(!class_exists($layout['class'])) {
+					throw new AgaviConfigurationException(sprintf('logging.xml specifies unknown class "%s" for layout "%s".', $layout['class'], $name));
+				}
 				$code[] = sprintf('${%s} = new %s();', var_export('_layout_' . $name, true), $layout['class']);
 				$code[] = sprintf('${%s}->initialize($this->context, %s);', var_export('_layout_' . $name, true), var_export($layout['params'], true));
 			}
 
 			foreach($appenders as $name => $appender) {
+				if(!isset($appender['class'])) {
+					throw new AgaviConfigurationException(sprintf('logging.xml has no class defined for appender "%s".', $name));
+				} elseif(!class_exists($appender['class'])) {
+					throw new AgaviConfigurationException(sprintf('logging.xml specifies unknown class "%s" for appender "%s".', $appender['class'], $name));
+				}
 				$code[] = sprintf('${%s} = new %s();', var_export('_appender_' . $name, true), $appender['class']);
 				$code[] = sprintf('${%s}->initialize($this->context, %s);', var_export('_appender_' . $name, true), var_export($appender['params'], true));
+				if(!isset($appender['layout'])) {
+					throw new AgaviConfigurationException(sprintf('logging.xml has no layout defined for appender "%s".', $name));
+				} elseif(!isset($layouts[$appender['layout']])) {
+					throw new AgaviConfigurationException(sprintf('logging.xml specifies unknown layout "%s" for appender "%s".', $appender['layout'], $name));
+				}
 				$code[] = sprintf('${%s}->setLayout(${%s});', var_export('_appender_' . $name, true), var_export('_layout_' . $appender['layout'], true));
 			}
 
 			foreach($loggers as $name => $logger) {
+				if(!isset($logger['class'])) {
+					throw new AgaviConfigurationException(sprintf('logging.xml has no class defined for logger "%s".', $name));
+				} elseif(!class_exists($logger['class'])) {
+					throw new AgaviConfigurationException(sprintf('logging.xml specifies unknown class "%s" for logger "%s".', $logger['class'], $name));
+				}
 				$code[] = sprintf('${%s} = new %s();', var_export('_logger_' . $name, true), $logger['class']);
 				foreach($logger['appenders'] as $appender) {
+					if(!isset($appenders[$appender])) {
+						throw new AgaviConfigurationException(sprintf('logging.xml specifies unknown appender "%s" for logger "%s".', $appender, $name));
+					}
 					$code[] = sprintf('${%s}->setAppender(%s, ${%s});', var_export('_logger_' . $name, true), var_export($appender, true), var_export('_appender_' . $appender, true));
 				}
 				if($logger['level'] !== null) {

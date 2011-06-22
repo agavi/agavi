@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../core/ContextTest.php');
+require_once(__DIR__ . '/../core/ContextTest.php');
 
 class CoreTests
 {

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -39,7 +39,7 @@ abstract class AgaviTask extends Task
 	public function init()
 	{
 		if(!class_exists('AgaviBuild')) {
-			require_once(dirname(__FILE__) . '/../../../../../agavi/build.php');
+			require_once(__DIR__ . '/../../../../../agavi/build.php');
 			AgaviBuild::bootstrap();
 		}
 	}

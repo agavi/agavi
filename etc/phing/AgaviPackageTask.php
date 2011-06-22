@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -133,7 +133,8 @@ EOD;
 		$p2->addInstallAs('bin/agavi-dist', 'agavi');
 		$p2->addIgnoreToRelease('bin/agavi.bat-dist');
 		
-		$p2->addPackageDepWithChannel('required', 'phing', 'pear.phing.info', '2.3.1');
+		$p2->addPackageDepWithChannel('required', 'phing', 'pear.phing.info', '2.4.0');
+		$p2->addPackageDepWithChannel('optional', 'PHPUnit', 'pear.phpunit.de', '3.5.0');
 		
 		$p2->addConflictingPackageDepWithChannel('phing', 'pear.php.net');
 		

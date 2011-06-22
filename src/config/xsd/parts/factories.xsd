@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:envelope_1_0="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns:envelope_1_1="http://agavi.org/agavi/config/global/envelope/1.1"
 	xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
-	xmlns="http://agavi.org/agavi/config/parts/factories/1.0"
-	targetNamespace="http://agavi.org/agavi/config/parts/factories/1.0"
+	xmlns="http://agavi.org/agavi/config/parts/factories/1.1"
+	targetNamespace="http://agavi.org/agavi/config/parts/factories/1.1"
 	elementFormDefault="qualified"
 	version="$Id$">
 
 	<xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
 	           schemaLocation="../_types.xsd" />
-	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.0"
+	<xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.1"
 	           schemaLocation="../_envelope.xsd" />
 
 	<xs:complexType name="factory">
 		<xs:sequence maxOccurs="unbounded">
-			<xs:group ref="envelope_1_0:parameters" />
+			<xs:group ref="envelope_1_1:parameters" />
 		</xs:sequence>
 		<xs:attribute name="class" type="types_1_0:php_class" use="required" />
 	</xs:complexType>

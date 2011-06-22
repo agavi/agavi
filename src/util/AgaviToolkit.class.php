@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -142,6 +142,10 @@ final class AgaviToolkit
 	 */
 	public static function clearCache($path = '')
 	{
+		if(!AgaviConfig::get('core.cache_dir')) {
+			throw new AgaviException('Holy disk wipe, Batman! It seems that the value of "core.cache_dir" is empty, and because Agavi considers you its most dearest of friends, it chose not to erase your entire file system. Skynet or other evil machines may not be so forgiving however, so please fix whatever code you wrote that caused this :)');
+		}
+		
 		$ignores = array('.', '..', '.svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.gitignore', '.gitkeep');
 		$path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $path));
 		$path = realpath(AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . $path);
@@ -319,7 +323,7 @@ final class AgaviToolkit
 			$oldvalue = $value;
 			$value = preg_replace_callback(
 				'/\%([\w\.]+?)\%/',
-				array('AgaviToolkit', 'expandDirectivesCallback'),
+				function($matches) { return AgaviConfig::get($matches[1], '%' . $matches[1] . '%'); },
 				$value
 			);
 		} while($oldvalue != $value);
@@ -327,21 +331,6 @@ final class AgaviToolkit
 		return $value;
 	}
 	
-	/**
-	 * preg_replace_callback used in AgaviTookit::expandDirectives()
-	 *
-	 * @param      array An array of matches; index 1 is used.
-	 *
-	 * @return     string A value to use for replacement.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	private static function expandDirectivesCallback($matches)
-	{
-		return AgaviConfig::get($matches[1], '%' . $matches[1] . '%');
-	}
-
 	/**
 	 * This function takes the numerator and divides it through the denominator while
 	 * storing the remainder and returning the quotient.

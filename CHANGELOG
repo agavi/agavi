@@ -4,11 +4,18 @@ AGAVI CHANGELOG
 1.1.0 beta1 (June ??, 2009)
 ---------------------------
 
+ADD: Allow control over value literalization and whitespace handling in parameters and settings (#1389) (David)
+ADD: AgaviHttpRedirectRoutingCallback (#1382) (David)
 ADD: Improve the build system for actions, views and models (#1106) (Felix)
 ADD: Allow array syntax for slot names (#1110) (David)
 ADD: Add support for custom filesystem layouts for modules to the project configuration system (#874) (Noah)
 ADD: Response attributes (#1062) (David, TANAKA Koichi)
 
+CHG: Bump configuration namespaces to version 1.1 (#1385) (David)
+CHG: Remove AgaviCreoleSessionStorage (#1380) (David)
+CHG: Remove AgaviAdodbDatabase (#1375) (David)
+CHG: Use brypt for password hashing in Sample Application (#1371) (David)
+CHG: Do not throw exception in AgaviWebResponse if headers already sent (#1358) (David)
 CHG: Make AgaviReturnArrayConfigHandler an AgaviXmlConfigHandler and add namespace awareness (#1277) (David)
 CHG: Move loading of autoload.xml into Agavi::bootstrap() (#1206) (David)
 CHG: Add response to default template assigns (#1095) (David)

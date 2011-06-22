@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -21,8 +21,7 @@ class AgaviSampleAppUser extends AgaviRbacSecurityUser
 	 */
 	static $users = array(
 		'Chuck Norris' => array(
-			'salt' => 'bb6cb0a1ea7b94d9a1ffdfe74a3e141a',
-			'password' => 'd436130cf2f5024cfdb3aa7325322d530336b95f', // that's "kick" plus the salt
+			'password' => '$2a$10$2/Gmc4XpwAytFgy3wfrW9OUnkzd6ahgcMqrm4cEc4zD3IFD1GB6IG', // bcrypt, 10 rounds, "kick"
 			'roles' => array(
 				'photographer',
 			)
@@ -55,7 +54,7 @@ class AgaviSampleAppUser extends AgaviRbacSecurityUser
 		}
 		
 		if(!$isPasswordHashed) {
-			$password = self::computeSaltedHash($password, self::$users[$username]['salt']);
+			$password = self::computeSaltedHash($password, self::$users[$username]['password']);
 		}
 		
 		if($password != self::$users[$username]['password']) {
@@ -69,8 +68,7 @@ class AgaviSampleAppUser extends AgaviRbacSecurityUser
 	
 	public static function computeSaltedHash($secret, $salt)
 	{
-		// sha1 is flawed. you know the drill. this is just an example.
-		return sha1($secret . $salt);
+		return crypt($secret, $salt);
 	}
 	
 	public static function getPassword($username)

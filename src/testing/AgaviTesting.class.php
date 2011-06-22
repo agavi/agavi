@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -59,7 +59,7 @@ class AgaviTesting
 		// bootstrap the framework for autoload, config handlers etc.
 		Agavi::bootstrap($environment);
 		
-		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
+		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(__DIR__));
 		
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}
@@ -100,7 +100,18 @@ class AgaviTesting
 		$runner->doRun($master_suite, $arguments);
 	}
 	
-	protected static function createSuite($name, $suite) 
+	/**
+	 * Initialize a suite from the given instructions and add registered tests.
+	 *
+	 * @param      string Name of the suite
+	 * @param      array  An array containing information about the suite
+	 *
+	 * @return     AgaviTestSuite The initialized test suite object.
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
+	protected static function createSuite($name, array $suite) 
 	{
 		$base = (null == $suite['base']) ? 'tests' : $suite['base'];
 		if(!AgaviToolkit::isPathAbsolute($base)) {

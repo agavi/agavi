@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -423,7 +423,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				if(isset($rememberTheView) && $actionCache != $rememberTheView) {
 					// yup. clear it!
 					$ourClass = get_class($this);
-					call_user_func(array($ourClass, 'clearCache'), $groups);
+					$ourClass::clearCache($groups);
 				}
 				
 				// check if the returned view is cacheable
@@ -437,7 +437,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 					if(isset($rememberTheView)) {
 						// yup. clear it!
 						$ourClass = get_class($this);
-						call_user_func(array($ourClass, 'clearCache'), $groups);
+						$ourClass::clearCache($groups);
 					}
 					// $lm->log('Returned View is not cleared for caching, setting cacheable status to false.');
 				} else {

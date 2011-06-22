@@ -1,17 +1,17 @@
 <?php
-require_once(dirname(__FILE__) . '/../config/AgaviConfigTest.php');
-require_once(dirname(__FILE__) . '/../config/AutoloadConfigHandlerTest.php');
-require_once(dirname(__FILE__) . '/../config/CompileConfigHandlerTest.php');
-require_once(dirname(__FILE__) . '/../config/ConfigCacheTest.php');
-require_once(dirname(__FILE__) . '/../config/ConfigHandlersConfigHandlerTest.php');
-require_once(dirname(__FILE__) . '/../config/ConfigHandlerTest.php');
-require_once(dirname(__FILE__) . '/../config/ConfigValueHolderTest.php');
-require_once(dirname(__FILE__) . '/../config/DatabaseConfigHandlerTest.php');
-//require_once(dirname(__FILE__) . '/../config/FactoryConfigHandlerTest.php');
-require_once(dirname(__FILE__) . '/../config/FilterConfigHandlerTest.php');
-require_once(dirname(__FILE__) . '/../config/LoggingConfigHandlerTest.php');
-require_once(dirname(__FILE__) . '/../config/ReturnArrayConfigHandlerTest.php');
-require_once(dirname(__FILE__) . '/../config/RbacdefinitionConfigHandlerTest.php');
+require_once(__DIR__ . '/../config/AgaviConfigTest.php');
+require_once(__DIR__ . '/../config/AutoloadConfigHandlerTest.php');
+require_once(__DIR__ . '/../config/CompileConfigHandlerTest.php');
+require_once(__DIR__ . '/../config/ConfigCacheTest.php');
+require_once(__DIR__ . '/../config/ConfigHandlersConfigHandlerTest.php');
+require_once(__DIR__ . '/../config/ConfigHandlerTest.php');
+require_once(__DIR__ . '/../config/ConfigValueHolderTest.php');
+require_once(__DIR__ . '/../config/DatabaseConfigHandlerTest.php');
+//require_once(__DIR__ . '/../config/FactoryConfigHandlerTest.php');
+require_once(__DIR__ . '/../config/FilterConfigHandlerTest.php');
+require_once(__DIR__ . '/../config/LoggingConfigHandlerTest.php');
+require_once(__DIR__ . '/../config/ReturnArrayConfigHandlerTest.php');
+require_once(__DIR__ . '/../config/RbacdefinitionConfigHandlerTest.php');
 
 class ConfigTests
 {

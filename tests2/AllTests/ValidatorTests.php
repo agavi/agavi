@@ -1,17 +1,17 @@
 <?php
-//require_once(dirname(__FILE__) . '/../validator/ErrorManagerTest.php');
-//require_once(dirname(__FILE__) . '/../validator/DependencyManagerTest.php');
-//require_once(dirname(__FILE__) . '/../validator/ValidatorTest.php');
-//require_once(dirname(__FILE__) . '/../validator/ValidatorManagerTest.php');
-//require_once(dirname(__FILE__) . '/../validator/OperatorValidatorTest.php');
-//require_once(dirname(__FILE__) . '/../validator/AndoperatorValidatorTest.php');
-//require_once(dirname(__FILE__) . '/../validator/OroperatorValidatorTest.php');
-//require_once(dirname(__FILE__) . '/../validator/XoroperatorValidatorTest.php');
-//require_once(dirname(__FILE__) . '/../validator/NotoperatorValidatorTest.php');
+//require_once(__DIR__ . '/../validator/ErrorManagerTest.php');
+//require_once(__DIR__ . '/../validator/DependencyManagerTest.php');
+//require_once(__DIR__ . '/../validator/ValidatorTest.php');
+//require_once(__DIR__ . '/../validator/ValidatorManagerTest.php');
+//require_once(__DIR__ . '/../validator/OperatorValidatorTest.php');
+//require_once(__DIR__ . '/../validator/AndoperatorValidatorTest.php');
+//require_once(__DIR__ . '/../validator/OroperatorValidatorTest.php');
+//require_once(__DIR__ . '/../validator/XoroperatorValidatorTest.php');
+//require_once(__DIR__ . '/../validator/NotoperatorValidatorTest.php');
 
-require_once(dirname(__FILE__) . '/../validator/EmailValidatorTest.php');
-require_once(dirname(__FILE__) . '/../validator/NumberValidatorTest.php');
-//require_once(dirname(__FILE__) . '/../validator/DateValidatorTest.php');
+require_once(__DIR__ . '/../validator/EmailValidatorTest.php');
+require_once(__DIR__ . '/../validator/NumberValidatorTest.php');
+//require_once(__DIR__ . '/../validator/DateValidatorTest.php');
 
 class ValidatorTests
 {

@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__FILE__) . '/../routing/RoutingTest.php');
+require_once(__DIR__ . '/../routing/RoutingTest.php');
 
-require_once(dirname(__FILE__) . '/../routing/WebRoutingTest.php');
+require_once(__DIR__ . '/../routing/WebRoutingTest.php');
 
 class RoutingTests
 {
@@ -12,7 +12,7 @@ class RoutingTests
 		$suite->addTestSuite('RoutingTest');
 
 		$webSuite = new PHPUnit_Framework_TestSuite('WebRouting');
-		$d = dir(dirname(__FILE__) . '/../routing/cases/');
+		$d = dir(__DIR__ . '/../routing/cases/');
 		while(false !== ($entry = $d->read())) {
 			if(preg_match('#.*\\.case\\.php#i', $entry))
 			{

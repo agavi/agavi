@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -149,7 +149,7 @@ class AgaviXsltRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 				try {
 					$inner = $this->loadDomDocumentXml($moreAssigns['inner']);
 				} catch(DOMException $e) {
-					throw new AgaviRenderException(sprintf("Unable to load input document for layer '%s'.\n\n%s", $layer->getName(), $e->getMessage()));
+					throw new AgaviRenderException(sprintf("Unable to load input document for layer '%s'.\n\n%s", $layer->getName(), $e->getMessage()), 0, $e);
 				}
 			} else {
 				$inner = $moreAssigns['inner'];
@@ -174,7 +174,7 @@ class AgaviXsltRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 					try {
 						$slot = $this->loadDomDocumentXml($slotContent);
 					} catch(Exception $e) {
-						throw new AgaviRenderException(sprintf("Unable to load contents for slot '%s'.\n\n%s", $slotName, $e->getMessage()));
+						throw new AgaviRenderException(sprintf("Unable to load contents for slot '%s'.\n\n%s", $slotName, $e->getMessage()), 0, $e);
 					}
 				} else {
 					$slot = $slotContent;
@@ -207,7 +207,7 @@ class AgaviXsltRenderer extends AgaviRenderer implements AgaviIReusableRenderer
 		try {
 			$xslt = $this->loadDomDocument($layer->getResourceStreamIdentifier());
 		} catch(DOMException $e) {
-			throw new AgaviRenderException(sprintf("Unable to load template '%s'.\n\n%s", $layer->getResourceStreamIdentifier(), $e->getMessage()));
+			throw new AgaviRenderException(sprintf("Unable to load template '%s'.\n\n%s", $layer->getResourceStreamIdentifier(), $e->getMessage()), 0, $e);
 		}
 		
 		$xsl = new XSLTProcessor();

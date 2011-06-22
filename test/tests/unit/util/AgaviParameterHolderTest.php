@@ -1,11 +1,11 @@
 <?php
 
 if(!class_exists('AgaviParameterHolder')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviParameterHolder.class.php');
+	include(__DIR__ . '/../../../../src/util/AgaviParameterHolder.class.php');
 }
 
 if(!class_exists('AgaviArrayPathDefinition')) {
-	include(dirname(__FILE__) . '/../../../../src/util/AgaviArrayPathDefinition.class.php');
+	include(__DIR__ . '/../../../../src/util/AgaviArrayPathDefinition.class.php');
 }
 
 //class AgaviParameterHolderTest extends AgaviUnitTestCase

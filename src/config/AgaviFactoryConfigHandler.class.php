@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -32,7 +32,7 @@
  */
 class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/factories/1.0';
+	const XML_NAMESPACE = 'http://agavi.org/agavi/config/parts/factories/1.1';
 	
 	/**
 	 * Execute this configuration handler.
@@ -223,7 +223,7 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 				} catch(ReflectionException $e) {
 					$error = 'Configuration file "%s" specifies unknown class "%s" for entry "%s"';
 					$error = sprintf($error, $config, $data[$factory]['class'], $factory);
-					throw new AgaviConfigurationException($error);
+					throw new AgaviConfigurationException($error, 0,  $e);
 				}
 				foreach($info['must_implement'] as $interface) {
 					if(!$rc->implementsInterface($interface)) {

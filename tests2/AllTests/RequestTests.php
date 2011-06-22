@@ -1,6 +1,6 @@
 <?php
-require_once(dirname(__FILE__) . '/../request/RequestTest.php');
-require_once(dirname(__FILE__) . '/../request/WebRequestTest.php');
+require_once(__DIR__ . '/../request/RequestTest.php');
+require_once(__DIR__ . '/../request/WebRequestTest.php');
 
 class RequestTests
 {

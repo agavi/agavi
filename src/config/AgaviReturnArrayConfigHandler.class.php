@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -104,9 +104,10 @@ class AgaviReturnArrayConfigHandler extends AgaviXmlConfigHandler
 		}
 		
 		if(!(int)$item->ownerDocument->getXpath()->evaluate(sprintf('count(*[namespace-uri() = "%s"])', $item->ownerDocument->getDefaultNamespaceUri()), $item)) {
-			$val = $item->getValue();
 			if($literalize) {
-				$val = AgaviToolkit::literalize($val);
+				$val = $item->getLiteralValue();
+			} else {
+				$val = $item->getValue();
 			}
 			
 			if($val === null) {

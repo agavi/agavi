@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__FILE__) . '/../date/CalendarTest.php');
-require_once(dirname(__FILE__) . '/../date/TimeZoneBoundaryTest.php');
-require_once(dirname(__FILE__) . '/../date/TimeZoneTest.php');
+require_once(__DIR__ . '/../date/CalendarTest.php');
+require_once(__DIR__ . '/../date/TimeZoneBoundaryTest.php');
+require_once(__DIR__ . '/../date/TimeZoneTest.php');
 
 class DateTests
 {

@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../model/ModelTest.php');
+require_once(__DIR__ . '/../model/ModelTest.php');
 
 class ModelTests
 {

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Accra".
- * Compiled from olson file "africa", version 8.30.
+ * Compiled from olson file "africa", version 8.31.
  *
  * @package    agavi
  * @subpackage translation
@@ -122,7 +122,7 @@ return array (
     'startYear' => 1943,
   ),
   'source' => 'africa',
-  'version' => '8.30',
+  'version' => '8.31',
   'name' => 'Africa/Accra',
 );
 

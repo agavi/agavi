@@ -8,7 +8,7 @@ if(!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 
-$here = realpath(dirname(dirname(__FILE__)));
+$here = realpath(dirname(__DIR__));
 
 // add our bundled PHPUnit to include path (until a new release is out :D)
 set_include_path($here . '/src/vendor' . PATH_SEPARATOR . get_include_path());
@@ -17,7 +17,7 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once('AgaviTestCase.class.php');
 
-$testDir = dirname(__FILE__);
+$testDir = __DIR__;
 include($testDir . '/../src/agavi.php');
 AgaviConfig::set('tests.dir', $testDir); // where the main tests dir resides
 AgaviConfig::set('core.app_dir', AgaviConfig::get('tests.dir') . "/sandbox2");
@@ -31,7 +31,7 @@ class AllTests
 {
 	public static function main()
 	{
-		$reportDir = dirname(__FILE__) . '/test_report/';
+		$reportDir = __DIR__ . '/test_report/';
 		PHPUnit_TextUI_TestRunner::run(self::suite(), array(
 			'backupGlobals' => false,
 			'backupStaticAttributes' => false,
@@ -40,7 +40,7 @@ class AllTests
 
 	public static function suite()
 	{
-		$testDir = dirname(__FILE__) . '/AllTests';
+		$testDir = __DIR__ . '/AllTests';
 
 		$suite = new PHPUnit_Framework_TestSuite('Agavi Framework');
 

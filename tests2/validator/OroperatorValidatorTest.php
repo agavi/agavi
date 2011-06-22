@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__). '/inc/DummyValidator.class.php');
+require_once(__DIR__. '/inc/DummyValidator.class.php');
 
 class OroperatorValidatorTest extends AgaviTestCase
 {

@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -14,7 +14,8 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * An Agavi Database driver for Propel, derived from the native Creole driver. 
+ * An Agavi Database driver for Propel. Supports all Propel versions. Support
+ * for Propel versions prior to 1.3 will be removed in Agavi 1.1.
  * 
  * <b>Optional parameters:</b>
  *

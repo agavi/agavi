@@ -29,7 +29,7 @@
 // | You shouldn't have to change this usually since it's auto-determined.     |
 // | Agavi can't determine this automatically, so you always have to supply it.|
 // +---------------------------------------------------------------------------+
-AgaviConfig::set('core.app_dir', dirname(__FILE__));
+AgaviConfig::set('core.app_dir', __DIR__);
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the directory where cache files will be    |

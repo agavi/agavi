@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . '/BaseCalendarTest.php');
+require_once(__DIR__ . '/BaseCalendarTest.php');
 
 /**
  * Ported from ICU:
@@ -423,7 +423,7 @@ TODO: is_equal doesn't work yet
 															array('id' =>"GMT", 'offset' =>  0, 'daylight' => false),
 															array('id' =>"UTC", 'offset' =>  0, 'daylight' => false), // ** srl: seems broken in C++
 															array('id' =>"ECT", 'offset' =>  60, 'daylight' => true),
-															array('id' =>"ART", 'offset' =>  120, 'daylight' => true),
+															array('id' =>"ART", 'offset' =>  120, 'daylight' => false),
 															array('id' =>"EET", 'offset' =>  120, 'daylight' => true),
 															array('id' =>"EAT", 'offset' =>  180, 'daylight' => false),
 															array('id' =>"MET", 'offset' =>  60, 'daylight' => true), // updated 12/3/99 aliu

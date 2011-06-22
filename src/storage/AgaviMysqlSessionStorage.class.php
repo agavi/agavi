@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -307,48 +307,31 @@ class AgaviMysqlSessionStorage extends AgaviSessionStorage
 		} else {
 			$ts = "'" . mysql_real_escape_string($ts) . "'";
 		}
-		// update the record associated with this id
+		// insert or update the record associated with this id
 		$sql = sprintf(
-			"UPDATE %s SET %s = '%s', %s = %s WHERE %s = '%s'",
+			"INSERT INTO %s (%s, %s, %s) VALUES ('%s', '%s', %s) ON DUPLICATE KEY UPDATE %s = VALUES(%s), %s = VALUES(%s)",
 			$db_table,
-			$db_data_col,
-			$data,
-			$db_time_col,
-			$ts,
 			$db_id_col,
-			$id
+			$db_data_col,
+			$db_time_col,
+			$id,
+			$data,
+			$ts,
+			$db_data_col,
+			$db_data_col,
+			$db_time_col,
+			$db_time_col
 		);
 
 		$result = @mysql_query($sql, $this->resource);
-		if($result !== false && mysql_affected_rows($this->resource)) {
+		if($result !== false) {
 			return true;
-		} elseif($result !== false) {
-			// session does not exist, create it
-			$sql = sprintf(
-				"INSERT INTO %s (%s, %s, %s) VALUES ('%s', '%s', %s)",
-				$db_table,
-				$db_id_col,
-				$db_data_col,
-				$db_time_col,
-				$id,
-				$data,
-				$ts
-			);
-
-			if(@mysql_query($sql, $this->resource)) {
-				return true;
-			}
-
-			// can't create record
-			$error = 'MySQLSessionStorage cannot create new record for id "%s", error reported by server: "%s"';
+		} else {
+			// something went wrong
+			$error = 'MySQLSessionStorage cannot insert or update session "%s", error reported by server: "%s"';
 			$error = sprintf($error, $id, mysql_error($this->resource));
 			throw new AgaviDatabaseException($error);
 		}
-
-		// failed to write session data
-		$error = 'MySQLSessionStorage cannot update session data for id "%s", error reported by server: "%s"';
-		$error = sprintf($error, $id, mysql_error($this->resource));
-		throw new AgaviDatabaseException($error);
 	}
 }
 

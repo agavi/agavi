@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // | Based on the Mojavi3 MVC Framework, Copyright (c) 2003-2005 Sean Kerr.    |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
@@ -237,7 +237,7 @@ abstract class AgaviView
 	public function removeLayer(AgaviTemplateLayer $layer)
 	{
 		if(($pos = array_search($layer, $this->layers, true)) === false) {
-			throw new AgaviViewException('Layer "' . $otherLayer->getName() . '" not in list');
+			throw new AgaviViewException('Layer "' . $layer->getName() . '" not in list');
 		}
 		array_splice($this->layers, $pos, 1);
 	}

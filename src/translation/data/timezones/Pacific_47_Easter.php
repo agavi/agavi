@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Easter".
- * Compiled from olson file "southamerica", version 8.48.
+ * Compiled from olson file "southamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -634,7 +634,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'southamerica',
-  'version' => '8.48',
+  'version' => '8.49',
   'name' => 'Pacific/Easter',
 );
 

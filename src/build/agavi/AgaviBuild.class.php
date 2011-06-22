@@ -2,7 +2,7 @@
 
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
-// | Copyright (c) 2005-2010 the Agavi Project.                                |
+// | Copyright (c) 2005-2011 the Agavi Project.                                |
 // |                                                                           |
 // | For the full copyright and license information, please view the LICENSE   |
 // | file that was distributed with this source code. You can also view the    |
@@ -85,7 +85,7 @@ final class AgaviBuild
 	public static function __autoload($class)
 	{
 		if(isset(self::$autoloads[$class])) {
-			require(dirname(__FILE__) . '/' . self::$autoloads[$class]);
+			require(__DIR__ . '/' . self::$autoloads[$class]);
 		}
 
 		/* If the class isn't loaded by this method, the only other
