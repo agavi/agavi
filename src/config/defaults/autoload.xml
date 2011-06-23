@@ -208,6 +208,7 @@
 			<autoload name="AgaviPdoSessionStorage">%core.agavi_dir%/storage/AgaviPdoSessionStorage.class.php</autoload>
 			<autoload name="AgaviPostgresqlSessionStorage">%core.agavi_dir%/storage/AgaviPostgresqlSessionStorage.class.php</autoload>
 			<autoload name="AgaviSessionStorage">%core.agavi_dir%/storage/AgaviSessionStorage.class.php</autoload>
+			<autoload name="AgaviSqlsrvSessionStorage">%core.agavi_dir%/storage/AgaviSqlsrvSessionStorage.class.php</autoload>
 			<autoload name="AgaviStorage">%core.agavi_dir%/storage/AgaviStorage.class.php</autoload>
 			<autoload name="AgaviWindowsazureSessionStorage">%core.agavi_dir%/storage/AgaviWindowsazureSessionStorage.class.php</autoload>
 

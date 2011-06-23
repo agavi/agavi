@@ -65,17 +65,7 @@ class AgaviSqlsrvDatabase extends AgaviDatabase
 		$this->connection = sqlsrv_connect($serverName, $connectionInfo);
 		if(!$this->connection) {
 			$this->connection = null;
-			$errors = sqlsrv_errors();
-			foreach($errors as &$error) {
-				if(strtolower($this->getParameter('connection_info[CharacterSet]')) != 'utf-8' || version_compare(phpversion('sqlsrv'), '2', 'lt')) {
-					// even when UTF-8 is specified as the encoding for the connection, error messages will be returned in the local codepage in ext/sqlsrv 1.x
-					// (not just for connection failures, but also for failed queries etc)
-					// also, we need to convert the encoding for newer versions as well if the encoding on the connection was not UTF-8
-					$error['message'] = utf8_encode($error['message']);
-				}
-				$error = sprintf('SQLSTATE %s (code %d): %s', $error['SQLSTATE'], $error['code'], $error['message']);
-			}
-			throw new AgaviDatabaseException(sprintf("%s\n\n%s", sprintf('Could not open database connection "%s".', $this->getName()), implode("\n", $errors)));
+			throw new AgaviDatabaseException(sprintf("%s\n\n%s", sprintf('Could not open database connection "%s".', $this->getName()), implode("\n", $this->getErrors())));
 		}
 
 		foreach((array)$this->getParameter('init_queries') as $query) {
@@ -83,6 +73,31 @@ class AgaviSqlsrvDatabase extends AgaviDatabase
 		}
 	}
 	
+	/**
+	 * Retrieve an array of formatted and UTF-8 encoded error messages.
+	 *
+	 * @return     array An array of error strings in UTF-8 encoding.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.6
+	 */
+	public function getErrors()
+	{
+		$errors = (array)sqlsrv_errors();
+		
+		foreach($errors as &$error) {
+			if(strtolower($this->getParameter('connection_info[CharacterSet]')) != 'utf-8' || version_compare(phpversion('sqlsrv'), '2', 'lt')) {
+				// even when UTF-8 is specified as the encoding for the connection, error messages will be returned in the local codepage in ext/sqlsrv 1.x
+				// (not just for connection failures, but also for failed queries etc)
+				// also, we need to convert the encoding for newer versions as well if the encoding on the connection was not UTF-8
+				$error['message'] = utf8_encode($error['message']);
+			}
+			$error = sprintf('SQLSTATE %s (code %d): %s', $error['SQLSTATE'], $error['code'], $error['message']);
+		}
+		
+		return $errors;
+	}
+  
 	/**
 	 * Execute the shutdown procedure.
 	 *
