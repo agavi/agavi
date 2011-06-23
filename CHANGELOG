@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 1.0.6 (June ??, 2011)
 ---------------------
 
-ADD: AgaviSqlsrvSessionStorage (#1394) (David)
+ADD: AgaviSqlsrvSessionStorage (#1392) (David)
 
 CHG: Factor out error message formatting in AgaviSqlsrvDatabase (#1393) (David)
 CHG: Move Sample App WSDL serving into web context (#1390) (David)
