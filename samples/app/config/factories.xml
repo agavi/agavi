@@ -56,17 +56,6 @@
 	
 	</ae:configuration>
 	
-	<ae:configuration context="web" environment="production.*">
-		
-		<request class="AgaviWebRequest">
-			<ae:parameter name="sources">
-				<ae:parameter name="SERVER_NAME">HTTP_X_FORWARDED_HOST</ae:parameter>
-				<ae:parameter name="SERVER_PORT">HTTP_X_FORWARDED_PORT</ae:parameter>
-			</ae:parameter>
-		</request>
-	
-	</ae:configuration>
-	
 	<ae:configuration context="web" environment="testing.*">
 		
 		<request class="AgaviWebRequest">
@@ -126,7 +115,7 @@
 			<ae:parameter name="wsdl_generator">
 				<ae:parameter name="soap">
 					<ae:parameter name="address">
-						<ae:parameter name="location">http://localhost/~dzuelke/Code/oss/agavi/branches/1.0_/samples/pub/soap.php</ae:parameter>
+						<ae:parameter name="location">http://localhost/~dzuelke/Code/oss/agavi/branches/1.0/samples/pub/soap.php</ae:parameter>
 					</ae:parameter>
 				</ae:parameter>
 			</ae:parameter>
