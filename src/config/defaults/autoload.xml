@@ -159,6 +159,7 @@
 			<autoload name="AgaviPhptalRenderer">%core.agavi_dir%/renderer/AgaviPhptalRenderer.class.php</autoload>
 			<autoload name="AgaviRenderer">%core.agavi_dir%/renderer/AgaviRenderer.class.php</autoload>
 			<autoload name="AgaviSmartyRenderer">%core.agavi_dir%/renderer/AgaviSmartyRenderer.class.php</autoload>
+			<autoload name="AgaviTwigRenderer">%core.agavi_dir%/renderer/AgaviTwigRenderer.class.php</autoload>
 			<autoload name="AgaviXsltRenderer">%core.agavi_dir%/renderer/AgaviXsltRenderer.class.php</autoload>
 			
 			<!-- agavi/request -->
