@@ -11,7 +11,7 @@
 ini_set('soap.wsdl_cache_enabled', 0);
 
 // this test.wsdl contains the URL to the service. You have to edit it to match your setup.
-$client = new SoapClient('http://localhost/~dzuelke/Code/oss/agavi/branches/1.0/samples/pub/wsdl.php', array(
+$client = new SoapClient('http://localhost/~dzuelke/Code/oss/agavi/branches/1.0/samples/pub/products.wsdl', array(
 	/* so we can get last request and response */
 	'trace' => true,
 ));

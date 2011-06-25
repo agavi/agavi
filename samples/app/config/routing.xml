@@ -48,6 +48,9 @@
 				
 				<!-- if the URL is exactly "/products", we run the Index action -->
 				<route name=".index" pattern="^$" action="Index" />
+				
+				<!-- send the WSDL file for the products service -->
+				<route pattern="^.wsdl$" module="Default" action="SendWsdl" output_type="wsdl" />
 			</route>
 			
 			<!-- The last route in case the input URL is just "/". -->
@@ -108,12 +111,4 @@
 		</routes>
 	</ae:configuration>
 	
-	<!-- this simple context is used to deliver the WSDL for the soap service above in a "normal" web request -->
-	<ae:configuration context="wsdl">
-		<routes>
-			<!-- matches anything -->
-			<!-- this action simply makes a soap context, requests the WSDL and returns it -->
-			<route pattern="" module="Default" action="SendWsdl" />
-		</routes>
-	</ae:configuration>
 </ae:configurations>

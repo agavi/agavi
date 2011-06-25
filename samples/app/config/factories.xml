@@ -130,17 +130,6 @@
 	</ae:configuration>
 	
 	
-	<ae:configuration context="wsdl">
-		
-		<storage class="AgaviSessionStorage">
-			<ae:parameter name="auto_start">false</ae:parameter>
-		</storage>
-		
-		<user class="AgaviSecurityUser" />
-		
-	</ae:configuration>
-	
-	
 	<ae:configuration context="xmlrpc">
 		
 		<request class="AgaviXmlrpcepiphpRequest" />
