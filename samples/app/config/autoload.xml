@@ -9,8 +9,14 @@
 			<autoload name="AgaviSampleAppLanguageRoutingCallback">%core.lib_dir%/routing/AgaviSampleAppLanguageRoutingCallback.class.php</autoload>
 			
 			<autoload name="AgaviSampleAppUser">%core.lib_dir%/user/AgaviSampleAppUser.class.php</autoload>
+			<autoload name="AgaviSampleAppIsProductOwnerAssertion">%core.lib_dir%/user/assertions/AgaviSampleAppIsProductOwnerAssertion.class.php</autoload>
 			
 			<autoload name="AgaviSampleAppProductValidator">%core.lib_dir%/validator/AgaviSampleAppProductValidator.class.php</autoload>
+			
+			<autoload name="Zend_Acl">%core.app_dir%/../libs/Zend/Acl.php</autoload>
+			<autoload name="Zend_Acl_Assert_Interface">%core.app_dir%/../libs/Zend/Acl/Assert/Interface.php</autoload>
+			<autoload name="Zend_Acl_Resource_Interface">%core.app_dir%/../libs/Zend/Acl/Resource/Interface.php</autoload>
+			<autoload name="Zend_Acl_Role_Interface">%core.app_dir%/../libs/Zend/Acl/Role/Interface.php</autoload>
 		</autoloads>
 	</ae:configuration>
 </ae:configurations>

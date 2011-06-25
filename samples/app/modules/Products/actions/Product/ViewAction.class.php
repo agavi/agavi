@@ -10,6 +10,11 @@ class Products_Product_ViewAction extends AgaviSampleAppProductsBaseAction
 		
 		return 'Success';
 	}
+	
+	public function checkPermissions(AgaviUser $us, AgaviRequestDataHolder $rd)
+	{
+		return $us->isAllowed($rd->getParameter('product'), 'read');
+	}
 }
 
 ?>

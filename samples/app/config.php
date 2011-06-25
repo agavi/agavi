@@ -55,4 +55,6 @@ AgaviConfig::set('core.app_dir', __DIR__);
 
 date_default_timezone_set('Europe/London');
 
+set_include_path(get_include_path() . PATH_SEPARATOR . realpath(AgaviConfig::get('core.app_dir') . '/../libs/'));
+
 ?>

@@ -14,19 +14,59 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class AgaviSampleAppUser extends AgaviRbacSecurityUser
+class AgaviSampleAppUser extends AgaviRbacSecurityUser implements Zend_Acl_Role_Interface
 {
 	/**
 	 * Let's pretend this is our database. For the sake of example ;)
 	 */
 	static $users = array(
-		'Chuck Norris' => array(
+		'chuck.norris' => array(
 			'password' => '$2a$10$2/Gmc4XpwAytFgy3wfrW9OUnkzd6ahgcMqrm4cEc4zD3IFD1GB6IG', // bcrypt, 10 rounds, "kick"
-			'roles' => array(
-				'photographer',
-			)
+			'role' => 'hero',
+		),
+		'jack.bauer' => array(
+			'password' => '$2a$10$3OGZhOGU2MTNlOTI4YjQz.AM5Ej6gG1VX9KDCJ52PmBnAiQYSe18S', // bcrypt, 10 rounds, "ctu"
+			'role' => 'agent',
+		),
+		'joe.cool' => array(
+			'password' => '$2a$10$8ZWRjYTcwMWY5YTEzMGE5OIxOCBdJ0l2S7VWCMlzA31yPueKDBZli', // bcrypt, 10 rounds, "redbaron"
+			'role' => 'user',
 		),
 	);
+	
+	protected $zendAcl;
+	
+	public function isAllowed($resource, $operation)
+	{
+		return $this->getZendAcl()->isAllowed($this, $resource, $operation);
+	}
+	
+	public function getZendAcl()
+	{
+		return $this->zendAcl;
+	}
+	
+	public function initialize(AgaviContext $context, array $parameters = array())
+	{
+		parent::initialize($context, $parameters);
+		
+		$this->zendAcl = new Zend_Acl();
+		
+		$this->zendAcl->addRole('user');
+		$this->zendAcl->addRole('agent', 'user');
+		$this->zendAcl->addRole('hero', 'agent');
+		
+		$this->zendAcl->addResource('product');
+		$this->zendAcl->addResource('secretproduct', 'product');
+		
+		$this->zendAcl->allow(null, 'product', 'read');
+		$this->zendAcl->deny(null, 'secretproduct', 'read');
+		$this->zendAcl->deny(null, 'product', 'write');
+		$this->zendAcl->allow('user', 'secretproduct', 'read', new AgaviSampleAppIsProductOwnerAssertion());
+		$this->zendAcl->allow('user', array('product', 'secretproduct'), 'write', new AgaviSampleAppIsProductOwnerAssertion());
+		$this->zendAcl->allow('agent', 'product', 'write');
+		$this->zendAcl->allow('hero', 'secretproduct', array('read', 'write'));
+	}
 	
 	public function startup()
 	{
@@ -63,7 +103,9 @@ class AgaviSampleAppUser extends AgaviRbacSecurityUser
 		
 		$this->setAuthenticated(true);
 		$this->clearCredentials();
-		$this->grantRoles(self::$users[$username]['roles']);
+		
+		$this->setAttribute('role', self::$users[$username]['role']);
+		$this->setAttribute('username', $username);
 	}
 	
 	public static function computeSaltedHash($secret, $salt)
@@ -82,6 +124,16 @@ class AgaviSampleAppUser extends AgaviRbacSecurityUser
 	{
 		$this->clearCredentials();
 		$this->setAuthenticated(false);
+		$this->removeAttribute('role');
+		$this->removeAttribute('username');
+	}
+	
+	public function getRoleId()
+	{
+		if($this->isAuthenticated()) {
+			return $this->getAttribute('role');
+		}
+		return 'user';
 	}
 }
 

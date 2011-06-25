@@ -1,15 +1,19 @@
 <?php
 
-class ProductModel extends AgaviSampleAppBaseModel
+class ProductModel extends AgaviSampleAppBaseModel implements Zend_Acl_Resource_Interface
 {
 	protected $id;
 	protected $name;
 	protected $price;
+	protected $owner;
+	protected $private;
 	
 	protected static $fields = array(
 		'id',
 		'name',
-		'price'
+		'price',
+		'owner',
+		'private',
 	);
 	
 	public function __construct(array $data = array())
@@ -71,6 +75,24 @@ class ProductModel extends AgaviSampleAppBaseModel
 	{
 		// imagine this makes a very complicated SOAP call to an ERP system to figure out whether or not this product is in stock
 		return (bool)mt_rand(0, 1);
+	}
+	
+	public function getResourceId()
+	{
+		if($this->private) {
+			return 'secretproduct';
+		}
+		return 'product';
+	}
+	
+	public function setOwner($owner)
+	{
+		$this->owner = $owner;
+	}
+	
+	public function getOwner()
+	{
+		return $this->owner;
 	}
 }
 

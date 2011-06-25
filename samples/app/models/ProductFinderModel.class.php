@@ -8,26 +8,36 @@ class ProductFinderModel extends AgaviSampleAppBaseModel implements AgaviISingle
 			'id'    => 8172401,
 			'name'  => 'TPS Report Cover Sheet',
 			'price' => 0.89,
+			'owner' => 'joe.cool',
+			'private' => false,
 		),
 		array(
 			'id'    => 917246,
 			'name'  => 'Weighted Companion Cube',
 			'price' => 129.99,
+			'owner' => 'chuck.norris',
+			'private' => false,
 		),
 		array(
 			'id'    => 7856122,
 			'name'  => 'Longcat',
 			'price' => 14599,
+			'owner' => 'joe.cool',
+			'private' => false,
 		),
 		array(
 			'id'    => 123456,
 			'name'  => 'Red Stapler',
 			'price' => 3.14,
+			'owner' => 'joe.cool',
+			'private' => true,
 		),
 		array(
 			'id'    => 3165463,
 			'name'  => 'Sildenafil Citrate',
 			'price' => 14.69,
+			'owner' => 'joe.cool',
+			'private' => false,
 		),
 	);
 	
