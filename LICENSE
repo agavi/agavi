@@ -32,6 +32,19 @@ The corresponding license can be found in LICENSE-AGAVI.
 --
 
 
+Zend Framework
+--------------
+
+The Agavi Sample Application uses the ACL component of Zend Framework.
+
+For more information about Zend Framework, visit the homepage:
+http://framework.zend.com/
+
+The corresponding license can be found in LICENSE-ZEND_FRAMEWORK.
+
+--
+
+
 International Components for Unicode
 ------------------------------------
 
