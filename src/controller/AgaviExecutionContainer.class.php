@@ -448,81 +448,44 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function runAction()
 	{
-		$viewName = null;
-
-		$controller = $this->context->getController();
-		$request = $this->context->getRequest();
-		$validationManager = $this->getValidationManager();
-
-		// get the current action instance
-		$actionInstance = $this->getActionInstance();
-
-		// get the current action information
-		$moduleName = $this->getModuleName();
-		$actionName = $this->getActionName();
-
-		// get the (already formatted) request method
-		$method = $this->getRequestMethod();
-
-		$requestData = $this->getRequestData();
-
-		$useGenericMethods = false;
-		$executeMethod = 'execute' . $method;
-		if(!is_callable(array($actionInstance, $executeMethod))) {
-			$executeMethod = 'execute';
-			$useGenericMethods = true;
+		$context = $this->getContext();
+		$controller = $context->getController();
+		
+		// create a new filter chain
+		$filterChain = $context->createInstanceFor('filter_chain');
+		
+		// register necessary filters
+		if(!$this->getActionInstance()->isSimple()) {
+			$filter = $controller->getFilter('validation');
+			$filterChain->register($filter);
+			$filter = $controller->getFilter('authorization');
+			$filterChain->register($filter);
 		}
-
-		if($actionInstance->isSimple() || ($useGenericMethods && !is_callable(array($actionInstance, $executeMethod)))) {
-			// this action will skip validation/execution for this method
-			// get the default view
-			$key = $request->toggleLock();
-			try {
-				$viewName = $actionInstance->getDefaultViewName();
-			} catch(Exception $e) {
-				// we caught an exception... unlock the request and rethrow!
-				$request->toggleLock($key);
-				throw $e;
-			}
-			$request->toggleLock($key);
-			
-			// run the validation manager - it's going to take care of cleaning up the request data, and retain "conditional" mode behavior etc.
-			// but only if the action is not simple; otherwise, the (safe) arguments in the request data holder will all be removed
-			if(!$actionInstance->isSimple()) {
-				$validationManager->execute($requestData);
-			}
-		} else {
-			if($this->performValidation()) {
-				// execute the action
-				// prevent access to Request::getParameters()
-				$key = $request->toggleLock();
-				try {
-					$viewName = $actionInstance->$executeMethod($requestData);
-				} catch(Exception $e) {
-					// we caught an exception... unlock the request and rethrow!
-					$request->toggleLock($key);
-					throw $e;
-				}
-				$request->toggleLock($key);
-			} else {
-				// validation failed
-				$handleErrorMethod = 'handle' . $method . 'Error';
-				if(!is_callable(array($actionInstance, $handleErrorMethod))) {
-					$handleErrorMethod = 'handleError';
-				}
-				$key = $request->toggleLock();
-				try {
-					$viewName = $actionInstance->$handleErrorMethod($requestData);
-				} catch(Exception $e) {
-					// we caught an exception... unlock the request and rethrow!
-					$request->toggleLock($key);
-					throw $e;
-				}
-				$request->toggleLock($key);
-			}
-		}
-
-		if(is_array($viewName)) {
+		
+		$filter = $controller->getFilter('action_execution');
+		$filterChain->register($filter);
+		
+		// rock and roll
+		$filterChain->execute($this);
+		
+		return array($this->getViewModuleName(), $this->getViewName());
+	}
+	
+	/**
+	 * Resolve the name of the given View.
+	 *
+	 * @param      mixed The View name (array of Module and View or View only).
+	 * @param      mixed The name of the Action to resolve for.
+	 * @param      mixed The name of the View to resolve for.
+	 *
+	 * @return     array An array containing Module name and name for the View.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function resolveViewName($viewName, $actionName, $moduleName)
+	{
+		if(is_array($viewName) && count($viewName) >= 2) {
 			// we're going to use an entirely different action for this view
 			$viewModule = $viewName[0];
 			$viewName   = $viewName[1];
@@ -579,7 +542,16 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		}
 
 		// process manual validation
-		return $actionInstance->$validateMethod($requestData) && $validated;
+		$manuallyValidated = $actionInstance->$validateMethod($requestData);
+		if($validated && !$manuallyValidated) {
+			// validation manager did not yield errors, but the manual validation indicated a failure
+			// set the appropriate status code on the validation result
+			$report = $validationManager->getReport();
+			if($report->getResult() < AgaviValidator::ERROR) {
+				$report->setResult(AgaviValidator::ERROR);
+			}
+		}
+		return $manuallyValidated && $validated;
 	}
 
 	/**

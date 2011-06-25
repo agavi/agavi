@@ -133,6 +133,26 @@ abstract class AgaviAction
 	}
 
 	/**
+	 * Checks permissions to perform the operation. Called after validation.
+	 *
+	 * As with several other methods, a more specific method that takes the
+	 * current request method (read, write, ...) into account can be used instead
+	 * by implementing a method checkReadPermissions() et cetera.
+	 *
+	 * @param      AgaviUser              The AgaviUser object (for convenience).
+	 * @param      AgaviRequestDataHolder The request data (for convenience).
+	 *
+	 * @return     bool Whether or not the operation is allowed.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function checkPermissions(AgaviUser $user, AgaviRequestDataHolder $rd)
+	{
+		return true;
+	}
+
+	/**
 	 * Whether or not this action is "simple", i.e. doesn't use validation etc.
 	 *
 	 * @return     bool true, if this action should act in simple mode, or false.

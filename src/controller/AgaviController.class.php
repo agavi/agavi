@@ -502,6 +502,12 @@ class AgaviController extends AgaviParameterHolder
 		$this->filters['dispatch'] = $this->context->createInstanceFor('dispatch_filter');
 		
 		$this->filters['execution'] = $this->context->createInstanceFor('execution_filter');
+		
+		$this->filters['action_execution'] = $this->context->createInstanceFor('action_execution_filter');
+		
+		$this->filters['authorization'] = $this->context->createInstanceFor('authorization_filter');
+		
+		$this->filters['validation'] = $this->context->createInstanceFor('validation_filter');
 	}
 	
 	/**

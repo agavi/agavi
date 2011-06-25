@@ -26,6 +26,8 @@
 			     environment/context so we're quite lax about validating them. A
 			     Schematron document could potentially test absolute validity of
 			     these factories once contexts have been matched by the parser. -->
+			<xs:element type="factory" minOccurs="0" name="action_execution_filter" />
+			<xs:element type="factory" minOccurs="0" name="authorization_filter" />
 			<xs:element type="factory" minOccurs="0" name="controller" />
 			<xs:element type="factory" minOccurs="0" name="dispatch_filter" />
 			<xs:element type="factory" minOccurs="0" name="execution_container" />
@@ -36,6 +38,7 @@
 			<xs:element type="factory" minOccurs="0" name="routing" />
 			<xs:element type="factory" minOccurs="0" name="storage" />
 			<xs:element type="factory" minOccurs="0" name="user" />
+			<xs:element type="factory" minOccurs="0" name="validation_filter" />
 			<xs:element type="factory" minOccurs="0" name="validation_manager" />
 
 			<!-- Optional factories -->

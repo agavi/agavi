@@ -112,6 +112,8 @@
 			<autoload name="AgaviViewException">%core.agavi_dir%/exception/AgaviViewException.class.php</autoload>
 
 			<!-- agavi/filter -->
+			<autoload name="AgaviActionExecutionFilter">%core.agavi_dir%/filter/AgaviActionExecutionFilter.class.php</autoload>
+			<autoload name="AgaviAuthorizationFilter">%core.agavi_dir%/filter/AgaviAuthorizationFilter.class.php</autoload>
 			<autoload name="AgaviDispatchFilter">%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</autoload>
 			<autoload name="AgaviExecutionFilter">%core.agavi_dir%/filter/AgaviExecutionFilter.class.php</autoload>
 			<autoload name="AgaviExecutionTimeFilter">%core.agavi_dir%/filter/AgaviExecutionTimeFilter.class.php</autoload>
@@ -124,6 +126,7 @@
 			<autoload name="AgaviISecurityFilter">%core.agavi_dir%/filter/AgaviISecurityFilter.interface.php</autoload>
 			<autoload name="AgaviSecurityFilter">%core.agavi_dir%/filter/AgaviSecurityFilter.class.php</autoload>
 			<autoload name="AgaviTidyFilter">%core.agavi_dir%/filter/AgaviTidyFilter.class.php</autoload>
+			<autoload name="AgaviValidationFilter">%core.agavi_dir%/filter/AgaviValidationFilter.class.php</autoload>
 
 			<!-- agavi/logging -->
 			<autoload name="AgaviFileLoggerAppender">%core.agavi_dir%/logging/AgaviFileLoggerAppender.class.php</autoload>

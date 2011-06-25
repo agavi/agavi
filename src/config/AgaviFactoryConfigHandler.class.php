@@ -90,6 +90,30 @@ class AgaviFactoryConfigHandler extends AgaviXmlConfigHandler
 				),
 			),
 			
+			'action_execution_filter' => array(
+				'required' => true,
+				'var' => null,
+				'must_implement' => array(
+					// 'AgaviIActionFilter',
+				),
+			),
+			
+			'authorization_filter' => array(
+				'required' => true,
+				'var' => null,
+				'must_implement' => array(
+					// 'AgaviIActionFilter',
+				),
+			),
+			
+			'validation_filter' => array(
+				'required' => true,
+				'var' => null,
+				'must_implement' => array(
+					// 'AgaviIActionFilter',
+				),
+			),
+			
 			'security_filter' => array(
 				'required' => AgaviConfig::get('core.use_security', false),
 				'var' => null,
