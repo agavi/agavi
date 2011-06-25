@@ -3,6 +3,10 @@
 	
 	<ae:configuration>
 		
+		<authorization_filter class="AgaviAuthorizationFilter" />
+		
+		<action_execution_filter class="AgaviActionExecutionFilter" />
+		
 		<controller class="AgaviController" />
 		
 		<database_manager class="AgaviDatabaseManager" />
@@ -30,6 +34,8 @@
 		<user class="AgaviSampleAppUser" />
 		
 		<translation_manager class="AgaviTranslationManager" />
+		
+		<validation_filter class="AgaviValidationFilter" />
 		
 		<validation_manager class="AgaviValidationManager" />
 		
