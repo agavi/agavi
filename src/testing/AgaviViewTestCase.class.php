@@ -316,6 +316,24 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		}
 	}
 	
+	/**
+	 * assert that the view has the  given layer
+	 * 
+	 * @param      string the expected layer name
+	 * @param      string the message to emit on failure
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.6
+	 */
+	protected function assertNotHasLayer($expectedLayer, $message = '')
+	{
+		$viewInstance = $this->container->getViewInstance();
+		$layer = $viewInstance->getLayer($expectedLayer);
+		
+		if(null !== $layer) {
+			$this->fail('Failed asserting that the view does not contain the layer.');
+		}
+	}
 }
 
 ?>
