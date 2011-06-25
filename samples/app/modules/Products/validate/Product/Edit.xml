@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+	parent="%core.module_dir%/Products/config/validators.xml"
+>
+	<ae:configuration>
+		<validators>
+
+			<validator name="product_id_name" class="AgaviSampleAppProductValidator">
+				<argument name="id">id</argument>
+				<ae:parameter name="export">product</ae:parameter>
+			</validator>
+
+		</validators>
+	</ae:configuration>
+</ae:configurations>
