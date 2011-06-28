@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Caracas".
- * Compiled from olson file "southamerica", version 8.49.
+ * Compiled from olson file "southamerica", version 8.50.
  *
  * @package    agavi
  * @subpackage translation
@@ -68,7 +68,7 @@ return array (
     'startYear' => 2008,
   ),
   'source' => 'southamerica',
-  'version' => '8.49',
+  'version' => '8.50',
   'name' => 'America/Caracas',
 );
 

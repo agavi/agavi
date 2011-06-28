@@ -9,6 +9,7 @@ ADD: Smarty 3 support in AgaviSmartyRenderer (#1328) (David)
 ADD: Renderer for Twig (#1330) (David)
 ADD: AgaviSqlsrvSessionStorage (#1392) (David)
 
+CHG: Update timezone database to 2011h (#1396) (David)
 CHG: Expand configuration directives in all routing attributes (#1383) (David, Thomas Bachem)
 CHG: Factor out error message formatting in AgaviSqlsrvDatabase (#1393) (David)
 CHG: Move Sample App WSDL serving into web context (#1390) (David)
