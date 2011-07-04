@@ -252,29 +252,12 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$controller->countExecution();
 
 		$moduleName = $this->getModuleName();
-		$actionName = $this->getActionName();
-		
-		try {
-			// TODO: cleanup and merge with createActionInstance once Exceptions have been cleaned up and specced properly so that the two error conditions can be told apart
-			if(false === $controller->checkActionFile($moduleName, $actionName)) {
-				$this->setNext($this->createSystemActionForwardContainer('error_404'));
-				return $this->proceed();
-			}
-			
-			$this->actionInstance = $controller->createActionInstance($moduleName, $actionName);
-		} catch(AgaviDisabledModuleException $e) {
-			$this->setNext($this->createSystemActionForwardContainer('module_disabled'));
-			return $this->proceed();
-		}
-		
- 
-		// initialize the action
-		$this->actionInstance->initialize($this);
+		$actionInstance = $this->getActionInstance();
 
 		// copy and merge request data as required
 		$this->initRequestData();
 		
-		if($this->actionInstance->isSimple()) {
+		if($actionInstance->isSimple()) {
 			// run the execution filter, without a proper chain
 			$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
 		} else {
@@ -784,6 +767,30 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function getActionInstance()
 	{
+		if($this->actionInstance === null) {
+			$controller = $this->context->getController();
+			
+			$moduleName = $this->getModuleName();
+			$actionName = $this->getActionName();
+			
+			try {
+				// FIXME: this has been moved from execute(), but in here, the $this->proceed() won't work anymore, and it appears that this whole 404 and module disabled stuff should be put somewhere else anyway. Maybe put the try{}/catch{} into execute()...
+				// TODO: cleanup and merge with createActionInstance once Exceptions have been cleaned up and specced properly so that the two error conditions can be told apart
+				if(false === $controller->checkActionFile($moduleName, $actionName)) {
+					$this->setNext($this->createSystemActionForwardContainer('error_404'));
+					return $this->proceed();
+				}
+				
+				$this->actionInstance = $controller->createActionInstance($moduleName, $actionName);
+			} catch(AgaviDisabledModuleException $e) {
+				$this->setNext($this->createSystemActionForwardContainer('module_disabled'));
+				return $this->proceed();
+			}
+			
+			// initialize the action
+			$this->actionInstance->initialize($this);
+		}
+		
 		return $this->actionInstance;
 	}
 
@@ -797,6 +804,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	public function getViewInstance()
 	{
+		if($this->viewInstance === null) {
+			// get the view instance
+			$this->viewInstance = $this->getContext()->getController()->createViewInstance($this->getViewModuleName(), $this->getViewName());
+			// initialize the view
+			$this->viewInstance->initialize($this);
+		}
+		
 		return $this->viewInstance;
 	}
 
