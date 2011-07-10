@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.6 (June ??, 2011)
 ---------------------
 
+ADD: Doctrine 2 support (#1329) (David)
 ADD: Support for configuration of Doctrine query/result caching (#1267) (David, TANAKA Koichi)
 ADD: Make Doctrine connection event listener class configurable (#1399) (David)
 ADD: AgaviViewTestCase::assertNotHasLayer() (#1278) (David)

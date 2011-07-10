@@ -69,6 +69,9 @@
 			<autoload name="AgaviCreoleDatabase">%core.agavi_dir%/database/AgaviCreoleDatabase.class.php</autoload>
 			<autoload name="AgaviDatabase">%core.agavi_dir%/database/AgaviDatabase.class.php</autoload>
 			<autoload name="AgaviDatabaseManager">%core.agavi_dir%/database/AgaviDatabaseManager.class.php</autoload>
+			<autoload name="AgaviDoctrine2Database">%core.agavi_dir%/database/AgaviDoctrine2Database.class.php</autoload>
+			<autoload name="AgaviDoctrine2dbalDatabase">%core.agavi_dir%/database/AgaviDoctrine2dbalDatabase.class.php</autoload>
+			<autoload name="AgaviDoctrine2ormDatabase">%core.agavi_dir%/database/AgaviDoctrine2ormDatabase.class.php</autoload>
 			<autoload name="AgaviDoctrineDatabase">%core.agavi_dir%/database/AgaviDoctrineDatabase.class.php</autoload>
 			<autoload name="AgaviDoctrineDatabaseEventListener">%core.agavi_dir%/database/doctrine/AgaviDoctrineDatabaseEventListener.class.php</autoload>
 			<autoload name="AgaviMysqlDatabase">%core.agavi_dir%/database/AgaviMysqlDatabase.class.php</autoload>
