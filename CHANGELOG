@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.6 (June ??, 2011)
 ---------------------
 
+ADD: Make Doctrine connection event listener class configurable (#1399) (David)
 ADD: AgaviViewTestCase::assertNotHasLayer() (#1278) (David)
 ADD: Smarty 3 support in AgaviSmartyRenderer (#1328) (David)
 ADD: Renderer for Twig (#1330) (David)
