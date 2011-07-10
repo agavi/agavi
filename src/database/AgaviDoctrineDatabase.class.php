@@ -153,11 +153,19 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 						$attributeName = constant($attributeName);
 					}
 					
-					// resolve from constant if possible
 					if(strpos($attributeValue, '::') && defined($attributeValue)) {
+						// resolve from constant if possible
 						$attributeValue = constant($attributeValue);
 					} elseif(ctype_digit($attributeValue)) {
+						// cast numeric type to int
 						$attributeValue = (int)$attributeValue;
+					} elseif(($attributeName == Doctrine::ATTR_QUERY_CACHE || $attributeName == Doctrine::ATTR_RESULT_CACHE) && (is_string($attributeValue) || (is_array($attributeValue) && isset($attributeValue['class'])))) {
+						// handle special case for query and result caches, where the attribute value needs to be an instance of Doctrine_Cache_Driver
+						// we only allow basic cases where the ctor argument array for options requires scalar values
+						// if people want to use e.g. Doctrine_Cache_Db, which requires an instance of Doctrine_Connection as the argument, they should use a custom connection event listener
+						$driverClass = is_string($attributeValue) ? $attributeValue : $attributeValue['class'];
+						$driverOptions = is_array($attributeValue) && isset($attributeValue['options']) && is_array($attributeValue['options']) ? $attributeValue['options'] : array();
+						$attributeValue = new $driverClass($driverOptions);
 					}
 					
 					$attributesDestination->setAttribute($attributeName, $attributeValue);
