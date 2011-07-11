@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.6 (July ??, 2011)
----------------------
+1.0.6 RC1 (July 11, 2011)
+-------------------------
 
 ADD: Doctrine 2 support (#1329) (David)
 ADD: Support for configuration of Doctrine query/result caching (#1267) (David, TANAKA Koichi)
