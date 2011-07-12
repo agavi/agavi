@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Moscow".
- * Compiled from olson file "europe", version 8.32.
+ * Compiled from olson file "europe", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -83,6 +83,12 @@ return array (
       'rawOffset' => 7200,
       'dstOffset' => 3600,
       'name' => 'EEST',
+    ),
+    11 => 
+    array (
+      'rawOffset' => 14400,
+      'dstOffset' => 0,
+      'name' => 'MSK',
     ),
   ),
   'rules' => 
@@ -337,37 +343,21 @@ return array (
       'time' => 846370800,
       'type' => 6,
     ),
+    50 => 
+    array (
+      'time' => 1301180400,
+      'type' => 11,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => 10800,
-    'name' => 
-    array (
-      0 => 'MSK',
-      1 => 'MSD',
-    ),
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'startYear' => 1996,
+    'type' => 'static',
+    'name' => 'MSK',
+    'offset' => 14400,
+    'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.32',
+  'version' => '8.33',
   'name' => 'Europe/Moscow',
 );
 

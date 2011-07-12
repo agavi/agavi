@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Sao_Paulo".
- * Compiled from olson file "southamerica", version 8.49.
+ * Compiled from olson file "southamerica", version 8.50.
  *
  * @package    agavi
  * @subpackage translation
@@ -715,7 +715,7 @@ return array (
     'startYear' => 2038,
   ),
   'source' => 'southamerica',
-  'version' => '8.49',
+  'version' => '8.50',
   'name' => 'America/Sao_Paulo',
 );
 
