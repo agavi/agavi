@@ -1,7 +1,7 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.6 - July ??, 2011
+Version 1.0.6 - July 23, 2011
 =============================
 
 This release adds a database adapter for Doctrine 2, a renderer for the Twig template engine, a native session storage for ext/sqlsrv and various enhancements such as support for Smarty 3 in the existing renderer and extended configuration abilities for the Doctrine 1 database adapter.
