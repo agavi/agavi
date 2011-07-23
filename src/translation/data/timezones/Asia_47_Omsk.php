@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Omsk".
- * Compiled from olson file "europe", version 8.32.
+ * Compiled from olson file "europe", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,6 +41,12 @@ return array (
       'rawOffset' => 18000,
       'dstOffset' => 3600,
       'name' => 'OMSST',
+    ),
+    4 => 
+    array (
+      'rawOffset' => 25200,
+      'dstOffset' => 0,
+      'name' => 'OMST',
     ),
   ),
   'rules' => 
@@ -225,33 +231,21 @@ return array (
       'time' => 846360000,
       'type' => 1,
     ),
+    36 => 
+    array (
+      'time' => 1301169600,
+      'type' => 4,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => 21600,
-    'name' => 'OMS%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'startYear' => 1996,
+    'type' => 'static',
+    'name' => 'OMST',
+    'offset' => 25200,
+    'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.32',
+  'version' => '8.33',
   'name' => 'Asia/Omsk',
 );
 
