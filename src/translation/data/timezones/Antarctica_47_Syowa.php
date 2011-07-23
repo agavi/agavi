@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Syowa".
- * Compiled from olson file "antarctica", version 8.9.
+ * Compiled from olson file "antarctica", version 8.8.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
     'startYear' => 1958,
   ),
   'source' => 'antarctica',
-  'version' => '8.9',
+  'version' => '8.8',
   'name' => 'Antarctica/Syowa',
 );
 

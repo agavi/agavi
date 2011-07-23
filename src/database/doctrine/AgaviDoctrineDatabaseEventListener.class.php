@@ -48,19 +48,6 @@ class AgaviDoctrineDatabaseEventListener extends Doctrine_EventListener
 	}
 	
 	/**
-	 * Return the AgaviDoctrineDatabase instance associated with this listener.
-	 *
-	 * @return     AgaviDoctrineDatabase
-	 *
-	 * @author     David Zülke <david.zuelke@bitextender.com>
-	 * @since      1.0.6
-	 */
-	public function getDatabase()
-	{
-		return $this->database;
-	}
-	
-	/**
 	 * Post-connect listener. Will set charset and run init queries if configured.
 	 *
 	 * @param      Doctrine_Event The Doctrine event object.
@@ -70,13 +57,11 @@ class AgaviDoctrineDatabaseEventListener extends Doctrine_EventListener
 	 */
 	public function postConnect(Doctrine_Event $event)
 	{
-		$database = $this->getDatabase();
-		
-		if($database->hasParameter('charset')) {
-			$event->getInvoker()->setCharset($database->getParameter('charset'));
+		if($this->database->hasParameter('charset')) {
+			$event->getInvoker()->setCharset($this->database->getParameter('charset'));
 		}
 		
-		foreach((array)$database->getParameter('init_queries') as $query) {
+		foreach((array)$this->database->getParameter('init_queries') as $query) {
 			$event->getInvoker()->exec($query);
 		}
 	}

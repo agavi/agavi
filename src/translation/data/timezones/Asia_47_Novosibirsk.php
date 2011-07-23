@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Novosibirsk".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.32.
  *
  * @package    agavi
  * @subpackage translation
@@ -236,21 +236,33 @@ return array (
       'time' => 846360000,
       'type' => 0,
     ),
-    37 => 
-    array (
-      'time' => 1301169600,
-      'type' => 1,
-    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'NOVT',
-    'offset' => 25200,
-    'startYear' => 2012,
+    'type' => 'dynamic',
+    'offset' => 21600,
+    'name' => 'NOV%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'end' => 
+    array (
+      'month' => 9,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.32',
   'name' => 'Asia/Novosibirsk',
 );
 

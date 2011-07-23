@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Thimphu".
- * Compiled from olson file "asia", version 8.65.
+ * Compiled from olson file "asia", version 8.64.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1988,
   ),
   'source' => 'asia',
-  'version' => '8.65',
+  'version' => '8.64',
   'name' => 'Asia/Thimphu',
 );
 

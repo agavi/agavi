@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Istanbul".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.32.
  *
  * @package    agavi
  * @subpackage translation
@@ -638,7 +638,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.32',
   'name' => 'Europe/Istanbul',
 );
 

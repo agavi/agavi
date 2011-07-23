@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Casey".
- * Compiled from olson file "antarctica", version 8.9.
+ * Compiled from olson file "antarctica", version 8.8.
  *
  * @package    agavi
  * @subpackage translation
@@ -57,7 +57,7 @@ return array (
     'startYear' => 2011,
   ),
   'source' => 'antarctica',
-  'version' => '8.9',
+  'version' => '8.8',
   'name' => 'Antarctica/Casey',
 );
 

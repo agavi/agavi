@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Irkutsk".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.32.
  *
  * @package    agavi
  * @subpackage translation
@@ -47,12 +47,6 @@ return array (
       'rawOffset' => 25200,
       'dstOffset' => 3600,
       'name' => 'IRKST',
-    ),
-    5 => 
-    array (
-      'rawOffset' => 32400,
-      'dstOffset' => 0,
-      'name' => 'IRKT',
     ),
   ),
   'rules' => 
@@ -242,21 +236,33 @@ return array (
       'time' => 846352800,
       'type' => 2,
     ),
-    37 => 
-    array (
-      'time' => 1301162400,
-      'type' => 5,
-    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'IRKT',
-    'offset' => 32400,
-    'startYear' => 2012,
+    'type' => 'dynamic',
+    'offset' => 28800,
+    'name' => 'IRK%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'end' => 
+    array (
+      'month' => 9,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.32',
   'name' => 'Asia/Irkutsk',
 );
 

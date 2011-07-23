@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Magadan".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.32.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,12 +41,6 @@ return array (
       'rawOffset' => 36000,
       'dstOffset' => 3600,
       'name' => 'MAGST',
-    ),
-    4 => 
-    array (
-      'rawOffset' => 43200,
-      'dstOffset' => 0,
-      'name' => 'MAGT',
     ),
   ),
   'rules' => 
@@ -231,21 +225,33 @@ return array (
       'time' => 846342000,
       'type' => 1,
     ),
-    36 => 
-    array (
-      'time' => 1301151600,
-      'type' => 4,
-    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'MAGT',
-    'offset' => 43200,
-    'startYear' => 2012,
+    'type' => 'dynamic',
+    'offset' => 39600,
+    'name' => 'MAG%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'end' => 
+    array (
+      'month' => 9,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.32',
   'name' => 'Asia/Magadan',
 );
 

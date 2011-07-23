@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Scoresbysund".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.32.
  *
  * @package    agavi
  * @subpackage translation
@@ -252,7 +252,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.32',
   'name' => 'America/Scoresbysund',
 );
 

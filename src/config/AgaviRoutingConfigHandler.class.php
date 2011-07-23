@@ -99,20 +99,20 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 	protected function parseRoutes(AgaviRouting $routing, $routes, $parent = null)
 	{
 		foreach($routes as $route) {
-			$pattern = AgaviToolkit::expandDirectives($route->getAttribute('pattern'));
+			$pattern = $route->getAttribute('pattern');
 			$opts = array();
 			if($route->hasAttribute('imply'))					$opts['imply']				= AgaviToolkit::literalize($route->getAttribute('imply'));
 			if($route->hasAttribute('cut'))						$opts['cut']					= AgaviToolkit::literalize($route->getAttribute('cut'));
 			if($route->hasAttribute('stop'))					$opts['stop']					= AgaviToolkit::literalize($route->getAttribute('stop'));
-			if($route->hasAttribute('name'))					$opts['name']					= AgaviToolkit::expandDirectives($route->getAttribute('name'));
-			if($route->hasAttribute('source'))				$opts['source']				= AgaviToolkit::expandDirectives($route->getAttribute('source'));
-			if($route->hasAttribute('constraint'))		$opts['constraint']		= array_map('trim', explode(' ', trim(AgaviToolkit::expandDirectives($route->getAttribute('constraint')))));
+			if($route->hasAttribute('name'))					$opts['name']					= $route->getAttribute('name');
+			if($route->hasAttribute('source'))				$opts['source']				= $route->getAttribute('source');
+			if($route->hasAttribute('constraint'))		$opts['constraint']		= array_map('trim', explode(' ', trim($route->getAttribute('constraint'))));
 			// values which will be set when the route matched
-			if($route->hasAttribute('action'))				$opts['action']				= AgaviToolkit::expandDirectives($route->getAttribute('action'));
-			if($route->hasAttribute('locale'))				$opts['locale']				= AgaviToolkit::expandDirectives($route->getAttribute('locale'));
-			if($route->hasAttribute('method'))				$opts['method']				= AgaviToolkit::expandDirectives($route->getAttribute('method'));
-			if($route->hasAttribute('module'))				$opts['module']				= AgaviToolkit::expandDirectives($route->getAttribute('module'));
-			if($route->hasAttribute('output_type'))		$opts['output_type']	= AgaviToolkit::expandDirectives($route->getAttribute('output_type'));
+			if($route->hasAttribute('action'))				$opts['action']				= AgaviToolkit::literalize($route->getAttribute('action'));
+			if($route->hasAttribute('locale'))				$opts['locale']				= AgaviToolkit::literalize($route->getAttribute('locale'));
+			if($route->hasAttribute('method'))				$opts['method']				= AgaviToolkit::literalize($route->getAttribute('method'));
+			if($route->hasAttribute('module'))				$opts['module']				= AgaviToolkit::literalize($route->getAttribute('module'));
+			if($route->hasAttribute('output_type'))		$opts['output_type']	= AgaviToolkit::literalize($route->getAttribute('output_type'));
 
 			if($route->has('ignores')) {
 				foreach($route->get('ignores') as $ignore) {

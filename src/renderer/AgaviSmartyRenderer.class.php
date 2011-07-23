@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * Renderer for Smarty (versions 2 and 3).
+ * A renderer produces the output as defined by a View
  *
  * @package    agavi
  * @subpackage renderer
@@ -58,11 +58,6 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	 *                    including the dot.
 	 */
 	protected $defaultExtension = '.tpl';
-
-	/**
-	 * @var        bool Internal flag to indicate the Smarty version used.
-	 */
-	protected $isSmarty2 = true;
 
 	/**
 	 * Pre-serialization callback.
@@ -114,40 +109,25 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	protected function getEngine()
 	{
 		if($this->smarty) {
-			if($this->isSmarty2) {
-				$this->smarty->clear_all_assign();
-				$this->smarty->clear_config();
-			}
+			$this->smarty->clear_all_assign();
+			$this->smarty->clear_config();
 			return $this->smarty;
 		}
 
 		$this->smarty = $this->createEngineInstance();
-		
-		$this->isSmarty2 = !defined("Smarty::SMARTY_VERSION") || (strpos(Smarty::SMARTY_VERSION, 'Smarty-3') !== 0);
-		
-		if($this->isSmarty2) {
-			$this->smarty->config_dir = AgaviConfig::get('core.config_dir');
-		} else {
-			$this->smarty->setConfigDir(AgaviConfig::get('core.config_dir'));
-		}
+		$this->smarty->clear_all_assign();
+		$this->smarty->clear_config();
+		$this->smarty->config_dir = AgaviConfig::get('core.config_dir');
 
 		$parentMode = fileperms(AgaviConfig::get('core.cache_dir'));
 
 		$compileDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::COMPILE_DIR . DIRECTORY_SEPARATOR . self::COMPILE_SUBDIR;
 		AgaviToolkit::mkdir($compileDir, $parentMode, true);
-		if($this->isSmarty2) {
-			$this->smarty->compile_dir = $compileDir;
-		} else {
-			$this->smarty->setCompileDir($compileDir);
-		}
+		$this->smarty->compile_dir = $compileDir;
 
 		$cacheDir = AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR . self::CACHE_DIR;
 		AgaviToolkit::mkdir($cacheDir, $parentMode, true);
-		if($this->isSmarty2) {
-			$this->smarty->cache_dir = $cacheDir;
-		} else {
-			$this->smarty->setCacheDir($cacheDir);
-		}
+		$this->smarty->cache_dir = $cacheDir;
 
 		if(AgaviConfig::get('core.debug', false)) {
 			$this->smarty->debugging = true;
@@ -176,36 +156,29 @@ class AgaviSmartyRenderer extends AgaviRenderer implements AgaviIReusableRendere
 	public function render(AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())
 	{
 		$engine = $this->getEngine();
-		if($this->isSmarty2) {
-			$assignFunc = 'assign_by_ref';
-			$data = $engine;
-		} else {
-			$assignFunc = 'assignByRef';
-			$data = $engine->createData($engine);
-		}
 		
 		if($this->extractVars) {
 			foreach($attributes as $name => &$value) {
-				$data->$assignFunc($name, $value);
+				$engine->assign_by_ref($name, $value);
 			}
 		} else {
-			$data->$assignFunc($this->varName, $attributes);
+			$engine->assign_by_ref($this->varName, $attributes);
 		}
 		
-		$data->$assignFunc($this->slotsVarName, $slots);
+		$engine->assign_by_ref($this->slotsVarName, $slots);
 		
 		foreach($this->assigns as $key => $getter) {
-			$data->assign($key, $this->context->$getter());
+			$engine->assign($key, $this->context->$getter());
 		}
 		
 		$finalMoreAssigns =& self::buildMoreAssigns($moreAssigns, $this->moreAssignNames);
 		foreach($finalMoreAssigns as $key => &$value) {
-			$data->$assignFunc($key, $value);
+			$engine->assign_by_ref($key, $value);
 		}
 		
 		// hack because stupid smarty cannot handle php streams... my god
 		$resource = str_replace('://', ':', $layer->getResourceStreamIdentifier());
-		return $engine->fetch($resource, $this->isSmarty2 ? null : $data);
+		return $engine->fetch($resource);
 	}
 }
 

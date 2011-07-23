@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Krasnoyarsk".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.32.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,12 +41,6 @@ return array (
       'rawOffset' => 21600,
       'dstOffset' => 3600,
       'name' => 'KRAST',
-    ),
-    4 => 
-    array (
-      'rawOffset' => 28800,
-      'dstOffset' => 0,
-      'name' => 'KRAT',
     ),
   ),
   'rules' => 
@@ -231,21 +225,33 @@ return array (
       'time' => 846356400,
       'type' => 1,
     ),
-    36 => 
-    array (
-      'time' => 1301166000,
-      'type' => 4,
-    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'KRAT',
-    'offset' => 28800,
-    'startYear' => 2012,
+    'type' => 'dynamic',
+    'offset' => 25200,
+    'name' => 'KRA%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'end' => 
+    array (
+      'month' => 9,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.32',
   'name' => 'Asia/Krasnoyarsk',
 );
 

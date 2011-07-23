@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Lima".
- * Compiled from olson file "southamerica", version 8.50.
+ * Compiled from olson file "southamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -127,7 +127,7 @@ return array (
     'startYear' => 1995,
   ),
   'source' => 'southamerica',
-  'version' => '8.50',
+  'version' => '8.49',
   'name' => 'America/Lima',
 );
 

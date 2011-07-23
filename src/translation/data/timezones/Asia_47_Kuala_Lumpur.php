@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Kuala_Lumpur".
- * Compiled from olson file "asia", version 8.65.
+ * Compiled from olson file "asia", version 8.64.
  *
  * @package    agavi
  * @subpackage translation
@@ -112,7 +112,7 @@ return array (
     'startYear' => 1982,
   ),
   'source' => 'asia',
-  'version' => '8.65',
+  'version' => '8.64',
   'name' => 'Asia/Kuala_Lumpur',
 );
 

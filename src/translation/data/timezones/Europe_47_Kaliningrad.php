@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Kaliningrad".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.32.
  *
  * @package    agavi
  * @subpackage translation
@@ -65,12 +65,6 @@ return array (
       'rawOffset' => 7200,
       'dstOffset' => 3600,
       'name' => 'EEST',
-    ),
-    8 => 
-    array (
-      'rawOffset' => 10800,
-      'dstOffset' => 0,
-      'name' => 'EET',
     ),
   ),
   'rules' => 
@@ -325,21 +319,33 @@ return array (
       'time' => 846374400,
       'type' => 6,
     ),
-    50 => 
-    array (
-      'time' => 1301184000,
-      'type' => 8,
-    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'EET',
-    'offset' => 10800,
-    'startYear' => 2012,
+    'type' => 'dynamic',
+    'offset' => 7200,
+    'name' => 'EE%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'end' => 
+    array (
+      'month' => 9,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.32',
   'name' => 'Europe/Kaliningrad',
 );
 

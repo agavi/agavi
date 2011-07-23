@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Volgograd".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.32.
  *
  * @package    agavi
  * @subpackage translation
@@ -249,21 +249,33 @@ return array (
       'time' => 846370800,
       'type' => 5,
     ),
-    36 => 
-    array (
-      'time' => 1301180400,
-      'type' => 3,
-    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'VOLT',
-    'offset' => 14400,
-    'startYear' => 2012,
+    'type' => 'dynamic',
+    'offset' => 10800,
+    'name' => 'VOL%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'end' => 
+    array (
+      'month' => 9,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 7200000,
+      'type' => 1,
+    ),
+    'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.32',
   'name' => 'Europe/Volgograd',
 );
 
