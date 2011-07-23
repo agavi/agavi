@@ -226,12 +226,14 @@
 		<copy file="CHANGELOG" todir="${builddir}" />
 		<copy file="COPYRIGHT" todir="${builddir}" />
 		<copy file="INSTALL" todir="${builddir}" />
+		<copy file="KNOWN_ISSUES" todir="${builddir}" />
 		<copy file="LICENSE" todir="${builddir}" />
 		<copy file="LICENSE-AGAVI" todir="${builddir}" />
 		<copy file="LICENSE-ICU" todir="${builddir}" />
 		<copy file="LICENSE-SCHEMATRON" todir="${builddir}" />
 		<copy file="LICENSE-UNICODE_CLDR" todir="${builddir}" />
 		<copy file="RELEASE_NOTES" todir="${builddir}" />
+		<copy file="TODO" todir="${builddir}" />
 		<copy file="UPGRADING" todir="${builddir}" />
 
 		<copy todir="${builddir}">

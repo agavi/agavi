@@ -1,38 +1,6 @@
 AGAVI RELEASE NOTES (1.0.x)
 ===========================
 
-Version 1.0.6 - July 23, 2011
-=============================
-
-This release adds a database adapter for Doctrine 2, a renderer for the Twig template engine, a native session storage for ext/sqlsrv and various enhancements such as support for Smarty 3 in the existing renderer and extended configuration abilities for the Doctrine 1 database adapter.
-
-Doctrine 2 support was added, both for the ORM (AgaviDoctrine2ormDatabase) and the DBAL (AgaviDoctrine2dbalDatabase) libraries. The ORM adapter can optionally utilize a pre-configured DBAL connection instead of specifying connection details itself. Both adapters allow for easy extensibility with custom logic by exposing a prepareConfiguration() and a prepareEventManager() method that can be used to customize the configuration and the event manager, respectively. The API documentation for both classes contains a detailed list of all options; a typical ORM adapter configuration would look similar to this:
-<database name="master" class="AgaviDoctrine2ormDatabase">
-	<ae:parameter name="connection">
-		<ae:parameter name="driver">pdo_mysql</ae:parameter>
-		<ae:parameter name="host">127.0.0.1</ae:parameter>
-		<ae:parameter name="user">root</ae:parameter>
-		<ae:parameter name="dbname">test</ae:parameter>
-	</ae:parameter>
-	<ae:parameter name="configuration">
-		<ae:parameter name="metadata_driver_impl_argument">%core.model_dir%/Entities</ae:parameter>
-	</ae:parameter>
-</database>
-An example cli-config.php file demonstrating how to integrate Agavi with the Doctrine command line utilities can be found in etc/database/doctrine2.
-
-The database adapter for Doctrine 1 now allows basic configuration of cache drivers for result and query caches, and added the ability to specify the class to use as the connection event listener - this allows a custom implementation to be used, where more advanced logic can be executed in the preConnect() event handler method, which is useful for modifying the connection or manager objects in ways not supported through configuration options.
-
-It is now possible to use ext/sqlsrv as a session storage via AgaviSqlsrvSessionStorage as an alternative to interfacing with SQL Server via PDO. The session table's data column must be of type "varbinary".
-
-The Twig template engine is supported through AgaviTwigRenderer; includes and inheritance lookups are performed on the current directory first by default before falling back to the main template directory. The lookup sequence is configurable. The renderer will also attempt to load a localized template from a locale subdirectory first before picking a generic one if the template that initiated the include or extension was a localized template.
-
-AgaviSmartyRenderer received minor adjustments to support Smarty 3 without triggering deprecation notices.
-
-The Sample App now uses the regular "web" context to serve the WSDL for the product service; the WSDL contents can now be retrieved through the URL "/products.wsdl".
-
-The timezone database was updated to version 2011h.
-
-
 Version 1.0.5 - June 16, 2011
 =============================
 
