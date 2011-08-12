@@ -401,7 +401,7 @@ class AgaviConfigCache
 			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
 			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
 			// schematron processor
-			require_once($agaviDir . '/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php');
+			require_once($agaviDir . '/util/AgaviSchematronProcessor.class.php');
 			// extended XSL* classes
 			if(!AgaviConfig::get('core.skip_config_transformations', false)) {
 				if(!extension_loaded('xsl')) {

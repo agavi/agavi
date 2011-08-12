@@ -241,7 +241,7 @@
 			<autoload name="AgaviDecimalFormatter">%core.agavi_dir%/util/AgaviDecimalFormatter.class.php</autoload>
 			<autoload name="AgaviInflector">%core.agavi_dir%/util/AgaviInflector.class.php</autoload>
 			<autoload name="AgaviParameterHolder">%core.agavi_dir%/util/AgaviParameterHolder.class.php</autoload>
-			<autoload name="AgaviSchematronProcessor">%core.agavi_dir%/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php</autoload>
+			<autoload name="AgaviSchematronProcessor">%core.agavi_dir%/util/AgaviSchematronProcessor.class.php</autoload>
 			<autoload name="AgaviToolkit">%core.agavi_dir%/util/AgaviToolkit.class.php</autoload>
 			<autoload name="AgaviVirtualArrayPath">%core.agavi_dir%/util/AgaviVirtualArrayPath.class.php</autoload>
 			<autoload name="AgaviRecursiveDirectoryFilterIterator">%core.agavi_dir%/util/AgaviRecursiveDirectoryFilterIterator.class.php</autoload>
