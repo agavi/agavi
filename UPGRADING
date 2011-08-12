@@ -21,3 +21,7 @@ to these elements yourself.
 The handler is also namespace-aware. By default, it will assume your configuration file's actual contents will be in no XML namespace. If you wish to use an XML namespace for those elements, define the corresponding namespace URI using
   <ae:parameter name="namespace_uri">urn:com.acme.rockets</ae:parameter>
 on the affected <handler> elements.
+
+Deprecated Functionality
+------------------------
+Support for php.ini settings "magic_quotes_gpc" and "register_long_arrays" has been deprecated.

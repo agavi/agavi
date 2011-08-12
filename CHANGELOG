@@ -12,6 +12,8 @@ ADD: Allow array syntax for slot names (#1110) (David)
 ADD: Add support for custom filesystem layouts for modules to the project configuration system (#874) (Noah)
 ADD: Response attributes (#1062) (David, TANAKA Koichi)
 
+CHG: Deprecate support for register_long_arrays (#1403) (David)
+CHG: Deprecate support for magic_quotes_gpc (#1402) (David)
 CHG: Make AgaviXmlConfigXsltProcessor generic and move it to util package (#1354) (David)
 CHG: Make AgaviXmlConfigSchematronProcessor generic and move it to util package (#1355) (David)
 CHG: Bump configuration namespaces to version 1.1 (#1385) (David)
