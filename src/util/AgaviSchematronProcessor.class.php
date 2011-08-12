@@ -107,7 +107,7 @@ class AgaviSchematronProcessor extends AgaviParameterHolder
 	protected static function getProcessor($path)
 	{
 		if(!isset(self::$processors[$path])) {
-			$processorImpl = new AgaviXmlConfigDomDocument();
+			$processorImpl = new DOMDocument();
 			$processorImpl->load($path);
 			$processor = new AgaviXsltProcessor();
 			$processor->importStylesheet($processorImpl);
