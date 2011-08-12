@@ -884,7 +884,7 @@ class AgaviXmlConfigParser
 		}
 		
 		// load the schematron processor
-		$schematron = new AgaviXmlConfigSchematronProcessor();
+		$schematron = new AgaviSchematronProcessor();
 		$schematron->setNode($document);
 		// set some info (config file path, context name, environment name) as params
 		// first arg is the namespace URI, which PHP doesn't support. awesome. see http://bugs.php.net/bug.php?id=30622 for the sad details

@@ -49,7 +49,6 @@
 			<autoload name="AgaviXmlConfigDomProcessingInstruction">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomText">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomText.class.php</autoload>
 			<autoload name="AgaviXmlConfigXsltProcessor">%core.agavi_dir%/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php</autoload>
-			<autoload name="AgaviXmlConfigSchematronProcessor">%core.agavi_dir%/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php</autoload>
 			<autoload name="AgaviXmlConfigHandler">%core.agavi_dir%/config/AgaviXmlConfigHandler.class.php</autoload>
 			<autoload name="AgaviXmlConfigParser">%core.agavi_dir%/config/AgaviXmlConfigParser.class.php</autoload>
 
@@ -242,6 +241,7 @@
 			<autoload name="AgaviDecimalFormatter">%core.agavi_dir%/util/AgaviDecimalFormatter.class.php</autoload>
 			<autoload name="AgaviInflector">%core.agavi_dir%/util/AgaviInflector.class.php</autoload>
 			<autoload name="AgaviParameterHolder">%core.agavi_dir%/util/AgaviParameterHolder.class.php</autoload>
+			<autoload name="AgaviSchematronProcessor">%core.agavi_dir%/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php</autoload>
 			<autoload name="AgaviToolkit">%core.agavi_dir%/util/AgaviToolkit.class.php</autoload>
 			<autoload name="AgaviVirtualArrayPath">%core.agavi_dir%/util/AgaviVirtualArrayPath.class.php</autoload>
 			<autoload name="AgaviRecursiveDirectoryFilterIterator">%core.agavi_dir%/util/AgaviRecursiveDirectoryFilterIterator.class.php</autoload>

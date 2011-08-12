@@ -14,12 +14,12 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * AgaviXmlConfigSchematronProcessor transforms DOM documents according to
- * ISO Schematron validation and transformation rules into a document
- * containing successful reports and failed assertions.
+ * AgaviSchematronProcessor transforms DOM documents according to ISO Schematron
+ * validation and transformation rules into a document containing successful
+ * reports and failed assertions.
  *
  * @package    agavi
- * @subpackage config
+ * @subpackage util
  *
  * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @author     David Zülke <david.zuelke@bitextender.com>
@@ -30,8 +30,14 @@
  *
  * @version    $Id$
  */
-class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
+class AgaviSchematronProcessor extends AgaviParameterHolder
 {
+	const NAMESPACE_SCHEMATRON_ISO = 'http://purl.oclc.org/dsdl/schematron';
+	
+	const NAMESPACE_SVRL_ISO = 'http://purl.oclc.org/dsdl/svrl';
+	
+	const NAMESPACE_XSL_1999 = 'http://www.w3.org/1999/XSL/Transform';
+	
 	/**
 	 * @var        array A cache of processor instances.
 	 */
@@ -139,8 +145,8 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	/**
 	 * Cleanup the given processor after use.
 	 * Removes all parameters from this processor class.
-	 * Cannot be done in AgaviXmlConfigSchematronProcessor::prepareProcessor(),
-	 * which is why this must be called in transform().
+	 * Cannot be done in AgaviSchematronProcessor::prepareProcessor(), which is
+	 * why this must be called in transform().
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.1.0
@@ -170,7 +176,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 		}
 		
 		// is it an ISO Schematron file?
-		if(!$schema->documentElement || $schema->documentElement->namespaceURI != AgaviXmlConfigParser::NAMESPACE_SCHEMATRON_ISO) {
+		if(!$schema->documentElement || $schema->documentElement->namespaceURI != self::NAMESPACE_SCHEMATRON_ISO) {
 			throw new AgaviParseException(sprintf('Schema file "%s" is invalid', $schema->documentURI));
 		}
 		
@@ -197,7 +203,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 		}
 		
 		// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
-		if(!$validatorImpl->documentElement || $validatorImpl->documentElement->namespaceURI != AgaviXmlConfigParser::NAMESPACE_XSL_1999) {
+		if(!$validatorImpl->documentElement || $validatorImpl->documentElement->namespaceURI != self::NAMESPACE_XSL_1999) {
 			throw new AgaviParseException(sprintf('Processing using schema file "%s" resulted in an invalid stylesheet', $schema->documentURI));
 		}
 		
