@@ -28,3 +28,11 @@ AgaviSchematronProcessor and AgaviXslProcessor
 ----------------------------------------------
 Both classes have been moved from config/util/ to util/ and decoupled from the configuration system; you can now use them in your application code to perform Schematron validation or XSL transformations.
 
+XInclude Wildcards
+------------------
+The href attribute of <xi:include /> elements now supports glob() syntax with the GLOB_BRACE flag enabled, so you can do any of the following:
+<xi:include href="%core.module_dir%/*/config/routing.xml" />
+<xi:include href="%core.module_dir%/{Foo,Bar,Baz}/config/routing.xml" />
+<xi:include href="%core.module_dir%/{WinningModule,*}/config/routing.xml" />
+For any path matched, the <xi:include /> element will be duplicated with the expanded path inserted into the href attribute.
+Duplicates are removed, so the "WinningModule" entry matched by the "*" wildcard alternative in the last example will not be included a second time.
