@@ -22,6 +22,7 @@
  * @subpackage config
  *
  * @author     Noah Fontes <noah.fontes@bitextender.com>
+ * @author     David Zülke <david.zuelke@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -37,7 +38,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	protected static $processors = array();
 	
 	/**
-	 * @var        array The list of schematron implementation parts to process.
+	 * @var        array The list of Schematron implementation paths to process.
 	 */
 	protected static $defaultChain = array(
 		'%core.agavi_dir%/config/schematron/iso_dsdl_include.xsl',
@@ -51,7 +52,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	protected $node = null;
 	
 	/**
-	 * Creates a new processor for transforming documents into a schematron
+	 * Creates a new processor for transforming documents into a Schematron
 	 * report.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
@@ -70,6 +71,14 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 		$this->chain = array_map(array('AgaviToolkit', 'expandDirectives'), $chain);
 	}
 	
+	/**
+	 * Get an array of all processors.
+	 *
+	 * @return     array An array of AgaviXmlConfigXsltProcessor instances.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
 	public function getProcessors()
 	{
 		$retval = array();
@@ -79,6 +88,16 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 		return $retval;
 	}
 	
+	/**
+	 * Get a processor instance for the given XSLT path.
+	 *
+	 * @param      string The file path to the XSL template.
+	 *
+	 * @return     AgaviXmlConfigXsltProcessor The processor instance.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
 	protected static function getProcessor($path)
 	{
 		if(!isset(self::$processors[$path])) {
@@ -105,11 +124,27 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 		$this->node = $node;
 	}
 	
+	/**
+	 * Prepare the given processor for use.
+	 * Sets all parameters from this processor class.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
 	protected function prepareProcessor($processor)
 	{
 		$processor->setParameter('', $this->getParameters());
 	}
 	
+	/**
+	 * Cleanup the given processor after use.
+	 * Removes all parameters from this processor class.
+	 * Cannot be done in AgaviXmlConfigSchematronProcessor::prepareProcessor(),
+	 * which is why this must be called in transform().
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
 	protected function cleanupProcessor($processor)
 	{
 		foreach(array_keys($this->getParameters()) as $parameter) {
@@ -118,7 +153,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	}
 	
 	/**
-	 * Validates the node against a given schematron validation file.
+	 * Validates the node against a given Schematron validation file.
 	 *
 	 * @param      DOMDocument The validator to use.
 	 *
@@ -139,7 +174,7 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 			throw new AgaviParseException(sprintf('Schema file "%s" is invalid', $schema->documentURI));
 		}
 		
-		// transform the .sch file to a validation stylesheet using the schematron implementation
+		// transform the .sch file to a validation stylesheet using the Schematron implementation
 		$validatorImpl = $schema;
 		$first = true;
 		foreach($this->getProcessors() as $processor) {
