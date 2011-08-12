@@ -63,7 +63,6 @@
 			<autoload name="AgaviContext">%core.agavi_dir%/core/AgaviContext.class.php</autoload>
 
 			<!-- agavi/database -->
-			<autoload name="AgaviCreoleDatabase">%core.agavi_dir%/database/AgaviCreoleDatabase.class.php</autoload>
 			<autoload name="AgaviDatabase">%core.agavi_dir%/database/AgaviDatabase.class.php</autoload>
 			<autoload name="AgaviDatabaseManager">%core.agavi_dir%/database/AgaviDatabaseManager.class.php</autoload>
 			<autoload name="AgaviDoctrine2Database">%core.agavi_dir%/database/AgaviDoctrine2Database.class.php</autoload>

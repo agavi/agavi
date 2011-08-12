@@ -22,7 +22,7 @@ You can now use array syntax for slot names. Setting slots "foo[0]" and "foo[1]"
 
 Database
 --------
-Support for Propel versions prior to 1.3 has been dropped from AgaviPropelDatabase.
+Support for Propel versions prior to 1.3 has been dropped from AgaviPropelDatabase. AgaviCreoleDatabase has been removed.
 
 AgaviReturnArrayConfigHandler
 -----------------------------
