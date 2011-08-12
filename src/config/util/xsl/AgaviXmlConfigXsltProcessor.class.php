@@ -103,8 +103,9 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 		
 		libxml_use_internal_errors($luie);
 		
-		// turn this into an Agavi DOMDocument rather than a regular one
-		$document = new AgaviXmlConfigDomDocument();
+		// turn this into an instance of the class that was passed in, rather than a regular DOMDocument
+		$class = $doc instanceof DOMDocument ? $doc : ($doc->ownerDocument ?: 'DOMDocument');
+		$document = new $class();
 		$document->loadXML($result->saveXML());
 		
 		// save the URI just in case
