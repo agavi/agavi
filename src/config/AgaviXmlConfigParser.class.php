@@ -588,7 +588,7 @@ class AgaviXmlConfigParser
 		foreach($transformations as $xsl) {
 			// load the stylesheet document into an XSLTProcessor instance
 			try {
-				$proc = new AgaviXmlConfigXsltProcessor();
+				$proc = new AgaviXsltProcessor();
 				$proc->importStylesheet($xsl);
 			} catch(Exception $e) {
 				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not import XSL stylesheet "%s": %s', $document->documentURI, $xsl->documentURI, $e->getMessage()), 0, $e);

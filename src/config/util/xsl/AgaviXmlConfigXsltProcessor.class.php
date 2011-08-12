@@ -17,7 +17,7 @@
  * Extended XSLTProcessor class that throws exceptions on errors.
  *
  * @package    agavi
- * @subpackage config
+ * @subpackage util
  *
  * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviXmlConfigXsltProcessor extends XSLTProcessor
+class AgaviXsltProcessor extends XSLTProcessor
 {
 	/**
 	 * Import a stylesheet.
@@ -71,7 +71,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 	 *
 	 * @param      DOMNode The node to transform.
 	 *
-	 * @return     AgaviXmlConfigDomDocument The resulting DOMDocument.
+	 * @return     DOMDocument The resulting DOMDocument.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>

@@ -80,7 +80,7 @@ class AgaviSchematronProcessor extends AgaviParameterHolder
 	/**
 	 * Get an array of all processors.
 	 *
-	 * @return     array An array of AgaviXmlConfigXsltProcessor instances.
+	 * @return     array An array of AgaviXsltProcessor instances.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.1.0
@@ -99,7 +99,7 @@ class AgaviSchematronProcessor extends AgaviParameterHolder
 	 *
 	 * @param      string The file path to the XSL template.
 	 *
-	 * @return     AgaviXmlConfigXsltProcessor The processor instance.
+	 * @return     AgaviXsltProcessor The processor instance.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.1.0
@@ -109,7 +109,7 @@ class AgaviSchematronProcessor extends AgaviParameterHolder
 		if(!isset(self::$processors[$path])) {
 			$processorImpl = new AgaviXmlConfigDomDocument();
 			$processorImpl->load($path);
-			$processor = new AgaviXmlConfigXsltProcessor();
+			$processor = new AgaviXsltProcessor();
 			$processor->importStylesheet($processorImpl);
 			self::$processors[$path] = $processor;
 		}
@@ -209,7 +209,7 @@ class AgaviSchematronProcessor extends AgaviParameterHolder
 		
 		// all fine so far. let us import the stylesheet
 		try {
-			$validator = new AgaviXmlConfigXsltProcessor();
+			$validator = new AgaviXsltProcessor();
 			$validator->importStylesheet($validatorImpl);
 		} catch(Exception $e) {
 			throw new AgaviParseException(sprintf('Could not process the schema file "%s": %s', $schema->documentURI, $e->getMessage()), 0, $e);

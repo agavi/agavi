@@ -48,7 +48,6 @@
 			<autoload name="AgaviXmlConfigDomNotation">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomNotation.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomProcessingInstruction">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php</autoload>
 			<autoload name="AgaviXmlConfigDomText">%core.agavi_dir%/config/util/dom/AgaviXmlConfigDomText.class.php</autoload>
-			<autoload name="AgaviXmlConfigXsltProcessor">%core.agavi_dir%/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php</autoload>
 			<autoload name="AgaviXmlConfigHandler">%core.agavi_dir%/config/AgaviXmlConfigHandler.class.php</autoload>
 			<autoload name="AgaviXmlConfigParser">%core.agavi_dir%/config/AgaviXmlConfigParser.class.php</autoload>
 
@@ -245,6 +244,7 @@
 			<autoload name="AgaviToolkit">%core.agavi_dir%/util/AgaviToolkit.class.php</autoload>
 			<autoload name="AgaviVirtualArrayPath">%core.agavi_dir%/util/AgaviVirtualArrayPath.class.php</autoload>
 			<autoload name="AgaviRecursiveDirectoryFilterIterator">%core.agavi_dir%/util/AgaviRecursiveDirectoryFilterIterator.class.php</autoload>
+			<autoload name="AgaviXsltProcessor">%core.agavi_dir%/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php</autoload>
 
 			<!-- agavi/validator -->
 			<autoload name="AgaviAndoperatorValidator">%core.agavi_dir%/validator/AgaviAndoperatorValidator.class.php</autoload>
