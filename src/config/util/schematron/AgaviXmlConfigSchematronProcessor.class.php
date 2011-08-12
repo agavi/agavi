@@ -32,22 +32,17 @@
 class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 {
 	/**
-	 * @var        array A list of processor instances.
+	 * @var        array A cache of processor instances.
 	 */
-	protected static $processors = null;
-	
-	/**
-	 * @var        int The number of processors.
-	 */
-	protected static $processorCount = 0;
+	protected static $processors = array();
 	
 	/**
 	 * @var        array The list of schematron implementation parts to process.
 	 */
-	protected static $chain = array(
-		'iso_dsdl_include.xsl',
-		'iso_abstract_expand.xsl',
-		'iso_svrl_for_xslt1.xsl'
+	protected static $defaultChain = array(
+		'%core.agavi_dir%/config/schematron/iso_dsdl_include.xsl',
+		'%core.agavi_dir%/config/schematron/iso_abstract_expand.xsl',
+		'%core.agavi_dir%/config/schematron/iso_svrl_for_xslt1.xsl'
 	);
 	
 	/**
@@ -62,29 +57,39 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function __construct()
+	public function __construct(array $chain = null)
 	{
+		if($chain === null) {
+			$chain = static::$defaultChain;
+		}
+		
+		if(!$chain) {
+			throw new AgaviException('Schematron processor chain must contain at least one path name.');
+		}
+		
+		$this->chain = array_map(array('AgaviToolkit', 'expandDirectives'), $chain);
 	}
 	
-	/**
-	 * Generates the processing chain.
-	 *
-	 * @author     Noah Fontes <noah.fontes@bitextender.com>
-	 * @since      1.0.0
-	 */
-	protected static function createProcessors()
+	public function getProcessors()
 	{
-		self::$processors = array();
-		self::$processorCount = 0;
-		
-		foreach(self::$chain as $file) {
+		$retval = array();
+		foreach($this->chain as $path) {
+			$retval[] = static::getProcessor($path);
+		}
+		return $retval;
+	}
+	
+	protected static function getProcessor($path)
+	{
+		if(!isset(self::$processors[$path])) {
 			$processorImpl = new AgaviXmlConfigDomDocument();
-			$processorImpl->load(AgaviConfig::get('core.agavi_dir') . '/config/schematron/' . $file);
+			$processorImpl->load($path);
 			$processor = new AgaviXmlConfigXsltProcessor();
 			$processor->importStylesheet($processorImpl);
-			self::$processors[] = $processor;
-			self::$processorCount++;
+			self::$processors[$path] = $processor;
 		}
+		
+		return self::$processors[$path];
 	}
 	
 	/**
@@ -97,11 +102,19 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 	 */
 	public function setNode(DOMNode $node)
 	{
-		if(self::$processors === null) {
-			self::createProcessors();
-		}
-		
 		$this->node = $node;
+	}
+	
+	protected function prepareProcessor($processor)
+	{
+		$processor->setParameter('', $this->getParameters());
+	}
+	
+	protected function cleanupProcessor($processor)
+	{
+		foreach(array_keys($this->getParameters()) as $parameter) {
+			$processor->removeParameter('', $parameter);
+		}
 	}
 	
 	/**
@@ -127,23 +140,25 @@ class AgaviXmlConfigSchematronProcessor extends AgaviParameterHolder
 		}
 		
 		// transform the .sch file to a validation stylesheet using the schematron implementation
-		try {
-			$initialProcessor = self::$processors[0];
-			$initialProcessor->setParameter('', $this->getParameters());
-			
-			// ...and do the actual transformations
-			$validatorImpl = $initialProcessor->transformToDoc($schema);
-			for($i = 1; $i < self::$processorCount; $i ++) {
-				$validatorImpl = self::$processors[$i]->transformToDoc($validatorImpl);
+		$validatorImpl = $schema;
+		$first = true;
+		foreach($this->getProcessors() as $processor) {
+			if($first) {
+				// set some vars for the schema
+				$this->prepareProcessor($processor);
 			}
-			
-			// for some reason we can't clone XSLTProcessor instances, so we have to
-			// go back and remove all the parameters :(
-			foreach(array_keys($this->getParameters()) as $parameter) {
-				$initialProcessor->removeParameter('', $parameter);
+			try {
+				$validatorImpl = $processor->transformToDoc($validatorImpl);
+			} catch(Exception $e) {
+				if($first) {
+					$this->cleanupProcessor($processor);
+				}
+				throw new AgaviParseException(sprintf('Could not transform schema file "%s": %s', $schema->documentURI, $e->getMessage()), 0, $e);
 			}
-		} catch(Exception $e) {
-			throw new AgaviParseException(sprintf('Could not transform schema file "%s": %s', $schema->documentURI, $e->getMessage()), 0, $e);
+			if($first) {
+				$this->cleanupProcessor($processor);
+				$first = false;
+			}
 		}
 		
 		// it transformed fine. but did we get a proper stylesheet instance at all? wrong namespaces can lead to empty docs that only have an XML prolog
