@@ -24,3 +24,7 @@ AgaviReturnArrayConfigHandler
 -----------------------------
 RACH is now an AgaviXmlConfigHandler and fully namespace aware. Transformations are automatically added in most cases for config files used with previous Agavi versions. Refer to UPGRADING for details.
 
+AgaviSchematronProcessor and AgaviXslProcessor
+----------------------------------------------
+Both classes have been moved from config/util/ to util/ and decoupled from the configuration system; you can now use them in your application code to perform Schematron validation or XSL transformations.
+
