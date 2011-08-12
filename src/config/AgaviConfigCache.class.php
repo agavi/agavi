@@ -407,7 +407,7 @@ class AgaviConfigCache
 				if(!extension_loaded('xsl')) {
 					throw new AgaviConfigurationException("The XSL extension for PHP is used by Agavi for performing transformations in the configuration system; this may be disabled by setting\nAgaviConfig::set('core.skip_config_transformations', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nAs a result, you *will* have to use the latest configuration file formats and namespaces as backwards compatibility is implemented through XSLT. Also, certain additional configuration file validations implemented via Schematron will not be performed.");
 				}
-				require($agaviDir . '/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php');
+				require($agaviDir . '/util/AgaviXsltProcessor.class.php');
 			}
 			self::$filesIncluded = true;
 		}
