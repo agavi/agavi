@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.7 RC1 (August ??, 2011)
 ---------------------------
 
+CHG: Do not call getCredentials() if Action is not "secure" (#1400) (David)
+
 
 1.0.6 (July 23, 2011)
 ---------------------

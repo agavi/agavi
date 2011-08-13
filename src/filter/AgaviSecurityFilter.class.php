@@ -53,13 +53,13 @@ class AgaviSecurityFilter extends AgaviFilter implements AgaviIActionFilter, Aga
 		// get the current action instance
 		$actionInstance = $container->getActionInstance();
 
-		// get the credential required for this action
-		$credential = $actionInstance->getCredentials();
-
 		if(!$actionInstance->isSecure()) {
 			// the action instance does not require authentication, so we can continue in the chain and then bail out early
 			return $filterChain->execute($container);
 		}
+
+		// get the credential required for this action
+		$credential = $actionInstance->getCredentials();
 
 		// credentials can be anything you wish; a string, array, object, etc.
 		// as long as you add the same exact data to the user as a credential,

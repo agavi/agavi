@@ -4,6 +4,8 @@ AGAVI RELEASE NOTES
 Version 1.0.7 - August ??, 2011
 ===============================
 
+The getCredentials() method on an Action is no longer called unconditionally (i.e. whether or not the isSecure() method returned false) but only if the Action is "secure".
+
 
 Version 1.0.6 - July 23, 2011
 =============================
