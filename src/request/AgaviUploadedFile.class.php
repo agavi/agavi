@@ -28,18 +28,60 @@
  *
  * @version    $Id$
  */
-class AgaviUploadedFile extends ArrayObject
+class AgaviUploadedFile implements ArrayAccess
 {
+	/**
+	 * @var        string The name of the file.
+	 */
+	protected $name;
+	
+	/**
+	 * @var        string The type of the file.
+	 */
+	protected $type;
+	
+	/**
+	 * @var        int The size of the file, in bytes.
+	 */
+	protected $size;
+	
+	/**
+	 * @var        string A local path name to the file, if persisted to disk.
+	 */
+	protected $tmpName;
+	
+	/**
+	 * @var        int An UPLOAD_ERR_* error code for the file upload.
+	 */
+	protected $error;
+	
+	/**
+	 * @var        bool Whether or not this was a file uploaded via an HTML form.
+	 */
+	protected $isUploadedFile;
+	
+	/**
+	 * @var        bool Whether or not this file has been moved already.
+	 */
+	protected $isMoved;
+	
+	/**
+	 * @var        string A string of the raw binary contents of the file.
+	 */
+	protected $contents;
+	
 	/**
 	 * @var        array An array to map get* method name fragments to indices.
 	 */
 	protected static $indexMap = array(
-		'Name' => 'name',
-		'Type' => 'type',
-		'Size' => 'size',
-		'TmpName' => 'tmp_name',
-		'Error' => 'error',
-		'IsUploadedFile' => 'is_uploaded_file',
+		'name' => 'name',
+		'type' => 'type',
+		'size' => 'size',
+		'tmpName' => 'tmp_name',
+		'error' => 'error',
+		'isUploadedFile' => 'is_uploaded_file',
+		'isMoved' => 'is_moved',
+		'contents' => 'contents',
 	);
 	
 	/**
@@ -52,7 +94,7 @@ class AgaviUploadedFile extends ArrayObject
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct($array = array(), $flags = ArrayObject::ARRAY_AS_PROPS, $iteratorClass = 'ArrayIterator')
+	public function __construct(array $array)
 	{
 		$defaults = array(
 			'name' => null,
@@ -61,9 +103,24 @@ class AgaviUploadedFile extends ArrayObject
 			'tmp_name' => null,
 			'error' => UPLOAD_ERR_NO_FILE,
 			'is_uploaded_file' => true,
-			'moved' => false,
+			'contents' => null,
 		);
-		parent::__construct(array_merge($defaults, $array), $flags, $iteratorClass);
+		$array = array_merge($defaults, $array, array('is_moved' => false)); // make sure it's marked not moved by default
+		
+		// we either need a tmp_name or contents
+		if(
+			(isset($array['tmp_name']) && isset($array['contents'])) ||
+			(!isset($array['tmp_name']) && !isset($array['contents']))
+		) {
+			throw new InvalidArgumentException('Value for either key "tmp_name" or "contents" (but not both) must be supplied.');
+		}
+		
+		// fill local props
+		foreach(self::$indexMap as $property => $index) {
+			if(isset($array[$index])) {
+				$this->$property = $array[$index];
+			}
+		}
 	}
 	
 	/**
@@ -74,28 +131,229 @@ class AgaviUploadedFile extends ArrayObject
 	 */
 	public function __destruct()
 	{
-		// must use array syntax here, ArrayObject property access does not work in destructors
-		if(!$this['moved'] && !$this['is_uploaded_file']) {
-			@unlink($this['tmp_name']);
+		if(!$this->getIsMoved() && !$this->getIsUploadedFile() && $this->hasTmpName()) {
+			@unlink($this->getTmpName());
 		}
 	}
 	
 	/**
-	 * Overload to handle getName() etc calls.
+	 * Property access overload.
 	 *
-	 * @param      string The name of the method.
-	 * @param      array  The method arguments.
+	 * @param      string The key to fetch.
 	 *
-	 * @return     string A value.
+	 * @return     mixed The value of the key or null.
 	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
 	 */
-	public function __call($name, array $arguments)
+	public function __get($key)
 	{
-		if(substr($name, 0, 3) == 'get') {
-			return $this[self::$indexMap[substr($name, 3)]];
+		if($this->__isset($key)) {
+			return $this->$key;
 		}
+	}
+	
+	/**
+	 * Property isset overload.
+	 *
+	 * @param      string The key to check.
+	 *
+	 * @return     bool Whether the given key exists.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function __isset($key)
+	{
+		return in_array($key, array('name', 'type', 'size', 'tmpName', 'error', 'isUploadedFile')) && isset($this->$key);
+	}
+	
+	/**
+	 * Array access: existence check.
+	 *
+	 * @param      string The key to check.
+	 *
+	 * @return     bool Whether or not the key exists.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function offsetExists($key)
+	{
+		if(in_array($key, array('name', 'type', 'size', 'tmp_name', 'error', 'is_uploaded_file'))) {
+			$property = array_search($key, self::$indexMap);
+			return isset($this->$property);
+		}
+		return false;
+	}
+	
+	/**
+	 * Array access: fetch value.
+	 *
+	 * @param      string The key of the value to fetch.
+	 *
+	 * @return     mixed The key for the given value.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function offsetGet($key)
+	{
+		if($this->offsetExists($key)) {
+			$property = array_search($key, self::$indexMap);
+			return $this->$property;
+		}
+	}
+	
+	/**
+	 * Array access: set value.
+	 *
+	 * @param      string The key to set.
+	 * @param      string The value to set.
+	 *
+	 * @throws     BadMethodCallException AgaviUploadedFile objects are immutable.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function offsetSet($key, $value)
+	{
+		throw new BadMethodCallException('AgaviUploadedFile objects are immutable.');
+	}
+	
+	/**
+	 * Array access: unset value.
+	 *
+	 * @param      string The key to unset.
+	 *
+	 * @throws     BadMethodCallException AgaviUploadedFile objects are immutable.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function offsetUnset($key)
+	{
+		throw new BadMethodCallException('AgaviUploadedFile objects are immutable.');
+	}
+	
+	/**
+	 * Get the name of the file as submitted by the client.
+	 *
+	 * @return     string The file name as submitted by the client.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+	
+	/**
+	 * Get the type of the file as submitted by the client.
+	 *
+	 * @return     string The file type as submitted by the client.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+	
+	/**
+	 * Get the size of the file.
+	 *
+	 * @return     int The length of the file in bytes.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getSize()
+	{
+		return $this->size;
+	}
+	
+	/**
+	 * Get the temporary filename of this file.
+	 *
+	 * @return     string The temporary filename for this file.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getTmpName()
+	{
+		if(!$this->hasTmpName()) {
+			// have faith in the ctor :)
+			$this->tmpName = tempnam(AgaviConfig::get('core.cache_dir'), 'AgaviUploadedFile_');
+			if(!is_writable($this->tmpName)) {
+				$error = 'Temporary file path "%s" is not writable';
+				$error = sprintf($error, $directory);
+				throw new AgaviFileException($error);
+			}
+			file_put_contents($this->tmpName, $this->contents);
+		}
+		
+		return $this->tmpName;
+	}
+	
+	/**
+	 * Check if this uploaded file has a temporary filename.
+	 * If a file has no temp name, then it means that this object was constructed
+	 * internally using the file contents rather than by PHP's upload handler.
+	 * On calling getTmpName(), the contents will be flushed to disk so access
+	 * using file methods is possible.
+	 *
+	 * @return     bool Whether or not the file contents are on disk yet.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function hasTmpName()
+	{
+		return isset($this->tmpName);
+	}
+	
+	/**
+	 * Get the error code for this uploaded file.
+	 *
+	 * @return     int One of PHP's UPLOAD_ERR_* constants.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getError()
+	{
+		return $this->error;
+	}
+	
+	/**
+	 * Check if this file is a multipart/form-data upload handled by PHP itself,
+	 * or another type of file submission handled by Agavi.
+	 *
+	 * @return     bool Whether or not this file was uploaded through a web form.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getIsUploadedFile()
+	{
+		return $this->isUploadedFile;
+	}
+	
+	/**
+	 * Check if this file has been moved from it's temporary location.
+	 *
+	 * @return     bool Whether or not the temporary file has been moved yet.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getIsMoved()
+	{
+		return $this->isMoved;
 	}
 	
 	/**
@@ -110,7 +368,7 @@ class AgaviUploadedFile extends ArrayObject
 	 */
 	public function hasError()
 	{
-		return $this->error !== UPLOAD_ERR_OK;
+		return $this->getError() !== UPLOAD_ERR_OK;
 	}
 	
 	/**
@@ -123,7 +381,7 @@ class AgaviUploadedFile extends ArrayObject
 	 */
 	public function isMovable()
 	{
-		return !$this->moved;
+		return !$this->getIsMoved();
 	}
 	
 	/**
@@ -138,11 +396,28 @@ class AgaviUploadedFile extends ArrayObject
 	 */
 	public function getContents()
 	{
-		if($this->hasError() || !$this->isMovable()) {
+		// for a file where we wrote the contents to a temp file in getTmpName(), we can always return contents
+		if($this->hasError() || (!$this->isMovable() && !$this->hasBufferedContents())) {
 			throw new AgaviException('Cannot get contents of erroneous or moved file.');
 		}
 		
-		return file_get_contents($this->tmp_name);
+		// we intentionally don't store the result of file_get_contents() here to keep memory usage low
+		return $this->hasBufferedContents() ? $this->contents : file_get_contents($this->getTmpName());
+	}
+	
+	/**
+	 * Check if this uploaded file object already has the file contents buffered.
+	 * If this method returns false, the getContents() method will still attempt
+	 * to read the file from the temporary location on disk.
+	 *
+	 * @return     bool Whether or not the file contents are on disk yet.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function hasBufferedContents()
+	{
+		return isset($this->contents);
 	}
 	
 	/**
@@ -163,7 +438,7 @@ class AgaviUploadedFile extends ArrayObject
 			throw new AgaviException('Cannot get contents of erroneous or moved file.');
 		}
 		
-		return fopen($this->tmp_name, $mode);
+		return fopen($this->getTmpName(), $mode);
 	}
 	
 	/**
@@ -210,17 +485,17 @@ class AgaviUploadedFile extends ArrayObject
 			throw new AgaviFileException($error);
 		}
 		
-		if($this->is_uploaded_file) {
-			$moved = @move_uploaded_file($this->tmp_name, $dest);
+		if($this->getIsUploadedFile()) {
+			$moved = @move_uploaded_file($this->getTmpName(), $dest);
 		} else {
 			if(is_writable($dest)) {
 				unlink($dest);
 			}
-			$moved = @rename($this->tmp_name, $dest);
+			$moved = @rename($this->getTmpName(), $dest);
 		}
 		
 		if($moved) {
-			$this->moved = true;
+			$this->isMoved = true;
 			// chmod our file
 			if(!@chmod($dest, $fileMode)) {
 				throw new AgaviFileException('Failed to chmod uploaded file after moving');

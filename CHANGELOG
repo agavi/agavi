@@ -12,6 +12,7 @@ ADD: Allow array syntax for slot names (#1110) (David)
 ADD: Add support for custom filesystem layouts for modules to the project configuration system (#874) (Noah)
 ADD: Response attributes (#1062) (David, TANAKA Koichi)
 
+CHG: Remove call overload and ArrayObject usage from AgaviUploadedFile (#1287) (David)
 CHG: Remove AgaviCreoleDatabase (#1379) (David)
 CHG: Remove support for Propel versions before 1.3 from AgaviPropelDatabase (#1381) (David)
 CHG: Deprecate support for register_long_arrays (#1403) (David)

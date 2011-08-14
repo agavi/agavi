@@ -628,18 +628,18 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 				if(is_array($value)) {
 					$this->fixFilesArray($input, $toIndex);
 				} else {
-					$data = new $this->uploadedFileClass();
 					foreach($theIndices as $name => $theIndex) {
 						$data[$name] = AgaviArrayPathDefinition::getValue(array_merge($theIndex, array($key)), $input, true /* for is_uploaded_file */);
 					}
+					$data = new $this->uploadedFileClass($data);
 					AgaviArrayPathDefinition::setValue($toIndex, $this->files, $data);
 				}
 			}
 		} else {
-			$data = new $this->uploadedFileClass();
 			foreach($theIndices as $name => $theIndex) {
 				$data[$name] = AgaviArrayPathDefinition::getValue($theIndex, $input, true /* for is_uploaded_file */);
 			}
+			$data = new $this->uploadedFileClass($data);
 			AgaviArrayPathDefinition::setValue($index, $this->files, $data);
 		}
 	}
