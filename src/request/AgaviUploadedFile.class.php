@@ -77,10 +77,10 @@ class AgaviUploadedFile implements ArrayAccess
 		'name' => 'name',
 		'type' => 'type',
 		'size' => 'size',
-		'tmpName' => 'tmp_name',
+		'tmp_name' => 'tmpName',
 		'error' => 'error',
-		'isUploadedFile' => 'is_uploaded_file',
-		'isMoved' => 'is_moved',
+		'is_uploaded_file' => 'isUploadedFile',
+		'is_moved' => 'isMoved',
 		'contents' => 'contents',
 	);
 	
@@ -116,7 +116,7 @@ class AgaviUploadedFile implements ArrayAccess
 		}
 		
 		// fill local props
-		foreach(self::$indexMap as $property => $index) {
+		foreach(self::$indexMap as $index => $property) {
 			if(isset($array[$index])) {
 				$this->$property = $array[$index];
 			}
@@ -182,7 +182,7 @@ class AgaviUploadedFile implements ArrayAccess
 	public function offsetExists($key)
 	{
 		if(in_array($key, array('name', 'type', 'size', 'tmp_name', 'error', 'is_uploaded_file'))) {
-			$property = array_search($key, self::$indexMap);
+			$property = self::$indexMap[$key];
 			return isset($this->$property);
 		}
 		return false;
@@ -201,7 +201,7 @@ class AgaviUploadedFile implements ArrayAccess
 	public function offsetGet($key)
 	{
 		if($this->offsetExists($key)) {
-			$method = 'get' . array_search($key, self::$indexMap);
+			$method = 'get' . self::$indexMap[$key];
 			return $this->$method();
 		}
 	}
