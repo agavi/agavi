@@ -22,12 +22,20 @@
  *   'min_size'     The minimum file size in byte, default 1
  *   'max_size'     The maximum file size in byte
  *   'extension'    list of valid extensions (delimited by ' ')
+ *   'mime_type'    A regular expression checked against the MIME type of the
+ *                  file as returned by the fileinfo extension. The mime type
+ *                  string to match against is something like "application/pdf".
+ *   'mime_type_include_charset' Whether the regex in parameter 'mime_type'
+ *                               should be matched against a string containing
+ *                               the charset info (as defined in RFC 2045), e.g.
+ *                               "text/csv; charset=iso-8859-1".
  *
  * Errors:
  *   'upload_failed' The upload of the file failed
  *   'min_size'      
  *   'max_size'      
  *   'extension'     The file doesn't have the required extension
+ *   'mime_type'     The MIME type check failed
  *
  * @package    agavi
  * @subpackage validator
@@ -55,6 +63,10 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 		}
 
 		parent::initialize($context, $parameters, $arguments, $errors);
+		
+		if($this->hasParameter('mime_type') && !extension_loaded('fileinfo')) {
+			throw new AgaviValidatorException('MIME type checks in file validators require the "fileinfo" PHP extension to be loaded.');
+		}
 	}
 
 	/**
@@ -105,6 +117,11 @@ abstract class AgaviBaseFileValidator extends AgaviValidator
 				}
 				
 				$this->throwError('extension');
+				return false;
+			}
+			
+			if($this->hasParameter('mime_type') && !preg_match($this->getParameter('mime_type'), $file->getMimeType($this->getParameter('mime_type_include_charset', false)), $matches)) {
+				$this->throwError('mime_type');
 				return false;
 			}
 		}
