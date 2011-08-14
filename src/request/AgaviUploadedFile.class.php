@@ -442,6 +442,23 @@ class AgaviUploadedFile implements ArrayAccess
 	}
 	
 	/**
+	 * Return the MIME type of this file using the fileinfo extension.
+	 *
+	 * @param      bool Whether to return the charset of the file as well.
+	 *
+	 * @return     string The MIME type of the file.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getMimeType($charset = false)
+	{
+		$finfo = new finfo($charset ? FILEINFO_MIME : FILEINFO_MIME_TYPE);
+		// don't use finfo_file() to avoid unnecessary hits to disk in case it's not an uploaded file
+		return $finfo->buffer($this->getContents());
+	}
+	
+	/**
 	 * Move the uploaded file.
 	 *
 	 * @param      string The destination filename.
