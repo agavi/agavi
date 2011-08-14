@@ -149,7 +149,8 @@ class AgaviUploadedFile implements ArrayAccess
 	public function __get($key)
 	{
 		if($this->__isset($key)) {
-			return $this->$key;
+			$method = 'get' . $key;
+			return $this->$method();
 		}
 	}
 	
@@ -200,8 +201,8 @@ class AgaviUploadedFile implements ArrayAccess
 	public function offsetGet($key)
 	{
 		if($this->offsetExists($key)) {
-			$property = array_search($key, self::$indexMap);
-			return $this->$property;
+			$method = 'get' . array_search($key, self::$indexMap);
+			return $this->$method();
 		}
 	}
 	
