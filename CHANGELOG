@@ -24,7 +24,7 @@ CHG: Make AgaviXmlConfigSchematronProcessor generic and move it to util package 
 CHG: Bump configuration namespaces to version 1.1 (#1385) (David)
 CHG: Remove AgaviCreoleSessionStorage (#1380) (David)
 CHG: Remove AgaviAdodbDatabase (#1375) (David)
-CHG: Use brypt for password hashing in Sample Application (#1371) (David)
+CHG: Use bcrypt for password hashing in Sample Application (#1371) (David)
 CHG: Do not throw exception in AgaviWebResponse if headers already sent (#1358) (David)
 CHG: Make AgaviReturnArrayConfigHandler an AgaviXmlConfigHandler and add namespace awareness (#1277) (David)
 CHG: Move loading of autoload.xml into Agavi::bootstrap() (#1206) (David)
