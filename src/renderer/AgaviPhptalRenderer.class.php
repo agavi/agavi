@@ -95,6 +95,8 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		
 		if(version_compare(PHPTAL_VERSION, '1.2', 'ge')) {
 			$phptal->setPhpCodeDestination($phptalPhpCodeDestination);
+		} else {
+		  trigger_error('Support for PHPTAL versions older than 1.2 is deprecated and will be removed in Agavi 1.2.', E_USER_DEPRECATED);
 		}
 		
 		return $phptal;
