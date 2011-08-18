@@ -615,7 +615,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		}
 		$sub = AgaviArrayPathDefinition::getValue($fromIndex, $input);
 		$theIndices = array();
-		foreach(array('name', 'type', 'size', 'tmp_name', 'error', 'is_uploaded_file') as $name) {
+		foreach(array('name', 'type', 'size', 'tmp_name', 'error', 'is_uploaded_file', 'contents') as $name) {
 			$theIndex = $fromIndex;
 			$first = array_shift($theIndex);
 			array_shift($theIndex);
@@ -629,7 +629,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 					$this->fixFilesArray($input, $toIndex);
 				} else {
 					foreach($theIndices as $name => $theIndex) {
-						$data[$name] = AgaviArrayPathDefinition::getValue(array_merge($theIndex, array($key)), $input, true /* for is_uploaded_file */);
+						$data[$name] = AgaviArrayPathDefinition::getValue(array_merge($theIndex, array($key)), $input, $name == 'is_uploaded_file' ? true : null);
 					}
 					$data = new $this->uploadedFileClass($data);
 					AgaviArrayPathDefinition::setValue($toIndex, $this->files, $data);
@@ -637,7 +637,7 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 			}
 		} else {
 			foreach($theIndices as $name => $theIndex) {
-				$data[$name] = AgaviArrayPathDefinition::getValue($theIndex, $input, true /* for is_uploaded_file */);
+				$data[$name] = AgaviArrayPathDefinition::getValue($theIndex, $input, $name == 'is_uploaded_file' ? true : null);
 			}
 			$data = new $this->uploadedFileClass($data);
 			AgaviArrayPathDefinition::setValue($index, $this->files, $data);
