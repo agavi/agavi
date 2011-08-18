@@ -91,6 +91,10 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 		
 		$is12 = version_compare(Doctrine::VERSION, '1.2', '>=');
 		
+		if(!$is12) {
+		  trigger_error('Support for Doctrine versions older than 1.2 is deprecated and will be removed in Agavi 1.2.', E_USER_DEPRECATED);
+		}
+		
 		// in any case, it's loaded now. maybe we need to register the autoloading stuff for it!
 		// we need this list further down
 		$splAutoloadFunctions = spl_autoload_functions();
