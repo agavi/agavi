@@ -230,10 +230,12 @@
 			<autoload name="AgaviGettextMoReader">%core.agavi_dir%/translation/gettext/AgaviGettextMoReader.class.php</autoload>
 
 			<!-- agavi/user -->
+			<autoload name="AgaviAclSecurityUser">%core.agavi_dir%/user/AgaviAclSecurityUser.class.php</autoload>
 			<autoload name="AgaviISecurityUser">%core.agavi_dir%/user/AgaviISecurityUser.interface.php</autoload>
 			<autoload name="AgaviRbacSecurityUser">%core.agavi_dir%/user/AgaviRbacSecurityUser.class.php</autoload>
 			<autoload name="AgaviSecurityUser">%core.agavi_dir%/user/AgaviSecurityUser.class.php</autoload>
 			<autoload name="AgaviUser">%core.agavi_dir%/user/AgaviUser.class.php</autoload>
+			<autoload name="AgaviZendaclSecurityUser">%core.agavi_dir%/user/AgaviZendaclSecurityUser.class.php</autoload>
 
 			<!-- agavi/util -->
 			<autoload name="AgaviArrayPathDefinition">%core.agavi_dir%/util/AgaviArrayPathDefinition.class.php</autoload>

@@ -21,6 +21,16 @@ class Products_Product_EditAction extends AgaviSampleAppProductsBaseAction
 	{
 		return $us->isAllowed($rd->getParameter('product'), 'write');
 	}
+	
+	public function isSecure()
+	{
+		return true;
+	}
+	
+	public function getCredentials()
+	{
+		return 'product.write';
+	}
 }
 
 ?>

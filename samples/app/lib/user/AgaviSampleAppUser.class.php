@@ -14,7 +14,7 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class AgaviSampleAppUser extends AgaviRbacSecurityUser implements Zend_Acl_Role_Interface
+class AgaviSampleAppUser extends AgaviZendaclSecurityUser
 {
 	/**
 	 * Let's pretend this is our database. For the sake of example ;)
@@ -34,38 +34,25 @@ class AgaviSampleAppUser extends AgaviRbacSecurityUser implements Zend_Acl_Role_
 		),
 	);
 	
-	protected $zendAcl;
-	
-	public function isAllowed($resource, $operation)
-	{
-		return $this->getZendAcl()->isAllowed($this, $resource, $operation);
-	}
-	
-	public function getZendAcl()
-	{
-		return $this->zendAcl;
-	}
-	
 	public function initialize(AgaviContext $context, array $parameters = array())
 	{
 		parent::initialize($context, $parameters);
 		
-		$this->zendAcl = new Zend_Acl();
+		$zendAcl = $this->getZendAcl();
+		$zendAcl->addRole('user');
+		$zendAcl->addRole('agent', 'user');
+		$zendAcl->addRole('hero', 'agent');
 		
-		$this->zendAcl->addRole('user');
-		$this->zendAcl->addRole('agent', 'user');
-		$this->zendAcl->addRole('hero', 'agent');
+		$zendAcl->addResource('product');
+		$zendAcl->addResource('secretproduct', 'product');
 		
-		$this->zendAcl->addResource('product');
-		$this->zendAcl->addResource('secretproduct', 'product');
-		
-		$this->zendAcl->allow(null, 'product', 'read');
-		$this->zendAcl->deny(null, 'secretproduct', 'read');
-		$this->zendAcl->deny(null, 'product', 'write');
-		$this->zendAcl->allow('user', 'secretproduct', 'read', new AgaviSampleAppIsProductOwnerAssertion());
-		$this->zendAcl->allow('user', array('product', 'secretproduct'), 'write', new AgaviSampleAppIsProductOwnerAssertion());
-		$this->zendAcl->allow('agent', 'product', 'write');
-		$this->zendAcl->allow('hero', 'secretproduct', array('read', 'write'));
+		$zendAcl->allow(null, 'product', 'read');
+		$zendAcl->deny(null, 'secretproduct', 'read');
+		$zendAcl->deny(null, 'product', 'write');
+		$zendAcl->allow('user', 'secretproduct', 'read', new AgaviSampleAppIsProductOwnerAssertion());
+		$zendAcl->allow('user', array('product', 'secretproduct'), 'write', new AgaviSampleAppIsProductOwnerAssertion());
+		$zendAcl->allow('agent', 'product', 'write');
+		$zendAcl->allow('hero', 'secretproduct', array('read', 'write'));
 	}
 	
 	public function startup()
@@ -104,7 +91,7 @@ class AgaviSampleAppUser extends AgaviRbacSecurityUser implements Zend_Acl_Role_
 		$this->setAuthenticated(true);
 		$this->clearCredentials();
 		
-		$this->setAttribute('role', self::$users[$username]['role']);
+		$this->setAttribute('acl_role', self::$users[$username]['role']);
 		$this->setAttribute('username', $username);
 	}
 	
@@ -124,16 +111,8 @@ class AgaviSampleAppUser extends AgaviRbacSecurityUser implements Zend_Acl_Role_
 	{
 		$this->clearCredentials();
 		$this->setAuthenticated(false);
-		$this->removeAttribute('role');
+		$this->removeAttribute('acl_role');
 		$this->removeAttribute('username');
-	}
-	
-	public function getRoleId()
-	{
-		if($this->isAuthenticated()) {
-			return $this->getAttribute('role');
-		}
-		return 'user';
 	}
 }
 
