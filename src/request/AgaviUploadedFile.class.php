@@ -166,6 +166,7 @@ class AgaviUploadedFile implements ArrayAccess
 	 */
 	public function __isset($key)
 	{
+		trigger_error('Property access in AgaviUploadedFile is deprecated and will be removed in Agavi 1.2. Please use getter methods or array access instead.', E_USER_DEPRECATED);
 		return in_array($key, array('name', 'type', 'size', 'tmpName', 'error', 'isUploadedFile')) && isset($this->$key);
 	}
 	
