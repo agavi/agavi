@@ -91,6 +91,10 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 		
 		$is12 = version_compare(Doctrine::VERSION, '1.2', '>=');
 		
+		if(!$is12) {
+		  trigger_error('Support for Doctrine versions older than 1.2 is deprecated and will be removed in Agavi 1.2.', E_USER_DEPRECATED);
+		}
+		
 		// in any case, it's loaded now. maybe we need to register the autoloading stuff for it!
 		// we need this list further down
 		$splAutoloadFunctions = spl_autoload_functions();
@@ -118,7 +122,8 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 			// $this->resource = $this->connection->getDbh();
 			
 			// set our event listener that, on connect, sets the configured charset and runs init queries
-			$this->connection->setListener(new AgaviDoctrineDatabaseEventListener($this));
+			$cel = $this->getParameter('connection_event_listener_class', 'AgaviDoctrineDatabaseEventListener');
+			$this->connection->setListener(new $cel($this));
 			
 			// set the context instance as a connection parameter
 			$this->connection->setParam('context', $databaseManager->getContext(), 'org.agavi');
@@ -152,11 +157,19 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 						$attributeName = constant($attributeName);
 					}
 					
-					// resolve from constant if possible
 					if(strpos($attributeValue, '::') && defined($attributeValue)) {
+						// resolve from constant if possible
 						$attributeValue = constant($attributeValue);
 					} elseif(ctype_digit($attributeValue)) {
+						// cast numeric type to int
 						$attributeValue = (int)$attributeValue;
+					} elseif(($attributeName == Doctrine::ATTR_QUERY_CACHE || $attributeName == Doctrine::ATTR_RESULT_CACHE) && (is_string($attributeValue) || (is_array($attributeValue) && isset($attributeValue['class'])))) {
+						// handle special case for query and result caches, where the attribute value needs to be an instance of Doctrine_Cache_Driver
+						// we only allow basic cases where the ctor argument array for options requires scalar values
+						// if people want to use e.g. Doctrine_Cache_Db, which requires an instance of Doctrine_Connection as the argument, they should use a custom connection event listener
+						$driverClass = is_string($attributeValue) ? $attributeValue : $attributeValue['class'];
+						$driverOptions = is_array($attributeValue) && isset($attributeValue['options']) && is_array($attributeValue['options']) ? $attributeValue['options'] : array();
+						$attributeValue = new $driverClass($driverOptions);
 					}
 					
 					$attributesDestination->setAttribute($attributeName, $attributeValue);

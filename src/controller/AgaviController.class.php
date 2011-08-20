@@ -47,6 +47,11 @@ class AgaviController extends AgaviParameterHolder
 	protected $response = null;
 	
 	/**
+	 * @var        AgaviFilterChain The global filter chain.
+	 */
+	protected $filterChain = null;
+	
+	/**
 	 * @var        array An array of filter instances for reuse.
 	 */
 	protected $filters = array(
@@ -243,12 +248,12 @@ class AgaviController extends AgaviParameterHolder
 				}
 				
 				// create a new filter chain
-				$filterChain = $this->context->createInstanceFor('filter_chain');
+				$filterChain = $this->getFilterChain();
 				
 				$this->loadFilters($filterChain, 'global');
 				
 				// register the dispatch filter
-				$filterChain->register($this->filters['dispatch']);
+				$filterChain->register($this->filters['dispatch'], 'agavi_dispatch_filter');
 				
 				// go, go, go!
 				$filterChain->execute($container);
@@ -526,6 +531,24 @@ class AgaviController extends AgaviParameterHolder
 	}
 	
 	/**
+	 * Get the global filter chain.
+	 *
+	 * @return     AgaviFilterChain The global filter chain.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getFilterChain()
+	{
+		if($this->filterChain === null) {
+			$this->filterChain = $this->context->createInstanceFor('filter_chain');
+			$this->filterChain->setType(AgaviFilterChain::TYPE_GLOBAL);
+		}
+		
+		return $this->filterChain;
+	}
+	
+	/**
 	 * Load filters.
 	 *
 	 * @param      AgaviFilterChain A FilterChain instance.
@@ -561,8 +584,8 @@ class AgaviController extends AgaviParameterHolder
 			}
 		}
 		
-		foreach($filters as $filter) {
-			$filterChain->register($filter);
+		foreach($filters as $name => $filter) {
+			$filterChain->register($filter, $name);
 		}
 	}
 

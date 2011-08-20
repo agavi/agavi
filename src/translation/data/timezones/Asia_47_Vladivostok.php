@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Vladivostok".
- * Compiled from olson file "europe", version 8.32.
+ * Compiled from olson file "europe", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -47,6 +47,12 @@ return array (
       'rawOffset' => 32400,
       'dstOffset' => 3600,
       'name' => 'VLASST',
+    ),
+    5 => 
+    array (
+      'rawOffset' => 39600,
+      'dstOffset' => 0,
+      'name' => 'VLAT',
     ),
   ),
   'rules' => 
@@ -231,33 +237,21 @@ return array (
       'time' => 846345600,
       'type' => 1,
     ),
+    36 => 
+    array (
+      'time' => 1301155200,
+      'type' => 5,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => 36000,
-    'name' => 'VLA%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'startYear' => 1996,
+    'type' => 'static',
+    'name' => 'VLAT',
+    'offset' => 39600,
+    'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.32',
+  'version' => '8.33',
   'name' => 'Asia/Vladivostok',
 );
 

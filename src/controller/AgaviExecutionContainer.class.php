@@ -36,6 +36,11 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	protected $context = null;
 
 	/**
+	 * @var        AgaviFilterChain The container's filter chain.
+	 */
+	protected $filterChain = null;
+
+	/**
 	 * @var        AgaviValidationManager The validation manager instance.
 	 */
 	protected $validationManager = null;
@@ -274,13 +279,10 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		// copy and merge request data as required
 		$this->initRequestData();
 		
-		if($this->actionInstance->isSimple()) {
-			// run the execution filter, without a proper chain
-			$controller->getFilter('execution')->execute(new AgaviFilterChain(), $this);
-		} else {
-
-			// create a new filter chain
-			$filterChain = $this->context->createInstanceFor('filter_chain');
+		$filterChain = $this->getFilterChain();
+		
+		if(!$this->actionInstance->isSimple()) {
+			// simple actions have no filters
 
 			if(AgaviConfig::get('core.available', false)) {
 				// the application is available so we'll register
@@ -289,20 +291,20 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 				// does this action require security?
 				if(AgaviConfig::get('core.use_security', false)) {
 					// register security filter
-					$filterChain->register($controller->getFilter('security'));
+					$filterChain->register($controller->getFilter('security'), 'agavi_security_filter');
 				}
 
 				// load filters
 				$controller->loadFilters($filterChain, 'action');
 				$controller->loadFilters($filterChain, 'action', $moduleName);
 			}
-
-			// register the execution filter
-			$filterChain->register($controller->getFilter('execution'));
-
-			// process the filter chain
-			$filterChain->execute($this);
 		}
+
+		// register the execution filter
+		$filterChain->register($controller->getFilter('execution'), 'agavi_execution_filter');
+
+		// process the filter chain
+		$filterChain->execute($this);
 		
 		return $this->proceed();
 	}
@@ -436,6 +438,23 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		return $this->validationManager;
 	}
 	
+	/**
+	 * Get the container's filter chain.
+	 *
+	 * @return     AgaviFilterChain The container's filter chain.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function getFilterChain()
+	{
+		if($this->filterChain === null) {
+			$this->filterChain = $this->context->createInstanceFor('filter_chain');
+			$this->filterChain->setType(AgaviFilterChain::TYPE_ACTION);
+		}
+		
+		return $this->filterChain;
+	}
 	
 	/**
 	 * Execute the Action.
