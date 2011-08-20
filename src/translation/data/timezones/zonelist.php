@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2011-04-27T06:38:35+00:00.
+ * Generated on 2011-06-28T15:48:47+00:00.
  *
  * @package    agavi
  * @subpackage translation
@@ -2195,6 +2195,16 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'Africa_47_Harare.php',
+  ),
+  'America/Lower_Princes' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Curacao',
+  ),
+  'America/Kralendijk' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Curacao',
   ),
   'Mideast/Riyadh89' => 
   array (

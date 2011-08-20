@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Yekaterinburg".
- * Compiled from olson file "europe", version 8.32.
+ * Compiled from olson file "europe", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -53,6 +53,12 @@ return array (
       'rawOffset' => 18000,
       'dstOffset' => 3600,
       'name' => 'YEKST',
+    ),
+    6 => 
+    array (
+      'rawOffset' => 21600,
+      'dstOffset' => 0,
+      'name' => 'YEKT',
     ),
   ),
   'rules' => 
@@ -237,33 +243,21 @@ return array (
       'time' => 846363600,
       'type' => 4,
     ),
+    36 => 
+    array (
+      'time' => 1301173200,
+      'type' => 6,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => 18000,
-    'name' => 'YEK%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'startYear' => 1996,
+    'type' => 'static',
+    'name' => 'YEKT',
+    'offset' => 21600,
+    'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.32',
+  'version' => '8.33',
   'name' => 'Asia/Yekaterinburg',
 );
 

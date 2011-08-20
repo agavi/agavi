@@ -17,7 +17,7 @@
  * Extended XSLTProcessor class that throws exceptions on errors.
  *
  * @package    agavi
- * @subpackage config
+ * @subpackage util
  *
  * @author     Noah Fontes <noah.fontes@bitextender.com>
  * @copyright  Authors
@@ -27,7 +27,7 @@
  *
  * @version    $Id$
  */
-class AgaviXmlConfigXsltProcessor extends XSLTProcessor
+class AgaviXsltProcessor extends XSLTProcessor
 {
 	/**
 	 * Import a stylesheet.
@@ -71,7 +71,7 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 	 *
 	 * @param      DOMNode The node to transform.
 	 *
-	 * @return     AgaviXmlConfigDomDocument The resulting DOMDocument.
+	 * @return     DOMDocument The resulting DOMDocument.
 	 *
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
@@ -103,8 +103,9 @@ class AgaviXmlConfigXsltProcessor extends XSLTProcessor
 		
 		libxml_use_internal_errors($luie);
 		
-		// turn this into an Agavi DOMDocument rather than a regular one
-		$document = new AgaviXmlConfigDomDocument();
+		// turn this into an instance of the class that was passed in, rather than a regular DOMDocument
+		$class = $doc instanceof DOMDocument ? $doc : ($doc->ownerDocument ?: 'DOMDocument');
+		$document = new $class();
 		$document->loadXML($result->saveXML());
 		
 		// save the URI just in case

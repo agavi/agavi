@@ -290,6 +290,7 @@ class AgaviWebRequest extends AgaviRequest
 
 		// very first thing to do: remove magic quotes
 		if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+			trigger_error('Support for php.ini directive "magic_quotes_gpc" is deprecated and will be dropped in Agavi 1.2. The setting is deprecated in PHP 5.3 and will be removed in PHP 5.4. Please refer to the PHP manual for details.', E_USER_DEPRECATED);
 			$_GET = self::clearMagicQuotes($_GET);
 			$_POST = self::clearMagicQuotes($_POST);
 			$_COOKIE = self::clearMagicQuotes($_COOKIE);
@@ -430,16 +431,14 @@ class AgaviWebRequest extends AgaviRequest
 				}
 			} else {
 				// some other data via PUT. we need to populate $_FILES manually
-				$putFile = tempnam(AgaviConfig::get('core.cache_dir'), 'PUTUpload_');
-				$size = stream_copy_to_stream(fopen('php://input', 'rb'), $handle = fopen($putFile, 'wb'));
-				fclose($handle);
+				$httpBody = file_get_contents('php://input');
 
 				$_FILES = array(
 					$this->getParameter('http_put_file_name', 'put_file') => array(
-						'name' => $putFile,
+						'name' => $this->getMethod(),
 						'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
-						'size' => $size,
-						'tmp_name' => $putFile,
+						'size' => strlen($httpBody),
+						'contents' => $httpBody,
 						'error' => UPLOAD_ERR_OK,
 						'is_uploaded_file' => false,
 					)
@@ -447,16 +446,14 @@ class AgaviWebRequest extends AgaviRequest
 			}
 		} elseif($this->getMethod() == $methods['POST'] && (!isset($_SERVER['CONTENT_TYPE']) || (isset($_SERVER['CONTENT_TYPE']) && !preg_match('#^(application/x-www-form-urlencoded|multipart/form-data)(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])))) {
 			// POST, but no regular urlencoded data or file upload. lets put the request payload into a file
-			$postFile = tempnam(AgaviConfig::get('core.cache_dir'), 'POSTUpload_');
-			$size = stream_copy_to_stream(fopen('php://input', 'rb'), $handle = fopen($postFile, 'wb'));
-			fclose($handle);
+			$httpBody = file_get_contents('php://input');
 
 			$_FILES = array(
 				$this->getParameter('http_post_file_name', 'post_file') => array(
-					'name' => $postFile,
+					'name' => $this->getMethod(),
 					'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
-					'size' => $size,
-					'tmp_name' => $postFile,
+					'size' => strlen($httpBody),
+					'contents' => $httpBody,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
 				)

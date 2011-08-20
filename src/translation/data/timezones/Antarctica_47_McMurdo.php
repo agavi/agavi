@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/McMurdo".
- * Compiled from olson file "antarctica", version 8.8.
+ * Compiled from olson file "antarctica", version 8.9.
  *
  * @package    agavi
  * @subpackage translation
@@ -490,7 +490,7 @@ return array (
     'startYear' => 2008,
   ),
   'source' => 'antarctica',
-  'version' => '8.8',
+  'version' => '8.9',
   'name' => 'Antarctica/McMurdo',
 );
 

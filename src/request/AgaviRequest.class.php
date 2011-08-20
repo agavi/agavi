@@ -192,6 +192,9 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 			
 			// nuke argc and argc if necessary
 			$rla = ini_get('register_long_arrays');
+			if($rla) {
+				trigger_error('Support for php.ini directive "register_long_arrays" is deprecated and will be dropped in Agavi 1.2. The setting is deprecated in PHP 5.3 and will be removed in PHP 5.4. Please refer to the PHP manual for details.', E_USER_DEPRECATED);
+			}
 			
 			if(isset($_SERVER['argc'])) {
 				$_SERVER['argc'] = 0;
