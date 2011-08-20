@@ -20,7 +20,31 @@ Slots
 -----
 You can now use array syntax for slot names. Setting slots "foo[0]" and "foo[1]" will result in $slots['foo'][0] and $slots['foo'][1].
 
+Database
+--------
+Support for Propel versions prior to 1.3 has been dropped from AgaviPropelDatabase. AgaviCreoleDatabase has been removed.
+
+Filters
+-------
+AgaviIFilter::executeOnce() has been deprecated; in most cases, you can simply use execute() instead, see UPGRADING for further information.
+
+It is now possible to get the global filter chain as well as the filter chain of the current execution container (with the action filter chain) by calling AgaviController::getFilterChain() and AgaviExecutionContainer::getFilterChain(), respectively.
+
+Filter chains now expose an interface to access individual filters by name via AgaviFilterChain::getFilter(); this allows filters to expose an API to adjust runtime behavior (e.g. for AgaviFormPopulationFilter as a more convenient alternative to request attributes). AgaviFilterChain::getType() now returns the type of the filter chain (AgaviFilterChain::TYPE_GLOBAL or AgaviFilterChain::TYPE_ACTION) so dual-use (global and action) filters can detect the calling context.
+
 AgaviReturnArrayConfigHandler
 -----------------------------
 RACH is now an AgaviXmlConfigHandler and fully namespace aware. Transformations are automatically added in most cases for config files used with previous Agavi versions. Refer to UPGRADING for details.
 
+AgaviSchematronProcessor and AgaviXslProcessor
+----------------------------------------------
+Both classes have been moved from config/util/ to util/ and decoupled from the configuration system; you can now use them in your application code to perform Schematron validation or XSL transformations.
+
+XInclude Wildcards
+------------------
+The href attribute of <xi:include /> elements now supports glob() syntax with the GLOB_BRACE flag enabled, so you can do any of the following:
+<xi:include href="%core.module_dir%/*/config/routing.xml" />
+<xi:include href="%core.module_dir%/{Foo,Bar,Baz}/config/routing.xml" />
+<xi:include href="%core.module_dir%/{WinningModule,*}/config/routing.xml" />
+For any path matched, the <xi:include /> element will be duplicated with the expanded path inserted into the href attribute.
+Duplicates are removed, so the "WinningModule" entry matched by the "*" wildcard alternative in the last example will not be included a second time.

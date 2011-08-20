@@ -40,7 +40,7 @@
  *
  * @version    $Id$
  */
-class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilter, AgaviIActionFilter
+class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
 	const ENCODING_UTF_8 = 'utf-8';
 
@@ -73,7 +73,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		$filterChain->execute($container);
 		$response = $container->getResponse();

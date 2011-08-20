@@ -60,6 +60,8 @@ class AgaviXmlConfigParser
 	
 	const NAMESPACE_XSL_1999 = 'http://www.w3.org/1999/XSL/Transform';
 	
+	const NAMESPACE_XINCLUDE_2001 = 'http://www.w3.org/2001/XInclude';
+	
 	const STAGE_SINGLE = 'single';
 	
 	const STAGE_COMPILATION = 'compilation';
@@ -493,12 +495,24 @@ class AgaviXmlConfigParser
 	public static function xinclude(AgaviXmlConfigDomDocument $document)
 	{
 		// replace %lala% directives in XInclude href attributes
-		foreach($document->getElementsByTagNameNS('http://www.w3.org/2001/XInclude', '*') as $element) {
+		foreach($document->getElementsByTagNameNS(self::NAMESPACE_XINCLUDE_2001, 'include') as $element) {
 			if($element->hasAttribute('href')) {
 				$attribute = $element->getAttributeNode('href');
 				$parts = explode('#', $attribute->nodeValue, 2);
 				$parts[0] = str_replace('\\', '/', AgaviToolkit::expandDirectives($parts[0]));
 				$attribute->nodeValue = implode('#', $parts);
+				if(strpos($parts[0], '*') !== false || strpos($parts[0], '{') !== false) {
+					$glob = glob($parts[0], GLOB_BRACE | GLOB_NOSORT);
+					if($glob) {
+						$glob = array_unique($glob); // it could be that someone used /path/to/{Foo,*}/burp.xml so Foo would come before all others, that's why we need to remove duplicates as the * would match Foo again
+						foreach($glob as $path) {
+							$new = $element->cloneNode(true);
+							$new->setAttribute('href', $path . (isset($parts[1]) ? '#' . $parts[1] : ''));
+							$element->parentNode->insertBefore($new, $element);
+						}
+						$element->parentNode->removeChild($element);
+					}
+				}
 			}
 		}
 		
@@ -588,7 +602,7 @@ class AgaviXmlConfigParser
 		foreach($transformations as $xsl) {
 			// load the stylesheet document into an XSLTProcessor instance
 			try {
-				$proc = new AgaviXmlConfigXsltProcessor();
+				$proc = new AgaviXsltProcessor();
 				$proc->importStylesheet($xsl);
 			} catch(Exception $e) {
 				throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: Could not import XSL stylesheet "%s": %s', $document->documentURI, $xsl->documentURI, $e->getMessage()), 0, $e);
@@ -884,7 +898,7 @@ class AgaviXmlConfigParser
 		}
 		
 		// load the schematron processor
-		$schematron = new AgaviXmlConfigSchematronProcessor();
+		$schematron = new AgaviSchematronProcessor();
 		$schematron->setNode($document);
 		// set some info (config file path, context name, environment name) as params
 		// first arg is the namespace URI, which PHP doesn't support. awesome. see http://bugs.php.net/bug.php?id=30622 for the sad details

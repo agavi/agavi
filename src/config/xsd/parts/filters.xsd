@@ -17,7 +17,14 @@
 		<xs:sequence>
 			<xs:group ref="envelope_1_1:parameters" />
 		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="name">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[^Aa][^Gg][^Aa][^Vv][^Ii].*" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+			
 		<xs:attribute name="class" type="types_1_0:php_class" />
 		<xs:attribute name="enabled" type="types_1_0:boolean" />
 	</xs:complexType>

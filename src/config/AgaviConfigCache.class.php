@@ -401,13 +401,13 @@ class AgaviConfigCache
 			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomProcessingInstruction.class.php');
 			require_once($agaviDir . '/config/util/dom/AgaviXmlConfigDomText.class.php');
 			// schematron processor
-			require_once($agaviDir . '/config/util/schematron/AgaviXmlConfigSchematronProcessor.class.php');
+			require_once($agaviDir . '/util/AgaviSchematronProcessor.class.php');
 			// extended XSL* classes
 			if(!AgaviConfig::get('core.skip_config_transformations', false)) {
 				if(!extension_loaded('xsl')) {
 					throw new AgaviConfigurationException("The XSL extension for PHP is used by Agavi for performing transformations in the configuration system; this may be disabled by setting\nAgaviConfig::set('core.skip_config_transformations', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nAs a result, you *will* have to use the latest configuration file formats and namespaces as backwards compatibility is implemented through XSLT. Also, certain additional configuration file validations implemented via Schematron will not be performed.");
 				}
-				require($agaviDir . '/config/util/xsl/AgaviXmlConfigXsltProcessor.class.php');
+				require($agaviDir . '/util/AgaviXsltProcessor.class.php');
 			}
 			self::$filesIncluded = true;
 		}

@@ -14,8 +14,7 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * An Agavi Database driver for Propel. Supports all Propel versions. Support
- * for Propel versions prior to 1.3 will be removed in Agavi 1.1.
+ * An Agavi Database driver for Propel. Supports Propel 1.3 and later.
  * 
  * <b>Optional parameters:</b>
  *
@@ -28,10 +27,6 @@
  *                                       via PropelAutoload. By default, the
  *                                       last config file in database.ini will
  *                                       be used.
- * # <b>use_autoload</b>   - [true]    - set this to false if you don't want to
- *                                       use the Propel autoloading feature.
- *                                       Instead, Propel will be initialized 
- *                                       on connect(). This is for 0.9.0 B/C.
  * # <b>enable_instance_pooling</b> - [none] - set this to false if you want to 
  *                                             explicitly disable propel 1.3 
  *                                             instance pooling, to true if 
@@ -53,88 +48,6 @@
 class AgaviPropelDatabase extends AgaviDatabase
 {
 	/**
-	 * Stores the actual AgaviCreoleDatabase implementation for Propel 1.2.
-	 *
-	 * @var        agaviCreoleDatabase The agaviCreoleDatabase instance used internally.
-	 */
-	protected $agaviCreoleDatabase = null;
-	
-	/**
-	 * Stores the path of the configuration file that will be passed to
-	 * Propel::init() when using Propel autoloading magic
-	 *
-	 * @var        string The filesystem path to the default runtime config.
-	 */
-	private static $defaultConfigPath = null;
-
-	/**
-	 * Stores whether a Propel configuration file path has been explicitly set
-	 * as default for use with Propel::init() in database.xml
-	 *
-	 * @var        bool A flag indicating whether a default config path was set.
-	 */
-	private static $defaultConfigPathSet = false;
-
-	/**
-	 * Returns the path to the config file that is passed to Propel::init() when
-	 * PropelAutoload.php is used in autoload.xml
-	 *
-	 * @return     mixed The path if one has been set, otherwise null
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	public static function getDefaultConfigPath()
-	{
-		return self::$defaultConfigPath;
-	}
-
-	/**
-	 * Sets the path to the config file that is passed to Propel::init() when
-	 * PropelAutoload.php is used in autoload.xml
-	 *
-	 * @param      string The path to the configuration file
-	 *
-	 * @return     mixed The old path if one was set previously, otherwise null
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	protected static function setDefaultConfigPath($path)
-	{
-		$return = self::getDefaultConfigPath();
-		self::$defaultConfigPath = $path;
-		return $return;
-	}
-
-	/**
-	 * Returns whether a Propel configuration file path has been explicitly set
-	 * as default for use with Propel::init() in database.xml
-	 *
-	 * @return     bool true, if a Propel configuration file path has explicitly
-	 *                  been set as default in database.ini, otherwise false
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	protected static function isDefaultConfigPathSet()
-	{
-		return self::$defaultConfigPathSet;
-	}
-
-	/**
-	 * Sets a flag indicating a Propel configuration file path has been
-	 * explicitly set as default for use with Propel::init() in database.xml
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.10.0
-	 */
-	protected static function setDefaultConfigPathSet()
-	{
-		self::$defaultConfigPathSet = true;
-	}
-
-	/**
 	 * Connect to the database.
 	 * 
 	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be 
@@ -145,36 +58,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 */
 	protected function connect()
 	{
-		if($this->agaviCreoleDatabase) {
-			// make concrete adapter connect
-			$this->connection = $this->agaviCreoleDatabase->getConnection();
-		} else {
-			// trigger Propel autoload and go go go
-			$this->connection = Propel::getConnection($this->getParameter('datasource'));
-		}
-	}
-
-	/**
-	 * Retrieve the database connection associated with this Database
-	 * implementation.
-	 *
-	 * When this is executed on a Database implementation that isn't an
-	 * abstraction layer, a copy of the resource will be returned.
-	 *
-	 * @return     mixed A database connection.
-	 *
-	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be
-	 *                                           retrieved.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getConnection()
-	{
-		if($this->connection === null) {
-			$this->connect();
-		}
-		return parent::getConnection();
+		$this->connection = Propel::getConnection($this->getParameter('datasource'));
 	}
 
 	/**
@@ -204,60 +88,31 @@ class AgaviPropelDatabase extends AgaviDatabase
 			}
 		}
 		
-		$is12 = false;
-		if(!isset($config['propel']['generator_version']) && !isset($config['generator_version'])) {
-			$is12 = true;
+		if(!class_exists('Propel')) {
+			include('propel/Propel.php');
+		}
+		if(!Propel::isInit()) {
+			Propel::init($configPath);
 		}
 		
-		if($is12) {
-			// Propel 1.1 or 1.2, so let's use Creole for the connection.
-			$this->agaviCreoleDatabase = new AgaviCreoleDatabase();
-			$this->agaviCreoleDatabase->initialize($databaseManager, $parameters);
-			foreach($config['propel']['datasources'][$datasource]['connection'] as $key => $value) {
-				$this->agaviCreoleDatabase->setParameter($key, $this->getParameter('overrides[connection][' . $key . ']', $value));
-			}
-			$this->agaviCreoleDatabase->setParameter('method', 'normal');
-		}
-		
-		if(!self::isDefaultConfigPathSet()) {
-			self::setDefaultConfigPath($configPath);
-			if($use_as_default) {
-				self::setDefaultConfigPathSet();
-			}
-		}
-		
-		$is13 = false;
-		if(!$is12) {
-			// it's Propel 1.3 or later, let's autoload or include Propel
-			if(!class_exists('Propel')) {
-				include('propel/Propel.php');
-			}
-			if(!Propel::isInit()) {
-				// that wasn't PropelAutoload, so init it
-				Propel::init($configPath);
-			}
-			
-			$is13 = version_compare(Propel::VERSION, '1.3.1', '<');
-		}
+		$is13 = version_compare(Propel::VERSION, '1.4', '<');
 		
 		// grab the configuration values and inject possibly defined overrides for this data source
-		if($is12 || $is13) {
+		if($is13) {
 			// old-style config array; PropelConfiguration was added after 1.3.0, http://trac.agavi.org/ticket/1195
 			$config = Propel::getConfiguration();
 			$config['datasources'][$datasource]['adapter'] = $this->getParameter('overrides[adapter]', $config['datasources'][$datasource]['adapter']);
 			$config['datasources'][$datasource]['connection'] = array_merge($config['datasources'][$datasource]['connection'], $this->getParameter('overrides[connection]', array()));
 			
-			if($is13) {
-				// for 1.3+, also the autoload classes 
-				$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
-				
-				// and init queries
-				if(!isset($config['datasources'][$datasource]['connection']['settings']['queries']['query'])) {
-					$config['datasources'][$datasource]['connection']['settings']['queries']['query'] = array();
-				}
-				// array cast because "query" might be a string if just one init query was given, http://trac.agavi.org/ticket/1194
-				$config['datasources'][$datasource]['connection']['settings']['queries']['query'] = array_merge((array)$config['datasources'][$datasource]['connection']['settings']['queries']['query'], (array)$this->getParameter('init_queries'));
+			// also the autoload classes 
+			$config['datasources'][$datasource]['classes'] = array_merge($config['datasources'][$datasource]['classes'], $this->getParameter('overrides[classes]', array()));
+			
+			// and init queries
+			if(!isset($config['datasources'][$datasource]['connection']['settings']['queries']['query'])) {
+				$config['datasources'][$datasource]['connection']['settings']['queries']['query'] = array();
 			}
+			// array cast because "query" might be a string if just one init query was given, http://trac.agavi.org/ticket/1194
+			$config['datasources'][$datasource]['connection']['settings']['queries']['query'] = array_merge((array)$config['datasources'][$datasource]['connection']['settings']['queries']['query'], (array)$this->getParameter('init_queries'));
 			
 			// set the new config
 			Propel::setConfiguration($config);
@@ -278,12 +133,10 @@ class AgaviPropelDatabase extends AgaviDatabase
 			$config->setParameter('datasources.' . $datasource . '.connection.settings.queries.query', $queries);
 		}
 		
-		if(!$is12) {
-			if(true === $this->getParameter('enable_instance_pooling')) {
-				Propel::enableInstancePooling();
-			} elseif(false === $this->getParameter('enable_instance_pooling')) {
-				Propel::disableInstancePooling();
-			}
+		if(true === $this->getParameter('enable_instance_pooling')) {
+			Propel::enableInstancePooling();
+		} elseif(false === $this->getParameter('enable_instance_pooling')) {
+			Propel::disableInstancePooling();
 		}
 	}
 
@@ -312,11 +165,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 */
 	public function shutdown()
 	{
-		if($this->agaviCreoleDatabase) {
-			$this->agaviCreoleDatabase->shutdown();
-		} else {
-			$this->connection = null;
-		}
+		$this->connection = null;
 	}
 }
 

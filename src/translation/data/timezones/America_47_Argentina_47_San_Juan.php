@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Argentina/San_Juan".
- * Compiled from olson file "southamerica", version 8.49.
+ * Compiled from olson file "southamerica", version 8.50.
  *
  * @package    agavi
  * @subpackage translation
@@ -391,7 +391,7 @@ return array (
     'startYear' => 2009,
   ),
   'source' => 'southamerica',
-  'version' => '8.49',
+  'version' => '8.50',
   'name' => 'America/Argentina/San_Juan',
 );
 
