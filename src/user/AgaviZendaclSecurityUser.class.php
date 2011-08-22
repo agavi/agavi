@@ -21,6 +21,12 @@ class AgaviZendaclSecurityUser extends AgaviSecurityUser implements Zend_Acl_Rol
 		return $this->getZendAcl()->isAllowed($this, $resource, $operation);
 	}
 	
+	public function hasRole($role)
+	{
+		// could be our role directly, could be an ancestor, so check both
+		return $this->getRoleId() == $role || $this->getZendAcl()->inheritsRole($this->getRoleId(), $role);
+	}
+	
 	public function getRoleId()
 	{
 		if($this->isAuthenticated() && $this->hasAttribute('acl_role')) {
@@ -48,8 +54,8 @@ class AgaviZendaclSecurityUser extends AgaviSecurityUser implements Zend_Acl_Rol
 				// a string like "product.create"; check the ACL
 				return $this->isAllowed($credential[0], $credential[1]);
 			} else {
-				// something like "administrator"; let's see if that's our role or an ancestor
-				return $this->getRoleId() == $credential[0] || $this->getZendAcl()->inheritsRole($this->getRoleId(), $credential[0]);
+				// something like "administrator"; let's see if that's our role or an ancestor of it
+				return $this->hasRole($credential[0]);
 			}
 		} catch(Zend_Acl_Exception $e) {
 			return false;
