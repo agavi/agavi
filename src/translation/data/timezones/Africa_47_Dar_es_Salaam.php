@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Dar_es_Salaam".
- * Compiled from olson file "africa", version 8.31.
+ * Compiled from olson file "africa", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -26,7 +26,7 @@ return array (
     ),
     1 => 
     array (
-      'rawOffset' => 9885,
+      'rawOffset' => 9900,
       'dstOffset' => 0,
       'name' => 'BEAUT',
     ),
@@ -45,7 +45,7 @@ return array (
     ),
     2 => 
     array (
-      'time' => -284006685,
+      'time' => -284006700,
       'type' => 0,
     ),
   ),
@@ -57,7 +57,7 @@ return array (
     'startYear' => 1961,
   ),
   'source' => 'africa',
-  'version' => '8.31',
+  'version' => '8.33',
   'name' => 'Africa/Dar_es_Salaam',
 );
 

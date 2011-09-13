@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "Africa/Khartoum".
+ * Data file for timezone "Africa/Juba".
  * Compiled from olson file "africa", version 8.33.
  *
  * @package    agavi
@@ -41,7 +41,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1230775808,
+      'time' => -1230775584,
       'type' => 0,
     ),
     1 => 
@@ -219,7 +219,7 @@ return array (
   ),
   'source' => 'africa',
   'version' => '8.33',
-  'name' => 'Africa/Khartoum',
+  'name' => 'Africa/Juba',
 );
 
 ?>

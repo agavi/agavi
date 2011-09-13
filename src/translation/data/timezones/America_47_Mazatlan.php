@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Mazatlan".
- * Compiled from olson file "northamerica", version 8.42.
+ * Compiled from olson file "northamerica", version 8.48.
  *
  * @package    agavi
  * @subpackage translation
@@ -186,7 +186,7 @@ return array (
     'startYear' => 2002,
   ),
   'source' => 'northamerica',
-  'version' => '8.42',
+  'version' => '8.48',
   'name' => 'America/Mazatlan',
 );
 

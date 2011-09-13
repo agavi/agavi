@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Metlakatla".
- * Compiled from olson file "northamerica", version 8.42.
+ * Compiled from olson file "northamerica", version 8.48.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,12 +52,6 @@ return array (
     array (
       'rawOffset' => -28800,
       'dstOffset' => 0,
-      'name' => 'MeST',
-    ),
-    6 => 
-    array (
-      'rawOffset' => -28800,
-      'dstOffset' => 3600,
       'name' => 'MeST',
     ),
   ),
@@ -258,273 +252,16 @@ return array (
       'time' => 436356000,
       'type' => 5,
     ),
-    39 => 
-    array (
-      'time' => 452080800,
-      'type' => 6,
-    ),
-    40 => 
-    array (
-      'time' => 467802000,
-      'type' => 5,
-    ),
-    41 => 
-    array (
-      'time' => 483530400,
-      'type' => 6,
-    ),
-    42 => 
-    array (
-      'time' => 499251600,
-      'type' => 5,
-    ),
-    43 => 
-    array (
-      'time' => 514980000,
-      'type' => 6,
-    ),
-    44 => 
-    array (
-      'time' => 530701200,
-      'type' => 5,
-    ),
-    45 => 
-    array (
-      'time' => 544615200,
-      'type' => 6,
-    ),
-    46 => 
-    array (
-      'time' => 562150800,
-      'type' => 5,
-    ),
-    47 => 
-    array (
-      'time' => 576064800,
-      'type' => 6,
-    ),
-    48 => 
-    array (
-      'time' => 594205200,
-      'type' => 5,
-    ),
-    49 => 
-    array (
-      'time' => 607514400,
-      'type' => 6,
-    ),
-    50 => 
-    array (
-      'time' => 625654800,
-      'type' => 5,
-    ),
-    51 => 
-    array (
-      'time' => 638964000,
-      'type' => 6,
-    ),
-    52 => 
-    array (
-      'time' => 657104400,
-      'type' => 5,
-    ),
-    53 => 
-    array (
-      'time' => 671018400,
-      'type' => 6,
-    ),
-    54 => 
-    array (
-      'time' => 688554000,
-      'type' => 5,
-    ),
-    55 => 
-    array (
-      'time' => 702468000,
-      'type' => 6,
-    ),
-    56 => 
-    array (
-      'time' => 720003600,
-      'type' => 5,
-    ),
-    57 => 
-    array (
-      'time' => 733917600,
-      'type' => 6,
-    ),
-    58 => 
-    array (
-      'time' => 752058000,
-      'type' => 5,
-    ),
-    59 => 
-    array (
-      'time' => 765367200,
-      'type' => 6,
-    ),
-    60 => 
-    array (
-      'time' => 783507600,
-      'type' => 5,
-    ),
-    61 => 
-    array (
-      'time' => 796816800,
-      'type' => 6,
-    ),
-    62 => 
-    array (
-      'time' => 814957200,
-      'type' => 5,
-    ),
-    63 => 
-    array (
-      'time' => 828871200,
-      'type' => 6,
-    ),
-    64 => 
-    array (
-      'time' => 846406800,
-      'type' => 5,
-    ),
-    65 => 
-    array (
-      'time' => 860320800,
-      'type' => 6,
-    ),
-    66 => 
-    array (
-      'time' => 877856400,
-      'type' => 5,
-    ),
-    67 => 
-    array (
-      'time' => 891770400,
-      'type' => 6,
-    ),
-    68 => 
-    array (
-      'time' => 909306000,
-      'type' => 5,
-    ),
-    69 => 
-    array (
-      'time' => 923220000,
-      'type' => 6,
-    ),
-    70 => 
-    array (
-      'time' => 941360400,
-      'type' => 5,
-    ),
-    71 => 
-    array (
-      'time' => 954669600,
-      'type' => 6,
-    ),
-    72 => 
-    array (
-      'time' => 972810000,
-      'type' => 5,
-    ),
-    73 => 
-    array (
-      'time' => 986119200,
-      'type' => 6,
-    ),
-    74 => 
-    array (
-      'time' => 1004259600,
-      'type' => 5,
-    ),
-    75 => 
-    array (
-      'time' => 1018173600,
-      'type' => 6,
-    ),
-    76 => 
-    array (
-      'time' => 1035709200,
-      'type' => 5,
-    ),
-    77 => 
-    array (
-      'time' => 1049623200,
-      'type' => 6,
-    ),
-    78 => 
-    array (
-      'time' => 1067158800,
-      'type' => 5,
-    ),
-    79 => 
-    array (
-      'time' => 1081072800,
-      'type' => 6,
-    ),
-    80 => 
-    array (
-      'time' => 1099213200,
-      'type' => 5,
-    ),
-    81 => 
-    array (
-      'time' => 1112522400,
-      'type' => 6,
-    ),
-    82 => 
-    array (
-      'time' => 1130662800,
-      'type' => 5,
-    ),
-    83 => 
-    array (
-      'time' => 1143972000,
-      'type' => 6,
-    ),
-    84 => 
-    array (
-      'time' => 1162112400,
-      'type' => 5,
-    ),
-    85 => 
-    array (
-      'time' => 1173607200,
-      'type' => 6,
-    ),
-    86 => 
-    array (
-      'time' => 1194166800,
-      'type' => 5,
-    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => -28800,
+    'type' => 'static',
     'name' => 'MeST',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => '8',
-      'day_of_week' => -1,
-      'time' => 7200000,
-      'type' => 0,
-    ),
-    'end' => 
-    array (
-      'month' => 10,
-      'date' => '1',
-      'day_of_week' => -1,
-      'time' => 7200000,
-      'type' => 0,
-    ),
-    'startYear' => 2007,
+    'offset' => -28800,
+    'startYear' => 1984,
   ),
   'source' => 'northamerica',
-  'version' => '8.42',
+  'version' => '8.48',
   'name' => 'America/Metlakatla',
 );
 

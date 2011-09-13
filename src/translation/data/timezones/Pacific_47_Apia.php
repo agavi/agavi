@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Apia".
- * Compiled from olson file "australasia", version 8.23.
+ * Compiled from olson file "australasia", version 8.27.
  *
  * @package    agavi
  * @subpackage translation
@@ -42,6 +42,18 @@ return array (
       'dstOffset' => 3600,
       'name' => 'WSDT',
     ),
+    4 => 
+    array (
+      'rawOffset' => 46800,
+      'dstOffset' => 3600,
+      'name' => 'WSDT',
+    ),
+    5 => 
+    array (
+      'rawOffset' => 46800,
+      'dstOffset' => 0,
+      'name' => 'WST',
+    ),
   ),
   'rules' => 
   array (
@@ -70,16 +82,31 @@ return array (
       'time' => 1301752800,
       'type' => 2,
     ),
+    5 => 
+    array (
+      'time' => 1316872800,
+      'type' => 3,
+    ),
+    6 => 
+    array (
+      'time' => 1325239200,
+      'type' => 4,
+    ),
+    7 => 
+    array (
+      'time' => 1333202400,
+      'type' => 5,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'WST',
-    'offset' => -39600,
-    'startYear' => 2012,
+    'offset' => 46800,
+    'startYear' => 2013,
   ),
   'source' => 'australasia',
-  'version' => '8.23',
+  'version' => '8.27',
   'name' => 'Pacific/Apia',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Kaliningrad".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.34.
  *
  * @package    agavi
  * @subpackage translation
@@ -70,7 +70,7 @@ return array (
     array (
       'rawOffset' => 10800,
       'dstOffset' => 0,
-      'name' => 'EET',
+      'name' => 'KALT',
     ),
   ),
   'rules' => 
@@ -334,12 +334,12 @@ return array (
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'EET',
+    'name' => 'KALT',
     'offset' => 10800,
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.34',
   'name' => 'Europe/Kaliningrad',
 );
 

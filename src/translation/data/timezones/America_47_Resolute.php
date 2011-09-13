@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Resolute".
- * Compiled from olson file "northamerica", version 8.42.
+ * Compiled from olson file "northamerica", version 8.48.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,18 +41,6 @@ return array (
       'rawOffset' => -18000,
       'dstOffset' => 0,
       'name' => 'EST',
-    ),
-    4 => 
-    array (
-      'rawOffset' => -18000,
-      'dstOffset' => 0,
-      'name' => 'T',
-    ),
-    5 => 
-    array (
-      'rawOffset' => -18000,
-      'dstOffset' => 0,
-      'name' => 'CDT',
     ),
   ),
   'rules' => 
@@ -350,34 +338,26 @@ return array (
     58 => 
     array (
       'time' => 1162108800,
-      'type' => 4,
+      'type' => 3,
     ),
     59 => 
     array (
-      'time' => 1162710000,
-      'type' => 3,
+      'time' => 1173600000,
+      'type' => 2,
     ),
     60 => 
     array (
-      'time' => 1173596400,
-      'type' => 5,
+      'time' => 1194159600,
+      'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'dynamic',
-    'offset' => -18000,
-    'name' => '%sT',
-    'save' => 0,
+    'offset' => -21600,
+    'name' => 'C%sT',
+    'save' => 3600,
     'start' => 
-    array (
-      'month' => 10,
-      'date' => '1',
-      'day_of_week' => -1,
-      'time' => 7200000,
-      'type' => 0,
-    ),
-    'end' => 
     array (
       'month' => 2,
       'date' => '8',
@@ -385,10 +365,18 @@ return array (
       'time' => 7200000,
       'type' => 0,
     ),
+    'end' => 
+    array (
+      'month' => 10,
+      'date' => '1',
+      'day_of_week' => -1,
+      'time' => 7200000,
+      'type' => 0,
+    ),
     'startYear' => 2007,
   ),
   'source' => 'northamerica',
-  'version' => '8.42',
+  'version' => '8.48',
   'name' => 'America/Resolute',
 );
 

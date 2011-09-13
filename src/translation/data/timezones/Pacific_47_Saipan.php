@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Saipan".
- * Compiled from olson file "australasia", version 8.23.
+ * Compiled from olson file "australasia", version 8.27.
  *
  * @package    agavi
  * @subpackage translation
@@ -74,7 +74,7 @@ return array (
     'startYear' => 2001,
   ),
   'source' => 'australasia',
-  'version' => '8.23',
+  'version' => '8.27',
   'name' => 'Pacific/Saipan',
 );
 
