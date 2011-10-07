@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "Asia/Gaza".
+ * Data file for timezone "Asia/Hebron".
  * Compiled from olson file "asia", version 8.68.
  *
  * @package    agavi
@@ -53,7 +53,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2185409872,
+      'time' => -2185410023,
       'type' => 0,
     ),
     1 => 
@@ -488,37 +488,52 @@ return array (
     ),
     87 => 
     array (
-      'time' => 1219957200,
-      'type' => 0,
+      'time' => 1217538000,
+      'type' => 2,
     ),
     88 => 
+    array (
+      'time' => 1220216400,
+      'type' => 0,
+    ),
+    89 => 
     array (
       'time' => 1238104800,
       'type' => 2,
     ),
-    89 => 
+    90 => 
     array (
       'time' => 1252018800,
       'type' => 0,
     ),
-    90 => 
+    91 => 
     array (
       'time' => 1269640860,
       'type' => 2,
     ),
-    91 => 
+    92 => 
     array (
       'time' => 1281474000,
       'type' => 0,
     ),
-    92 => 
-    array (
-      'time' => 1301738460,
-      'type' => 2,
-    ),
     93 => 
     array (
+      'time' => 1301652060,
+      'type' => 2,
+    ),
+    94 => 
+    array (
       'time' => 1312146000,
+      'type' => 0,
+    ),
+    95 => 
+    array (
+      'time' => 1314655200,
+      'type' => 2,
+    ),
+    96 => 
+    array (
+      'time' => 1317600000,
       'type' => 0,
     ),
   ),
@@ -531,7 +546,7 @@ return array (
   ),
   'source' => 'asia',
   'version' => '8.68',
-  'name' => 'Asia/Gaza',
+  'name' => 'Asia/Hebron',
 );
 
 ?>

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Kaliningrad".
- * Compiled from olson file "europe", version 8.34.
+ * Compiled from olson file "europe", version 8.38.
  *
  * @package    agavi
  * @subpackage translation
@@ -70,7 +70,7 @@ return array (
     array (
       'rawOffset' => 10800,
       'dstOffset' => 0,
-      'name' => 'KALT',
+      'name' => 'FET',
     ),
   ),
   'rules' => 
@@ -327,6 +327,146 @@ return array (
     ),
     50 => 
     array (
+      'time' => 859680000,
+      'type' => 7,
+    ),
+    51 => 
+    array (
+      'time' => 877824000,
+      'type' => 6,
+    ),
+    52 => 
+    array (
+      'time' => 891129600,
+      'type' => 7,
+    ),
+    53 => 
+    array (
+      'time' => 909273600,
+      'type' => 6,
+    ),
+    54 => 
+    array (
+      'time' => 922579200,
+      'type' => 7,
+    ),
+    55 => 
+    array (
+      'time' => 941328000,
+      'type' => 6,
+    ),
+    56 => 
+    array (
+      'time' => 954028800,
+      'type' => 7,
+    ),
+    57 => 
+    array (
+      'time' => 972777600,
+      'type' => 6,
+    ),
+    58 => 
+    array (
+      'time' => 985478400,
+      'type' => 7,
+    ),
+    59 => 
+    array (
+      'time' => 1004227200,
+      'type' => 6,
+    ),
+    60 => 
+    array (
+      'time' => 1017532800,
+      'type' => 7,
+    ),
+    61 => 
+    array (
+      'time' => 1035676800,
+      'type' => 6,
+    ),
+    62 => 
+    array (
+      'time' => 1048982400,
+      'type' => 7,
+    ),
+    63 => 
+    array (
+      'time' => 1067126400,
+      'type' => 6,
+    ),
+    64 => 
+    array (
+      'time' => 1080432000,
+      'type' => 7,
+    ),
+    65 => 
+    array (
+      'time' => 1099180800,
+      'type' => 6,
+    ),
+    66 => 
+    array (
+      'time' => 1111881600,
+      'type' => 7,
+    ),
+    67 => 
+    array (
+      'time' => 1130630400,
+      'type' => 6,
+    ),
+    68 => 
+    array (
+      'time' => 1143331200,
+      'type' => 7,
+    ),
+    69 => 
+    array (
+      'time' => 1162080000,
+      'type' => 6,
+    ),
+    70 => 
+    array (
+      'time' => 1174780800,
+      'type' => 7,
+    ),
+    71 => 
+    array (
+      'time' => 1193529600,
+      'type' => 6,
+    ),
+    72 => 
+    array (
+      'time' => 1206835200,
+      'type' => 7,
+    ),
+    73 => 
+    array (
+      'time' => 1224979200,
+      'type' => 6,
+    ),
+    74 => 
+    array (
+      'time' => 1238284800,
+      'type' => 7,
+    ),
+    75 => 
+    array (
+      'time' => 1256428800,
+      'type' => 6,
+    ),
+    76 => 
+    array (
+      'time' => 1269734400,
+      'type' => 7,
+    ),
+    77 => 
+    array (
+      'time' => 1288483200,
+      'type' => 6,
+    ),
+    78 => 
+    array (
       'time' => 1301184000,
       'type' => 8,
     ),
@@ -334,12 +474,12 @@ return array (
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'KALT',
+    'name' => 'FET',
     'offset' => 10800,
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.34',
+  'version' => '8.38',
   'name' => 'Europe/Kaliningrad',
 );
 

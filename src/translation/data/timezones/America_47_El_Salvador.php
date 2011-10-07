@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/El_Salvador".
- * Compiled from olson file "northamerica", version 8.48.
+ * Compiled from olson file "northamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -72,7 +72,7 @@ return array (
     'startYear' => 1989,
   ),
   'source' => 'northamerica',
-  'version' => '8.48',
+  'version' => '8.49',
   'name' => 'America/El_Salvador',
 );
 

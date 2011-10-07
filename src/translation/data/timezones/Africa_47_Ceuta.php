@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Ceuta".
- * Compiled from olson file "europe", version 8.34.
+ * Compiled from olson file "europe", version 8.38.
  *
  * @package    agavi
  * @subpackage translation
@@ -306,7 +306,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.34',
+  'version' => '8.38',
   'name' => 'Africa/Ceuta',
 );
 

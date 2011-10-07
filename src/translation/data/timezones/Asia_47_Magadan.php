@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Magadan".
- * Compiled from olson file "europe", version 8.34.
+ * Compiled from olson file "europe", version 8.38.
  *
  * @package    agavi
  * @subpackage translation
@@ -233,6 +233,146 @@ return array (
     ),
     36 => 
     array (
+      'time' => 859647600,
+      'type' => 2,
+    ),
+    37 => 
+    array (
+      'time' => 877791600,
+      'type' => 1,
+    ),
+    38 => 
+    array (
+      'time' => 891097200,
+      'type' => 2,
+    ),
+    39 => 
+    array (
+      'time' => 909241200,
+      'type' => 1,
+    ),
+    40 => 
+    array (
+      'time' => 922546800,
+      'type' => 2,
+    ),
+    41 => 
+    array (
+      'time' => 941295600,
+      'type' => 1,
+    ),
+    42 => 
+    array (
+      'time' => 953996400,
+      'type' => 2,
+    ),
+    43 => 
+    array (
+      'time' => 972745200,
+      'type' => 1,
+    ),
+    44 => 
+    array (
+      'time' => 985446000,
+      'type' => 2,
+    ),
+    45 => 
+    array (
+      'time' => 1004194800,
+      'type' => 1,
+    ),
+    46 => 
+    array (
+      'time' => 1017500400,
+      'type' => 2,
+    ),
+    47 => 
+    array (
+      'time' => 1035644400,
+      'type' => 1,
+    ),
+    48 => 
+    array (
+      'time' => 1048950000,
+      'type' => 2,
+    ),
+    49 => 
+    array (
+      'time' => 1067094000,
+      'type' => 1,
+    ),
+    50 => 
+    array (
+      'time' => 1080399600,
+      'type' => 2,
+    ),
+    51 => 
+    array (
+      'time' => 1099148400,
+      'type' => 1,
+    ),
+    52 => 
+    array (
+      'time' => 1111849200,
+      'type' => 2,
+    ),
+    53 => 
+    array (
+      'time' => 1130598000,
+      'type' => 1,
+    ),
+    54 => 
+    array (
+      'time' => 1143298800,
+      'type' => 2,
+    ),
+    55 => 
+    array (
+      'time' => 1162047600,
+      'type' => 1,
+    ),
+    56 => 
+    array (
+      'time' => 1174748400,
+      'type' => 2,
+    ),
+    57 => 
+    array (
+      'time' => 1193497200,
+      'type' => 1,
+    ),
+    58 => 
+    array (
+      'time' => 1206802800,
+      'type' => 2,
+    ),
+    59 => 
+    array (
+      'time' => 1224946800,
+      'type' => 1,
+    ),
+    60 => 
+    array (
+      'time' => 1238252400,
+      'type' => 2,
+    ),
+    61 => 
+    array (
+      'time' => 1256396400,
+      'type' => 1,
+    ),
+    62 => 
+    array (
+      'time' => 1269702000,
+      'type' => 2,
+    ),
+    63 => 
+    array (
+      'time' => 1288450800,
+      'type' => 1,
+    ),
+    64 => 
+    array (
       'time' => 1301151600,
       'type' => 4,
     ),
@@ -245,7 +385,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.34',
+  'version' => '8.38',
   'name' => 'Asia/Magadan',
 );
 

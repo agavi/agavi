@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Costa_Rica".
- * Compiled from olson file "northamerica", version 8.48.
+ * Compiled from olson file "northamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -103,7 +103,7 @@ return array (
     'startYear' => 1993,
   ),
   'source' => 'northamerica',
-  'version' => '8.48',
+  'version' => '8.49',
   'name' => 'America/Costa_Rica',
 );
 
