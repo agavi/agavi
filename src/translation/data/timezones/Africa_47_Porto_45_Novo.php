@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Porto-Novo".
- * Compiled from olson file "africa", version 8.31.
+ * Compiled from olson file "africa", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1935,
   ),
   'source' => 'africa',
-  'version' => '8.31',
+  'version' => '8.33',
   'name' => 'Africa/Porto-Novo',
 );
 

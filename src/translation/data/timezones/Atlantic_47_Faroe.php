@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Atlantic/Faroe".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.34.
  *
  * @package    agavi
  * @subpackage translation
@@ -229,7 +229,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.34',
   'name' => 'Atlantic/Faroe',
 );
 

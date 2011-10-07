@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2011-06-28T15:48:47+00:00.
+ * Generated on 2011-09-13T08:06:25+00:00.
  *
  * @package    agavi
  * @subpackage translation
@@ -2160,6 +2160,11 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'Africa_47_Khartoum.php',
+  ),
+  'Africa/Juba' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'Africa_47_Juba.php',
   ),
   'Africa/Mbabane' => 
   array (

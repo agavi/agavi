@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Tortola".
- * Compiled from olson file "northamerica", version 8.42.
+ * Compiled from olson file "northamerica", version 8.48.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
     'startYear' => 1912,
   ),
   'source' => 'northamerica',
-  'version' => '8.42',
+  'version' => '8.48',
   'name' => 'America/Tortola',
 );
 

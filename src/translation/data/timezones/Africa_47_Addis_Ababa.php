@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Addis_Ababa".
- * Compiled from olson file "africa", version 8.31.
+ * Compiled from olson file "africa", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1937,
   ),
   'source' => 'africa',
-  'version' => '8.31',
+  'version' => '8.33',
   'name' => 'Africa/Addis_Ababa',
 );
 

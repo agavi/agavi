@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Tripoli".
- * Compiled from olson file "africa", version 8.31.
+ * Compiled from olson file "africa", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -193,7 +193,7 @@ return array (
     'startYear' => 1998,
   ),
   'source' => 'africa',
-  'version' => '8.31',
+  'version' => '8.33',
   'name' => 'Africa/Tripoli',
 );
 

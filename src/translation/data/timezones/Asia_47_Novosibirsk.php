@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Novosibirsk".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.34.
  *
  * @package    agavi
  * @subpackage translation
@@ -250,7 +250,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.34',
   'name' => 'Asia/Novosibirsk',
 );
 
