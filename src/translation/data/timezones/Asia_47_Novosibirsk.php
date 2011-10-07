@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Novosibirsk".
- * Compiled from olson file "europe", version 8.34.
+ * Compiled from olson file "europe", version 8.38.
  *
  * @package    agavi
  * @subpackage translation
@@ -238,6 +238,146 @@ return array (
     ),
     37 => 
     array (
+      'time' => 859665600,
+      'type' => 3,
+    ),
+    38 => 
+    array (
+      'time' => 877809600,
+      'type' => 0,
+    ),
+    39 => 
+    array (
+      'time' => 891115200,
+      'type' => 3,
+    ),
+    40 => 
+    array (
+      'time' => 909259200,
+      'type' => 0,
+    ),
+    41 => 
+    array (
+      'time' => 922564800,
+      'type' => 3,
+    ),
+    42 => 
+    array (
+      'time' => 941313600,
+      'type' => 0,
+    ),
+    43 => 
+    array (
+      'time' => 954014400,
+      'type' => 3,
+    ),
+    44 => 
+    array (
+      'time' => 972763200,
+      'type' => 0,
+    ),
+    45 => 
+    array (
+      'time' => 985464000,
+      'type' => 3,
+    ),
+    46 => 
+    array (
+      'time' => 1004212800,
+      'type' => 0,
+    ),
+    47 => 
+    array (
+      'time' => 1017518400,
+      'type' => 3,
+    ),
+    48 => 
+    array (
+      'time' => 1035662400,
+      'type' => 0,
+    ),
+    49 => 
+    array (
+      'time' => 1048968000,
+      'type' => 3,
+    ),
+    50 => 
+    array (
+      'time' => 1067112000,
+      'type' => 0,
+    ),
+    51 => 
+    array (
+      'time' => 1080417600,
+      'type' => 3,
+    ),
+    52 => 
+    array (
+      'time' => 1099166400,
+      'type' => 0,
+    ),
+    53 => 
+    array (
+      'time' => 1111867200,
+      'type' => 3,
+    ),
+    54 => 
+    array (
+      'time' => 1130616000,
+      'type' => 0,
+    ),
+    55 => 
+    array (
+      'time' => 1143316800,
+      'type' => 3,
+    ),
+    56 => 
+    array (
+      'time' => 1162065600,
+      'type' => 0,
+    ),
+    57 => 
+    array (
+      'time' => 1174766400,
+      'type' => 3,
+    ),
+    58 => 
+    array (
+      'time' => 1193515200,
+      'type' => 0,
+    ),
+    59 => 
+    array (
+      'time' => 1206820800,
+      'type' => 3,
+    ),
+    60 => 
+    array (
+      'time' => 1224964800,
+      'type' => 0,
+    ),
+    61 => 
+    array (
+      'time' => 1238270400,
+      'type' => 3,
+    ),
+    62 => 
+    array (
+      'time' => 1256414400,
+      'type' => 0,
+    ),
+    63 => 
+    array (
+      'time' => 1269720000,
+      'type' => 3,
+    ),
+    64 => 
+    array (
+      'time' => 1288468800,
+      'type' => 0,
+    ),
+    65 => 
+    array (
       'time' => 1301169600,
       'type' => 1,
     ),
@@ -250,7 +390,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.34',
+  'version' => '8.38',
   'name' => 'Asia/Novosibirsk',
 );
 

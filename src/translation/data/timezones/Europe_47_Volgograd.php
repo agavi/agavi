@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Volgograd".
- * Compiled from olson file "europe", version 8.34.
+ * Compiled from olson file "europe", version 8.38.
  *
  * @package    agavi
  * @subpackage translation
@@ -251,6 +251,146 @@ return array (
     ),
     36 => 
     array (
+      'time' => 859676400,
+      'type' => 6,
+    ),
+    37 => 
+    array (
+      'time' => 877820400,
+      'type' => 5,
+    ),
+    38 => 
+    array (
+      'time' => 891126000,
+      'type' => 6,
+    ),
+    39 => 
+    array (
+      'time' => 909270000,
+      'type' => 5,
+    ),
+    40 => 
+    array (
+      'time' => 922575600,
+      'type' => 6,
+    ),
+    41 => 
+    array (
+      'time' => 941324400,
+      'type' => 5,
+    ),
+    42 => 
+    array (
+      'time' => 954025200,
+      'type' => 6,
+    ),
+    43 => 
+    array (
+      'time' => 972774000,
+      'type' => 5,
+    ),
+    44 => 
+    array (
+      'time' => 985474800,
+      'type' => 6,
+    ),
+    45 => 
+    array (
+      'time' => 1004223600,
+      'type' => 5,
+    ),
+    46 => 
+    array (
+      'time' => 1017529200,
+      'type' => 6,
+    ),
+    47 => 
+    array (
+      'time' => 1035673200,
+      'type' => 5,
+    ),
+    48 => 
+    array (
+      'time' => 1048978800,
+      'type' => 6,
+    ),
+    49 => 
+    array (
+      'time' => 1067122800,
+      'type' => 5,
+    ),
+    50 => 
+    array (
+      'time' => 1080428400,
+      'type' => 6,
+    ),
+    51 => 
+    array (
+      'time' => 1099177200,
+      'type' => 5,
+    ),
+    52 => 
+    array (
+      'time' => 1111878000,
+      'type' => 6,
+    ),
+    53 => 
+    array (
+      'time' => 1130626800,
+      'type' => 5,
+    ),
+    54 => 
+    array (
+      'time' => 1143327600,
+      'type' => 6,
+    ),
+    55 => 
+    array (
+      'time' => 1162076400,
+      'type' => 5,
+    ),
+    56 => 
+    array (
+      'time' => 1174777200,
+      'type' => 6,
+    ),
+    57 => 
+    array (
+      'time' => 1193526000,
+      'type' => 5,
+    ),
+    58 => 
+    array (
+      'time' => 1206831600,
+      'type' => 6,
+    ),
+    59 => 
+    array (
+      'time' => 1224975600,
+      'type' => 5,
+    ),
+    60 => 
+    array (
+      'time' => 1238281200,
+      'type' => 6,
+    ),
+    61 => 
+    array (
+      'time' => 1256425200,
+      'type' => 5,
+    ),
+    62 => 
+    array (
+      'time' => 1269730800,
+      'type' => 6,
+    ),
+    63 => 
+    array (
+      'time' => 1288479600,
+      'type' => 5,
+    ),
+    64 => 
+    array (
       'time' => 1301180400,
       'type' => 3,
     ),
@@ -263,7 +403,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.34',
+  'version' => '8.38',
   'name' => 'Europe/Volgograd',
 );
 

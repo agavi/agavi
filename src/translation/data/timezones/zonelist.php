@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2011-09-13T08:06:25+00:00.
+ * Generated on 2011-10-07T20:54:52+00:00.
  *
  * @package    agavi
  * @subpackage translation
@@ -1780,6 +1780,11 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'Asia_47_Gaza.php',
+  ),
+  'Asia/Hebron' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'Asia_47_Hebron.php',
   ),
   'Asia/Manila' => 
   array (

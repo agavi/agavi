@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Anadyr".
- * Compiled from olson file "europe", version 8.34.
+ * Compiled from olson file "europe", version 8.38.
  *
  * @package    agavi
  * @subpackage translation
@@ -242,16 +242,166 @@ return array (
       'time' => 846338400,
       'type' => 0,
     ),
+    37 => 
+    array (
+      'time' => 859644000,
+      'type' => 3,
+    ),
+    38 => 
+    array (
+      'time' => 877788000,
+      'type' => 0,
+    ),
+    39 => 
+    array (
+      'time' => 891093600,
+      'type' => 3,
+    ),
+    40 => 
+    array (
+      'time' => 909237600,
+      'type' => 0,
+    ),
+    41 => 
+    array (
+      'time' => 922543200,
+      'type' => 3,
+    ),
+    42 => 
+    array (
+      'time' => 941292000,
+      'type' => 0,
+    ),
+    43 => 
+    array (
+      'time' => 953992800,
+      'type' => 3,
+    ),
+    44 => 
+    array (
+      'time' => 972741600,
+      'type' => 0,
+    ),
+    45 => 
+    array (
+      'time' => 985442400,
+      'type' => 3,
+    ),
+    46 => 
+    array (
+      'time' => 1004191200,
+      'type' => 0,
+    ),
+    47 => 
+    array (
+      'time' => 1017496800,
+      'type' => 3,
+    ),
+    48 => 
+    array (
+      'time' => 1035640800,
+      'type' => 0,
+    ),
+    49 => 
+    array (
+      'time' => 1048946400,
+      'type' => 3,
+    ),
+    50 => 
+    array (
+      'time' => 1067090400,
+      'type' => 0,
+    ),
+    51 => 
+    array (
+      'time' => 1080396000,
+      'type' => 3,
+    ),
+    52 => 
+    array (
+      'time' => 1099144800,
+      'type' => 0,
+    ),
+    53 => 
+    array (
+      'time' => 1111845600,
+      'type' => 3,
+    ),
+    54 => 
+    array (
+      'time' => 1130594400,
+      'type' => 0,
+    ),
+    55 => 
+    array (
+      'time' => 1143295200,
+      'type' => 3,
+    ),
+    56 => 
+    array (
+      'time' => 1162044000,
+      'type' => 0,
+    ),
+    57 => 
+    array (
+      'time' => 1174744800,
+      'type' => 3,
+    ),
+    58 => 
+    array (
+      'time' => 1193493600,
+      'type' => 0,
+    ),
+    59 => 
+    array (
+      'time' => 1206799200,
+      'type' => 3,
+    ),
+    60 => 
+    array (
+      'time' => 1224943200,
+      'type' => 0,
+    ),
+    61 => 
+    array (
+      'time' => 1238248800,
+      'type' => 3,
+    ),
+    62 => 
+    array (
+      'time' => 1256392800,
+      'type' => 0,
+    ),
+    63 => 
+    array (
+      'time' => 1269698400,
+      'type' => 4,
+    ),
+    64 => 
+    array (
+      'time' => 1269702000,
+      'type' => 5,
+    ),
+    65 => 
+    array (
+      'time' => 1288450800,
+      'type' => 4,
+    ),
+    66 => 
+    array (
+      'time' => 1301151600,
+      'type' => 0,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'ANAT',
     'offset' => 43200,
-    'startYear' => 1996,
+    'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.34',
+  'version' => '8.38',
   'name' => 'Asia/Anadyr',
 );
 

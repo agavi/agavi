@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Bahia_Banderas".
- * Compiled from olson file "northamerica", version 8.48.
+ * Compiled from olson file "northamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -186,7 +186,7 @@ return array (
     'startYear' => 2002,
   ),
   'source' => 'northamerica',
-  'version' => '8.48',
+  'version' => '8.49',
   'name' => 'America/Bahia_Banderas',
 );
 

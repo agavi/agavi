@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Simferopol".
- * Compiled from olson file "europe", version 8.34.
+ * Compiled from olson file "europe", version 8.38.
  *
  * @package    agavi
  * @subpackage translation
@@ -274,33 +274,21 @@ return array (
       'time' => 828230400,
       'type' => 6,
     ),
+    41 => 
+    array (
+      'time' => 846374400,
+      'type' => 2,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => 7200,
-    'name' => 'EE%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 3600000,
-      'type' => 2,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 3600000,
-      'type' => 2,
-    ),
+    'type' => 'static',
+    'name' => 'FET',
+    'offset' => 10800,
     'startYear' => 1997,
   ),
   'source' => 'europe',
-  'version' => '8.34',
+  'version' => '8.38',
   'name' => 'Europe/Simferopol',
 );
 

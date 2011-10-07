@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Indiana/Petersburg".
- * Compiled from olson file "northamerica", version 8.48.
+ * Compiled from olson file "northamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -378,7 +378,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'northamerica',
-  'version' => '8.48',
+  'version' => '8.49',
   'name' => 'America/Indiana/Petersburg',
 );
 

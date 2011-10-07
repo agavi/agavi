@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Goose_Bay".
- * Compiled from olson file "northamerica", version 8.48.
+ * Compiled from olson file "northamerica", version 8.49.
  *
  * @package    agavi
  * @subpackage translation
@@ -882,7 +882,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'northamerica',
-  'version' => '8.48',
+  'version' => '8.49',
   'name' => 'America/Goose_Bay',
 );
 
