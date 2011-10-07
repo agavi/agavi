@@ -48,34 +48,27 @@ class AgaviBooleanValidator extends AgaviValidator
 	protected function validate()
 	{
 		$value = & $this->getData($this->getArgument());
-		$origValue = $value;
+		$castValue = $value;
 		
-		if(is_bool($value)) {
+		if(is_bool($castValue)) {
 			// noop
-		} elseif(1 === $value || '1' === $value) {
-			$value = true;
-		} elseif(0 === $value || '0' === $value) {
-			$value = false;
-		} elseif(is_string($value)) {
-			$value = AgaviToolkit::literalize($value);
+		} elseif(1 === $castValue || '1' === $castValue) {
+			$castValue = true;
+		} elseif(0 === $castValue || '0' === $castValue) {
+			$castValue = false;
+		} elseif(is_string($castValue)) {
+			$castValue = AgaviToolkit::literalize($castValue);
 		}
 		
-		if(is_bool($value)) {
-			
-			// we don't cast if the value is exported.
-			// caution, AgaviValidator::export does the test for empty
-			// strings, null and false values, so we can't use
-			// hasParameter here
-			if($this->getParameter('export')) {
-				$value = $origValue;
+		if(is_bool($castValue)) {
+			if($this->hasParameter('export')) {
+				$this->export($castValue);
 			} else {
-				$this->export($value);
+				$value = $castValue;
 			}
 			
 			return true;
 		}
-		
-		$value = $origValue;
 		
 		$this->throwError('type');
 		
