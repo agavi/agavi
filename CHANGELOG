@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 CHG: Update timezone database to 2011k (#1423) (David)
 CHG: Do not call getCredentials() if Action is not "secure" (#1400) (David)
 
+FIX: AgaviViewTestCase calls undefined method (#1424) (David, Markus Lervik)
 FIX: Exporting and value casting behavior swapped in AgaviBooleanValidator (#1422) (Dominik)
 
 
