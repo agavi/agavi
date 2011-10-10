@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 1.0.7 RC1 (August ??, 2011)
 ---------------------------
 
-CHG: Update timezone database to 2011k (#1423) (David)
+CHG: Update timezone database to 2011l (#1425) (David)
 CHG: Do not call getCredentials() if Action is not "secure" (#1400) (David)
 
 FIX: AgaviViewTestCase calls undefined method (#1424) (David, Markus Lervik)
