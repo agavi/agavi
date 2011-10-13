@@ -40,7 +40,7 @@ class AgaviTidyFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public function executeOnce(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
+	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
 		// nothing to do so far. let's carry on in the chain
 		$filterChain->execute($container);
