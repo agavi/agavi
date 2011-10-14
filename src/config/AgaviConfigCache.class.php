@@ -405,7 +405,7 @@ class AgaviConfigCache
 			// extended XSL* classes
 			if(!AgaviConfig::get('core.skip_config_transformations', false)) {
 				if(!extension_loaded('xsl')) {
-					throw new AgaviConfigurationException("The XSL extension for PHP is used by Agavi for performing transformations in the configuration system; this may be disabled by setting\nAgaviConfig::set('core.skip_config_transformations', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this).\n\nAs a result, you *will* have to use the latest configuration file formats and namespaces as backwards compatibility is implemented through XSLT. Also, certain additional configuration file validations implemented via Schematron will not be performed.");
+					throw new AgaviConfigurationException("You do not have the XSL extension for PHP (ext/xsl) installed or enabled. The extension is used by Agavi to perform XSL transformations in the configuration system to guarantee forwards compatibility of applications.\n\nIf you do not want to or can not install ext/xsl, you may disable all transformations by setting\nAgaviConfig::set('core.skip_config_transformations', true);\nbefore calling\nAgavi::bootstrap();\nin index.php (app/config.php is not the right place for this because this is a setting that's specific to your environment or machine).\n\nKeep in mind that disabling transformations mean you *have* to use the latest configuration file formats and namespace versions. Also, certain additional configuration file validations implemented via Schematron will not be performed.");
 				}
 				// kill a bunch of kittens thanks to http://trac.agavi.org/ticket/1038...
 				$hopeless = version_compare(PHP_VERSION, '5.2.9', '<');
