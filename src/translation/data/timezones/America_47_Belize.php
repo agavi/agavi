@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Belize".
- * Compiled from olson file "northamerica", version 8.49.
+ * Compiled from olson file "northamerica", version 8.50.
  *
  * @package    agavi
  * @subpackage translation
@@ -328,7 +328,7 @@ return array (
     'startYear' => 1984,
   ),
   'source' => 'northamerica',
-  'version' => '8.49',
+  'version' => '8.50',
   'name' => 'America/Belize',
 );
 

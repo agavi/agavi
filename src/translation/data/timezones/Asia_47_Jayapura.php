@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Jayapura".
- * Compiled from olson file "asia", version 8.68.
+ * Compiled from olson file "asia", version 8.69.
  *
  * @package    agavi
  * @subpackage translation
@@ -57,7 +57,7 @@ return array (
     'startYear' => 1964,
   ),
   'source' => 'asia',
-  'version' => '8.68',
+  'version' => '8.69',
   'name' => 'Asia/Jayapura',
 );
 

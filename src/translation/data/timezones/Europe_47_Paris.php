@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Paris".
- * Compiled from olson file "europe", version 8.38.
+ * Compiled from olson file "europe", version 8.39.
  *
  * @package    agavi
  * @subpackage translation
@@ -615,7 +615,7 @@ return array (
     'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.38',
+  'version' => '8.39',
   'name' => 'Europe/Paris',
 );
 

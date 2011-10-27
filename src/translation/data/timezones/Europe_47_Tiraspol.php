@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "Europe/Chisinau".
+ * Data file for timezone "Europe/Tiraspol".
  * Compiled from olson file "europe", version 8.39.
  *
  * @package    agavi
@@ -77,7 +77,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2840147720,
+      'time' => -2840147912,
       'type' => 0,
     ),
     1 => 
@@ -378,31 +378,14 @@ return array (
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => 7200,
-    'name' => 'EE%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 3600000,
-      'type' => 2,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 3600000,
-      'type' => 2,
-    ),
+    'type' => 'static',
+    'name' => 'FET',
+    'offset' => 10800,
     'startYear' => 1996,
   ),
   'source' => 'europe',
   'version' => '8.39',
-  'name' => 'Europe/Chisinau',
+  'name' => 'Europe/Tiraspol',
 );
 
 ?>

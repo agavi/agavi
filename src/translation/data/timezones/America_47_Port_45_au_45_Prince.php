@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Port-au-Prince".
- * Compiled from olson file "northamerica", version 8.49.
+ * Compiled from olson file "northamerica", version 8.50.
  *
  * @package    agavi
  * @subpackage translation
@@ -238,7 +238,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'northamerica',
-  'version' => '8.49',
+  'version' => '8.50',
   'name' => 'America/Port-au-Prince',
 );
 

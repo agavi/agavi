@@ -4,8 +4,8 @@ AGAVI CHANGELOG
 1.0.7 RC1 (August ??, 2011)
 ---------------------------
 
+CHG: Update timezone database to 2011m (#1429) (David)
 CHG: Rephrase exception message about missing XSL extension to be more descriptive (#1426) (David)
-CHG: Update timezone database to 2011l (#1425) (David)
 CHG: Do not call getCredentials() if Action is not "secure" (#1400) (David)
 
 FIX: AgaviViewTestCase calls undefined method (#1424) (David, Markus Lervik)
