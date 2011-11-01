@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Indian/Christmas".
- * Compiled from olson file "australasia", version 8.28.
+ * Compiled from olson file "australasia", version 8.29.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
     'startYear' => 1896,
   ),
   'source' => 'australasia',
-  'version' => '8.28',
+  'version' => '8.29',
   'name' => 'Indian/Christmas',
 );
 

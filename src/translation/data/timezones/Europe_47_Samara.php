@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Samara".
- * Compiled from olson file "europe", version 8.39.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -430,7 +430,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.39',
+  'version' => '8.40',
   'name' => 'Europe/Samara',
 );
 

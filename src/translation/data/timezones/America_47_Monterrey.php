@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Monterrey".
- * Compiled from olson file "northamerica", version 8.50.
+ * Compiled from olson file "northamerica", version 8.51.
  *
  * @package    agavi
  * @subpackage translation
@@ -154,7 +154,7 @@ return array (
     'startYear' => 2002,
   ),
   'source' => 'northamerica',
-  'version' => '8.50',
+  'version' => '8.51',
   'name' => 'America/Monterrey',
 );
 

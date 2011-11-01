@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2011-10-27T02:25:27+00:00.
+ * Generated on 2011-11-01T11:38:05+00:00.
  *
  * @package    agavi
  * @subpackage translation
@@ -955,11 +955,6 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'Europe_47_Chisinau.php',
-  ),
-  'Europe/Tiraspol' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'Europe_47_Tiraspol.php',
   ),
   'Europe/Monaco' => 
   array (
@@ -2665,6 +2660,11 @@ return array (
   array (
     'type' => 'link',
     'to' => 'Europe/London',
+  ),
+  'Europe/Tiraspol' => 
+  array (
+    'type' => 'link',
+    'to' => 'Europe/Chisinau',
   ),
   'GB' => 
   array (
