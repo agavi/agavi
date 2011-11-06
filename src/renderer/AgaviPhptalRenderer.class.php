@@ -97,6 +97,10 @@ class AgaviPhptalRenderer extends AgaviRenderer
 			$phptal->setPhpCodeDestination($phptalPhpCodeDestination);
 		}
 		
+		if($this->hasParameter('encoding')) {
+			$phptal->setEncoding($this->getParameter('encoding'));
+		}
+		
 		return $phptal;
 	}
 
