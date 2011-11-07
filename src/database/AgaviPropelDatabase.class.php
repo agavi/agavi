@@ -155,29 +155,6 @@ class AgaviPropelDatabase extends AgaviDatabase
 	}
 
 	/**
-	 * Retrieve the database connection associated with this Database
-	 * implementation.
-	 *
-	 * When this is executed on a Database implementation that isn't an
-	 * abstraction layer, a copy of the resource will be returned.
-	 *
-	 * @return     mixed A database connection.
-	 *
-	 * @throws     <b>AgaviDatabaseException</b> If a connection could not be
-	 *                                           retrieved.
-	 *
-	 * @author     Sean Kerr <skerr@mojavi.org>
-	 * @since      0.9.0
-	 */
-	public function getConnection()
-	{
-		if($this->connection === null) {
-			$this->connect();
-		}
-		return parent::getConnection();
-	}
-
-	/**
 	 * Load Propel config
 	 * 
 	 * @param      AgaviDatabaseManager The database manager of this instance.
@@ -314,9 +291,9 @@ class AgaviPropelDatabase extends AgaviDatabase
 	{
 		if($this->agaviCreoleDatabase) {
 			$this->agaviCreoleDatabase->shutdown();
-		} else {
-			$this->connection = null;
 		}
+		
+		$this->agaviCreoleDatabase = $this->connection = $this->resource = null;
 	}
 }
 

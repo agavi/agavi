@@ -182,6 +182,7 @@ class AgaviAdodbDatabase extends AgaviDatabase
 	{
 		if($this->connection !== null) {
 			@$this->connection->Close();
+			$this->connection = $this->resource = null;
 		}
 	}
 }
