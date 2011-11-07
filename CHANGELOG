@@ -10,6 +10,7 @@ CHG: Update timezone database to 2011n (#1430) (David)
 CHG: Rephrase exception message about missing XSL extension to be more descriptive (#1426) (David)
 CHG: Do not call getCredentials() if Action is not "secure" (#1400) (David)
 
+FIX: Doctrine database adapter won't trigger connect() on getResource() call (#1434) (David)
 FIX: Doctrine2 database adapters won't trigger connect() on getResource() call (#1432) (David)
 FIX: AgaviViewTestCase calls undefined method (#1424) (David, Markus Lervik)
 FIX: Exporting and value casting behavior swapped in AgaviBooleanValidator (#1422) (Dominik)
