@@ -11,7 +11,7 @@ class AgaviSampleAppIsProductOwnerAssertion implements Zend_Acl_Assert_Interface
 		}
 		
 		if(!($role instanceof AgaviUser)) {
-			// in case the check is performed without a specific product instance:
+			// in case the check is performed without a specific user instance:
 			// let's assume that any generic user cannot edit this product
 			return false;
 		}
