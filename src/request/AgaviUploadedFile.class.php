@@ -87,7 +87,7 @@ class AgaviUploadedFile implements ArrayAccess
 	/**
 	 * Constructor.
 	 *
-	 * @param      $flags int Flags, overridden to be ArrayObject::ARRAY_AS_PROPS.
+	 * @param      array The fields for this file.
 	 *
 	 * @see        ArrayObject::__construct()
 	 *
