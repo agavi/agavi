@@ -84,6 +84,7 @@ class AgaviConsoleRequest extends AgaviRequest
 		$_FILES = array();
 		if($this->getParameter('read_stdin', false)) {
 			$stdin = fopen('php://stdin', 'rb');
+			// set to non-blocking so the stream_get_contents() call won't hang forever if there is no STDIN input
 			stream_set_blocking($stdin, false);
 			$stdinContents = stream_get_contents($stdin);
 			fclose($handle);
