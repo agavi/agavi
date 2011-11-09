@@ -164,6 +164,7 @@ class AgaviMysqliDatabase extends AgaviMysqlDatabase
 	{
 		if($this->connection != null) {
 			$this->connection->close();
+			$this->connection = $this->resource = null;
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Vladivostok".
- * Compiled from olson file "europe", version 8.38.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -391,7 +391,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.38',
+  'version' => '8.40',
   'name' => 'Asia/Vladivostok',
 );
 

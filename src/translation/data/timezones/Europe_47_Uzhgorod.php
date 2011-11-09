@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Uzhgorod".
- * Compiled from olson file "europe", version 8.38.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -53,12 +53,6 @@ return array (
       'rawOffset' => 7200,
       'dstOffset' => 3600,
       'name' => 'EEST',
-    ),
-    6 => 
-    array (
-      'rawOffset' => 10800,
-      'dstOffset' => 0,
-      'name' => 'FET',
     ),
   ),
   'rules' => 
@@ -278,21 +272,33 @@ return array (
       'time' => 846378000,
       'type' => 4,
     ),
-    43 => 
-    array (
-      'time' => 1298930400,
-      'type' => 6,
-    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'FET',
-    'offset' => 10800,
-    'startYear' => 2012,
+    'type' => 'dynamic',
+    'offset' => 7200,
+    'name' => 'EE%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 3600000,
+      'type' => 2,
+    ),
+    'end' => 
+    array (
+      'month' => 9,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 3600000,
+      'type' => 2,
+    ),
+    'startYear' => 1996,
   ),
   'source' => 'europe',
-  'version' => '8.38',
+  'version' => '8.40',
   'name' => 'Europe/Uzhgorod',
 );
 

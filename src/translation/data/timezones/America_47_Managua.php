@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Managua".
- * Compiled from olson file "northamerica", version 8.49.
+ * Compiled from olson file "northamerica", version 8.51.
  *
  * @package    agavi
  * @subpackage translation
@@ -139,7 +139,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'northamerica',
-  'version' => '8.49',
+  'version' => '8.51',
   'name' => 'America/Managua',
 );
 

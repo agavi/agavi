@@ -166,6 +166,7 @@ class AgaviPostgresqlDatabase extends AgaviDatabase
 	{
 		if($this->connection != null) {
 			@pg_close($this->connection);
+			$this->connection = $this->resource = null;
 		}
 	}
 }

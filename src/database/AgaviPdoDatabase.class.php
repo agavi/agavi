@@ -143,7 +143,7 @@ class AgaviPdoDatabase extends AgaviDatabase
 	public function shutdown()
 	{
 		// assigning null to a previously open connection object causes a disconnect
-		$this->connection = null;
+		$this->connection = $this->resource = null;
 	}
 }
 

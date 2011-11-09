@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Indian/Cocos".
- * Compiled from olson file "australasia", version 8.27.
+ * Compiled from olson file "australasia", version 8.29.
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
     'startYear' => 1900,
   ),
   'source' => 'australasia',
-  'version' => '8.27',
+  'version' => '8.29',
   'name' => 'Indian/Cocos',
 );
 

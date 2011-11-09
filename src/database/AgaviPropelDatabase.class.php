@@ -165,7 +165,7 @@ class AgaviPropelDatabase extends AgaviDatabase
 	 */
 	public function shutdown()
 	{
-		$this->connection = null;
+		$this->connection = $this->resource = null;
 	}
 }
 

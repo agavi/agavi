@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/St_Lucia".
- * Compiled from olson file "northamerica", version 8.49.
+ * Compiled from olson file "northamerica", version 8.51.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1913,
   ),
   'source' => 'northamerica',
-  'version' => '8.49',
+  'version' => '8.51',
   'name' => 'America/St_Lucia',
 );
 

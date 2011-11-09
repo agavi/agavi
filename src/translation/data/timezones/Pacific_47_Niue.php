@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Niue".
- * Compiled from olson file "australasia", version 8.27.
+ * Compiled from olson file "australasia", version 8.29.
  *
  * @package    agavi
  * @subpackage translation
@@ -63,7 +63,7 @@ return array (
     'startYear' => 1979,
   ),
   'source' => 'australasia',
-  'version' => '8.27',
+  'version' => '8.29',
   'name' => 'Pacific/Niue',
 );
 

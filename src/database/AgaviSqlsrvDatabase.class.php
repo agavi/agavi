@@ -111,6 +111,7 @@ class AgaviSqlsrvDatabase extends AgaviDatabase
 	{
 		if($this->connection) {
 			sqlsrv_close($this->connection);
+			$this->connection = $this->resource = null;
 		}
 	}
 }

@@ -99,7 +99,7 @@ abstract class AgaviDoctrine2Database extends AgaviDatabase
 	 */
 	public function shutdown()
 	{
-		// not necessary; zere is meat in ze building!
+		$this->connection = $this->resource = null;
 	}
 }
 
