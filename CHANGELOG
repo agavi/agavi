@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.7 RC1 (August ??, 2011)
 ---------------------------
 
+ADD: Pass through "configuration" command line option to PHPUnit (#1439) (David)
 ADD: Configuration option for character encoding in AgaviPhpTalRenderer (#1428) (David)
 
 CHG: Update timezone database to 2011n (#1430) (David)

@@ -132,6 +132,7 @@ class AgaviTesting
 	public static function processCommandlineOptions()
 	{
 		$longOptions = array(
+			'configuration=',
 			'coverage-html=',
 			'coverage-clover=',
 			'coverage-source=',
