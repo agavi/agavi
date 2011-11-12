@@ -289,7 +289,7 @@ class AgaviWebRequest extends AgaviRequest
 		$rla = ini_get('register_long_arrays');
 
 		// very first thing to do: remove magic quotes
-		if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+		if(get_magic_quotes_gpc()) {
 			// check if we're on PHP < 5.2.8
 			// http://trac.agavi.org/ticket/953
 			// http://trac.agavi.org/ticket/945

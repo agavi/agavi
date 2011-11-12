@@ -7,6 +7,7 @@ AGAVI CHANGELOG
 ADD: Pass through "configuration" command line option to PHPUnit (#1439) (David)
 ADD: Configuration option for character encoding in AgaviPhpTalRenderer (#1428) (David)
 
+CHG: Remove function_exists check for get_magic_quotes_gpc (#1440) (David)
 CHG: Update timezone database to 2011n (#1430) (David)
 CHG: Rephrase exception message about missing XSL extension to be more descriptive (#1426) (David)
 CHG: Do not call getCredentials() if Action is not "secure" (#1400) (David)
