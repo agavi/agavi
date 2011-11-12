@@ -237,7 +237,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 			
 			if(is_object($val) && is_callable(array($val, '__toString'))) {
 				$val = $val->__toString();
-			} elseif(is_object($val) && function_exists('spl_object_hash')) {
+			} elseif(is_object($val)) {
 				$val = spl_object_hash($val);
 			}
 			
