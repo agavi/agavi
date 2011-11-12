@@ -1,10 +1,18 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.7 - August ??, 2011
-===============================
+Version 1.0.7 - November ??, 2011
+=================================
 
 The getCredentials() method on an Action is no longer called unconditionally (i.e. whether or not the isSecure() method returned false) but only if the Action is "secure".
+
+The PHPTAL renderer now supports configuration of character encoding via parameter "encoding".
+
+It is now possible to manually call shutdown() on any database adapter to close the underlying connection; another call to getConnection() will cause a reconnect.
+
+Several other minor changes and fixes are included in this release as well; most notably, AgaviBooleanValidator's casting and exporting logic has been repaired.
+
+The timezone database was updated to version 2011n.
 
 
 Version 1.0.6 - July 23, 2011
