@@ -64,8 +64,21 @@ class AgaviTesting
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}
 
-	public static function dispatch($arguments = array())
-	{		
+	/**
+	 * Dispatch the test run.
+	 *
+	 * @param      array An array of arguments configuring PHPUnit behavior.
+	 * @param      bool  Whether exit() should be called with an appropriate shell
+	 *                   exit status to indicate success or failures/errors.
+	 *
+	 * @return     PHPUnit_Framework_TestResult The PHPUnit result object.
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function dispatch($arguments = array(), $exit = false)
+	{
 		
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.testing_dir').'/config/suites.xml');
 		$master_suite = new AgaviTestSuite('Master');
@@ -79,7 +92,7 @@ class AgaviTesting
 				if(empty($suites[$name])) {
 					throw new InvalidArgumentException(sprintf('Invalid suite name %1$s.', $name));
 				}
-
+				
 				$master_suite->addTest(self::createSuite($name, $suites[$name]));		
 			}
 				
@@ -97,7 +110,33 @@ class AgaviTesting
 		}
 		
 		$runner = new PHPUnit_TextUI_TestRunner();
-		$runner->doRun($master_suite, $arguments);
+		$result = $runner->doRun($master_suite, $arguments);
+		if($exit) {
+			// bai
+			exit(self::getExitStatus($result));
+		} else {
+			// return result so calling code can use it
+			return $result;
+		}
+	}
+	
+	/**
+	 * Compute a shell exit status for the given result.
+	 * Behaves like PHPUnit_TextUI_Command.
+	 *
+	 * @param      PHPUnit_Framework_TestResult The test result object.
+	 *
+	 * @return     int The shell exit code.
+	 */
+	public static function getExitStatus(PHPUnit_Framework_TestResult $result)
+	{
+		if($result->wasSuccessful()) {
+			return PHPUnit_TextUI_TestRunner::SUCCESS_EXIT;
+		} elseif($result->errorCount()) {
+			return PHPUnit_TextUI_TestRunner::EXCEPTION_EXIT;
+		} else {
+			return PHPUnit_TextUI_TestRunner::FAILURE_EXIT;
+		}
 	}
 	
 	/**
@@ -154,6 +193,7 @@ class AgaviTesting
 	public static function processCommandlineOptions()
 	{
 		$longOptions = array(
+			'configuration=',
 			'coverage-html=',
 			'coverage-clover=',
 			'coverage-source=',

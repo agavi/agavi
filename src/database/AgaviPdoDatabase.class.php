@@ -108,7 +108,7 @@ class AgaviPdoDatabase extends AgaviDatabase
 				}
 			}
 
-			$this->connection = new PDO($dsn, $username, $password, $options);
+			$this->connection = $this->resource = new PDO($dsn, $username, $password, $options);
 
 			// default connection attributes
 			$attributes = array(

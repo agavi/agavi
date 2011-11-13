@@ -67,6 +67,7 @@ class AgaviSqlsrvDatabase extends AgaviDatabase
 			$this->connection = null;
 			throw new AgaviDatabaseException(sprintf("%s\n\n%s", sprintf('Could not open database connection "%s".', $this->getName()), implode("\n", $this->getErrors())));
 		}
+		$this->resource =& $this->connection;
 
 		foreach((array)$this->getParameter('init_queries') as $query) {
 			sqlsrv_query($this->connection, $query);
