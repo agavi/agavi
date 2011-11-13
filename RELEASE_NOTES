@@ -10,6 +10,8 @@ The PHPTAL renderer now supports configuration of character encoding via paramet
 
 It is now possible to manually call shutdown() on any database adapter to close the underlying connection; another call to getConnection() will cause a reconnect.
 
+AgaviTesting::dispatch() can now call exit() with the appropriate shell status code (the same as returned by a vanilla PHPUnit run) to indicate success or failures/errors to the calling process. This behavior is triggered when the new optional second argument, defaulting to false, is set to true. If set to false, it returns the PHPUnit result object that may be used by custom code to perform further analysis of the test run.
+
 Several other minor changes and fixes are included in this release as well; most notably, AgaviBooleanValidator's casting and exporting logic has been repaired.
 
 The timezone database was updated to version 2011n.

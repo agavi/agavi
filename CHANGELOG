@@ -4,9 +4,11 @@ AGAVI CHANGELOG
 1.0.7 RC1 (August ??, 2011)
 ---------------------------
 
+ADD: Optional argument for AgaviTesting::dispatch() to trigger exit with status code (#1444) (David)
 ADD: Pass through "configuration" command line option to PHPUnit (#1439) (David)
 ADD: Configuration option for character encoding in AgaviPhpTalRenderer (#1428) (David)
 
+CHG: Return test result from AgaviTesting::dispatch() (#1445) (David)
 CHG: Remove function_exists check for spl_object_hash (#1441) (David)
 CHG: Remove function_exists check for get_magic_quotes_gpc (#1440) (David)
 CHG: Update timezone database to 2011n (#1430) (David)
