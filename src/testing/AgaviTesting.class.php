@@ -73,7 +73,7 @@ class AgaviTesting
 	 * @since      1.0.0
 	 */
 	public static function dispatch($arguments = array())
-	{		
+	{
 		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
 		
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.testing_dir').'/config/suites.xml');
@@ -88,7 +88,7 @@ class AgaviTesting
 				if(empty($suites[$name])) {
 					throw new InvalidArgumentException(sprintf('Invalid suite name %1$s.', $name));
 				}
-
+				
 				$master_suite->addTest(self::createSuite($name, $suites[$name]));		
 			}
 				
