@@ -77,7 +77,7 @@ class AgaviTesting
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
 	 */
-	public static function dispatch($arguments = array(), $exit = false)
+	public static function dispatch($arguments = array(), $exit = true)
 	{
 		
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.testing_dir').'/config/suites.xml');

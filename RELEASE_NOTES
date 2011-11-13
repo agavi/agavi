@@ -48,3 +48,7 @@ The href attribute of <xi:include /> elements now supports glob() syntax with th
 <xi:include href="%core.module_dir%/{WinningModule,*}/config/routing.xml" />
 For any path matched, the <xi:include /> element will be duplicated with the expanded path inserted into the href attribute.
 Duplicates are removed, so the "WinningModule" entry matched by the "*" wildcard alternative in the last example will not be included a second time.
+
+Testing
+-------
+AgaviTesting::dispatch() now calls exit() with an appropriate shell exit code to indicate success or failures/errors by default; pass false as the second argument to prevent this behavior.
