@@ -64,6 +64,14 @@ class AgaviTesting
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}
 
+	/**
+	 * Dispatch the test run.
+	 *
+	 * @param      array An array of arguments configuring PHPUnit behavior.
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @since      1.0.0
+	 */
 	public static function dispatch($arguments = array())
 	{		
 		$GLOBALS['__PHPUNIT_BOOTSTRAP'] = dirname(__FILE__).'/templates/AgaviBootstrap.tpl.php';
