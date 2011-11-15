@@ -15,6 +15,7 @@ CHG: Update timezone database to 2011n (#1430) (David)
 CHG: Rephrase exception message about missing XSL extension to be more descriptive (#1426) (David)
 CHG: Do not call getCredentials() if Action is not "secure" (#1400) (David)
 
+FIX: AgavConsoleRequest creates array instead of AgaviUploadedFile for STDIN contents (#1447) (David)
 FIX: AgaviSmartyRenderer fails to detect Smarty version 3.1 or later (#1438) (David)
 FIX: AgaviSqlsrvDatabase does not assign resource property (#1443) (David)
 FIX: AgaviPdoDatabase does not assign resource property (#1442) (David)

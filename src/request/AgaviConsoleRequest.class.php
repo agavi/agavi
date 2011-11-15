@@ -82,7 +82,7 @@ class AgaviConsoleRequest extends AgaviRequest
 		}
 		
 		$_FILES = array();
-		if($this->getParameter('read_stdin', false)) {
+		if($this->getParameter('read_stdin', true)) {
 			$stdinFile = tempnam(AgaviConfig::get('core.cache_dir'), 'stdin_');
 			$stdin = fopen('php://stdin', 'rb');
 			stream_set_blocking($stdin, false);
@@ -90,14 +90,14 @@ class AgaviConsoleRequest extends AgaviRequest
 			fclose($handle);
 			
 			$_FILES = array(
-				$this->getParameter('stdin_file_name', 'stdin_file') => array(
+				$this->getParameter('stdin_file_name', 'stdin_file') => new AgaviUploadedFile(array(
 					'name' => $stdinFile,
 					'type' => 'application/octet-stream',
 					'size' => $size,
 					'tmp_name' => $stdinFile,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
-				)
+				))
 			);
 		}
 
