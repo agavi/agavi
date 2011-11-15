@@ -89,8 +89,9 @@ class AgaviConsoleRequest extends AgaviRequest
 			$size = stream_copy_to_stream($stdin, $handle = fopen($stdinFile, 'wb'));
 			fclose($handle);
 			
+			$ufc = $this->getParameter('uploaded_file_class', 'AgaviUploadedFile');
 			$files = array(
-				$this->getParameter('stdin_file_name', 'stdin_file') => new AgaviUploadedFile(array(
+				$this->getParameter('stdin_file_name', 'stdin_file') => new $ufc(array(
 					'name' => $stdinFile,
 					'type' => 'application/octet-stream',
 					'size' => $size,
