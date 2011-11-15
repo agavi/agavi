@@ -87,8 +87,9 @@ class AgaviConsoleRequest extends AgaviRequest
 			// the alternative method to determine this is via posix_isatty(STDIN) which returns false in the same situation, but that requires the posix extension and also doesn't work on Windows
 			$stdinName = $this->getParameter('stdin_file_name', 'stdin_file');
 			
+			$ufc = $this->getParameter('uploaded_file_class', 'AgaviUploadedFile');
 			$files = array(
-				$stdinName => new AgaviUploadedFile(array(
+				$stdinName => new $ufc(array(
 					'name' => $stdinName,
 					'type' => 'application/octet-stream',
 					'size' => -1, // we're not buffering, so -1 is a good choice probably (better than 0 anyway)
