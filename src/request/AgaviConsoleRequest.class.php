@@ -82,7 +82,7 @@ class AgaviConsoleRequest extends AgaviRequest
 		}
 		
 		$files = array();
-		if($this->getParameter('read_stdin', true)) {
+		if($this->getParameter('read_stdin', false)) {
 			$stdinFile = tempnam(AgaviConfig::get('core.cache_dir'), 'stdin_');
 			$stdin = fopen('php://stdin', 'rb');
 			stream_set_blocking($stdin, false);
