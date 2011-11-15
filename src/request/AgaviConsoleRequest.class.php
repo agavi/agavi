@@ -81,7 +81,7 @@ class AgaviConsoleRequest extends AgaviRequest
 			$prev = $arg;
 		}
 		
-		$_FILES = array();
+		$files = array();
 		if($this->getParameter('read_stdin', false)) {
 			$stdin = fopen('php://stdin', 'rb');
 			// set to non-blocking so the stream_get_contents() call won't hang forever if there is no STDIN input
@@ -89,22 +89,22 @@ class AgaviConsoleRequest extends AgaviRequest
 			$stdinContents = stream_get_contents($stdin);
 			$stdinName = $this->getParameter('stdin_file_name', 'stdin_file');
 			
-			$_FILES = array(
-				$stdinName => array(
+			$files = array(
+				$stdinName => new AgaviUploadedFile(array(
 					'name' => $stdinName,
 					'type' => 'application/octet-stream',
 					'size' => strlen($stdinContents),
 					'contents' => $stdinContents,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
-				)
+				))
 			);
 		}
 
 		$rdhc = $this->getParameter('request_data_holder_class');
 		$this->setRequestData(new $rdhc(array(
 			constant("$rdhc::SOURCE_PARAMETERS") => array(),
-			constant("$rdhc::SOURCE_FILES") => $_FILES,
+			constant("$rdhc::SOURCE_FILES") => $files,
 		)));
 		$rd = $this->getRequestData();
 		
