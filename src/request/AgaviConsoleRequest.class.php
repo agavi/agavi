@@ -82,19 +82,17 @@ class AgaviConsoleRequest extends AgaviRequest
 		}
 		
 		$files = array();
-		if($this->getParameter('read_stdin', false)) {
-			$stdin = fopen('php://stdin', 'rb');
-			// set to non-blocking so the stream_get_contents() call won't hang forever if there is no STDIN input
-			stream_set_blocking($stdin, false);
-			$stdinContents = stream_get_contents($stdin);
+		if($this->getParameter('read_stdin', true) && ($stdinMeta = stream_get_meta_data(STDIN)) && !$stdinMeta['seekable']) {
+			// if stream_get_meta_data() reports STDIN as not seekable, that means something was piped into our process, and we should put that into a file
+			// the alternative method to determine this is via posix_isatty(STDIN) which returns false in the same situation, but that requires the posix extension and also doesn't work on Windows
 			$stdinName = $this->getParameter('stdin_file_name', 'stdin_file');
 			
 			$files = array(
 				$stdinName => new AgaviUploadedFile(array(
 					'name' => $stdinName,
 					'type' => 'application/octet-stream',
-					'size' => strlen($stdinContents),
-					'contents' => $stdinContents,
+					'size' => -1, // we're not buffering, so -1 is a good choice probably (better than 0 anyway)
+					'stream' => STDIN,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
 				))
