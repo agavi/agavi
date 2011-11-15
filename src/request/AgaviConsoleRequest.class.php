@@ -82,15 +82,19 @@ class AgaviConsoleRequest extends AgaviRequest
 		}
 		
 		$files = array();
-		if($this->getParameter('read_stdin', true) && !posix_isatty(STDIN)) {
+		if($this->getParameter('read_stdin', false)) {
+			$stdin = fopen('php://stdin', 'rb');
+			// set to non-blocking so the stream_get_contents() call won't hang forever if there is no STDIN input
+			stream_set_blocking($stdin, false);
+			$stdinContents = stream_get_contents($stdin);
 			$stdinName = $this->getParameter('stdin_file_name', 'stdin_file');
 			
 			$files = array(
 				$stdinName => new AgaviUploadedFile(array(
 					'name' => $stdinName,
 					'type' => 'application/octet-stream',
-					'size' => -1,
-					'stream' => STDIN,
+					'size' => strlen($stdinContents),
+					'contents' => $stdinContents,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
 				))
