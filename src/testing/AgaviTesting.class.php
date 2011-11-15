@@ -203,6 +203,10 @@ class AgaviTesting
 		
 		foreach($options[0] as $option) {
 			switch($option[0]) {
+				case '--configuration':
+					$arguments['configuration'] = $option[1];
+					break;
+				
 				case '--coverage-clover':
 				case '--coverage-xml': 
 					if(self::checkCodeCoverageDeps()) {
@@ -323,6 +327,8 @@ Usage: run-tests.php [switches]
   --log-xml <file>         Log test execution in XML format to file.
   --log-metrics <file>     Write metrics report in XML format.
   --log-pmd <file>         Write violations report in PMD XML format.
+
+  --configuration <file>   PHPUnit XML configuration file to use.
 
   --coverage-html <dir>    Generate code coverage report in HTML format.
   --coverage-clover <file> Write code coverage data in Clover XML format.
