@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.1.0 beta1 (June ??, 2009)
 ---------------------------
 
+ADD: Streams support in AgaviUploadedFile (#1449) (David)
 ADD: Make filter chains and their filters accessible via an API (#1418) (David)
 ADD: Allow MIME type checks in AgaviBaseFileValidator (#1342) (David)
 ADD: Allow checking of MIME type in AgaviUploadedFile (#1407) (David)
