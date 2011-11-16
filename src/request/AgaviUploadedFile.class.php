@@ -134,19 +134,6 @@ class AgaviUploadedFile implements ArrayAccess
 	}
 	
 	/**
-	 * Destructor. Removes the tempfile.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function __destruct()
-	{
-		if(!$this->getIsMoved() && !$this->getIsUploadedFile() && $this->hasTmpName()) {
-			@unlink($this->getTmpName());
-		}
-	}
-	
-	/**
 	 * Property access overload.
 	 *
 	 * @param      string The key to fetch.
