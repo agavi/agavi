@@ -105,10 +105,10 @@ class AgaviUploadedFile implements ArrayAccess
 		$defaults = array(
 			'name' => null,
 			'type' => null,
-			'size' => 0,
+			'size' => -1,
 			'tmp_name' => null,
-			'error' => UPLOAD_ERR_NO_FILE,
-			'is_uploaded_file' => true,
+			'error' => UPLOAD_ERR_OK,
+			'is_uploaded_file' => false,
 			'contents' => null,
 			'stream' => null,
 		);
