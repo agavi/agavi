@@ -299,13 +299,14 @@ class AgaviUploadedFile implements ArrayAccess
 	{
 		if(!$this->hasTmpName() && !$this->hasOpenStream()) {
 			// have faith in the ctor :)
-			$this->tmpName = tempnam(AgaviConfig::get('core.cache_dir'), 'AgaviUploadedFile_');
-			if(!is_writable($this->tmpName)) {
-				$error = 'Temporary file path "%s" is not writable';
+			$this->stream = tmpfile();
+			if(!$this->stream) {
+				$error = 'Cannot create temporary file via tmpfile()';
 				$error = sprintf($error, $directory);
 				throw new AgaviFileException($error);
 			}
-			file_put_contents($this->tmpName, $this->contents);
+			fwrite($this->stream, $this->contents);
+			rewind($this->stream);
 		}
 		
 		if($this->hasOpenStream()) {
