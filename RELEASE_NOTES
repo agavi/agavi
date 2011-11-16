@@ -37,6 +37,10 @@ It is now possible to get the global filter chain as well as the filter chain of
 
 Filter chains now expose an interface to access individual filters by name via AgaviFilterChain::getFilter(); this allows filters to expose an API to adjust runtime behavior (e.g. for AgaviFormPopulationFilter as a more convenient alternative to request attributes). AgaviFilterChain::getType() now returns the type of the filter chain (AgaviFilterChain::TYPE_GLOBAL or AgaviFilterChain::TYPE_ACTION) so dual-use (global and action) filters can detect the calling context.
 
+Autoloading
+-----------
+Agavi's autoloader has been moved to its own class and gained the ability to autoload namespaces. This functionality is compliant with the PSR-0 specification. The <autoload> element in namespace http://agavi.org/agavi/config/parts/autoload/1.1 now allows either a "class" attribute specifying a class name (in which case the element value is the path to the file containing that class) or a "namespace" attribute specifying a namespace prefix (in which case the element value is the path containing the files for that namespace). XSL transformations will transparently convert <autoload> elements with a "name" attribute from older namespaces to the latest version.
+
 AgaviReturnArrayConfigHandler
 -----------------------------
 RACH is now an AgaviXmlConfigHandler and fully namespace aware. Transformations are automatically added in most cases for config files used with previous Agavi versions. Refer to UPGRADING for details.

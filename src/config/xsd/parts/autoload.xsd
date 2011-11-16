@@ -11,7 +11,9 @@
 	           schemaLocation="../_types.xsd" />
 
 	<xs:complexType name="autoload" mixed="true">
-		<xs:attribute name="name" type="types_1_0:php_class" use="required" />
+		<!-- we only allow either attribute, but there is no way to express that in XML Schema, so the config handler will have to do the check... :( -->
+		<xs:attribute name="class" type="types_1_0:php_class" />
+		<xs:attribute name="namespace" type="types_1_0:php_class" />
 	</xs:complexType>
 
 	<xs:complexType name="autoloads">

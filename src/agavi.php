@@ -47,6 +47,7 @@ AgaviConfig::set('exception.default_template', $agavi_config_directive_core_agav
 // required files
 require($agavi_config_directive_core_agavi_dir . '/version.php');
 require($agavi_config_directive_core_agavi_dir . '/core/Agavi.class.php');
+require($agavi_config_directive_core_agavi_dir . '/util/AgaviAutoloader.class.php');
 // required files for classes Agavi and ConfigCache to run
 // consider this the bare minimum we need for bootstrapping
 require($agavi_config_directive_core_agavi_dir . '/util/AgaviInflector.class.php');
