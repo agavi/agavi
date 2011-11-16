@@ -525,12 +525,14 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 *                   exporting instead of the "export" attribute value, or an
 	 *                   AgaviValidationArgument object if the value should be
 	 *                   exported to a different source.
+	 * @param      int   The result status code to use for the exported value.
+	 *                   Defaults to AgaviValidator::SUCCESS.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.11.0
 	 */
-	protected function export($value, $argument = null)
+	protected function export($value, $argument = null, $result = AgaviValidator::SUCCESS)
 	{
 		if($argument === null) {
 			$argument = $this->getParameter('export');
@@ -568,10 +570,10 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			if(is_array($value)) {
 				// for arrays all child elements need to be marked as not processed
 				foreach(AgaviArrayPathDefinition::getFlatKeyNames($value) as $keyName) {
-					$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->pushRetNew($keyName)->__toString(), $source), AgaviValidator::SUCCESS, $this);
+					$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->pushRetNew($keyName)->__toString(), $source), $result, $this);
 				}
 			}
-			$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->__toString(), $source), AgaviValidator::SUCCESS, $this);
+			$this->parentContainer->addArgumentResult(new AgaviValidationArgument($cp->__toString(), $source), $result, $this);
 		}
 	}
 

@@ -27,6 +27,7 @@ Support for Propel versions prior to 1.3 has been dropped from AgaviPropelDataba
 Validators
 ----------
 It is now possible to export request data arguments to a different source. This is done by either passing an AgaviValidationArgument object as the second argument to AgaviValidator::export(), or, if the validator does not provide an argument name or only a name, but not an object, via the "export_to_source" parameter of the validator.
+Furthermore, a new third parameter in AgaviValidator::export() now accepts the result code to use when exporting; it defaults to AgaviValidator::SUCCESS and may be used to for instance require validation of the exported value by using AgaviValidator::NOT_PROCESSED.
 
 Filters
 -------
