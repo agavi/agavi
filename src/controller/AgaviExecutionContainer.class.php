@@ -476,13 +476,13 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		// register necessary filters
 		if(!$this->getActionInstance()->isSimple()) {
 			$filter = $controller->getFilter('validation');
-			$filterChain->register($filter);
+			$filterChain->register($filter, 'agavi_validation_filter');
 			$filter = $controller->getFilter('authorization');
-			$filterChain->register($filter);
+			$filterChain->register($filter, 'agavi_authorization_filter');
 		}
 		
 		$filter = $controller->getFilter('action_execution');
-		$filterChain->register($filter);
+		$filterChain->register($filter, 'agavi_action_execution_filter');
 		
 		// rock and roll
 		$filterChain->execute($this);
