@@ -12,7 +12,7 @@ It is now possible to manually call shutdown() on any database adapter to close 
 
 AgaviTesting::dispatch() can now call exit() with the appropriate shell status code (the same as returned by a vanilla PHPUnit run) to indicate success or failures/errors to the calling process. This behavior is triggered when the new optional second argument, defaulting to false, is set to true. If set to false, it returns the PHPUnit result object that may be used by custom code to perform further analysis of the test run.
 
-Several other minor changes and fixes are included in this release as well; most notably, AgaviBooleanValidator's casting and exporting logic has been repaired.
+Several other minor changes and fixes are included in this release as well; most notably, AgaviBooleanValidator's casting and exporting logic has been repaired, and AgaviConsoleRequest now properly creates an AgaviUploadedFile object with STDIN contents (when configured to read those) instead of a plain array.
 
 The timezone database was updated to version 2011n.
 

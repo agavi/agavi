@@ -1,8 +1,8 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.7 RC1 (August ??, 2011)
----------------------------
+1.0.7 RC1 (November 20, 2011)
+-----------------------------
 
 ADD: Optional argument for AgaviTesting::dispatch() to trigger exit with status code (#1444) (David)
 ADD: Pass through "configuration" command line option to PHPUnit (#1439) (David)
