@@ -1,6 +1,32 @@
 AGAVI CHANGELOG (1.0.x)
 =======================
 
+1.0.7 RC1 (November 20, 2011)
+-----------------------------
+
+ADD: Optional argument for AgaviTesting::dispatch() to trigger exit with status code (#1444) (David)
+ADD: Pass through "configuration" command line option to PHPUnit (#1439) (David)
+ADD: Configuration option for character encoding in AgaviPhpTalRenderer (#1428) (David)
+
+CHG: AgaviConsoleRequest should not populate $_FILES superglobal when processing STDIN content (#1448) (David)
+CHG: Return test result from AgaviTesting::dispatch() (#1445) (David)
+CHG: Remove function_exists check for spl_object_hash (#1441) (David)
+CHG: Remove function_exists check for get_magic_quotes_gpc (#1440) (David)
+CHG: Update timezone database to 2011n (#1430) (David)
+CHG: Rephrase exception message about missing XSL extension to be more descriptive (#1426) (David)
+CHG: Do not call getCredentials() if Action is not "secure" (#1400) (David)
+
+FIX: AgavConsoleRequest creates array instead of AgaviUploadedFile for STDIN contents (#1447) (David)
+FIX: AgaviSmartyRenderer fails to detect Smarty version 3.1 or later (#1438) (David)
+FIX: AgaviSqlsrvDatabase does not assign resource property (#1443) (David)
+FIX: AgaviPdoDatabase does not assign resource property (#1442) (David)
+FIX: Several database adapters don't clean up connection and resource properties on shutdown (#1433) (David)
+FIX: Doctrine database adapter won't trigger connect() on getResource() call (#1434) (David)
+FIX: Doctrine2 database adapters won't trigger connect() on getResource() call (#1432) (David)
+FIX: AgaviViewTestCase calls undefined method (#1424) (David, Markus Lervik)
+FIX: Exporting and value casting behavior swapped in AgaviBooleanValidator (#1422) (Dominik)
+
+
 1.0.6 (July 23, 2011)
 ---------------------
 
