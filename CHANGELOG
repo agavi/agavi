@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.1.0 beta1 (June ??, 2009)
 ---------------------------
 
+ADD: Allow calls to PHP functions in configuration file transformations (#1456) (David)
 ADD: PSR-0 compatible namespaces autoloader (#1454) (David)
 ADD: Allow validators to specify result code for exported data (#1453) (David)
 ADD: Allow validators to export to a different source (#1419) (David)
