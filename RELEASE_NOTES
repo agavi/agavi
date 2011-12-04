@@ -10,6 +10,8 @@ The PHPTAL renderer now supports configuration of character encoding via paramet
 
 It is now possible to manually call shutdown() on any database adapter to close the underlying connection; another call to getConnection() will cause a reconnect.
 
+Testing is now compatible with both PHPUnit 3.5 and 3.6. If you want to specify code coverage filters, AgaviTesting::getCodeCoverageFilter() returns the correct instance (singleton or not depending on the PHPUnit version) for you to use. A base constraint class named "AgaviBaseConstraintBecausePhpunitSucksAtBackwardsCompatibility" can be used for constraints that work with both PHPUnit 3.5 and 3.6; if you implement the new matches() method introduced in PHPUnit 3.6 instead of the old evaluate(), it will automatically be called in the proper fashion depending on the PHPUnit version.
+
 AgaviTesting::dispatch() can now call exit() with the appropriate shell status code (the same as returned by a vanilla PHPUnit run) to indicate success or failures/errors to the calling process. This behavior is triggered when the new optional second argument, defaulting to false, is set to true. If set to false, it returns the PHPUnit result object that may be used by custom code to perform further analysis of the test run.
 
 Several other minor changes and fixes are included in this release as well; most notably, AgaviBooleanValidator's casting and exporting logic has been repaired, and AgaviConsoleRequest now properly creates an AgaviUploadedFile object with STDIN contents (when configured to read those) instead of a plain array.

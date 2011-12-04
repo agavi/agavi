@@ -1,7 +1,7 @@
 <?php
 
 // ***
-// This file is based on https://github.com/sebastianbergmann/phpunit/blob/3.5.15/PHPUnit/Framework/Process/TestCaseMethod.tpl.dist with some lines commented out and a version switch inside __phpunit_run_isolated_test() to cater for the different code coverage collection mechanisms between versions
+// This file is based on https://github.com/sebastianbergmann/phpunit/blob/3.5.15/PHPUnit/Framework/Process/TestCaseMethod.tpl.dist and https://github.com/sebastianbergmann/phpunit/blob/3.6.4/PHPUnit/Framework/Process/TestCaseMethod.tpl.dist with some lines commented out and a version switch inside __phpunit_run_isolated_test() to cater for the different code coverage collection mechanisms between versions
 // ***
 
 set_include_path('{include_path}');
@@ -16,7 +16,15 @@ function __phpunit_run_isolated_test()
     }
 
     $result = new PHPUnit_Framework_TestResult;
-    $result->collectRawCodeCoverageInformation({collectCodeCoverageInformation});
+
+    if(version_compare(PHPUnit_Runner_Version::id(), '3.6', '<')) { // testing.php includes Version.php
+        $result->collectRawCodeCoverageInformation({collectCodeCoverageInformation});
+    } else {
+        if ({collectCodeCoverageInformation}) {
+            $result->setCodeCoverage(new PHP_CodeCoverage);
+        }
+    }
+
     $result->strictMode({strict});
 
     $test = new {className}('{methodName}', unserialize('{data}'), '{dataName}');

@@ -4,7 +4,7 @@ AGAVI CHANGELOG
 1.0.7 (November ??, 2011)
 -------------------------
 
-
+FIX: Fatal errors with PHPUnit 3.6 (#1457) (David)
 
 
 1.0.7 RC1 (November 20, 2011)
