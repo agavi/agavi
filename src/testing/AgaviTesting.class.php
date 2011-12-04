@@ -31,6 +31,32 @@
 class AgaviTesting
 {
 	/**
+	 * @var       PHP_CodeCoverage_Filter The code coverage filter for our tests.
+	 */
+	public static $codeCoverageFilter = null;
+	
+	/**
+	 * Get the code coverage filter instance we will use for tests.
+	 * When running PHPUnit 3.5, this will return the singleton instance.
+	 * When running PHPUnit 3.6, this will return the instance we hold internally;
+	 * this same instance will be passed to PHPUnit in AgaviTesting::dispatch().
+	 *
+	 * @return     PHP_CodeCoverage_Filter The code coverage filter for our tests.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.7
+	 */
+	public static function getCodeCoverageFilter()
+	{
+		if(self::$codeCoverageFilter === null) {
+			// PHP_CodeCoverage doesn't expose any version info, we'll have to check if there is a static getInstance method
+			self::$codeCoverageFilter = method_exists('PHP_CodeCoverage_Filter', 'getInstance') ? PHP_CodeCoverage_Filter::getInstance() : new PHP_CodeCoverage_Filter();
+		}
+		
+		return self::$codeCoverageFilter;
+	}
+
+	/**
 	 * Startup the Agavi core
 	 *
 	 * @param      string environment the environment to use for this session.
@@ -109,7 +135,13 @@ class AgaviTesting
 			}
 		}
 		
-		$runner = new PHPUnit_TextUI_TestRunner();
+		if(version_compare(PHPUnit_Runner_Version::id(), '3.6', '<')) {
+			// PHP_CodeCoverage_Filter is a singleton
+			$runner = new PHPUnit_TextUI_TestRunner();
+		} else {
+			// PHP_CodeCoverage_Filter instance must be passed to the test runner
+			$runner = new PHPUnit_TextUI_TestRunner(null, self::$codeCoverageFilter);
+		}
 		$result = $runner->doRun($master_suite, $arguments);
 		if($exit) {
 			// bai

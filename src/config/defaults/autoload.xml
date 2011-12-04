@@ -300,6 +300,7 @@
 			
 			<autoload class="AgaviTestSuite">%core.agavi_dir%/testing/AgaviTestSuite.class.php</autoload>
 			
+			<autoload class="AgaviBaseConstraintBecausePhpunitSucksAtBackwardsCompatibility">%core.agavi_dir%/testing/AgaviBaseConstraintBecausePhpunitSucksAtBackwardsCompatibility.class.php</autoload>
 			<autoload class="AgaviConstraintActionHandlesMethod">%core.agavi_dir%/testing/PHPUnit/Constraint/AgaviConstraintActionHandlesMethod.php</autoload>
 			<autoload class="AgaviConstraintViewHandlesOutputType">%core.agavi_dir%/testing/PHPUnit/Constraint/AgaviConstraintViewHandlesOutputType.php</autoload>
 		</autoloads>
