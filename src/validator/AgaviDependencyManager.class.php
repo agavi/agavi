@@ -59,15 +59,15 @@ class AgaviDependencyManager
 	 */
 	public function checkDependencies(array $tokens, AgaviVirtualArrayPath $base)
 	{
-		$root = new AgaviVirtualArrayPath('');
+		$currentParts = $base->getParts();
 		foreach($tokens as $token) {
-			$path = $root;
-			if(substr($token, 0, 1) == '[') {
-				// the dependency we need to check is relative
-				$path = $base;
+			if($currentParts && strpos($token, '%') !== false) { 
+				// the depends attribute contains sprintf syntax 
+				$token = vsprintf($token, $currentParts); 
 			}
-
-			if(!$path->getValueByChildPath($token, $this->depData)) {
+			
+			$path = new AgaviVirtualArrayPath($token);
+			if(!$path->getValue($this->depData)) {
 				return false;
 			}
 		}
@@ -87,9 +87,43 @@ class AgaviDependencyManager
 	 */
 	public function addDependTokens(array $tokens, AgaviVirtualArrayPath $base)
 	{
+		$currentParts = $base->getParts();
 		foreach($tokens as $token) {
-			$base->setValueByChildPath($token, $this->depData, true);
+			if($currentParts && strpos($token, '%') !== false) { 
+				// the depends attribute contains sprintf syntax 
+				$token = vsprintf($token, $currentParts); 
+			}
+			
+			$path = new AgaviVirtualArrayPath($token);
+			$path->setValue($this->depData, true);
 		}
+	}
+	
+	/**
+	 * Populate key references in an argument base string if necessary.
+	 * Fills only empty bracket positions with an sprintf() offset placeholder.
+	 * Example: foo[][bar][] as input will return foo[%2$s][bar][%4$s] as output.
+	 * This is used in validate.xsl to convert pre-1.1 provides/depends behavior.
+	 *
+	 * @param      string The argument base string.
+	 *
+	 * @return     string The argument base string with empty brackets filled with
+	 *                    correct sprintf() position specifiers.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public static function populateArgumentBaseKeyRefs($string)
+	{
+		$index = 1;
+		return preg_replace_callback(
+			'#\[([^\]]*)\]#',
+			function($matches) use(&$index) {
+				$index++; // always increment so static key parts are "skipped" properly
+				return $matches[1] !== '' ? $matches[0] : '[%'.$index.'$s]'; // leave parts other than "[]" intact, else inject numeric accessor
+			},
+			$string
+		);
 	}
 }
 ?>

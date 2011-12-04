@@ -29,6 +29,12 @@ Validators
 It is now possible to export request data arguments to a different source. This is done by either passing an AgaviValidationArgument object as the second argument to AgaviValidator::export(), or, if the validator does not provide an argument name or only a name, but not an object, via the "export_to_source" parameter of the validator.
 Furthermore, a new third parameter in AgaviValidator::export() now accepts the result code to use when exporting; it defaults to AgaviValidator::SUCCESS and may be used to for instance require validation of the exported value by using AgaviValidator::NOT_PROCESSED.
 
+The "provides" and "depends" options of a validator now take an sprintf() string where you can use position specifiers to access parts of the argument base.
+This means that having a "provides" value of "foobar" with an argument base of "foo[]" will now provide into "foobar" for every iteration, and not into "foo[$key][foobar]" like in 1.0. To get this old behavior back in this example, you'd have to use "foo[%2$s][foobar]" or "%1$s[%2$s][foobar]" as the value for "provides". The referencing of argument base parts works exactly like in "export" strings.
+For "depends", the exact same syntax and behavior is now used; the old behavior was for a plain "foobar" to depend on just "foobar" no matter the argument base, and for "[foobar]" with an argument base of "foo[]" to depend on "foo[$key][foobar]", which was a bit confusing and also meant that you could only ever depend on provides from the same argument base. To depend on the "provides" results for the same keys as in the example above, you would again use "foo[%2$s][foobar]" or "%1$s[%2$s][foobar]" (but if we assume that this second validator had "lulz[]" as the argument base, then only "foo[%2$s][foobar]" would work of course).
+If your validation config is from the 1.0 namespace, then the old behavior is retained automatically, so if you want to take advantage of this new functionality, you must bump the config namespace to 1.1.
+Some more examples can be found in ticket #1199 (and also in #1073 where the same syntax is discussed for the exporting feature).
+
 Filters
 -------
 AgaviIFilter::executeOnce() has been deprecated; in most cases, you can simply use execute() instead, see UPGRADING for further information.
