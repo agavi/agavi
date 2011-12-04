@@ -37,8 +37,8 @@ require_once($here . '/testing/AgaviTesting.class.php');
 
 // changing the init procedure in a minor release... good job, PHPUnit...
 require_once('PHPUnit/Runner/Version.php'); 
-if(version_compare(PHPUnit_Runner_Version::id(), '3.5', '<')) { 
-	trigger_error('Agavi requires PHPUnit version 3.5 or higher', E_USER_ERROR);
+if(version_compare(PHPUnit_Runner_Version::id(), '3.5.2', '<')) { 
+	trigger_error('Agavi requires PHPUnit version 3.5.2 or higher', E_USER_ERROR);
 }
 // load PHPUnit basics
 require_once('PHPUnit/Autoload.php');
