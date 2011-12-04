@@ -31,7 +31,7 @@ class ContextTest extends AgaviTestCase
 		$default = AgaviConfig::get('core.default_context');
 		
 		$this->assertNotNull(AgaviContext::getInstance());
-		$this->assertType('AgaviContext', AgaviContext::getInstance());
+		$this->assertInstanceOf('AgaviContext', AgaviContext::getInstance());
 		$a = AgaviContext::getInstance();
 		$b = AgaviContext::getInstance(AgaviConfig::get('core.default_context'));
 		$c = AgaviContext::getInstance(AgaviConfig::get('core.default_context'));
@@ -47,16 +47,16 @@ class ContextTest extends AgaviTestCase
 		$this->assertReference($a, $f);
 		$this->assertNotSame($e, $f);
 		
-		$this->assertType('AgaviWebRequest', AgaviContext::getInstance('test')->getRequest());
-		$this->assertType('TestRouting', AgaviContext::getInstance('test')->getRouting());
+		$this->assertInstanceOf('AgaviWebRequest', AgaviContext::getInstance('test')->getRequest());
+		$this->assertInstanceOf('TestRouting', AgaviContext::getInstance('test')->getRouting());
 	}
 
 	public function testGetAlternateContextInstance()
 	{
 		$this->assertNotNull(AgaviContext::getInstance('test'));
-		$this->assertType('AgaviContext', AgaviContext::getInstance('test'));
+		$this->assertInstanceOf('AgaviContext', AgaviContext::getInstance('test'));
 		$this->assertNotNull(AgaviContext::getInstance('test1'));
-		$this->assertType('AgaviContext', AgaviContext::getInstance('test1'));
+		$this->assertInstanceOf('AgaviContext', AgaviContext::getInstance('test1'));
 		$a = AgaviContext::getInstance('test1');
 		$b = AgaviContext::getInstance('test');
 		$this->assertNotSame($a, $b);
@@ -67,15 +67,15 @@ class ContextTest extends AgaviTestCase
 	// {
 	// 	$context = AgaviContext::getInstance('test');
 	// 	$context->initialize('test1');
-	// 	$this->assertType('TestSessionStorage', $context->getStorage());
+	// 	$this->assertInstanceOf('TestSessionStorage', $context->getStorage());
 	// }
 
 
 	public function testGetGlobalModel()
 	{
 		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('SampleModel', $ctx->getModel('Sample'));
-		$this->assertType('SingletonSampleModel', $ctx->getModel('SingletonSample'));
+		$this->assertInstanceOf('SampleModel', $ctx->getModel('Sample'));
+		$this->assertInstanceOf('SingletonSampleModel', $ctx->getModel('SingletonSample'));
 		$firstSingleton = $ctx->getModel('SingletonSample');
 		$firstSingleton->setFoo('bar');
 		$secondSingleton = $ctx->getModel('SingletonSample');
@@ -86,8 +86,8 @@ class ContextTest extends AgaviTestCase
 	public function testGetModel()
 	{
 		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('Test_TestModel', $ctx->getModel('Test', 'Test'));
-		$this->assertType('Test_SingletonTestModel', $ctx->getModel('SingletonTest', 'Test'));
+		$this->assertInstanceOf('Test_TestModel', $ctx->getModel('Test', 'Test'));
+		$this->assertInstanceOf('Test_SingletonTestModel', $ctx->getModel('SingletonTest', 'Test'));
 		$firstSingleton = $ctx->getModel('SingletonTest', 'Test');
 		$firstSingleton->setFoo('bar');
 		$secondSingleton = $ctx->getModel('SingletonTest', 'Test');
@@ -98,8 +98,8 @@ class ContextTest extends AgaviTestCase
 	public function testGetDotStyleModel()
 	{
 		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('Foo_Bar_BazModel', $ctx->getModel('Foo.Bar.Baz'));
-		$this->assertType('Test_Foo_Bar_BazModel', $ctx->getModel('Foo.Bar.Baz', 'Test'));
+		$this->assertInstanceOf('Foo_Bar_BazModel', $ctx->getModel('Foo.Bar.Baz'));
+		$this->assertInstanceOf('Test_Foo_Bar_BazModel', $ctx->getModel('Foo.Bar.Baz', 'Test'));
 	}
 
 	public function testGetFactoryInfo()
@@ -124,13 +124,13 @@ class ContextTest extends AgaviTestCase
 		unlink(AgaviConfigCache::getCacheName(AgaviConfig::get('core.config_dir') . '/factories.xml', AgaviConfig::get('core.default_context')));
 		AgaviConfig::set('core.use_database', true);
 		AgaviContext::getInstance('test')->initialize();
-		$this->assertType('AgaviDatabaseManager', AgaviContext::getInstance('test')->getDatabaseManager());
+		$this->assertInstanceOf('AgaviDatabaseManager', AgaviContext::getInstance('test')->getDatabaseManager());
 		AgaviConfig::set('core.use_database', false);
 	}
 
 	public function testGetLoggerManager()
 	{
-		$this->assertType('AgaviLoggerManager', AgaviContext::getInstance('test')->getLoggerManager());
+		$this->assertInstanceOf('AgaviLoggerManager', AgaviContext::getInstance('test')->getLoggerManager());
 
 		// this BS just won't work... zomg tests suck suck suck suck suck
 		
@@ -153,30 +153,30 @@ class ContextTest extends AgaviTestCase
 	public function testGetRequest()
 	{
 		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('AgaviRequest', $ctx->getRequest());
+		$this->assertInstanceOf('AgaviRequest', $ctx->getRequest());
 	}
 
 	public function testGetRouting()
 	{
 		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('AgaviRouting', $ctx->getRouting());
+		$this->assertInstanceOf('AgaviRouting', $ctx->getRouting());
 	}
 
 	public function testGetStorage()
 	{
 		$ctx = AgaviContext::getInstance('test');
-		$this->assertType('AgaviStorage', $ctx->getStorage());
+		$this->assertInstanceOf('AgaviStorage', $ctx->getStorage());
 	}
 
 	public function testGetUser()
 	{
-		$this->assertType('AgaviUser', AgaviContext::getInstance('test')->getUser());
+		$this->assertInstanceOf('AgaviUser', AgaviContext::getInstance('test')->getUser());
 
 		// clear the factories cache (needed since we are changing settings which are evaluated at compile time)
 		unlink(AgaviConfigCache::getCacheName(AgaviConfig::get('core.config_dir') . '/factories.xml', AgaviConfig::get('core.default_context')));
 		AgaviConfig::set('core.use_security', true);
 		AgaviContext::getInstance('test')->initialize();
-		$this->assertType('AgaviSecurityUser', AgaviContext::getInstance('test')->getUser());
+		$this->assertInstanceOf('AgaviSecurityUser', AgaviContext::getInstance('test')->getUser());
 	}
 }
 

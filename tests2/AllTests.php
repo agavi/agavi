@@ -52,10 +52,10 @@ class AllTests
 
 		require_once($testDir . '/ControllerTests.php');
 		$suite->addTest(ControllerTests::suite());
-
+		
 		require_once($testDir . '/CoreTests.php');
 		$suite->addTest(CoreTests::suite());
-
+		
 		require_once($testDir . '/DatabaseTests.php');
 		$suite->addTest(DatabaseTests::suite());
 
@@ -98,6 +98,6 @@ class AllTests
 
 
 if(PHPUnit_MAIN_METHOD == 'AllTests::main') {
-	AllTests::main();
+	// AllTests::main();
 }
 ?>

@@ -171,36 +171,36 @@ class FactoryConfigHandlerTest extends ConfigHandlerTestBase
 			$this->factories['response']
 		);
 
-		$this->assertType('FCHTestDBManager', $this->databaseManager);
+		$this->assertInstanceOf('FCHTestDBManager', $this->databaseManager);
 		$this->assertReference($this, $this->databaseManager->context);
 		$this->assertSame($params_ex, $this->databaseManager->params);
 
-		$this->assertType('FCHTestRequest', $this->request);
+		$this->assertInstanceOf('FCHTestRequest', $this->request);
 		$this->assertReference($this, $this->request->context);
 		$this->assertSame($params_ex, $this->request->params);
 
-		$this->assertType('FCHTestStorage', $this->storage);
+		$this->assertInstanceOf('FCHTestStorage', $this->storage);
 		$this->assertReference($this, $this->storage->context);
 		$this->assertSame($params_ex, $this->storage->params);
 		$this->assertTrue($this->storage->suCalled);
 
-		$this->assertType('FCHTestValidationManager', $this->validationManager);
+		$this->assertInstanceOf('FCHTestValidationManager', $this->validationManager);
 		$this->assertReference($this, $this->validationManager->context);
 		$this->assertSame($params_ex, $this->validationManager->params);
 
-		$this->assertType('FCHTestUser', $this->user);
+		$this->assertInstanceOf('FCHTestUser', $this->user);
 		$this->assertReference($this, $this->user->context);
 		$this->assertSame($params_ex, $this->user->params);
 
-		$this->assertType('FCHTestLoggerManager', $this->loggerManager);
+		$this->assertInstanceOf('FCHTestLoggerManager', $this->loggerManager);
 		$this->assertReference($this, $this->loggerManager->context);
 		$this->assertSame($params_ex, $this->loggerManager->params);
 
-		$this->assertType('FCHTestController', $this->controller);
+		$this->assertInstanceOf('FCHTestController', $this->controller);
 		$this->assertReference($this, $this->controller->context);
 		$this->assertSame($params_ex, $this->controller->params);
 
-		$this->assertType('FCHTestRouting', $this->routing);
+		$this->assertInstanceOf('FCHTestRouting', $this->routing);
 		$this->assertReference($this, $this->routing->context);
 		$this->assertSame($params_ex, $this->routing->params);
 	}
