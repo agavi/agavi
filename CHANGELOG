@@ -4,6 +4,9 @@ AGAVI CHANGELOG
 1.0.7 (November ??, 2011)
 -------------------------
 
+CHG: Update singular and plural rules in AgaviInflector (#1460) (David)
+
+FIX: Inflector does not handle uncountable words as part of strings (#1459) (David)
 FIX: Fatal errors with PHPUnit 3.6 (#1457) (David)
 
 
