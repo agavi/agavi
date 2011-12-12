@@ -5,10 +5,10 @@
 		<autoload class="SandboxBaseAction">%core.lib_dir%/action/SandboxBaseAction.class.php</autoload>
 		<autoload class="SandboxBaseModel">%core.lib_dir%/model/SandboxBaseModel.class.php</autoload>
 		<autoload class="SandboxBaseView">%core.lib_dir%/view/SandboxBaseView.class.php</autoload>
-		          class
+		
 		<autoload class="AgaviTestingRouting">%core.app_dir%/../../lib/routing/AgaviTestingRouting.class.php</autoload>
 		<autoload class="AgaviTestingWebRouting">%core.app_dir%/../../lib/routing/AgaviTestingWebRouting.class.php</autoload>
-		          class
+		
 		<autoload class="MatchingRoutingCallback">%core.app_dir%/../../lib/routing/MatchingRoutingCallback.class.php</autoload>
 		<autoload class="NonMatchingRoutingCallback">%core.app_dir%/../../lib/routing/NonMatchingRoutingCallback.class.php</autoload>
 		<autoload class="OnNotMatchedRoutingCallback">%core.app_dir%/../../lib/routing/OnNotMatchedRoutingCallback.class.php</autoload>
@@ -31,9 +31,9 @@
 		<autoload class="GenSetExtraParamRoutingValueRoutingCallback">%core.app_dir%/../../lib/routing/GenSetExtraParamRoutingValueRoutingCallback.class.php</autoload>
 		<autoload class="GenChangeExtraParamRoutingCallback">%core.app_dir%/../../lib/routing/GenChangeExtraParamRoutingCallback.class.php</autoload>
 		<autoload class="GenChangeExtraParamRoutingValueRoutingCallback">%core.app_dir%/../../lib/routing/GenChangeExtraParamRoutingValueRoutingCallback.class.php</autoload>
-		          class
+		
 		<autoload class="AgaviTestingConfigCache">%core.app_dir%/../../lib/config/AgaviTestingConfigCache.class.php</autoload>
-		          class
+		
 		<autoload class="AgaviWebRequestDataHolderTest">%core.app_dir%/../../tests/unit/request/AgaviWebRequestDataHolderTest.php</autoload>
 	</ae:configuration>
 </ae:configurations>
