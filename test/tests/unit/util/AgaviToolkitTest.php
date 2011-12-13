@@ -30,15 +30,8 @@ class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 
 	public function testMkdir()
 	{
-		$this->assertTrue(AgaviToolkit::mkdir('path'));
-		rmdir('path');
-		$this->assertTrue(AgaviToolkit::mkdir('/newpath'));
-		rmdir('/newpath');
-		$this->assertTrue(AgaviToolkit::mkdir('anotherpath'));
-		rmdir('anotherpath');
-		$this->assertFalse(AgaviToolkit::mkdir('contextpath', 0777, false, "path"));
-		$this->assertFalse(AgaviToolkit::mkdir('ehh', 0777, false, "lala"));
-		$this->assertFalse(AgaviToolkit::mkdir('az', 0666, true, "ti"));
+		$this->assertTrue(AgaviToolkit::mkdir('_testing_path'));
+		rmdir('_testing_path');
 	}
 
 	public function testStringBase()
