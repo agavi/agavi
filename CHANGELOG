@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.7 (November ??, 2011)
 -------------------------
 
+CHG: Add missing interfaces to default compile.xml (#1462) (David)
 CHG: Guarantee order of form population and give preferential treatment to automatically re-populated forms (#1461) (David)
 CHG: Update singular and plural rules in AgaviInflector (#1460) (David)
 
