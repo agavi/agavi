@@ -30,7 +30,6 @@
  */
 abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements AgaviIFragmentTestCase
 {
-	
 	/**
 	 * @var        string the name of the context to use, null for default context
 	 */
@@ -99,9 +98,9 @@ abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements Aga
 	}
 	
 	/**
-	 * retrieve the application context
-	 * 
-	 * @return     AgaviContext the application context
+	 * Return the context defined for this test (or the default one).
+	 *
+	 * @return     AgaviContext The context instance defined for this test.
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0

@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.0.7 (December ??, 2011)
 -------------------------
 
+ADD: Configurable context for AgaviFlowTestCase (#1465) (David)
+
 CHG: Redesign welcome page (#1464) (David)
 
 
