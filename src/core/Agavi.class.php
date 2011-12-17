@@ -30,30 +30,6 @@
 final class Agavi
 {
 	/**
-	 * @var        array An assoc array of classes and files used for autoloading.
-	 */
-	public static $autoloads = array();
-
-	/**
-	 * Handles autoloading of classes
-	 *
-	 * @param      string A class name.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public static function __autoload($class)
-	{
-		if(isset(self::$autoloads[$class])) {
-			// class exists, let's include it
-			require(self::$autoloads[$class]);
-		}
-
-		// If the class doesn't exist in autoload.xml there's not a lot we can do.
-		// Hopefully, another registered autoloader will be able to help :)
-	}
-
-	/**
 	 * Startup the Agavi core
 	 *
 	 * @param      string environment the environment to use for this session.
@@ -64,7 +40,7 @@ final class Agavi
 	public static function bootstrap($environment = null)
 	{
 		// set up our __autoload
-		spl_autoload_register(array('Agavi', '__autoload'));
+		spl_autoload_register(array('AgaviAutoloader', 'loadClass'));
 
 		try {
 			if($environment === null) {
@@ -111,7 +87,7 @@ final class Agavi
 			if(!is_readable($autoload)) {
 				$autoload = AgaviConfig::get('core.system_config_dir') . '/autoload.xml';
 			}
-			self::$autoloads = include(AgaviConfigCache::checkConfig($autoload));
+			AgaviConfigCache::load($autoload);
 			
 			// load base settings
 			AgaviConfigCache::load(AgaviConfig::get('core.config_dir') . '/settings.xml');

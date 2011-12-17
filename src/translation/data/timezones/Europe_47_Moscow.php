@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Moscow".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -345,6 +345,146 @@ return array (
     ),
     50 => 
     array (
+      'time' => 859676400,
+      'type' => 7,
+    ),
+    51 => 
+    array (
+      'time' => 877820400,
+      'type' => 6,
+    ),
+    52 => 
+    array (
+      'time' => 891126000,
+      'type' => 7,
+    ),
+    53 => 
+    array (
+      'time' => 909270000,
+      'type' => 6,
+    ),
+    54 => 
+    array (
+      'time' => 922575600,
+      'type' => 7,
+    ),
+    55 => 
+    array (
+      'time' => 941324400,
+      'type' => 6,
+    ),
+    56 => 
+    array (
+      'time' => 954025200,
+      'type' => 7,
+    ),
+    57 => 
+    array (
+      'time' => 972774000,
+      'type' => 6,
+    ),
+    58 => 
+    array (
+      'time' => 985474800,
+      'type' => 7,
+    ),
+    59 => 
+    array (
+      'time' => 1004223600,
+      'type' => 6,
+    ),
+    60 => 
+    array (
+      'time' => 1017529200,
+      'type' => 7,
+    ),
+    61 => 
+    array (
+      'time' => 1035673200,
+      'type' => 6,
+    ),
+    62 => 
+    array (
+      'time' => 1048978800,
+      'type' => 7,
+    ),
+    63 => 
+    array (
+      'time' => 1067122800,
+      'type' => 6,
+    ),
+    64 => 
+    array (
+      'time' => 1080428400,
+      'type' => 7,
+    ),
+    65 => 
+    array (
+      'time' => 1099177200,
+      'type' => 6,
+    ),
+    66 => 
+    array (
+      'time' => 1111878000,
+      'type' => 7,
+    ),
+    67 => 
+    array (
+      'time' => 1130626800,
+      'type' => 6,
+    ),
+    68 => 
+    array (
+      'time' => 1143327600,
+      'type' => 7,
+    ),
+    69 => 
+    array (
+      'time' => 1162076400,
+      'type' => 6,
+    ),
+    70 => 
+    array (
+      'time' => 1174777200,
+      'type' => 7,
+    ),
+    71 => 
+    array (
+      'time' => 1193526000,
+      'type' => 6,
+    ),
+    72 => 
+    array (
+      'time' => 1206831600,
+      'type' => 7,
+    ),
+    73 => 
+    array (
+      'time' => 1224975600,
+      'type' => 6,
+    ),
+    74 => 
+    array (
+      'time' => 1238281200,
+      'type' => 7,
+    ),
+    75 => 
+    array (
+      'time' => 1256425200,
+      'type' => 6,
+    ),
+    76 => 
+    array (
+      'time' => 1269730800,
+      'type' => 7,
+    ),
+    77 => 
+    array (
+      'time' => 1288479600,
+      'type' => 6,
+    ),
+    78 => 
+    array (
       'time' => 1301180400,
       'type' => 11,
     ),
@@ -357,7 +497,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.40',
   'name' => 'Europe/Moscow',
 );
 

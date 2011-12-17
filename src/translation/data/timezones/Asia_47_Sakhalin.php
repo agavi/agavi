@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Sakhalin".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -242,16 +242,166 @@ return array (
       'time' => 846342000,
       'type' => 2,
     ),
+    37 => 
+    array (
+      'time' => 857134800,
+      'type' => 4,
+    ),
+    38 => 
+    array (
+      'time' => 859651200,
+      'type' => 5,
+    ),
+    39 => 
+    array (
+      'time' => 877795200,
+      'type' => 4,
+    ),
+    40 => 
+    array (
+      'time' => 891100800,
+      'type' => 5,
+    ),
+    41 => 
+    array (
+      'time' => 909244800,
+      'type' => 4,
+    ),
+    42 => 
+    array (
+      'time' => 922550400,
+      'type' => 5,
+    ),
+    43 => 
+    array (
+      'time' => 941299200,
+      'type' => 4,
+    ),
+    44 => 
+    array (
+      'time' => 954000000,
+      'type' => 5,
+    ),
+    45 => 
+    array (
+      'time' => 972748800,
+      'type' => 4,
+    ),
+    46 => 
+    array (
+      'time' => 985449600,
+      'type' => 5,
+    ),
+    47 => 
+    array (
+      'time' => 1004198400,
+      'type' => 4,
+    ),
+    48 => 
+    array (
+      'time' => 1017504000,
+      'type' => 5,
+    ),
+    49 => 
+    array (
+      'time' => 1035648000,
+      'type' => 4,
+    ),
+    50 => 
+    array (
+      'time' => 1048953600,
+      'type' => 5,
+    ),
+    51 => 
+    array (
+      'time' => 1067097600,
+      'type' => 4,
+    ),
+    52 => 
+    array (
+      'time' => 1080403200,
+      'type' => 5,
+    ),
+    53 => 
+    array (
+      'time' => 1099152000,
+      'type' => 4,
+    ),
+    54 => 
+    array (
+      'time' => 1111852800,
+      'type' => 5,
+    ),
+    55 => 
+    array (
+      'time' => 1130601600,
+      'type' => 4,
+    ),
+    56 => 
+    array (
+      'time' => 1143302400,
+      'type' => 5,
+    ),
+    57 => 
+    array (
+      'time' => 1162051200,
+      'type' => 4,
+    ),
+    58 => 
+    array (
+      'time' => 1174752000,
+      'type' => 5,
+    ),
+    59 => 
+    array (
+      'time' => 1193500800,
+      'type' => 4,
+    ),
+    60 => 
+    array (
+      'time' => 1206806400,
+      'type' => 5,
+    ),
+    61 => 
+    array (
+      'time' => 1224950400,
+      'type' => 4,
+    ),
+    62 => 
+    array (
+      'time' => 1238256000,
+      'type' => 5,
+    ),
+    63 => 
+    array (
+      'time' => 1256400000,
+      'type' => 4,
+    ),
+    64 => 
+    array (
+      'time' => 1269705600,
+      'type' => 5,
+    ),
+    65 => 
+    array (
+      'time' => 1288454400,
+      'type' => 4,
+    ),
+    66 => 
+    array (
+      'time' => 1301155200,
+      'type' => 2,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'SAKT',
     'offset' => 39600,
-    'startYear' => 1996,
+    'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.40',
   'name' => 'Asia/Sakhalin',
 );
 

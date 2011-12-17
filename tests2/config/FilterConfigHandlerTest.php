@@ -72,11 +72,11 @@ class FilterConfigHandlerTest extends ConfigHandlerTestBase
 
 		$this->assertSame(2, count($filters));
 
-		$this->assertType('FCHTestFilter1', $filters[0]);
+		$this->assertInstanceOf('FCHTestFilter1', $filters[0]);
 		$this->assertSame(array('comment' => true), $filters[0]->params);
 		$this->assertReference($ctx, $filters[0]->context);
 
-		$this->assertType('FCHTestFilter2', $filters[1]);
+		$this->assertInstanceOf('FCHTestFilter2', $filters[1]);
 		$this->assertSame(array(), $filters[1]->params);
 		$this->assertReference($ctx, $filters[1]->context);
 	}

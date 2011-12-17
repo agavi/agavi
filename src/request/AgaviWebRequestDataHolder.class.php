@@ -60,11 +60,6 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	 * @var        array An array of headers sent with the request.
 	 */
 	protected $headers = array();
-	
-	/**
-	 * @var        string The name of the AgaviUploadedFile implementation to use.
-	 */
-	protected $uploadedFileClass = 'AgaviUploadedFile';
 
 	/**
 	 * Checks if there is a value of a parameter is empty or not set.
@@ -594,57 +589,6 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 	}
 	
 	/**
-	 * Corrects the order of $_FILES for arrays of files.
-	 * The cleaned up array of AgaviUploadedFile objects is put into $this->files.
-	 *
-	 * @param      array Array of indices used during recursion, initially empty.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	protected function fixFilesArray(&$input = array(), $index = array())
-	{
-		$fromIndex = $index;
-		if(count($fromIndex) > 0) {
-			$first = array_shift($fromIndex);
-			array_unshift($fromIndex, $first, 'error');
-		} else {
-			// first call
-			$input = $this->files;
-			$this->files = array();
-		}
-		$sub = AgaviArrayPathDefinition::getValue($fromIndex, $input);
-		$theIndices = array();
-		foreach(array('name', 'type', 'size', 'tmp_name', 'error', 'is_uploaded_file', 'contents') as $name) {
-			$theIndex = $fromIndex;
-			$first = array_shift($theIndex);
-			array_shift($theIndex);
-			array_unshift($theIndex, $first, $name);
-			$theIndices[$name] = $theIndex;
-		}
-		if(is_array($sub)) {
-			foreach($sub as $key => $value) {
-				$toIndex = array_merge($index, array($key));
-				if(is_array($value)) {
-					$this->fixFilesArray($input, $toIndex);
-				} else {
-					foreach($theIndices as $name => $theIndex) {
-						$data[$name] = AgaviArrayPathDefinition::getValue(array_merge($theIndex, array($key)), $input, $name == 'is_uploaded_file' ? true : null);
-					}
-					$data = new $this->uploadedFileClass($data);
-					AgaviArrayPathDefinition::setValue($toIndex, $this->files, $data);
-				}
-			}
-		} else {
-			foreach($theIndices as $name => $theIndex) {
-				$data[$name] = AgaviArrayPathDefinition::getValue($theIndex, $input, $name == 'is_uploaded_file' ? true : null);
-			}
-			$data = new $this->uploadedFileClass($data);
-			AgaviArrayPathDefinition::setValue($index, $this->files, $data);
-		}
-	}
-	
-	/**
 	 * Constructor
 	 *
 	 * @param      array An associative array of request data source names and
@@ -661,16 +605,6 @@ class AgaviWebRequestDataHolder extends AgaviRequestDataHolder implements AgaviI
 		
 		// call the parent ctor which handles the actual loading of the data
 		parent::__construct($data);
-		
-		// now fix the files array if necessary
-		if($this->files) {
-			foreach(new RecursiveIteratorIterator(new RecursiveArrayIterator($this->files), RecursiveIteratorIterator::LEAVES_ONLY) as $leaf) {
-				if(!($leaf instanceof AgaviUploadedFile)) {
-					$this->fixFilesArray();
-				}
-				break;
-			}
-		}
 	}
 	
 	/**

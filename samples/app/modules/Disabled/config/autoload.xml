@@ -2,9 +2,9 @@
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
 	<ae:configuration>
 		<autoloads>
-			<autoload name="AgaviSampleAppDisabledBaseAction">%core.module_dir%/Disabled/lib/action/AgaviSampleAppDisabledBaseAction.class.php</autoload>
-			<autoload name="AgaviSampleAppDisabledBaseModel">%core.module_dir%/Disabled/lib/model/AgaviSampleAppDisabledBaseModel.class.php</autoload>
-			<autoload name="AgaviSampleAppDisabledBaseView">%core.module_dir%/Disabled/lib/view/AgaviSampleAppDisabledBaseView.class.php</autoload>
+			<autoload class="AgaviSampleAppDisabledBaseAction">%core.module_dir%/Disabled/lib/action/AgaviSampleAppDisabledBaseAction.class.php</autoload>
+			<autoload class="AgaviSampleAppDisabledBaseModel">%core.module_dir%/Disabled/lib/model/AgaviSampleAppDisabledBaseModel.class.php</autoload>
+			<autoload class="AgaviSampleAppDisabledBaseView">%core.module_dir%/Disabled/lib/view/AgaviSampleAppDisabledBaseView.class.php</autoload>
 		</autoloads>
 	</ae:configuration>
 </ae:configurations>

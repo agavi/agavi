@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Nairobi".
- * Compiled from olson file "africa", version 8.31.
+ * Compiled from olson file "africa", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -32,7 +32,7 @@ return array (
     ),
     2 => 
     array (
-      'rawOffset' => 9885,
+      'rawOffset' => 9900,
       'dstOffset' => 0,
       'name' => 'BEAUT',
     ),
@@ -56,7 +56,7 @@ return array (
     ),
     3 => 
     array (
-      'time' => -315629085,
+      'time' => -315629100,
       'type' => 0,
     ),
   ),
@@ -68,7 +68,7 @@ return array (
     'startYear' => 1960,
   ),
   'source' => 'africa',
-  'version' => '8.31',
+  'version' => '8.33',
   'name' => 'Africa/Nairobi',
 );
 

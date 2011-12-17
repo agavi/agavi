@@ -99,6 +99,10 @@ class AgaviPhptalRenderer extends AgaviRenderer
 		  trigger_error('Support for PHPTAL versions older than 1.2 is deprecated and will be removed in Agavi 1.2.', E_USER_DEPRECATED);
 		}
 		
+		if($this->hasParameter('encoding')) {
+			$phptal->setEncoding($this->getParameter('encoding'));
+		}
+		
 		return $phptal;
 	}
 

@@ -8,12 +8,16 @@
 			<compile>%core.agavi_dir%/controller/AgaviController.class.php</compile>
 			<compile>%core.agavi_dir%/controller/AgaviExecutionContainer.class.php</compile>
 			<compile>%core.agavi_dir%/controller/AgaviOutputType.class.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviIFilter.interface.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviIGlobalFilter.interface.php</compile>
+			<compile>%core.agavi_dir%/filter/AgaviIActionFilter.interface.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviActionExecutionFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviDispatchFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviExecutionFilter.class.php</compile>
 			<compile>%core.agavi_dir%/filter/AgaviFilterChain.class.php</compile>
 			<compile>%core.agavi_dir%/renderer/AgaviRenderer.class.php</compile>
+			<compile>%core.agavi_dir%/request/AgaviIParametersRequestDataHolder.interface.php</compile>
 			<compile>%core.agavi_dir%/request/AgaviRequestDataHolder.class.php</compile>
 			<compile>%core.agavi_dir%/request/AgaviRequest.class.php</compile>
 			<compile>%core.agavi_dir%/response/AgaviResponse.class.php</compile>

@@ -3,7 +3,7 @@
 class AgaviTimeZoneTest extends AgaviUnitTestCase
 {
 	/**
-	 * @expectedException Exception
+	 * @expectedException InvalidArgumentException
 	 */
 	public function testTicket958()
 	{

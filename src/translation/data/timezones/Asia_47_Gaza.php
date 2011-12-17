@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Gaza".
- * Compiled from olson file "asia", version 8.65.
+ * Compiled from olson file "asia", version 8.69.
  *
  * @package    agavi
  * @subpackage translation
@@ -483,12 +483,12 @@ return array (
     ),
     86 => 
     array (
-      'time' => 1207008000,
+      'time' => 1207000800,
       'type' => 2,
     ),
     87 => 
     array (
-      'time' => 1219964400,
+      'time' => 1219957200,
       'type' => 0,
     ),
     88 => 
@@ -498,51 +498,39 @@ return array (
     ),
     89 => 
     array (
-      'time' => 1238194800,
-      'type' => 2,
-    ),
-    90 => 
-    array (
       'time' => 1252018800,
       'type' => 0,
     ),
-    91 => 
+    90 => 
     array (
       'time' => 1269640860,
       'type' => 2,
     ),
-    92 => 
+    91 => 
     array (
       'time' => 1281474000,
+      'type' => 0,
+    ),
+    92 => 
+    array (
+      'time' => 1301738460,
+      'type' => 2,
+    ),
+    93 => 
+    array (
+      'time' => 1312146000,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
+    'type' => 'static',
+    'name' => 'EET',
     'offset' => 7200,
-    'name' => 'EE%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 7,
-      'time' => 60000,
-      'type' => 0,
-    ),
-    'end' => 
-    array (
-      'month' => 8,
-      'date' => '1',
-      'day_of_week' => -6,
-      'time' => 7200000,
-      'type' => 0,
-    ),
-    'startYear' => 2011,
+    'startYear' => 2012,
   ),
   'source' => 'asia',
-  'version' => '8.65',
+  'version' => '8.69',
   'name' => 'Asia/Gaza',
 );
 

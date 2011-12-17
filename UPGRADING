@@ -16,6 +16,10 @@ Response
 --------
 If you are using custom implementations of AgaviResponse, please make sure to update the merge() method to call parent::merge(). This method was previously declared abstract, but since Agavi 1.1 it contains the necessary code to perform merging of response attributes.
 
+Autoloading
+-----------
+AgaviAutoloader now performs autoloads; class maps or namespaces prefixes may be registered. Namespace autoloading is compliant with the PSR-0 specification.  The <autoload> element in namespace http://agavi.org/agavi/config/parts/autoload/1.1 now allows either a "class" attribute specifying a class name (in which case the element value is the path to the file containing that class) or a "namespace" attribute specifying a namespace prefix (in which case the element value is the path containing the files for that namespace). XSL transformations will transparently convert <autoload> elements with a "name" attribute from older namespaces to the latest version.
+
 AgaviReturnArrayConfigHandler
 -----------------------------
 RACH has been ported to the new-style configuration handler system introduced in Agavi 1.0, and expects your configuration contents to be wrapped in <ae:configurations>/<ae:configuration> elements, like all other Agavi configuration files. The actual content elements must be in no namespace, unless configured otherwise.

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Australia/Lindeman".
- * Compiled from olson file "australasia", version 8.23.
+ * Compiled from olson file "australasia", version 8.29.
  *
  * @package    agavi
  * @subpackage translation
@@ -156,7 +156,7 @@ return array (
     'startYear' => 1995,
   ),
   'source' => 'australasia',
-  'version' => '8.23',
+  'version' => '8.29',
   'name' => 'Australia/Lindeman',
 );
 

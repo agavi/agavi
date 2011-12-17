@@ -71,6 +71,11 @@ class AgaviUploadedFile implements ArrayAccess
 	protected $contents;
 	
 	/**
+	 * @var        resource A resource pointer to the stream with the contents.
+	 */
+	protected $stream;
+	
+	/**
 	 * @var        array An array to map get* method name fragments to indices.
 	 */
 	protected static $indexMap = array(
@@ -82,12 +87,13 @@ class AgaviUploadedFile implements ArrayAccess
 		'is_uploaded_file' => 'isUploadedFile',
 		'is_moved' => 'isMoved',
 		'contents' => 'contents',
+		'stream' => 'stream',
 	);
 	
 	/**
 	 * Constructor.
 	 *
-	 * @param      $flags int Flags, overridden to be ArrayObject::ARRAY_AS_PROPS.
+	 * @param      array The fields for this file.
 	 *
 	 * @see        ArrayObject::__construct()
 	 *
@@ -99,20 +105,24 @@ class AgaviUploadedFile implements ArrayAccess
 		$defaults = array(
 			'name' => null,
 			'type' => null,
-			'size' => 0,
+			'size' => -1,
 			'tmp_name' => null,
-			'error' => UPLOAD_ERR_NO_FILE,
-			'is_uploaded_file' => true,
+			'error' => UPLOAD_ERR_OK,
+			'is_uploaded_file' => false,
 			'contents' => null,
+			'stream' => null,
 		);
 		$array = array_merge($defaults, $array, array('is_moved' => false)); // make sure it's marked not moved by default
 		
-		// we either need a tmp_name or contents
+		// we need exactly one of tmp_name, contents or stream
 		if(
-			(isset($array['tmp_name']) && isset($array['contents'])) ||
-			(!isset($array['tmp_name']) && !isset($array['contents']))
+			isset($array['tmp_name'], $array['contents'], $array['stream']) ||
+			isset($array['tmp_name'], $array['contents']) ||
+			isset($array['tmp_name'], $array['stream']) ||
+			isset($array['contents'], $array['stream']) ||
+			(!isset($array['tmp_name']) && !isset($array['contents']) && !isset($array['stream']))
 		) {
-			throw new InvalidArgumentException('Value for either key "tmp_name" or "contents" (but not both) must be supplied.');
+			throw new InvalidArgumentException('Value for exactly one of keys "tmp_name", "contents" or "stream" must be supplied.');
 		}
 		
 		// fill local props
@@ -120,19 +130,6 @@ class AgaviUploadedFile implements ArrayAccess
 			if(isset($array[$index])) {
 				$this->$property = $array[$index];
 			}
-		}
-	}
-	
-	/**
-	 * Destructor. Removes the tempfile.
-	 *
-	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
-	 */
-	public function __destruct()
-	{
-		if(!$this->getIsMoved() && !$this->getIsUploadedFile() && $this->hasTmpName()) {
-			@unlink($this->getTmpName());
 		}
 	}
 	
@@ -287,15 +284,21 @@ class AgaviUploadedFile implements ArrayAccess
 	 */
 	public function getTmpName()
 	{
-		if(!$this->hasTmpName()) {
+		if(!$this->hasTmpName() && !$this->hasOpenStream()) {
 			// have faith in the ctor :)
-			$this->tmpName = tempnam(AgaviConfig::get('core.cache_dir'), 'AgaviUploadedFile_');
-			if(!is_writable($this->tmpName)) {
-				$error = 'Temporary file path "%s" is not writable';
+			$this->stream = tmpfile();
+			if(!$this->stream) {
+				$error = 'Cannot create temporary file via tmpfile()';
 				$error = sprintf($error, $directory);
 				throw new AgaviFileException($error);
 			}
-			file_put_contents($this->tmpName, $this->contents);
+			fwrite($this->stream, $this->contents);
+			rewind($this->stream);
+		}
+		
+		if($this->hasOpenStream()) {
+			$meta = stream_get_meta_data($this->getStream());
+			return $meta['uri'];
 		}
 		
 		return $this->tmpName;
@@ -383,7 +386,7 @@ class AgaviUploadedFile implements ArrayAccess
 	 */
 	public function isMovable()
 	{
-		return !$this->getIsMoved();
+		return $this->hasTmpName() && !$this->getIsMoved();
 	}
 	
 	/**
@@ -399,12 +402,18 @@ class AgaviUploadedFile implements ArrayAccess
 	public function getContents()
 	{
 		// for a file where we wrote the contents to a temp file in getTmpName(), we can always return contents
-		if($this->hasError() || (!$this->isMovable() && !$this->hasBufferedContents())) {
+		if($this->hasError() || (!$this->isMovable() && !$this->hasBufferedContents() && !$this->hasOpenStream())) {
 			throw new AgaviException('Cannot get contents of erroneous or moved file.');
 		}
 		
 		// we intentionally don't store the result of file_get_contents() here to keep memory usage low
-		return $this->hasBufferedContents() ? $this->contents : file_get_contents($this->getTmpName());
+		return
+			$this->hasBufferedContents()
+				? $this->contents
+				: $this->hasOpenStream()
+					? stream_get_contents($this->getStream(), -1, 0)
+					: file_get_contents($this->getTmpName())
+		;
 	}
 	
 	/**
@@ -423,9 +432,25 @@ class AgaviUploadedFile implements ArrayAccess
 	}
 	
 	/**
+	 * Check if there is an open stream resource for this uploaded file.
+	 * Will be true if this object has been constructed with a resource pointer,
+	 * or if it has been constructed with raw contents and after getStream() has
+	 * been called once.
+	 *
+	 * @return     bool Whether there is an open stream with the file contents.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.1.0
+	 */
+	public function hasOpenStream()
+	{
+		return isset($this->stream);
+	}
+	
+	/**
 	 * Retrieve a stream handle of the uploaded file.
 	 *
-	 * @param      string The fopen mode, defaults to 'rb'.
+	 * @param      string The fopen mode, defaults to 'rb'. Only used for files.
 	 *
 	 * @return     resource The stream.
 	 *
@@ -436,11 +461,18 @@ class AgaviUploadedFile implements ArrayAccess
 	 */
 	public function getStream($mode = 'rb')
 	{
-		if($this->hasError() || !$this->isMovable()) {
+		if($this->hasError() || (!$this->isMovable() && !$this->hasBufferedContents() && !$this->hasOpenStream())) {
 			throw new AgaviException('Cannot get contents of erroneous or moved file.');
 		}
 		
-		return fopen($this->getTmpName(), $mode);
+		if(!$this->hasOpenStream() && $this->hasBufferedContents()) {
+			// copy the contents into a temp stream
+			$this->stream = fopen('php://temp', 'rb+');
+			fputs($this->stream, $this->getContents());
+			rewind($this->stream);
+		}
+		
+		return $this->hasOpenStream() ? $this->stream : fopen($this->getTmpName(), $mode);
 	}
 	
 	/**

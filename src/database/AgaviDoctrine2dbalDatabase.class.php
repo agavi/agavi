@@ -53,7 +53,7 @@ class AgaviDoctrine2dbalDatabase extends AgaviDoctrine2Database
 	 */
 	public function getResource()
 	{
-		return $this->connection->getWrappedConnection();
+		return $this->getConnection()->getWrappedConnection();
 	}
 	
 	/**

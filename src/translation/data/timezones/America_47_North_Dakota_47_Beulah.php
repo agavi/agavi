@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/North_Dakota/Beulah".
- * Compiled from olson file "northamerica", version 8.42.
+ * Compiled from olson file "northamerica", version 8.51.
  *
  * @package    agavi
  * @subpackage translation
@@ -527,7 +527,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'northamerica',
-  'version' => '8.42',
+  'version' => '8.51',
   'name' => 'America/North_Dakota/Beulah',
 );
 

@@ -165,7 +165,7 @@ class AgaviController extends AgaviParameterHolder
 			
 			$moduleAutoload = AgaviConfig::get('core.module_dir') . '/' . $moduleName . '/config/autoload.xml';
 			if(is_readable($moduleAutoload)) {
-				Agavi::$autoloads = array_merge(Agavi::$autoloads, include(AgaviConfigCache::checkConfig($moduleAutoload)));
+				AgaviConfigCache::load($moduleAutoload);
 			}
 			
 			if(AgaviConfig::get('modules.' . $lowerModuleName . '.enabled')) {

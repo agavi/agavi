@@ -179,28 +179,28 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 		$test2 = $this->context->getLoggerManager()->getLogger('test2');
 		$test3 = $this->context->getLoggerManager()->getLogger('test3');
 
-		$this->assertType('TestLogger1', $test1);
+		$this->assertInstanceOf('TestLogger1', $test1);
 		$this->assertSame(TestLogger::INFO, $test1->level);
-		$this->assertType('TestAppender1', $test1->appenders['appender1']);
-		$this->assertType('TestAppender2', $test1->appenders['appender2']);
+		$this->assertInstanceOf('TestAppender1', $test1->appenders['appender1']);
+		$this->assertInstanceOf('TestAppender2', $test1->appenders['appender2']);
 		$this->assertReference($test1->appenders['appender1'], $test2->appenders['appender1']);
 		$this->assertReference($test1->appenders['appender2'], $test2->appenders['appender2']);
 
 
-		$this->assertType('TestLogger2', $test2);
+		$this->assertInstanceOf('TestLogger2', $test2);
 		$this->assertSame(TestLogger::ERROR, $test2->level);
-		$this->assertType('TestAppender1', $test2->appenders['appender1']);
-		$this->assertType('TestAppender2', $test2->appenders['appender2']);
-		$this->assertType('TestAppender3', $test2->appenders['appender3']);
+		$this->assertInstanceOf('TestAppender1', $test2->appenders['appender1']);
+		$this->assertInstanceOf('TestAppender2', $test2->appenders['appender2']);
+		$this->assertInstanceOf('TestAppender3', $test2->appenders['appender3']);
 
-		$this->assertType('TestLogger3', $test3);
+		$this->assertInstanceOf('TestLogger3', $test3);
 		$this->assertSame(TestLogger::INFO | TestLogger::ERROR, $test3->level);
 
 		$a1 = $test2->appenders['appender1'];
 		$a2 = $test2->appenders['appender2'];
 		$a3 = $test2->appenders['appender3'];
 
-		$this->assertType('TestLayout1', $a1->layout);
+		$this->assertInstanceOf('TestLayout1', $a1->layout);
 		$this->assertSame(array(
 			'param1' => 'value1',
 			'param2' => 'value2',
@@ -209,11 +209,11 @@ class LoggingConfigHandlerTest extends ConfigHandlerTestBase
 		);
 
 
-		$this->assertType('TestLayout1', $a2->layout);
+		$this->assertInstanceOf('TestLayout1', $a2->layout);
 		$this->assertEquals(array(), $a2->params);
 
 
-		$this->assertType('TestLayout2', $a3->layout);
+		$this->assertInstanceOf('TestLayout2', $a3->layout);
 		$this->assertSame(array(
 			'file' => AgaviConfig::get('core.app_dir') . '/log/myapp.log',
 			),

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Macau".
- * Compiled from olson file "asia", version 8.65.
+ * Compiled from olson file "asia", version 8.69.
  *
  * @package    agavi
  * @subpackage translation
@@ -246,7 +246,7 @@ return array (
     'startYear' => 1981,
   ),
   'source' => 'asia',
-  'version' => '8.65',
+  'version' => '8.69',
   'name' => 'Asia/Macau',
 );
 
