@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Kamchatka".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -225,16 +225,166 @@ return array (
       'time' => 846338400,
       'type' => 1,
     ),
+    36 => 
+    array (
+      'time' => 859644000,
+      'type' => 2,
+    ),
+    37 => 
+    array (
+      'time' => 877788000,
+      'type' => 1,
+    ),
+    38 => 
+    array (
+      'time' => 891093600,
+      'type' => 2,
+    ),
+    39 => 
+    array (
+      'time' => 909237600,
+      'type' => 1,
+    ),
+    40 => 
+    array (
+      'time' => 922543200,
+      'type' => 2,
+    ),
+    41 => 
+    array (
+      'time' => 941292000,
+      'type' => 1,
+    ),
+    42 => 
+    array (
+      'time' => 953992800,
+      'type' => 2,
+    ),
+    43 => 
+    array (
+      'time' => 972741600,
+      'type' => 1,
+    ),
+    44 => 
+    array (
+      'time' => 985442400,
+      'type' => 2,
+    ),
+    45 => 
+    array (
+      'time' => 1004191200,
+      'type' => 1,
+    ),
+    46 => 
+    array (
+      'time' => 1017496800,
+      'type' => 2,
+    ),
+    47 => 
+    array (
+      'time' => 1035640800,
+      'type' => 1,
+    ),
+    48 => 
+    array (
+      'time' => 1048946400,
+      'type' => 2,
+    ),
+    49 => 
+    array (
+      'time' => 1067090400,
+      'type' => 1,
+    ),
+    50 => 
+    array (
+      'time' => 1080396000,
+      'type' => 2,
+    ),
+    51 => 
+    array (
+      'time' => 1099144800,
+      'type' => 1,
+    ),
+    52 => 
+    array (
+      'time' => 1111845600,
+      'type' => 2,
+    ),
+    53 => 
+    array (
+      'time' => 1130594400,
+      'type' => 1,
+    ),
+    54 => 
+    array (
+      'time' => 1143295200,
+      'type' => 2,
+    ),
+    55 => 
+    array (
+      'time' => 1162044000,
+      'type' => 1,
+    ),
+    56 => 
+    array (
+      'time' => 1174744800,
+      'type' => 2,
+    ),
+    57 => 
+    array (
+      'time' => 1193493600,
+      'type' => 1,
+    ),
+    58 => 
+    array (
+      'time' => 1206799200,
+      'type' => 2,
+    ),
+    59 => 
+    array (
+      'time' => 1224943200,
+      'type' => 1,
+    ),
+    60 => 
+    array (
+      'time' => 1238248800,
+      'type' => 2,
+    ),
+    61 => 
+    array (
+      'time' => 1256392800,
+      'type' => 1,
+    ),
+    62 => 
+    array (
+      'time' => 1269698400,
+      'type' => 0,
+    ),
+    63 => 
+    array (
+      'time' => 1269702000,
+      'type' => 3,
+    ),
+    64 => 
+    array (
+      'time' => 1288450800,
+      'type' => 0,
+    ),
+    65 => 
+    array (
+      'time' => 1301151600,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'PETT',
     'offset' => 43200,
-    'startYear' => 1996,
+    'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.40',
   'name' => 'Asia/Kamchatka',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Antigua".
- * Compiled from olson file "northamerica", version 8.42.
+ * Compiled from olson file "northamerica", version 8.51.
  *
  * @package    agavi
  * @subpackage translation
@@ -52,7 +52,7 @@ return array (
     'startYear' => 1952,
   ),
   'source' => 'northamerica',
-  'version' => '8.42',
+  'version' => '8.51',
   'name' => 'America/Antigua',
 );
 

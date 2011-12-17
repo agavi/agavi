@@ -14,7 +14,7 @@
  *
  * @version    $Id$
  */
-class AgaviConstraintActionHandlesMethod extends PHPUnit_Framework_Constraint
+class AgaviConstraintActionHandlesMethod extends AgaviBaseConstraintBecausePhpunitSucksAtBackwardsCompatibility
 {
 	/**
 	 * @var        AgaviAction The Action instance.
@@ -50,9 +50,9 @@ class AgaviConstraintActionHandlesMethod extends PHPUnit_Framework_Constraint
 	 * @return     bool The result of the evaluation.
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
-	 * @since      1.0.0
+	 * @since      1.0.7
 	 */
-	public function evaluate($other)
+	public function matches($other)
 	{
 		$executeMethod = 'execute' . $other;
 		if(is_callable(array($this->actionInstance, $executeMethod)) || ($this->acceptGeneric && is_callable(array($this->actionInstance, 'execute')))) {

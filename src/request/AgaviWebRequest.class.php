@@ -289,7 +289,7 @@ class AgaviWebRequest extends AgaviRequest
 		$rla = ini_get('register_long_arrays');
 
 		// very first thing to do: remove magic quotes
-		if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+		if(get_magic_quotes_gpc()) {
 			trigger_error('Support for php.ini directive "magic_quotes_gpc" is deprecated and will be dropped in Agavi 1.2. The setting is deprecated in PHP 5.3 and will be removed in PHP 5.4. Please refer to the PHP manual for details.', E_USER_DEPRECATED);
 			$_GET = self::clearMagicQuotes($_GET);
 			$_POST = self::clearMagicQuotes($_POST);
@@ -421,6 +421,9 @@ class AgaviWebRequest extends AgaviRequest
 		$this->urlQuery = $parts['query'];
 		unset($parts);
 
+		$files = array();
+		$ufc = $this->getParameter('uploaded_file_class', 'AgaviUploadedFile');
+
 		if($this->getMethod() == $methods['PUT']) {
 
 			if(isset($_SERVER['CONTENT_TYPE']) && $this->getParameter('http_put_decode_urlencoded', true) && preg_match('#^application/x-www-form-urlencoded(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])) {
@@ -433,31 +436,33 @@ class AgaviWebRequest extends AgaviRequest
 				// some other data via PUT. we need to populate $_FILES manually
 				$httpBody = file_get_contents('php://input');
 
-				$_FILES = array(
-					$this->getParameter('http_put_file_name', 'put_file') => array(
+				$files = array(
+					$this->getParameter('http_put_file_name', 'put_file') => new $ufc(array(
 						'name' => $this->getMethod(),
 						'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
 						'size' => strlen($httpBody),
 						'contents' => $httpBody,
 						'error' => UPLOAD_ERR_OK,
 						'is_uploaded_file' => false,
-					)
+					))
 				);
 			}
 		} elseif($this->getMethod() == $methods['POST'] && (!isset($_SERVER['CONTENT_TYPE']) || (isset($_SERVER['CONTENT_TYPE']) && !preg_match('#^(application/x-www-form-urlencoded|multipart/form-data)(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])))) {
 			// POST, but no regular urlencoded data or file upload. lets put the request payload into a file
 			$httpBody = file_get_contents('php://input');
 
-			$_FILES = array(
-				$this->getParameter('http_post_file_name', 'post_file') => array(
+			$files = array(
+				$this->getParameter('http_post_file_name', 'post_file') => new $ufc(array(
 					'name' => $this->getMethod(),
 					'type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'application/octet-stream',
 					'size' => strlen($httpBody),
 					'contents' => $httpBody,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
-				)
+				))
 			);
+		} elseif($this->getMethod() == $methods['POST'] && isset($_SERVER['CONTENT_TYPE']) && preg_match('#^multipart/form-data(;[^;]+)*?$#', $_SERVER['CONTENT_TYPE'])) {
+			$files = static::fixFilesArray($_FILES, $ufc);
 		}
 
 		$headers = array();
@@ -474,9 +479,61 @@ class AgaviWebRequest extends AgaviRequest
 		$this->setRequestData(new $rdhc(array(
 			constant("$rdhc::SOURCE_PARAMETERS") => array_merge($_GET, $_POST),
 			constant("$rdhc::SOURCE_COOKIES") => $_COOKIE,
-			constant("$rdhc::SOURCE_FILES") => $_FILES,
+			constant("$rdhc::SOURCE_FILES") => $files,
 			constant("$rdhc::SOURCE_HEADERS") => $headers,
 		)));
+	}
+
+	/**
+	 * Corrects the order of $_FILES for arrays of files.
+	 * The cleaned up array of AgaviUploadedFile objects is returned.
+	 *
+	 * @param      array  The array to work on.
+	 * @param      string Name of the wrapper uploaded file class to instantiate.
+	 * @param      array  Array of indices used during recursion, initially empty.
+	 * @param      array  Output buffer used during recursion, initially empty.
+	 *
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      1.1.0
+	 */
+	protected static function fixFilesArray($input, $uploadedFileClass = 'AgaviUploadedFile', $index = array(), &$output = array())
+	{
+		$fromIndex = $index;
+		if(count($fromIndex) > 0) {
+			$first = array_shift($fromIndex);
+			array_unshift($fromIndex, $first, 'error');
+		}
+		$sub = AgaviArrayPathDefinition::getValue($fromIndex, $input);
+		$theIndices = array();
+		foreach(array('name', 'type', 'size', 'tmp_name', 'error', 'is_uploaded_file') as $name) {
+			$theIndex = $fromIndex;
+			$first = array_shift($theIndex);
+			array_shift($theIndex);
+			array_unshift($theIndex, $first, $name);
+			$theIndices[$name] = $theIndex;
+		}
+		if(is_array($sub)) {
+			foreach($sub as $key => $value) {
+				$toIndex = array_merge($index, array($key));
+				if(is_array($value)) {
+					static::fixFilesArray($input, $uploadedFileClass, $toIndex, $output);
+				} else {
+					foreach($theIndices as $name => $theIndex) {
+						$data[$name] = AgaviArrayPathDefinition::getValue(array_merge($theIndex, array($key)), $input, $name == 'is_uploaded_file' ? true : null);
+					}
+					$data = new $uploadedFileClass($data);
+					AgaviArrayPathDefinition::setValue($toIndex, $output, $data);
+				}
+			}
+		} else {
+			foreach($theIndices as $name => $theIndex) {
+				$data[$name] = AgaviArrayPathDefinition::getValue($theIndex, $input, $name == 'is_uploaded_file' ? true : null);
+			}
+			$data = new $uploadedFileClass($data);
+			AgaviArrayPathDefinition::setValue($index, $output, $data);
+		}
+		
+		return $output;
 	}
 
 	/**

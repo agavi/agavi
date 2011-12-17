@@ -23,6 +23,7 @@
  *
  * @author     Sean Kerr <skerr@mojavi.org>
  * @author     Dominik del Bondio <ddb@bitxtender.com>
+ * @author     David Zülke <david.zuelke@bitextender.com>
  * @copyright  Authors
  * @copyright  The Agavi Project
  *
@@ -47,6 +48,7 @@ class AgaviAutoloadConfigHandler extends AgaviXmlConfigHandler
 	 * @author     Sean Kerr <skerr@mojavi.org>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     Noah Fontes <noah.fontes@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.9.0
 	 */
 	public function execute(AgaviXmlConfigDomDocument $document)
@@ -54,7 +56,7 @@ class AgaviAutoloadConfigHandler extends AgaviXmlConfigHandler
 		// set up our default namespace
 		$document->setDefaultNamespace(self::XML_NAMESPACE, 'autoload');
 
-		$data = array();
+		$classes = $namespaces = array();
 		
 		foreach($document->getConfigurationElements() as $configuration) {
 			if(!$configuration->has('autoloads')) {
@@ -64,36 +66,48 @@ class AgaviAutoloadConfigHandler extends AgaviXmlConfigHandler
 			// let's do our fancy work
 			foreach($configuration->get('autoloads') as $autoload) {
 				// we can have variables in the filename
-				$file = AgaviToolkit::expandDirectives($autoload->getValue());
-				// we need the filename w/o app dir prepended since the file could 
-				// be placed in the include path
-				$originalFile = $file;
-				// if the filename is not absolute we assume its relative to the app dir
-				$file = self::replacePath($file);
-
-				$class = $autoload->getAttribute('name');
-
-				if(!($fp = @fopen($file, 'r', true))) {
-					if($originalFile != $file && ($fpOriginal = @fopen($originalFile, 'r', true))) {
-						$file = $originalFile;
-						$fp = $fpOriginal;
-					} else {
-						// the class path doesn't exist
-						$error = 'Configuration file "%s" specifies class "%s" with ' .
-								 'nonexistent or unreadable file "%s"';
-						$error = sprintf($error, $document->documentURI, $class, $file);
-
-						throw new AgaviParseException($error);
-					}
+				$path = AgaviToolkit::expandDirectives($autoload->getValue());
+				
+				// sanity check; XML Schema can't do <xs:choice> on attributes...
+				if(($isClass = $autoload->hasAttribute('class')) && $autoload->hasAttribute('namespace')) {
+					$error = sprintf(
+						'Configuration file "%s" specifies both "class" and "namespace" attribute for path "%s"',
+						$document->documentURI,
+						$path
+					);
+					throw new AgaviParseException($error);
 				}
-				fclose($fp);
-
-				$data[$class] = $file;
+				
+				// prepend the app dir if the path is not absolute
+				$file = self::replacePath($path);
+				
+				// check if absolute path is readable or try to resolve it against the include path
+				if(!file_exists($file) && ($path == $file || !($file = stream_resolve_include_path($path)))) {
+					// the class path doesn't exist and couldn't be resolved against the include path either
+					$error = sprintf(
+						'Configuration file "%s" specifies %s "%s" with non-existent path "%s"',
+						$document->documentURI,
+						$isClass ? 'file' : 'namespace',
+						$isClass ? $autoload->getAttribute('class') : $autoload->getAttribute('namespace'),
+						$path
+					);
+					throw new AgaviParseException($error);
+				}
+				
+				if($isClass) {
+					// it's a class
+					$classes[$autoload->getAttribute('class')] = $file;
+				} else {
+					// it's a whole namespace
+					// trim backslashes from the namespace and trailing slashes or backslashes from the path
+					$namespaces[trim($autoload->getAttribute('namespace'), '\\')] = rtrim($file, '/\\'); 
+				}
 			}
 		}
 
 		$code = array(
-			'return ' . var_export($data, true) . ';',
+			'AgaviAutoloader::addClasses(' . var_export($classes, true) . ');',
+			'AgaviAutoloader::addNamespaces(' . var_export($namespaces, true) . ');',
 		);
 
 		return $this->generate($code, $document->documentURI);

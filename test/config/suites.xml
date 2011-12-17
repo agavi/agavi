@@ -79,6 +79,7 @@
 					<testfile>unit/util/AgaviParameterHolderTest.php</testfile>
 					<testfile>unit/util/AgaviAttributeHolderTest.php</testfile>
 					<testfile>unit/util/AgaviArrayPathDefinitionTest.php</testfile>
+					<testfile>unit/util/AgaviInflectorTest.php</testfile>
 				</testfiles>
 			</suite>
 			<suite name="Validator">

@@ -53,8 +53,8 @@ class ControllerTest extends AgaviTestCase
 		// TODO: check all other existing naming schemes for actions
 
 		$action = $this->_controller->createActionInstance('Test', 'Test');
-		$this->assertType('Test_TestAction', $action);
-		$this->assertType('AgaviAction', $action);
+		$this->assertInstanceOf('Test_TestAction', $action);
+		$this->assertInstanceOf('AgaviAction', $action);
 
 		// TODO: this needs checking for errors 
 //		$this->_controller->createActionInstance('Test', 'NonExistant');
@@ -64,22 +64,22 @@ class ControllerTest extends AgaviTestCase
 	{
 		$ctx1 = AgaviContext::getInstance('test');
 		$ctx2 = AgaviContext::getInstance('test')->getController()->getContext();
-		$this->assertType('AgaviContext', $ctx1);
-		$this->assertType('AgaviContext', $ctx2);
+		$this->assertInstanceOf('AgaviContext', $ctx1);
+		$this->assertInstanceOf('AgaviContext', $ctx2);
 		$this->assertReference($ctx1, $ctx2);
 	}
 
 	public function testgetInstance()
 	{
 		$controller = AgaviContext::getInstance('test')->getController();
-		$this->assertType('AgaviController', $controller);
+		$this->assertInstanceOf('AgaviController', $controller);
 	}
 
 	public function testCreateViewInstance()
 	{
 		$controller = $this->_controller;
-		$this->assertType('Test_TestSuccessView', $controller->createViewInstance('Test', 'TestSuccess'));
-		$this->assertType('Test_TestErrorView', $controller->createViewInstance('Test', 'TestError'));
+		$this->assertInstanceOf('Test_TestSuccessView', $controller->createViewInstance('Test', 'TestSuccess'));
+		$this->assertInstanceOf('Test_TestErrorView', $controller->createViewInstance('Test', 'TestError'));
 	}
 
 	public function testModelExists()

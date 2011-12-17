@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Minsk".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -65,6 +65,12 @@ return array (
       'rawOffset' => 7200,
       'dstOffset' => 3600,
       'name' => 'EEST',
+    ),
+    8 => 
+    array (
+      'rawOffset' => 10800,
+      'dstOffset' => 0,
+      'name' => 'FET',
     ),
   ),
   'rules' => 
@@ -269,33 +275,161 @@ return array (
       'time' => 846374400,
       'type' => 1,
     ),
+    40 => 
+    array (
+      'time' => 859680000,
+      'type' => 7,
+    ),
+    41 => 
+    array (
+      'time' => 877824000,
+      'type' => 1,
+    ),
+    42 => 
+    array (
+      'time' => 891129600,
+      'type' => 7,
+    ),
+    43 => 
+    array (
+      'time' => 909273600,
+      'type' => 1,
+    ),
+    44 => 
+    array (
+      'time' => 922579200,
+      'type' => 7,
+    ),
+    45 => 
+    array (
+      'time' => 941328000,
+      'type' => 1,
+    ),
+    46 => 
+    array (
+      'time' => 954028800,
+      'type' => 7,
+    ),
+    47 => 
+    array (
+      'time' => 972777600,
+      'type' => 1,
+    ),
+    48 => 
+    array (
+      'time' => 985478400,
+      'type' => 7,
+    ),
+    49 => 
+    array (
+      'time' => 1004227200,
+      'type' => 1,
+    ),
+    50 => 
+    array (
+      'time' => 1017532800,
+      'type' => 7,
+    ),
+    51 => 
+    array (
+      'time' => 1035676800,
+      'type' => 1,
+    ),
+    52 => 
+    array (
+      'time' => 1048982400,
+      'type' => 7,
+    ),
+    53 => 
+    array (
+      'time' => 1067126400,
+      'type' => 1,
+    ),
+    54 => 
+    array (
+      'time' => 1080432000,
+      'type' => 7,
+    ),
+    55 => 
+    array (
+      'time' => 1099180800,
+      'type' => 1,
+    ),
+    56 => 
+    array (
+      'time' => 1111881600,
+      'type' => 7,
+    ),
+    57 => 
+    array (
+      'time' => 1130630400,
+      'type' => 1,
+    ),
+    58 => 
+    array (
+      'time' => 1143331200,
+      'type' => 7,
+    ),
+    59 => 
+    array (
+      'time' => 1162080000,
+      'type' => 1,
+    ),
+    60 => 
+    array (
+      'time' => 1174780800,
+      'type' => 7,
+    ),
+    61 => 
+    array (
+      'time' => 1193529600,
+      'type' => 1,
+    ),
+    62 => 
+    array (
+      'time' => 1206835200,
+      'type' => 7,
+    ),
+    63 => 
+    array (
+      'time' => 1224979200,
+      'type' => 1,
+    ),
+    64 => 
+    array (
+      'time' => 1238284800,
+      'type' => 7,
+    ),
+    65 => 
+    array (
+      'time' => 1256428800,
+      'type' => 1,
+    ),
+    66 => 
+    array (
+      'time' => 1269734400,
+      'type' => 7,
+    ),
+    67 => 
+    array (
+      'time' => 1288483200,
+      'type' => 1,
+    ),
+    68 => 
+    array (
+      'time' => 1301184000,
+      'type' => 8,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => 7200,
-    'name' => 'EE%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'startYear' => 1996,
+    'type' => 'static',
+    'name' => 'FET',
+    'offset' => 10800,
+    'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.40',
   'name' => 'Europe/Minsk',
 );
 

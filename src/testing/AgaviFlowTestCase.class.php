@@ -31,6 +31,11 @@
 abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIFlowTestCase
 {
 	/**
+	 * @var        string the name of the context to use, null for default context
+	 */
+	protected $contextName = null;
+	
+	/**
 	 * @var        string the fake routing input
 	 */
 	protected $input;
@@ -53,9 +58,17 @@ abstract class AgaviFlowTestCase extends AgaviPhpUnitTestCase implements AgaviIF
 		$this->setRunTestInSeparateProcess(true);
 	}
 	
+	/**
+	 * Return the context defined for this test (or the default one).
+	 *
+	 * @return     AgaviContext The context instance defined for this test.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.7
+	 */
 	public function getContext()
 	{
-		return AgaviContext::getInstance();
+		return AgaviContext::getInstance($this->contextName);
 	}
 	
 	/**

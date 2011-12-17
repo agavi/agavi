@@ -20,7 +20,7 @@
 		<xs:attribute name="name">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
-					<xs:pattern value="[^Aa][^Gg][^Aa][^Vv][^Ii].*" />
+					<xs:pattern value="(([^Aa].*)|([Aa][^Gg].*)|([Aa][Gg][^Aa].*)|([Aa][Gg][Aa][^Vv].*)|([Aa][Gg][Aa][Vv][^Ii].*))" />
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>

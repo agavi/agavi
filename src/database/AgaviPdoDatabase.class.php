@@ -108,7 +108,7 @@ class AgaviPdoDatabase extends AgaviDatabase
 				}
 			}
 
-			$this->connection = new PDO($dsn, $username, $password, $options);
+			$this->connection = $this->resource = new PDO($dsn, $username, $password, $options);
 
 			// default connection attributes
 			$attributes = array(
@@ -143,7 +143,7 @@ class AgaviPdoDatabase extends AgaviDatabase
 	public function shutdown()
 	{
 		// assigning null to a previously open connection object causes a disconnect
-		$this->connection = null;
+		$this->connection = $this->resource = null;
 	}
 }
 

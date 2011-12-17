@@ -124,7 +124,7 @@ class AgaviZendclouddocumentserviceDatabase extends AgaviDatabase
 	 */
 	public function shutdown()
 	{
-		// nothing to do here
+		$this->connection = $this->resource = null;
 	}
 	
 	/**
