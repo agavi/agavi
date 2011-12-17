@@ -16,6 +16,7 @@
 				<testfiles>
 					<testfile>unit/config/AgaviConfigCacheTest.php</testfile>
 					<testfile>unit/config/AgaviConfigTest.php</testfile>
+					<testfile>unit/config/util/dom/AgaviXmlConfigDomElementTest.php</testfile>
 				</testfiles>
 			</suite>
 			<suite name="Controller">
