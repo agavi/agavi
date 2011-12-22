@@ -1,7 +1,7 @@
 AGAVI CHANGELOG
 ===============
 
-1.0.7 (December ??, 2011)
+1.0.7 (December 22, 2011)
 -------------------------
 
 ADD: Configurable context for AgaviFlowTestCase (#1465) (David)
