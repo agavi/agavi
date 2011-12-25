@@ -102,8 +102,8 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 		// no problem though, because these other chars aren't legal in XML
 		$trimmedValue = trim($value);
 		
-		$preserveWhitespace = $this->getAttributeNS(AgaviXmlConfigParser::NAMESPACE_XML_1998, 'space') == 'preserve';
-		$literalize = AgaviToolkit::literalize($this->getAttributeNS(AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST, 'literalize')) !== false;
+		$preserveWhitespace = $this->ownerDocument->getXpath()->evaluate(sprintf('ancestor-or-self::*[@*[namespace-uri()="%1$s" and local-name()="space"]][1]/@*[namespace-uri()="%1$s" and local-name()="space"] = "preserve"', AgaviXmlConfigParser::NAMESPACE_XML_1998), $this);
+		$literalize = !$this->ownerDocument->getXpath()->evaluate(sprintf('count(ancestor-or-self::*[@*[namespace-uri()="%1$s" and local-name()="literalize"]][1]/@*[namespace-uri()="%1$s" and local-name()="literalize"])', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST), $this) || AgaviToolkit::literalize($this->ownerDocument->getXpath()->evaluate(sprintf('string(ancestor-or-self::*[@*[namespace-uri()="%1$s" and local-name()="literalize"]][1]/@*[namespace-uri()="%1$s" and local-name()="literalize"])', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST), $this)) === true;
 		
 		if($literalize) {
 			if($preserveWhitespace && ($trimmedValue === '' || $value != $trimmedValue)) {

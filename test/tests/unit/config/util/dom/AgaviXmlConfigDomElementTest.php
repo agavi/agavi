@@ -192,6 +192,12 @@ class AgaviXmlConfigDomElementTest extends AgaviPhpunitTestCase
 			'plural container'                   => array('<ae:parameters><ae:parameter name="foo">bar</ae:parameter></ae:parameters>', array('foo' => 'bar')),
 			'plural children'                    => array('<ae:parameters><ae:parameter name="foo"><ae:parameters><ae:parameter>bar</ae:parameter></ae:parameters></ae:parameter></ae:parameters>', array('foo' => array(0 => 'bar'))),
 			'plural and singular mix'            => array('<ae:parameters><ae:parameter name="foo">bar</ae:parameter></ae:parameters><ae:parameter name="bar">baz</ae:parameter>', array('foo' => 'bar', 'bar' => 'baz')),
+			'ae:literalize affects descendants'  => array('<ae:parameter name="foo" ae:literalize="false"><ae:parameter name="bar">true</ae:parameter></ae:parameter>', array('foo' => array('bar' => 'true'))),
+			'xml:space affects descendants'      => array('<ae:parameter name="foo" xml:space="preserve"><ae:parameter name="bar"> ohai </ae:parameter></ae:parameter>', array('foo' => array('bar' => ' ohai '))),
+			'ae:literalize can be reset'         => array('<ae:parameter name="foo" ae:literalize="false"><ae:parameter name="bar" ae:literalize="true">true</ae:parameter></ae:parameter>', array('foo' => array('bar' => true))),
+			'xml:space can be reset'             => array('<ae:parameter name="foo" xml:space="preserve"><ae:parameter name="bar" xml:space="default"> ohai </ae:parameter></ae:parameter>', array('foo' => array('bar' => 'ohai'))),
+			'ancestor can reset ae:literalize'   => array('<ae:parameter name="foo" ae:literalize="false"><ae:parameter name="bar" ae:literalize="true"><ae:parameter>true</ae:parameter></ae:parameter></ae:parameter>', array('foo' => array('bar' => array(true)))),
+			'ancestor can reset xml:space'       => array('<ae:parameter name="foo" xml:space="preserve"><ae:parameter name="bar" xml:space="default"><ae:parameter> ohai </ae:parameter></ae:parameter></ae:parameter>', array('foo' => array('bar' => array('ohai')))),
 		);
 	}
 	

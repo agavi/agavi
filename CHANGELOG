@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.1.0 beta1 (June ??, 2009)
 ---------------------------
 
+ADD: Allow control over value literalization and whitespace handling in parameters and settings (#1389) (David)
 ADD: Support arbitrary "provides" and "depends" validator options with access to argument base parts (#1199) (David)
 ADD: Allow calls to PHP functions in configuration file transformations (#1456) (David)
 ADD: PSR-0 compatible namespaces autoloader (#1454) (David)
@@ -15,7 +16,6 @@ ADD: Make filter chains and their filters accessible via an API (#1418) (David)
 ADD: Allow MIME type checks in AgaviBaseFileValidator (#1342) (David)
 ADD: Allow checking of MIME type in AgaviUploadedFile (#1407) (David)
 ADD: Allow glob syntax for XIncludes in configuration files (#1406) (David)
-ADD: Allow control over value literalization and whitespace handling in parameters and settings (#1389) (David)
 ADD: AgaviHttpRedirectRoutingCallback (#1382) (David)
 ADD: Improve the build system for actions, views and models (#1106) (Felix)
 ADD: Allow array syntax for slot names (#1110) (David)
