@@ -461,10 +461,7 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 
 				$key = $request->toggleLock();
 				try {
-					// get the view instance
-					$viewInstance = $controller->createViewInstance($actionCache['view_module'], $actionCache['view_name']);
-					// initialize the view
-					$viewInstance->initialize($container);
+					$viewInstance = $container->getViewInstance();
 				} catch(Exception $e) {
 					// we caught an exception... unlock the request and rethrow!
 					$request->toggleLock($key);
@@ -472,9 +469,6 @@ class AgaviExecutionFilter extends AgaviFilter implements AgaviIActionFilter
 				}
 				$request->toggleLock($key);
 
-				// Set the View Instance in the container
-				$container->setViewInstance($viewInstance);
-			
 				$outputType = $container->getOutputType()->getName();
 
 				if($isCacheable) {

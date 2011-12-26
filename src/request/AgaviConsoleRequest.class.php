@@ -82,7 +82,7 @@ class AgaviConsoleRequest extends AgaviRequest
 		}
 		
 		$files = array();
-		if($this->getParameter('read_stdin', true) && ($stdinMeta = stream_get_meta_data(STDIN)) && !$stdinMeta['seekable']) {
+		if($this->getParameter('read_stdin', true) && defined('STDIN') && ($stdinMeta = stream_get_meta_data(STDIN)) && !$stdinMeta['seekable']) {
 			// if stream_get_meta_data() reports STDIN as not seekable, that means something was piped into our process, and we should put that into a file
 			// the alternative method to determine this is via posix_isatty(STDIN) which returns false in the same situation, but that requires the posix extension and also doesn't work on Windows
 			$stdinName = $this->getParameter('stdin_file_name', 'stdin_file');
