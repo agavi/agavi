@@ -169,7 +169,7 @@ class AgaviDoctrine2ormDatabase extends AgaviDoctrine2Database
 	 */
 	public function getResource()
 	{
-		return $this->connection->getConnection();
+		return $this->getConnection()->getConnection();
 	}
 }
 

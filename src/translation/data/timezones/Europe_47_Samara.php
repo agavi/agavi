@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Samara".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -69,6 +69,12 @@ return array (
     8 => 
     array (
       'rawOffset' => 14400,
+      'dstOffset' => 3600,
+      'name' => 'SAMST',
+    ),
+    9 => 
+    array (
+      'rawOffset' => 10800,
       'dstOffset' => 3600,
       'name' => 'SAMST',
     ),
@@ -265,16 +271,166 @@ return array (
       'time' => 846367200,
       'type' => 1,
     ),
+    38 => 
+    array (
+      'time' => 859672800,
+      'type' => 8,
+    ),
+    39 => 
+    array (
+      'time' => 877816800,
+      'type' => 1,
+    ),
+    40 => 
+    array (
+      'time' => 891122400,
+      'type' => 8,
+    ),
+    41 => 
+    array (
+      'time' => 909266400,
+      'type' => 1,
+    ),
+    42 => 
+    array (
+      'time' => 922572000,
+      'type' => 8,
+    ),
+    43 => 
+    array (
+      'time' => 941320800,
+      'type' => 1,
+    ),
+    44 => 
+    array (
+      'time' => 954021600,
+      'type' => 8,
+    ),
+    45 => 
+    array (
+      'time' => 972770400,
+      'type' => 1,
+    ),
+    46 => 
+    array (
+      'time' => 985471200,
+      'type' => 8,
+    ),
+    47 => 
+    array (
+      'time' => 1004220000,
+      'type' => 1,
+    ),
+    48 => 
+    array (
+      'time' => 1017525600,
+      'type' => 8,
+    ),
+    49 => 
+    array (
+      'time' => 1035669600,
+      'type' => 1,
+    ),
+    50 => 
+    array (
+      'time' => 1048975200,
+      'type' => 8,
+    ),
+    51 => 
+    array (
+      'time' => 1067119200,
+      'type' => 1,
+    ),
+    52 => 
+    array (
+      'time' => 1080424800,
+      'type' => 8,
+    ),
+    53 => 
+    array (
+      'time' => 1099173600,
+      'type' => 1,
+    ),
+    54 => 
+    array (
+      'time' => 1111874400,
+      'type' => 8,
+    ),
+    55 => 
+    array (
+      'time' => 1130623200,
+      'type' => 1,
+    ),
+    56 => 
+    array (
+      'time' => 1143324000,
+      'type' => 8,
+    ),
+    57 => 
+    array (
+      'time' => 1162072800,
+      'type' => 1,
+    ),
+    58 => 
+    array (
+      'time' => 1174773600,
+      'type' => 8,
+    ),
+    59 => 
+    array (
+      'time' => 1193522400,
+      'type' => 1,
+    ),
+    60 => 
+    array (
+      'time' => 1206828000,
+      'type' => 8,
+    ),
+    61 => 
+    array (
+      'time' => 1224972000,
+      'type' => 1,
+    ),
+    62 => 
+    array (
+      'time' => 1238277600,
+      'type' => 8,
+    ),
+    63 => 
+    array (
+      'time' => 1256421600,
+      'type' => 1,
+    ),
+    64 => 
+    array (
+      'time' => 1269727200,
+      'type' => 0,
+    ),
+    65 => 
+    array (
+      'time' => 1269730800,
+      'type' => 9,
+    ),
+    66 => 
+    array (
+      'time' => 1288479600,
+      'type' => 0,
+    ),
+    67 => 
+    array (
+      'time' => 1301180400,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'SAMT',
     'offset' => 14400,
-    'startYear' => 1996,
+    'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.40',
   'name' => 'Europe/Samara',
 );
 

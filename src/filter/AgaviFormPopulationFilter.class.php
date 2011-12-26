@@ -272,14 +272,27 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 		$forms = array();
 		if(is_array($populate)) {
-			$query = array();
-			foreach(array_keys($populate) as $id) {
+			$queries = array();
+			foreach($populate as $id => $data) {
 				if(is_string($id)) {
-					$query[] = sprintf('@id="%s"', $id);
+					$id = sprintf('@id="%s"', $id);
+					if($data === true) {
+						// prepend to the array to give re-populates preferential treatment, see #1461
+						array_unshift($queries, $id);
+					} else {
+						$queries[] = $id;
+					}
 				}
 			}
-			if($query) {
-				$forms = $this->xpath->query(sprintf('//%1$sform[%2$s]', $this->xmlnsPrefix, implode(' or ', $query)));
+			if($queries) {
+				// we must assemble the array by hand as neither '//form[@id="foo"] or //form[@id="bar"]' nor '//form[@id="foo"] || //form[@id="bar"]' will order the elements as given in the query (order of element in the document is used instead and that can be a problem for error insertion, see #1461)
+				$forms = array();
+				foreach($queries as $query) {
+					$form = $this->xpath->query(sprintf('//%1$sform[%2$s]', $this->xmlnsPrefix, $query));
+					if($form->length) {
+						$forms[] = $form->item(0);
+					}
+				}
 			}
 		} else {
 			$forms = $this->xpath->query(sprintf('//%1$sform[@action]', $this->xmlnsPrefix));

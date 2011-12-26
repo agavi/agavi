@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Irkutsk".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -244,6 +244,146 @@ return array (
     ),
     37 => 
     array (
+      'time' => 859658400,
+      'type' => 3,
+    ),
+    38 => 
+    array (
+      'time' => 877802400,
+      'type' => 2,
+    ),
+    39 => 
+    array (
+      'time' => 891108000,
+      'type' => 3,
+    ),
+    40 => 
+    array (
+      'time' => 909252000,
+      'type' => 2,
+    ),
+    41 => 
+    array (
+      'time' => 922557600,
+      'type' => 3,
+    ),
+    42 => 
+    array (
+      'time' => 941306400,
+      'type' => 2,
+    ),
+    43 => 
+    array (
+      'time' => 954007200,
+      'type' => 3,
+    ),
+    44 => 
+    array (
+      'time' => 972756000,
+      'type' => 2,
+    ),
+    45 => 
+    array (
+      'time' => 985456800,
+      'type' => 3,
+    ),
+    46 => 
+    array (
+      'time' => 1004205600,
+      'type' => 2,
+    ),
+    47 => 
+    array (
+      'time' => 1017511200,
+      'type' => 3,
+    ),
+    48 => 
+    array (
+      'time' => 1035655200,
+      'type' => 2,
+    ),
+    49 => 
+    array (
+      'time' => 1048960800,
+      'type' => 3,
+    ),
+    50 => 
+    array (
+      'time' => 1067104800,
+      'type' => 2,
+    ),
+    51 => 
+    array (
+      'time' => 1080410400,
+      'type' => 3,
+    ),
+    52 => 
+    array (
+      'time' => 1099159200,
+      'type' => 2,
+    ),
+    53 => 
+    array (
+      'time' => 1111860000,
+      'type' => 3,
+    ),
+    54 => 
+    array (
+      'time' => 1130608800,
+      'type' => 2,
+    ),
+    55 => 
+    array (
+      'time' => 1143309600,
+      'type' => 3,
+    ),
+    56 => 
+    array (
+      'time' => 1162058400,
+      'type' => 2,
+    ),
+    57 => 
+    array (
+      'time' => 1174759200,
+      'type' => 3,
+    ),
+    58 => 
+    array (
+      'time' => 1193508000,
+      'type' => 2,
+    ),
+    59 => 
+    array (
+      'time' => 1206813600,
+      'type' => 3,
+    ),
+    60 => 
+    array (
+      'time' => 1224957600,
+      'type' => 2,
+    ),
+    61 => 
+    array (
+      'time' => 1238263200,
+      'type' => 3,
+    ),
+    62 => 
+    array (
+      'time' => 1256407200,
+      'type' => 2,
+    ),
+    63 => 
+    array (
+      'time' => 1269712800,
+      'type' => 3,
+    ),
+    64 => 
+    array (
+      'time' => 1288461600,
+      'type' => 2,
+    ),
+    65 => 
+    array (
       'time' => 1301162400,
       'type' => 5,
     ),
@@ -256,7 +396,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.40',
   'name' => 'Asia/Irkutsk',
 );
 

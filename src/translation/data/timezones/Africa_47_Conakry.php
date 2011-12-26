@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Conakry".
- * Compiled from olson file "africa", version 8.31.
+ * Compiled from olson file "africa", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -57,7 +57,7 @@ return array (
     'startYear' => 1961,
   ),
   'source' => 'africa',
-  'version' => '8.31',
+  'version' => '8.33',
   'name' => 'Africa/Conakry',
 );
 

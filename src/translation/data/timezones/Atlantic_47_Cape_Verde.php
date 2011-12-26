@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Atlantic/Cape_Verde".
- * Compiled from olson file "africa", version 8.31.
+ * Compiled from olson file "africa", version 8.33.
  *
  * @package    agavi
  * @subpackage translation
@@ -68,7 +68,7 @@ return array (
     'startYear' => 1976,
   ),
   'source' => 'africa',
-  'version' => '8.31',
+  'version' => '8.33',
   'name' => 'Atlantic/Cape_Verde',
 );
 

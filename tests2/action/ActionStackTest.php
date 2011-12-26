@@ -32,7 +32,7 @@ class ActionStackTest extends AgaviTestCase
 		$a = new ASSampleAction();
 		$this->_as->addEntry('Sample1', 'Index4', $a, $this->_pars);
 		$ase = $this->_as->getEntry(3);
-		$this->assertType('AgaviActionStackEntry', $ase);
+		$this->assertInstanceOf('AgaviActionStackEntry', $ase);
 		$this->assertEquals('Sample1', $ase->getModuleName());
 		$this->assertEquals('Index4', $ase->getActionName());
 		$this->assertEquals($this->_pars, $ase->getParameters());
@@ -43,7 +43,7 @@ class ActionStackTest extends AgaviTestCase
 	public function testgetEntry()
 	{
 		$ase = $this->_as->getEntry(0);
-		$this->assertType('AgaviActionStackEntry', $ase);
+		$this->assertInstanceOf('AgaviActionStackEntry', $ase);
 		$a1 = $ase->getActionInstance();
 		$a2 = $this->_as->getEntry(1)->getActionInstance();
 		$a3 = $this->_as->getEntry(2)->getActionInstance();
@@ -59,7 +59,7 @@ class ActionStackTest extends AgaviTestCase
 	public function testgetFirstEntry()
 	{
 		$ase = $this->_as->getFirstEntry();
-		$this->assertType('AgaviActionStackEntry', $ase);
+		$this->assertInstanceOf('AgaviActionStackEntry', $ase);
 		$a = $ase->getActionInstance();
 		$this->assertReference($this->_a1, $a);
 
@@ -71,7 +71,7 @@ class ActionStackTest extends AgaviTestCase
 	public function testgetLastEntry()
 	{
 		$ase = $this->_as->getLastEntry();
-		$this->assertType('AgaviActionStackEntry', $ase);
+		$this->assertInstanceOf('AgaviActionStackEntry', $ase);
 		$a = $ase->getActionInstance();
 		$this->assertReference($this->_a3, $a);
 

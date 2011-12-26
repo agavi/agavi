@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Omsk".
- * Compiled from olson file "europe", version 8.33.
+ * Compiled from olson file "europe", version 8.40.
  *
  * @package    agavi
  * @subpackage translation
@@ -233,6 +233,146 @@ return array (
     ),
     36 => 
     array (
+      'time' => 859665600,
+      'type' => 2,
+    ),
+    37 => 
+    array (
+      'time' => 877809600,
+      'type' => 1,
+    ),
+    38 => 
+    array (
+      'time' => 891115200,
+      'type' => 2,
+    ),
+    39 => 
+    array (
+      'time' => 909259200,
+      'type' => 1,
+    ),
+    40 => 
+    array (
+      'time' => 922564800,
+      'type' => 2,
+    ),
+    41 => 
+    array (
+      'time' => 941313600,
+      'type' => 1,
+    ),
+    42 => 
+    array (
+      'time' => 954014400,
+      'type' => 2,
+    ),
+    43 => 
+    array (
+      'time' => 972763200,
+      'type' => 1,
+    ),
+    44 => 
+    array (
+      'time' => 985464000,
+      'type' => 2,
+    ),
+    45 => 
+    array (
+      'time' => 1004212800,
+      'type' => 1,
+    ),
+    46 => 
+    array (
+      'time' => 1017518400,
+      'type' => 2,
+    ),
+    47 => 
+    array (
+      'time' => 1035662400,
+      'type' => 1,
+    ),
+    48 => 
+    array (
+      'time' => 1048968000,
+      'type' => 2,
+    ),
+    49 => 
+    array (
+      'time' => 1067112000,
+      'type' => 1,
+    ),
+    50 => 
+    array (
+      'time' => 1080417600,
+      'type' => 2,
+    ),
+    51 => 
+    array (
+      'time' => 1099166400,
+      'type' => 1,
+    ),
+    52 => 
+    array (
+      'time' => 1111867200,
+      'type' => 2,
+    ),
+    53 => 
+    array (
+      'time' => 1130616000,
+      'type' => 1,
+    ),
+    54 => 
+    array (
+      'time' => 1143316800,
+      'type' => 2,
+    ),
+    55 => 
+    array (
+      'time' => 1162065600,
+      'type' => 1,
+    ),
+    56 => 
+    array (
+      'time' => 1174766400,
+      'type' => 2,
+    ),
+    57 => 
+    array (
+      'time' => 1193515200,
+      'type' => 1,
+    ),
+    58 => 
+    array (
+      'time' => 1206820800,
+      'type' => 2,
+    ),
+    59 => 
+    array (
+      'time' => 1224964800,
+      'type' => 1,
+    ),
+    60 => 
+    array (
+      'time' => 1238270400,
+      'type' => 2,
+    ),
+    61 => 
+    array (
+      'time' => 1256414400,
+      'type' => 1,
+    ),
+    62 => 
+    array (
+      'time' => 1269720000,
+      'type' => 2,
+    ),
+    63 => 
+    array (
+      'time' => 1288468800,
+      'type' => 1,
+    ),
+    64 => 
+    array (
       'time' => 1301169600,
       'type' => 4,
     ),
@@ -245,7 +385,7 @@ return array (
     'startYear' => 2012,
   ),
   'source' => 'europe',
-  'version' => '8.33',
+  'version' => '8.40',
   'name' => 'Asia/Omsk',
 );
 

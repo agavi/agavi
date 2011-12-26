@@ -63,7 +63,7 @@ class AgaviDoctrineDatabase extends AgaviDatabase
 	 */
 	public function getResource()
 	{
-		return $this->connection->getDbh();
+		return $this->getConnection()->getDbh();
 	}
 
 	/**

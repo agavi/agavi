@@ -24,6 +24,17 @@ Database
 --------
 Support for Propel versions prior to 1.3 has been dropped from AgaviPropelDatabase. AgaviCreoleDatabase has been removed.
 
+Validators
+----------
+It is now possible to export request data arguments to a different source. This is done by either passing an AgaviValidationArgument object as the second argument to AgaviValidator::export(), or, if the validator does not provide an argument name or only a name, but not an object, via the "export_to_source" parameter of the validator.
+Furthermore, a new third parameter in AgaviValidator::export() now accepts the result code to use when exporting; it defaults to AgaviValidator::SUCCESS and may be used to for instance require validation of the exported value by using AgaviValidator::NOT_PROCESSED.
+
+The "provides" and "depends" options of a validator now take an sprintf() string where you can use position specifiers to access parts of the argument base.
+This means that having a "provides" value of "foobar" with an argument base of "foo[]" will now provide into "foobar" for every iteration, and not into "foo[$key][foobar]" like in 1.0. To get this old behavior back in this example, you'd have to use "foo[%2$s][foobar]" or "%1$s[%2$s][foobar]" as the value for "provides". The referencing of argument base parts works exactly like in "export" strings.
+For "depends", the exact same syntax and behavior is now used; the old behavior was for a plain "foobar" to depend on just "foobar" no matter the argument base, and for "[foobar]" with an argument base of "foo[]" to depend on "foo[$key][foobar]", which was a bit confusing and also meant that you could only ever depend on provides from the same argument base. To depend on the "provides" results for the same keys as in the example above, you would again use "foo[%2$s][foobar]" or "%1$s[%2$s][foobar]" (but if we assume that this second validator had "lulz[]" as the argument base, then only "foo[%2$s][foobar]" would work of course).
+If your validation config is from the 1.0 namespace, then the old behavior is retained automatically, so if you want to take advantage of this new functionality, you must bump the config namespace to 1.1.
+Some more examples can be found in ticket #1199 (and also in #1073 where the same syntax is discussed for the exporting feature).
+
 Filters
 -------
 AgaviIFilter::executeOnce() has been deprecated; in most cases, you can simply use execute() instead, see UPGRADING for further information.
@@ -31,6 +42,10 @@ AgaviIFilter::executeOnce() has been deprecated; in most cases, you can simply u
 It is now possible to get the global filter chain as well as the filter chain of the current execution container (with the action filter chain) by calling AgaviController::getFilterChain() and AgaviExecutionContainer::getFilterChain(), respectively.
 
 Filter chains now expose an interface to access individual filters by name via AgaviFilterChain::getFilter(); this allows filters to expose an API to adjust runtime behavior (e.g. for AgaviFormPopulationFilter as a more convenient alternative to request attributes). AgaviFilterChain::getType() now returns the type of the filter chain (AgaviFilterChain::TYPE_GLOBAL or AgaviFilterChain::TYPE_ACTION) so dual-use (global and action) filters can detect the calling context.
+
+Autoloading
+-----------
+Agavi's autoloader has been moved to its own class and gained the ability to autoload namespaces. This functionality is compliant with the PSR-0 specification. The <autoload> element in namespace http://agavi.org/agavi/config/parts/autoload/1.1 now allows either a "class" attribute specifying a class name (in which case the element value is the path to the file containing that class) or a "namespace" attribute specifying a namespace prefix (in which case the element value is the path containing the files for that namespace). XSL transformations will transparently convert <autoload> elements with a "name" attribute from older namespaces to the latest version.
 
 AgaviReturnArrayConfigHandler
 -----------------------------
@@ -48,3 +63,7 @@ The href attribute of <xi:include /> elements now supports glob() syntax with th
 <xi:include href="%core.module_dir%/{WinningModule,*}/config/routing.xml" />
 For any path matched, the <xi:include /> element will be duplicated with the expanded path inserted into the href attribute.
 Duplicates are removed, so the "WinningModule" entry matched by the "*" wildcard alternative in the last example will not be included a second time.
+
+Testing
+-------
+AgaviTesting::dispatch() now calls exit() with an appropriate shell exit code to indicate success or failures/errors by default; pass false as the second argument to prevent this behavior.

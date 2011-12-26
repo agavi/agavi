@@ -31,6 +31,32 @@
 class AgaviTesting
 {
 	/**
+	 * @var       PHP_CodeCoverage_Filter The code coverage filter for our tests.
+	 */
+	public static $codeCoverageFilter = null;
+	
+	/**
+	 * Get the code coverage filter instance we will use for tests.
+	 * When running PHPUnit 3.5, this will return the singleton instance.
+	 * When running PHPUnit 3.6, this will return the instance we hold internally;
+	 * this same instance will be passed to PHPUnit in AgaviTesting::dispatch().
+	 *
+	 * @return     PHP_CodeCoverage_Filter The code coverage filter for our tests.
+	 *
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.7
+	 */
+	public static function getCodeCoverageFilter()
+	{
+		if(self::$codeCoverageFilter === null) {
+			// PHP_CodeCoverage doesn't expose any version info, we'll have to check if there is a static getInstance method
+			self::$codeCoverageFilter = method_exists('PHP_CodeCoverage_Filter', 'getInstance') ? PHP_CodeCoverage_Filter::getInstance() : new PHP_CodeCoverage_Filter();
+		}
+		
+		return self::$codeCoverageFilter;
+	}
+
+	/**
 	 * Startup the Agavi core
 	 *
 	 * @param      string environment the environment to use for this session.
@@ -64,8 +90,21 @@ class AgaviTesting
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}
 
-	public static function dispatch($arguments = array())
-	{		
+	/**
+	 * Dispatch the test run.
+	 *
+	 * @param      array An array of arguments configuring PHPUnit behavior.
+	 * @param      bool  Whether exit() should be called with an appropriate shell
+	 *                   exit status to indicate success or failures/errors.
+	 *
+	 * @return     PHPUnit_Framework_TestResult The PHPUnit result object.
+	 *
+	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
+	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @since      1.0.0
+	 */
+	public static function dispatch($arguments = array(), $exit = true)
+	{
 		
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.testing_dir').'/config/suites.xml');
 		$master_suite = new AgaviTestSuite('Master');
@@ -79,7 +118,7 @@ class AgaviTesting
 				if(empty($suites[$name])) {
 					throw new InvalidArgumentException(sprintf('Invalid suite name %1$s.', $name));
 				}
-
+				
 				$master_suite->addTest(self::createSuite($name, $suites[$name]));		
 			}
 				
@@ -96,8 +135,40 @@ class AgaviTesting
 			}
 		}
 		
-		$runner = new PHPUnit_TextUI_TestRunner();
-		$runner->doRun($master_suite, $arguments);
+		if(version_compare(PHPUnit_Runner_Version::id(), '3.6', '<')) {
+			// PHP_CodeCoverage_Filter is a singleton
+			$runner = new PHPUnit_TextUI_TestRunner();
+		} else {
+			// PHP_CodeCoverage_Filter instance must be passed to the test runner
+			$runner = new PHPUnit_TextUI_TestRunner(null, self::$codeCoverageFilter);
+		}
+		$result = $runner->doRun($master_suite, $arguments);
+		if($exit) {
+			// bai
+			exit(self::getExitStatus($result));
+		} else {
+			// return result so calling code can use it
+			return $result;
+		}
+	}
+	
+	/**
+	 * Compute a shell exit status for the given result.
+	 * Behaves like PHPUnit_TextUI_Command.
+	 *
+	 * @param      PHPUnit_Framework_TestResult The test result object.
+	 *
+	 * @return     int The shell exit code.
+	 */
+	public static function getExitStatus(PHPUnit_Framework_TestResult $result)
+	{
+		if($result->wasSuccessful()) {
+			return PHPUnit_TextUI_TestRunner::SUCCESS_EXIT;
+		} elseif($result->errorCount()) {
+			return PHPUnit_TextUI_TestRunner::EXCEPTION_EXIT;
+		} else {
+			return PHPUnit_TextUI_TestRunner::FAILURE_EXIT;
+		}
 	}
 	
 	/**
@@ -154,6 +225,7 @@ class AgaviTesting
 	public static function processCommandlineOptions()
 	{
 		$longOptions = array(
+			'configuration=',
 			'coverage-html=',
 			'coverage-clover=',
 			'coverage-source=',
@@ -185,6 +257,10 @@ class AgaviTesting
 		
 		foreach($options[0] as $option) {
 			switch($option[0]) {
+				case '--configuration':
+					$arguments['configuration'] = $option[1];
+					break;
+				
 				case '--coverage-clover':
 				case '--coverage-xml': 
 					if(self::checkCodeCoverageDeps()) {
@@ -305,6 +381,8 @@ Usage: run-tests.php [switches]
   --log-xml <file>         Log test execution in XML format to file.
   --log-metrics <file>     Write metrics report in XML format.
   --log-pmd <file>         Write violations report in PMD XML format.
+
+  --configuration <file>   PHPUnit XML configuration file to use.
 
   --coverage-html <dir>    Generate code coverage report in HTML format.
   --coverage-clover <file> Write code coverage data in Clover XML format.

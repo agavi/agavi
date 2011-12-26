@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Paramaribo".
- * Compiled from olson file "southamerica", version 8.50.
+ * Compiled from olson file "southamerica", version 8.52.
  *
  * @package    agavi
  * @subpackage translation
@@ -85,7 +85,7 @@ return array (
     'startYear' => 1985,
   ),
   'source' => 'southamerica',
-  'version' => '8.50',
+  'version' => '8.52',
   'name' => 'America/Paramaribo',
 );
 

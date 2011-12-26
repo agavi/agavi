@@ -23,9 +23,30 @@ class WebRoutingTest extends AgaviTestCase
 		AgaviConfig::set('core.use_routing', true);
 	}
 
-	protected function runTest()
+	public function loadTestCases()
 	{
-		$export = $this->export;
+		$retval = array();
+		
+		$d = dir(dirname(__FILE__) . '/../routing/cases/');
+		while(false !== ($entry = $d->read())) {
+			if(preg_match('#.*\\.case\\.php#i', $entry))
+			{
+				$cases = include($d->path . $entry);
+				foreach($cases as $case) {
+					$retval[$entry . ': ' . $case['message']] = array($case);
+				}
+			}
+		}
+		$d->close();
+		
+		return $retval;
+	}
+
+	/**
+	 * @dataProvider loadTestCases
+	 */
+	public function testCases($export)
+	{
 		$_SERVER = $export['_SERVER'];
 		$_ENV = $export['_ENV'];
 		$_GET = $export['_GET'];

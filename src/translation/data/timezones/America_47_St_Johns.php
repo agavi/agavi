@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/St_Johns".
- * Compiled from olson file "northamerica", version 8.42.
+ * Compiled from olson file "northamerica", version 8.51.
  *
  * @package    agavi
  * @subpackage translation
@@ -979,6 +979,41 @@ return array (
       'time' => 1194143460,
       'type' => 3,
     ),
+    182 => 
+    array (
+      'time' => 1205033460,
+      'type' => 4,
+    ),
+    183 => 
+    array (
+      'time' => 1225593060,
+      'type' => 3,
+    ),
+    184 => 
+    array (
+      'time' => 1236483060,
+      'type' => 4,
+    ),
+    185 => 
+    array (
+      'time' => 1257042660,
+      'type' => 3,
+    ),
+    186 => 
+    array (
+      'time' => 1268537460,
+      'type' => 4,
+    ),
+    187 => 
+    array (
+      'time' => 1289097060,
+      'type' => 3,
+    ),
+    188 => 
+    array (
+      'time' => 1299987060,
+      'type' => 4,
+    ),
   ),
   'finalRule' => 
   array (
@@ -991,7 +1026,7 @@ return array (
       'month' => 2,
       'date' => '8',
       'day_of_week' => -1,
-      'time' => 60000,
+      'time' => 7200000,
       'type' => 0,
     ),
     'end' => 
@@ -999,13 +1034,13 @@ return array (
       'month' => 10,
       'date' => '1',
       'day_of_week' => -1,
-      'time' => 60000,
+      'time' => 7200000,
       'type' => 0,
     ),
-    'startYear' => 2007,
+    'startYear' => 2012,
   ),
   'source' => 'northamerica',
-  'version' => '8.42',
+  'version' => '8.51',
   'name' => 'America/St_Johns',
 );
 

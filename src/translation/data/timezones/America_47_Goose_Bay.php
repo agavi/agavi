@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Goose_Bay".
- * Compiled from olson file "northamerica", version 8.42.
+ * Compiled from olson file "northamerica", version 8.51.
  *
  * @package    agavi
  * @subpackage translation
@@ -821,6 +821,41 @@ return array (
       'time' => 1194145260,
       'type' => 7,
     ),
+    148 => 
+    array (
+      'time' => 1205035260,
+      'type' => 8,
+    ),
+    149 => 
+    array (
+      'time' => 1225594860,
+      'type' => 7,
+    ),
+    150 => 
+    array (
+      'time' => 1236484860,
+      'type' => 8,
+    ),
+    151 => 
+    array (
+      'time' => 1257044460,
+      'type' => 7,
+    ),
+    152 => 
+    array (
+      'time' => 1268539260,
+      'type' => 8,
+    ),
+    153 => 
+    array (
+      'time' => 1289098860,
+      'type' => 7,
+    ),
+    154 => 
+    array (
+      'time' => 1299988860,
+      'type' => 8,
+    ),
   ),
   'finalRule' => 
   array (
@@ -833,7 +868,7 @@ return array (
       'month' => 2,
       'date' => '8',
       'day_of_week' => -1,
-      'time' => 60000,
+      'time' => 7200000,
       'type' => 0,
     ),
     'end' => 
@@ -841,13 +876,13 @@ return array (
       'month' => 10,
       'date' => '1',
       'day_of_week' => -1,
-      'time' => 60000,
+      'time' => 7200000,
       'type' => 0,
     ),
-    'startYear' => 2007,
+    'startYear' => 2012,
   ),
   'source' => 'northamerica',
-  'version' => '8.42',
+  'version' => '8.51',
   'name' => 'America/Goose_Bay',
 );
 

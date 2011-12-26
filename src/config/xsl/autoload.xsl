@@ -23,6 +23,13 @@
 	</xsl:template>
 	
 	<!-- 1.0 backwards compatibility for 1.1 -->
+	<xsl:template match="autoload_1_0:autoload">
+		<xsl:element name="autoload" namespace="{$autoload_1_1}">
+			<xsl:attribute name="class"><xsl:value-of select="@name" /></xsl:attribute>
+			<xsl:copy-of select="@*[local-name() != 'name']" />
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
 	<xsl:template match="autoload_1_0:*">
 		<xsl:element name="{local-name()}" namespace="{$autoload_1_1}">
 			<xsl:copy-of select="@*" />

@@ -81,30 +81,29 @@ class AgaviConsoleRequest extends AgaviRequest
 			$prev = $arg;
 		}
 		
-		$_FILES = array();
-		if($this->getParameter('read_stdin', false)) {
-			$stdinFile = tempnam(AgaviConfig::get('core.cache_dir'), 'stdin_');
-			$stdin = fopen('php://stdin', 'rb');
-			stream_set_blocking($stdin, false);
-			$size = stream_copy_to_stream($stdin, $handle = fopen($stdinFile, 'wb'));
-			fclose($handle);
+		$files = array();
+		if($this->getParameter('read_stdin', true) && defined('STDIN') && ($stdinMeta = stream_get_meta_data(STDIN)) && !$stdinMeta['seekable']) {
+			// if stream_get_meta_data() reports STDIN as not seekable, that means something was piped into our process, and we should put that into a file
+			// the alternative method to determine this is via posix_isatty(STDIN) which returns false in the same situation, but that requires the posix extension and also doesn't work on Windows
+			$stdinName = $this->getParameter('stdin_file_name', 'stdin_file');
 			
-			$_FILES = array(
-				$this->getParameter('stdin_file_name', 'stdin_file') => array(
-					'name' => $stdinFile,
+			$ufc = $this->getParameter('uploaded_file_class', 'AgaviUploadedFile');
+			$files = array(
+				$stdinName => new $ufc(array(
+					'name' => $stdinName,
 					'type' => 'application/octet-stream',
-					'size' => $size,
-					'tmp_name' => $stdinFile,
+					'size' => -1, // we're not buffering, so -1 is a good choice probably (better than 0 anyway)
+					'stream' => STDIN,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
-				)
+				))
 			);
 		}
 
 		$rdhc = $this->getParameter('request_data_holder_class');
 		$this->setRequestData(new $rdhc(array(
 			constant("$rdhc::SOURCE_PARAMETERS") => array(),
-			constant("$rdhc::SOURCE_FILES") => $_FILES,
+			constant("$rdhc::SOURCE_FILES") => $files,
 		)));
 		$rd = $this->getRequestData();
 		

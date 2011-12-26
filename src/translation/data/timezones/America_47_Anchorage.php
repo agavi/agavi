@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Anchorage".
- * Compiled from olson file "northamerica", version 8.42.
+ * Compiled from olson file "northamerica", version 8.51.
  *
  * @package    agavi
  * @subpackage translation
@@ -769,7 +769,7 @@ return array (
     'startYear' => 2007,
   ),
   'source' => 'northamerica',
-  'version' => '8.42',
+  'version' => '8.51',
   'name' => 'America/Anchorage',
 );
 
