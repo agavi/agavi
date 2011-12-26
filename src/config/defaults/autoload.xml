@@ -92,12 +92,14 @@
 			<!-- agavi/exception -->
 			<autoload class="AgaviAutoloadException">%core.agavi_dir%/exception/AgaviAutoloadException.class.php</autoload>
 			<autoload class="AgaviCacheException">%core.agavi_dir%/exception/AgaviCacheException.class.php</autoload>
+			<autoload class="AgaviClassNotFoundException">%core.agavi_dir%/exception/AgaviClassNotFoundException.class.php</autoload>
 			<autoload class="AgaviConfigurationException">%core.agavi_dir%/exception/AgaviConfigurationException.class.php</autoload>
 			<autoload class="AgaviControllerException">%core.agavi_dir%/exception/AgaviControllerException.class.php</autoload>
 			<autoload class="AgaviDatabaseException">%core.agavi_dir%/exception/AgaviDatabaseException.class.php</autoload>
 			<autoload class="AgaviException">%core.agavi_dir%/exception/AgaviException.class.php</autoload>
 			<autoload class="AgaviFactoryException">%core.agavi_dir%/exception/AgaviFactoryException.class.php</autoload>
 			<autoload class="AgaviFileException">%core.agavi_dir%/exception/AgaviFileException.class.php</autoload>
+			<autoload class="AgaviFileNotFoundException">%core.agavi_dir%/exception/AgaviFileNotFoundException.class.php</autoload>
 			<autoload class="AgaviFilterException">%core.agavi_dir%/exception/AgaviFilterException.class.php</autoload>
 			<autoload class="AgaviInitializationException">%core.agavi_dir%/exception/AgaviInitializationException.class.php</autoload>
 			<autoload class="AgaviDisabledModuleException">%core.agavi_dir%/exception/AgaviDisabledModuleException.class.php</autoload>

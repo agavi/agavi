@@ -358,11 +358,11 @@ class AgaviController extends AgaviParameterHolder
 			if(false !== ($file = $this->checkActionFile($moduleName, $actionName))) {
 				require($file);
 			} else {
-				throw new AgaviException('Could not find file for Action "' . $actionName . '" in module "' . $moduleName . '"');
+				throw new AgaviFileNotFoundException(sprintf('Could not find file for Action "%s" in Module "%s".', $actionName, $moduleName));
 			}
 			
 			if(!class_exists($class, false)) {
-				throw new AgaviException('Could not find Action "' . $longActionName . '" for module "' . $moduleName . '"');
+				throw new AgaviClassNotFoundException(sprintf('Failed to instantiate Action "%s" in Module "%s" because file "%s" does not contain class "%s".', $actionName, $moduleName, $file, $class));
 			}
 		} 
 		
@@ -454,11 +454,11 @@ class AgaviController extends AgaviParameterHolder
 			if(false !== ($file = $this->checkViewFile($moduleName, $viewName))) {
 				require($file);
 			} else {
-				throw new AgaviException('Could not find file for View "' . $viewName . '" in module "' . $moduleName . '"');
+				throw new AgaviFileNotFoundException(sprintf('Could not find file for View "%s" in Module "%s".', $viewName, $moduleName));
 			}
 			
 			if(!class_exists($class, false)) {
-				throw new AgaviException('Could not find View "' . $longViewName . '" for module "' . $moduleName . '"');
+				throw new AgaviClassNotFoundException(sprintf('Failed to instantiate View "%s" in Module "%s" because file "%s" does not contain class "%s".', $viewName, $moduleName, $file, $class));
 			}
 		} 
 		
