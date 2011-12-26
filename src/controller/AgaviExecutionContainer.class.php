@@ -257,8 +257,17 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 		$controller->countExecution();
 
 		$moduleName = $this->getModuleName();
-		$actionInstance = $this->getActionInstance();
 
+		try {
+			$actionInstance = $this->getActionInstance();
+		} catch(AgaviDisabledModuleException $e) {
+			$this->setNext($this->createSystemActionForwardContainer('module_disabled'));
+			return $this->proceed();
+		} catch(AgaviFileNotFoundException $e) {
+			$this->setNext($this->createSystemActionForwardContainer('error_404'));
+			return $this->proceed();
+		} // do not catch AgaviClassNotFoundException, we want that to bubble up since it means the class in the action file is named incorrectly
+		
 		// copy and merge request data as required
 		$this->initRequestData();
 		
@@ -792,19 +801,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 			$moduleName = $this->getModuleName();
 			$actionName = $this->getActionName();
 			
-			try {
-				// FIXME: this has been moved from execute(), but in here, the $this->proceed() won't work anymore, and it appears that this whole 404 and module disabled stuff should be put somewhere else anyway. Maybe put the try{}/catch{} into execute()...
-				// TODO: cleanup and merge with createActionInstance once Exceptions have been cleaned up and specced properly so that the two error conditions can be told apart
-				if(false === $controller->checkActionFile($moduleName, $actionName)) {
-					$this->setNext($this->createSystemActionForwardContainer('error_404'));
-					return $this->proceed();
-				}
-				
-				$this->actionInstance = $controller->createActionInstance($moduleName, $actionName);
-			} catch(AgaviDisabledModuleException $e) {
-				$this->setNext($this->createSystemActionForwardContainer('module_disabled'));
-				return $this->proceed();
-			}
+			$this->actionInstance = $controller->createActionInstance($moduleName, $actionName);
 			
 			// initialize the action
 			$this->actionInstance->initialize($this);
