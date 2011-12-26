@@ -300,7 +300,7 @@ class AgaviExecutionContainer extends AgaviAttributeHolder
 	 */
 	protected function initRequestData()
 	{
-		if($this->actionInstance->isSimple()) {
+		if($this->getActionInstance()->isSimple()) {
 			if($this->arguments !== null) {
 				// clone it so mutating it has no effect on the "outside world"
 				$this->requestData = clone $this->arguments;
