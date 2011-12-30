@@ -204,13 +204,159 @@ class AgaviXmlConfigDomElementTest extends AgaviPhpunitTestCase
 	public function genGetAgaviParametersMergeCases()
 	{
 		return array(
-			'simple overwrite'                   => array(array('<ae:parameter name="foo">bar</ae:parameter>', '<ae:parameter name="foo">baz</ae:parameter>'), array('foo' => 'baz')),
-			'singular/plural overwrite'          => array(array('<ae:parameter name="foo">bar</ae:parameter>', '<ae:parameters><ae:parameter name="foo">baz</ae:parameter></ae:parameters>'), array('foo' => 'baz')),
-			'overwrite array with string'        => array(array('<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>', '<ae:parameter name="foo">baz</ae:parameter>'), array('foo' => 'baz')),
-			'overwrite string with array'        => array(array('<ae:parameter name="foo">baz</ae:parameter>', '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>'), array('foo' => array('bar'))),
-			'overwrite string with array w/ key' => array(array('<ae:parameter name="foo">baz</ae:parameter>', '<ae:parameter name="foo"><ae:parameter name="1">bar</ae:parameter></ae:parameter>'), array('foo' => array(1 => 'bar'))),
-			'numeric keys are not reindexed'     => array(array('<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>', '<ae:parameter name="foo"><ae:parameter>baz</ae:parameter></ae:parameter>'), array('foo' => array(0 => 'baz'))),
-			'empty element overwrites'           => array(array('<ae:parameter name="foo">bar</ae:parameter>', '<ae:parameter name="foo"></ae:parameter>'), array('foo' => null)),
+			'simple overwrite'                          => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo">baz</ae:parameter>',
+			                                               ), array('foo' => 'baz')),
+			'singular/plural overwrite'                 => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameters><ae:parameter name="foo">baz</ae:parameter></ae:parameters>',
+			                                               ), array('foo' => 'baz')),
+			'overwrite array with string'               => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo">baz</ae:parameter>',
+			                                               ), array('foo' => 'baz')),
+			'overwrite string with array'               => array(array(
+			                                                 '<ae:parameter name="foo">baz</ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array('bar'))),
+			'overwrite string with array w/ key'        => array(array(
+			                                                 '<ae:parameter name="foo">baz</ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter name="1">bar</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array(1 => 'bar'))),
+			'numeric keys are not reindexed'            => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter>baz</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array(0 => 'baz'))),
+			'empty element overwrites'                  => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo"></ae:parameter>',
+			                                               ), array('foo' => null)),
+			
+			'simple overwrite (auto)'                   => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo">baz</ae:parameter>',
+			                                               ), array('foo' => 'baz')),
+			'singular/plural overwrite (auto)'          => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameters><ae:parameter name="foo">baz</ae:parameter></ae:parameters>',
+			                                               ), array('foo' => 'baz')),
+			'overwrite array with string (auto)'        => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo">baz</ae:parameter>',
+			                                               ), array('foo' => 'baz')),
+			'overwrite string with array (auto)'        => array(array(
+			                                                 '<ae:parameter name="foo">baz</ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array('bar'))),
+			'overwrite string with array w/ key (auto)' => array(array(
+			                                                 '<ae:parameter name="foo">baz</ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter name="1">bar</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array(1 => 'bar'))),
+			'numeric keys are not reindexed (auto)'     => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter>baz</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array(0 => 'baz'))),
+			'empty element overwrites (auto)'           => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo"></ae:parameter>',
+			                                               ), array('foo' => null)),
+			
+			'replace existing key'                      => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo" mode="replace">baz</ae:parameter>',
+			                                               ), array('foo' => 'baz')),
+			'replace non-existing key'                  => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="bar" mode="replace">baz</ae:parameter>',
+			                                               ), array('foo' => 'bar', 'bar' => 'baz')),
+			'replace simple item with complex item'     => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo" mode="replace"><ae:parameter>baz</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array('baz'))),
+			'replace complex item with simple item'     => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo" mode="replace">baz</ae:parameter>',
+			                                               ), array('foo' => 'baz')),
+			
+			'remove'                                    => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo" merge="remove" />',
+			                                               ), array()),
+			'remove despite content'                    => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo" merge="remove">baz</ae:parameter>',
+			                                               ), array()),
+			'remove complex content'                    => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter name="bar">baz</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo" merge="remove" />',
+			                                               ), array()),
+			'remove nested'                             => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter name="bar">baz</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter name="bar" merge="remove" /></ae:parameter>',
+			                                               ), array('foo' => array())),
+			'remove numeric'                            => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="remove" /></ae:parameter>',
+			                                               ), array('foo' => array())),
+			'removal leaves gap'                        => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>foo</ae:parameter><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="remove" /><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array(1 => 'bar'))), // EDGE CASE, WHAT TO DO?
+			
+			'setnx sets if key not exists'              => array(array(
+			                                                 '<ae:parameter name="foo" merge="setnx">bar</ae:parameter>',
+			                                               ), array('foo' => 'bar')),
+			'setnx does not set if key exists'          => array(array(
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo" merge="setnx">baz</ae:parameter>',
+			                                               ), array('foo' => 'bar')),
+			'setnx does not set if existing is null'    => array(array(
+			                                                 '<ae:parameter name="foo"></ae:parameter>',
+			                                                 '<ae:parameter name="foo" merge="setnx">baz</ae:parameter>',
+			                                               ), array('foo' => null)),
+			'setnx can set into children'               => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter name="bar">lol</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter name="baz">ohai</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array('bar' => 'lol', 'baz' => 'ohai'))),
+			'setnx array casts scalar existing item'    => array(array( // EDGE CASE, WHAT TO DO?
+			                                                 '<ae:parameter name="foo">lol</ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter name="baz">ohai</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array('baz' => 'ohai'))),
+			
+			'append'                                    => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>egg</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="append">spam</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array('egg', 'spam'))),
+			'append overwrites existing scalar'         => array(array( // EDGE CASE, BUT THERE REALLY IS NO OTHER WAY IMPLEMENTATION-WISE
+			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="append">spam</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array('spam'))),
+			'appending to map gives key 0'              => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter name="bar">baz</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="append">spam</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array('bar' => 'baz', 0 => 'spam'))),
+			'appending to mixed array gives right key'  => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter name="bar">baz</ae:parameter><ae:parameter>lulz</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="append">spam</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array('bar' => 'baz', 0 => 'lulz', 1 => 'spam'))),
+			'appending to array without 0 key works'    => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter name="1">lulz</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="append">spam</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array(1 => 'lulz', 2 => 'spam'))),
+			'appending to array with key gaps works'    => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter><ae:parameter name="2">baz</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="append">spam</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array(0 => 'bar', 2 => 'baz', 3 => 'spam'))),
+			'appending to array with remove gaps works' => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter><ae:parameter>zomg</ae:parameter><ae:parameter>baz</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter name="1" merge="remove" /></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="append">spam</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array(0 => 'bar', 2 => 'baz', 3 => 'spam'))),
+			'following siblings are not reindexed'      => array(array(
+			                                                 '<ae:parameter name="foo"><ae:parameter>foo</ae:parameter><ae:parameter>bar</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo"><ae:parameter merge="append">baz</ae:parameter><ae:parameter>spam</ae:parameter></ae:parameter>',
+			                                               ), array('foo' => array(0 => 'spam', 1 => 'bar', 2 => 'baz'))),
 		);
 	}
 }

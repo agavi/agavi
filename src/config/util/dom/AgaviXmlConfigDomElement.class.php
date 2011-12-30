@@ -521,19 +521,52 @@ class AgaviXmlConfigDomElement extends DOMElement implements IteratorAggregate
 			$elements = $this->get('parameters', AgaviXmlConfigParser::NAMESPACE_AGAVI_ENVELOPE_LATEST);
 			
 			foreach($elements as $element) {
-				$key = null;
+				if(!$element->hasAttribute('merge')) {
+					// assume "auto" as default merge mode
+					$element->setAttribute('merge', 'auto');
+				}
+				
 				if(!$element->hasAttribute('name')) {
-					$result[$key = $offset++] = null;
+					if($element->getAttribute('merge') == 'append') {
+						$key = $result ? (int)max(array_keys($result)) : -1; // if the result is empty, we start at 0
+						// if there are string keys only, or string keys and a key int(0), max() will return a string, so we need to make sure we start at 0 or 1 depending on the case
+						// since we cast to int above, we can check for this special case and set the key to -1
+						if($key === 0 && !isset($result[0])) {
+							$key = -1; 
+						}
+						// finally, increment the key to the desired value
+						$key++;
+					} else {
+						$key = $offset++;
+					}
 				} else {
 					$key = $element->getAttribute('name');
 				}
 				
-				if($element->hasAgaviParameters()) {
-					$result[$key] = isset($result[$key]) && is_array($result[$key]) ? $result[$key] : array();
-					$result[$key] = $element->getAgaviParameters($result[$key]);
-				} else {
-					$result[$key] = $element->getLiteralValue();
+				if($element->getAttribute('merge') == 'remove') {
+					// remove the element and skip the rest of the loop
+					unset($result[$key]);
+					continue;
 				}
+				
+				if($element->getAttribute('merge') == 'setnx' && array_key_exists($key, $result)) { // TODO: isset or array_key_exists?
+					// key already exists, we're not supposed to set our value then, skip...
+					continue;
+				}
+				
+				if($element->hasAgaviParameters()) {
+					// $value = isset($result[$key]) && is_array($result[$key]) ? $result[$key] : array();
+					// $value = $element->getAgaviParameters($element->getAttribute('merge') == 'auto' ? $value : array()); // merge or replace
+					$value = $element->getAgaviParameters(
+						$element->getAttribute('merge') == 'auto' && isset($result[$key]) && is_array($result[$key]) // only merge arrays or else we break BC
+						? $result[$key]
+						: array()
+					);
+				} else {
+					$value = $element->getLiteralValue();
+				}
+				
+				$result[$key] = $value;
 			}
 		}
 		
