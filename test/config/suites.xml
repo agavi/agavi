@@ -2,11 +2,11 @@
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/testing/suites/1.0">
 	<ae:configuration>
 		<suites>
-			<suite name="All" base="">
+			<!-- <suite name="All" base="">
 				<includes>
 					<include>.*Test.php</include>
 				</includes>
-			</suite>
+			</suite> -->
 			<suite name="Context">
 				<testfiles>
 					<testfile>unit/context/AgaviContextTest.php</testfile>
