@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.0.8 RC1 (January ??, 2011)
 ----------------------------
 
+FIX: The NumberFormatter tests fail with recent ICU versions (#1469) (Dominik)
 
 
 
