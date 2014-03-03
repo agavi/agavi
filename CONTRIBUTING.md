@@ -4,19 +4,19 @@ Input and contributions are very welcome! Please open issues with
 improvements, feature requests or bug reports. To contribute source code,
 add documentation or fix spelling mistakes try this:
 
-1. [Fork](http://help.github.com/forking/) a current branch (like master).
+1. [Fork](https://help.github.com/forking/) a current branch (like master).
 1. Clone the forked git.
 1. Make changes and additions.
 1. Verify changes and make sure that the tests succeed.
 1. Add, commit, squash and push the changes to the forked repository.
-1. Send a [pull request](http://help.github.com/pull-requests/) to Agavi
+1. Send a [pull request](https://help.github.com/pull-requests/) to Agavi
 
 Please provide a well written issue describing the change and why it is
 necessary.
 
 ## Coding styles
 
-Please see the [coding style hints](wiki/CodingStyle) before making changes
+Please see the [coding style hints](https://github.com/agavi/agavi/wiki/CodingStyle) before making changes
 and try to adhere to them.
 
 ## Commit messages
