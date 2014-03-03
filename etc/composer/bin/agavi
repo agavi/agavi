@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+ini_set('memory_limit', 4294967295);
+
+$agaviSourceDirectory = __DIR__ . '/../../../src';
+$composerVendorDir = __DIR__ . '/../../../../../';
+
+// inject the source directory argument
+array_splice($_SERVER['argv'], 1, 0, array('--agavi-source-directory', $agaviSourceDirectory));
+
+// when phing is installed via composer the version string always is PHING-DEV
+// but we can be sure to have the proper version installed
+define('DISABLE_PHING_VERSION_CHECK', true);
+
+// set up the include paths via composer
+require($composerVendorDir . '/autoload.php');
+require($agaviSourceDirectory . '/build/agavi/script/agavi_wrapped.php');
+
