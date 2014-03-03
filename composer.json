@@ -1,0 +1,46 @@
+{
+	"name": "agavi/agavi",
+	"description": "Agavi is a full-featured MVC-style framework for PHP5 with a strong focus on structure, code reusability and flexibility.",
+	"keywords": ["framework", "mvc"],
+	"homepage": "http://agavi.org",
+	"type": "library",
+	"license": "LGPL-2.1+",
+	"authors": [
+		{
+			"name": "Agavi Contributors",
+			"homepage": "https://github.com/agavi/agavi/graphs/contributors"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/agavi/agavi/issues",
+		"wiki": "https://github.com/agavi/agavi/wiki",
+		"irc": "irc://irc.freenode.org/agavi"
+	},
+	"require": {
+		"php": ">=5.2.0",
+		"ext-dom": "*",
+		"lib-libxml": "*",
+		"ext-spl": "*",
+		"ext-reflection": "*",
+		"ext-pcre": "*",
+
+		"phing/phing": "~2.4"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~3.5"
+	},
+	"suggest": {
+		"phpunit/phpunit": "Install phpunit if you want to run your tests",
+		"ext-xsl": "Required only for transformation of pre 1.0 style configuration files",
+		"ext-tokenizer": "Enable the tokenizer extension allows Agavi to generate more efficient config-caches",
+		"ext-session": "If the session extension is disabled you'll have to build your own session storage system and hook it into agavi",
+		"ext-xmlrpc": "Enable the xmlrpc extension if you want to use XML-RPC features",
+		"ext-soap": "Enable the xmlrpc extension if you want to use Agavi's SOAP features",
+		"ext-pdo": "PDO is required for database connectors that use PDO as base",
+		"ext-iconv": "Enable iconv if you need to convert between other charset than iso-8859-1 and utf-8"
+	},
+	"autoload": {
+		"files": ["src/agavi.php"]
+	},
+	"bin": ["etc/composer/bin/agavi"]
+}
