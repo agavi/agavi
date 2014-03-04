@@ -4,6 +4,14 @@
 // This file is based on https://github.com/sebastianbergmann/phpunit/blob/3.5.15/PHPUnit/Framework/Process/TestCaseMethod.tpl.dist and https://github.com/sebastianbergmann/phpunit/blob/3.6.4/PHPUnit/Framework/Process/TestCaseMethod.tpl.dist with some lines commented out and a version switch inside __phpunit_run_isolated_test() to cater for the different code coverage collection mechanisms between versions
 // ***
 
+/**
+ * If PHP has no timezone set, use London (UTC) as a fallback.
+ * Otherwise the tests would fail unnecessarily.
+ */
+if (!ini_get('date.timezone')) {
+    ini_set('date.timezone', 'Europe/London');
+}
+
 set_include_path('{include_path}');
 // removal reason: testing.php includes that one
 // require_once 'PHPUnit/Autoload.php';
