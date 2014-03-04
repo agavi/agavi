@@ -14,8 +14,8 @@ set_include_path('{include_path}');
  * The code generated from this template runs in a new process and does not have
  * the autoloaders present.
  */
-if (is_readable({composerAutoload})) {
-    require_once({composerAutoload});
+if(is_readable({composerAutoload})) {
+	require_once({composerAutoload});
 }
 
 ob_start();
