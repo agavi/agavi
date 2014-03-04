@@ -1,6 +1,6 @@
 <?php
 
-$composer_autoload = '../vendor/autoload.php';
+$composer_autoload = dirname(__FILE__).'/../vendor/autoload.php';
 
 if (is_readable($composer_autoload)) {
     require($composer_autoload);
