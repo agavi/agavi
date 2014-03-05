@@ -288,9 +288,7 @@ class AgaviUploadedFile implements ArrayAccess
 			// have faith in the ctor :)
 			$this->stream = tmpfile();
 			if(!$this->stream) {
-				$error = 'Cannot create temporary file via tmpfile()';
-				$error = sprintf($error, $directory);
-				throw new AgaviFileException($error);
+				throw new AgaviFileException('Cannot create temporary file via tmpfile()');
 			}
 			fwrite($this->stream, $this->contents);
 			rewind($this->stream);

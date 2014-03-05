@@ -30,6 +30,11 @@
 class AgaviConsoleRequest extends AgaviRequest
 {
 	/**
+	 * @var        string The command given on the command line (without parameters)
+	 */
+	protected $input = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
