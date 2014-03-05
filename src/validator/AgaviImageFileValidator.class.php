@@ -92,8 +92,12 @@ class AgaviImageFileValidator  extends AgaviBaseFileValidator
 			return true;
 		}
 		
-		$formats = array(
-			'jpg' => IMAGETYPE_JPEG, // As image_type_to_extension() returns only "jpeg"
+		// We need this additional alias map because image_type_to_extension()
+		// returns only "jpeg" but not "jpg" or "tiff" but not "tif"
+		$aliases = array(
+			IMAGETYPE_JPEG    => 'jpg',
+			IMAGETYPE_TIFF_II => 'tif',
+			IMAGETYPE_TIFF_MM => 'tif',
 		);
 		$ext = image_type_to_extension($imageType, false);
 		
@@ -105,7 +109,9 @@ class AgaviImageFileValidator  extends AgaviBaseFileValidator
 		
 		foreach($format as $name) {
 			$lName = strtolower($name);
-			if($ext == $lName || isset($formats[$lName]) && $formats[$lName] == $imageType) {
+			if($ext == $lName) {
+				return true;
+			} elseif(isset($aliases[$imageType]) && $aliases[$imageType] == $name) {
 				return true;
 			}
 		}
