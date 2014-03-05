@@ -521,9 +521,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	
 	/**
 	 * Get a complete list of gen() options based on the given, probably
-	 * incomplete, options array, or options preset name.
+	 * incomplete, options array, and/or options preset name(s).
 	 *
-	 * @param      mixed An array of gen options or the name of an options preset.
+	 * @param      mixed An array of gen options and names of options presets
+	 *                   or just the name of a single option preset.
 	 *
 	 * @return     array A complete array of options.
 	 *
@@ -535,15 +536,28 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	protected function resolveGenOptions($input = array())
 	{
 		if(is_string($input)) {
+			// A single option preset was given
 			if(isset($this->genOptionsPresets[$input])) {
 				return array_merge($this->defaultGenOptions, $this->genOptionsPresets[$input]);
 			}
 		} elseif(is_array($input)) {
-			return array_merge($this->defaultGenOptions, $input);
+			$genOptions = $this->defaultGenOptions;
+			foreach($input as $key => $value) {
+				if(is_numeric($key)) {
+					// Numeric key – it's an option preset
+					if(isset($this->genOptionsPresets[$value])) {
+						$genOptions = array_merge($genOptions, $this->genOptionsPresets[$value]);
+					} else {
+						throw new AgaviException('Undefined Routing gen() options preset "' . $value . '"');
+					}
+				} else {
+					// String key – it's an option
+					$genOptions[$key] = $value;
+				}
+			}
+			return $genOptions;
 		}
-		throw new AgaviException('Undefined Routing gen() options preset "' . $input . '"');
 	}
-	
 	
 	/**
 	 * Adds the matched parameters from the 'null' routes to the given parameters
