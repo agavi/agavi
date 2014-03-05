@@ -38,9 +38,9 @@ $svg = false;
 $ua = '';
 if(isset($_SERVER['HTTP_USER_AGENT'])) {
 	$ua = $_SERVER['HTTP_USER_AGENT'];
-} elseif($container !== null && ($rd = $container->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder && $rd->hasHeader('User-Agent')) {
+} elseif(isset($container) && ($rd = $container->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder && $rd->hasHeader('User-Agent')) {
 	$ua = $rd->getHeader('User-Agent');
-} elseif($context !== null && ($rq = $context->getRequest()) !== null && !$rq->isLocked() && ($rd = $rq->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder) {
+} elseif(isset($context) && ($rq = $context->getRequest()) !== null && !$rq->isLocked() && ($rd = $rq->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder) {
 	$ua = $rd->getHeader('User-Agent');
 }
 if(strpos($ua, 'AppleWebKit') !== false) {
