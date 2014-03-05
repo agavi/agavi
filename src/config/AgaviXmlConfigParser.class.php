@@ -507,7 +507,7 @@ class AgaviXmlConfigParser
 				$parts[0] = str_replace('\\', '/', AgaviToolkit::expandDirectives($parts[0]));
 				$attribute->nodeValue = rawurlencode($parts[0]) . (isset($parts[1]) ? '#' . $parts[1] : '');
 				if(strpos($parts[0], '*') !== false || strpos($parts[0], '{') !== false) {
-					$glob = glob($parts[0], GLOB_BRACE | GLOB_NOSORT);
+					$glob = glob($parts[0], GLOB_BRACE);
 					if($glob) {
 						$glob = array_unique($glob); // it could be that someone used /path/to/{Foo,*}/burp.xml so Foo would come before all others, that's why we need to remove duplicates as the * would match Foo again
 						foreach($glob as $path) {
