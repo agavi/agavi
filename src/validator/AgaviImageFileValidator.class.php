@@ -93,14 +93,9 @@ class AgaviImageFileValidator  extends AgaviBaseFileValidator
 		}
 		
 		$formats = array(
-			'gif'	=> IMAGETYPE_GIF,
-			'jpeg'	=> IMAGETYPE_JPEG,
-			'jpg'	=> IMAGETYPE_JPEG,
-			'png'	=> IMAGETYPE_PNG,
-			'bmp'	=> IMAGETYPE_BMP,
-			'psd' => IMAGETYPE_PSD,
-			'swf' => IMAGETYPE_SWF,
+			'jpg' => IMAGETYPE_JPEG, // As image_type_to_extension() returns only "jpeg"
 		);
+		$ext = image_type_to_extension($imageType, false);
 		
 		$format = $this->getParameter('format', array());
 		
@@ -109,7 +104,8 @@ class AgaviImageFileValidator  extends AgaviBaseFileValidator
 		}
 		
 		foreach($format as $name) {
-			if($formats[strtolower($name)] == $imageType) {
+			$lName = strtolower($name);
+			if($ext == $lName || isset($formats[$lName]) && $formats[$lName] == $imageType) {
 				return true;
 			}
 		}
