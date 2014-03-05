@@ -57,12 +57,18 @@ if(strpos($ua, 'AppleWebKit') !== false) {
 	}
 }
 
-header('HTTP/1.0 500 Internal Server Error');
+if(!headers_sent()) {
+	header('HTTP/1.0 500 Internal Server Error');
+}
 if($svg) {
-	header('Content-Type: application/xhtml+xml; charset=utf-8');
+	if(!headers_sent()) {
+		header('Content-Type: application/xhtml+xml; charset=utf-8');
+	}
 	echo '<?xml version="1.0" encoding="utf-8" standalone="no" ?>';
 } else {
-	header('Content-Type: text/html; charset=utf-8');
+	if(!headers_sent()) {
+		header('Content-Type: text/html; charset=utf-8');
+	}
 }
 
 ?>
