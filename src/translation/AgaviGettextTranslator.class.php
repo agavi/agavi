@@ -207,8 +207,7 @@ class AgaviGettextTranslator extends AgaviBasicTranslator
 		$basePath = AgaviToolkit::expandVariables($basePath, array('domain' => $domain));
 
 		$data = array();
-		$replaceCount = 0;
-		
+
 		foreach($localeNameBases as $localeNameBase) {
 			$fileName = AgaviToolkit::expandVariables($basePath, array('locale' => $localeNameBase));
 			if($fileName === $basePath) {

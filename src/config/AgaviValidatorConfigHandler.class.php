@@ -62,7 +62,6 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		
 		$config = $document->documentURI;
 		
-		$classMap = array();
 		$code = array();//array('lines' => array(), 'order' => array());
 		
 		foreach($document->getConfigurationElements() as $cfg) {

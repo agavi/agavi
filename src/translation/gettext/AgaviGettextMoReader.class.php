@@ -72,7 +72,6 @@ final class AgaviGettextMoReader
 
 		$originalOffsetPos = $originalOffset;
 		$translatedOffsetPos = $translatedOffset;
-		$i = 0;
 
 		if($numStrings > 0) {
 			$offsetLen = $numStrings * 8;

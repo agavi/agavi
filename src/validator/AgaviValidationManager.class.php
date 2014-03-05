@@ -809,8 +809,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			}
 			return $msgs;
 		} else {
-			$msgs = array();
-
 			$incidents = $this->getIncidents(AgaviValidator::NOTICE);
 			$msgs = array();
 			foreach($incidents as $incident) {

@@ -479,8 +479,6 @@ class AgaviTranslationManager
 		}
 
 		$domainParts = explode('.', $domain);
-		$partCount = count($domainParts);
-		$extraParts = array();
 
 		do {
 			if(count($domainParts) == 0) {
