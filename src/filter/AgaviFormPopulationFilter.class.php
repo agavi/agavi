@@ -38,7 +38,7 @@
  *
  * @since      0.11.0
  *
- * @version    $Id: AgaviFormPopulationFilter.class.php 4887 2011-12-11 22:28:49Z david $
+ * @version    $Id$
  */
 class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
