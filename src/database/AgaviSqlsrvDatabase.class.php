@@ -48,7 +48,6 @@ class AgaviSqlsrvDatabase extends AgaviDatabase
 			throw new AgaviDatabaseException($error);
 		}
 
-		$settings = array();
 		if($this->hasParameter('settings')) {
 			foreach((array)$this->getParameter('settings') as $key => $value) {
 				if(!sqlsrv_configure($key, is_string($value) && strpos($value, 'SQLSRV_') === 0 && defined($value) ? constant($value) : (is_numeric($value) ? (int)$value : $value))) {
@@ -58,7 +57,7 @@ class AgaviSqlsrvDatabase extends AgaviDatabase
 		}
 
 		$connectionInfo = $this->getParameter('connection_info');
-		foreach($connectionInfo as $key => &$value) {
+		foreach($connectionInfo as &$value) {
 			$value = is_string($value) && strpos($value, 'SQLSRV_') === 0 && defined($value) ? constant($value) : (is_numeric($value) ? (int)$value : $value);
 		}
 		

@@ -217,8 +217,6 @@ class AgaviCurrencyFormatter extends AgaviDecimalFormatter implements AgaviITran
 			$name = $code;
 		}
 
-		$res = '';
-
 		switch($this->currencyType) {
 			case AgaviDecimalFormatter::CURRENCY_SYMBOL:
 				return $symbol;
