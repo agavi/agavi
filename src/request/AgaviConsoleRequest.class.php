@@ -108,7 +108,7 @@ class AgaviConsoleRequest extends AgaviRequest
 		$rd = $this->getRequestData();
 		
 		foreach($parameters as $name => $value) {
-			$rd->setParameter(substr($name, 1), $value);
+			$rd->setParameter(ltrim($name, '-'), $value);
 		}
 		
 		$this->input = implode(' ', $input);
