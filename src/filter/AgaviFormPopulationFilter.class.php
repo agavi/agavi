@@ -38,7 +38,7 @@
  *
  * @since      0.11.0
  *
- * @version    $Id$
+ * @version    $Id: AgaviFormPopulationFilter.class.php 4887 2011-12-11 22:28:49Z david $
  */
 class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
@@ -195,7 +195,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				count($errors) > 1 ? 's' : '',
 				implode("\n", $errors)
 			);
-			if(AgaviConfig::get('core.use_logging') && $cfg['log_parse_errors']) {
+			if(AgaviConfig::get('core.use_logging') && $cfg['log_parse_errors'] !== false && $maxError >= $cfg['log_parse_errors']) {
 				$severity = AgaviLogger::INFO;
 				switch($maxError) {
 					case LIBXML_ERR_WARNING:
@@ -993,7 +993,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			'multi_field_error_messages' => array(),
 
 			'ignore_parse_errors'        => LIBXML_ERR_ERROR,
-			'log_parse_errors'           => true,
+			'log_parse_errors'           => LIBXML_ERR_WARNING,
 			'logging_logger'             => null,
 		));
 
@@ -1032,6 +1032,15 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			$ignoreParseErrors = LIBXML_ERR_FATAL;
 		} elseif($ignoreParseErrors === false) {
 			$ignoreParseErrors = LIBXML_ERR_NONE;
+		}
+		
+		$logParseErrors =& $this->getParameter('log_parse_errors');
+		if(is_string($logParseErrors) && defined($logParseErrors)) {
+			$logParseErrors = constant($logParseErrors);
+		}
+		// BC
+		if($logParseErrors === true) {
+			$logParseErrors = LIBXML_ERR_WARNING;
 		}
 
 		// and now copy all that to the request namespace so it can all be modified at runtime, not just overwritten
