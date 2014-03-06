@@ -1,6 +1,13 @@
 AGAVI CHANGELOG (1.0.x)
 =======================
 
+1.0.8 RC1 (January ??, 2011)
+----------------------------
+
+FIX: Some tests fail when date.timezone is not set (#1469) (Dominik, Leon Weidauer)
+FIX: The NumberFormatter tests fail with recent ICU versions (#1469) (Dominik)
+
+
 1.0.7 (December 22, 2011)
 -------------------------
 
