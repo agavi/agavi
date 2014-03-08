@@ -29,15 +29,27 @@
 
 $here = realpath(dirname(__FILE__));
 
-// load Agavi basics
-require_once($here . '/agavi.php');
+$isComposerInstall = false;
+foreach([$here . '/../vendor/autoload.php', $here . '/../../../autoload.php'] as $composerAutoload) {
+	if(file_exists($composerAutoload)) {
+		require($composerAutoload);
+		$isComposerInstall = true;
+		break;
+	}
+}
+
+if(!$isComposerInstall) {
+	// when the composer autoload was found Agavi will already be loaded
+	// load Agavi basics
+	require_once($here . '/agavi.php');
+}
 
 // AgaviTesting class
 require_once($here . '/testing/AgaviTesting.class.php');
 
 // changing the init procedure in a minor release... good job, PHPUnit...
-require_once('PHPUnit/Runner/Version.php'); 
-if(version_compare(PHPUnit_Runner_Version::id(), '3.5.2', '<')) { 
+require_once('PHPUnit/Runner/Version.php');
+if(version_compare(PHPUnit_Runner_Version::id(), '3.5.2', '<')) {
 	trigger_error('Agavi requires PHPUnit version 3.5.2 or higher', E_USER_ERROR);
 }
 // load PHPUnit basics
