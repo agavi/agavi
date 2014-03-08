@@ -30,7 +30,7 @@
 $here = realpath(dirname(__FILE__));
 
 $isComposerInstall = false;
-foreach([$here . '/../vendor/autoload.php', $here . '/../../../autoload.php'] as $composerAutoload) {
+foreach(array($here . '/../vendor/autoload.php', $here . '/../../../autoload.php') as $composerAutoload) {
 	if(file_exists($composerAutoload)) {
 		require($composerAutoload);
 		$isComposerInstall = true;
