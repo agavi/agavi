@@ -191,7 +191,7 @@ class AgaviTranslationConfigHandler extends AgaviXmlConfigHandler
 					}
 					$domainData[$type]['class'] = $node->getAttribute('class', $domainData[$type]['class']);
 					$domainData[$type]['params'] = $node->getAgaviParameters($domainData[$type]['params']);
-					$domainData[$type]['filters'] = $this->getFilters($node);
+					$domainData[$type]['filters'] = array_merge($domainData[$type]['filters'], $this->getFilters($node));
 				}
 			}
 

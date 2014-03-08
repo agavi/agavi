@@ -15,7 +15,7 @@
 
 	<xs:complexType name="filters">
 		<xs:sequence>
-			<xs:element name="filter" type="xs:string" />
+			<xs:element name="filter" type="xs:string" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 
