@@ -7,6 +7,17 @@
 set_include_path('{include_path}');
 // removal reason: testing.php includes that one
 // require_once 'PHPUnit/Autoload.php';
+
+/**
+ * If PHPUnit has set a valid file path vor composers autoload.php,
+ * require it, to load all the vendor classes, including PHPUnit itself.
+ * The code generated from this template runs in a new process and does not have
+ * the autoloaders present.
+ */
+if(is_readable({composerAutoload})) {
+	require_once({composerAutoload});
+}
+
 ob_start();
 
 function __phpunit_run_isolated_test()
