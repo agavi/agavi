@@ -74,7 +74,7 @@ class AgaviDependencyManager
 		
 		return true;
 	}
-
+	
 	/**
 	 * Puts a list of tokens into the dependency cache.
 	 * 
@@ -91,5 +91,19 @@ class AgaviDependencyManager
 			$base->setValueByChildPath($token, $this->depData, true);
 		}
 	}
+	
+	/**
+	 * Returns the list of provided tokens from the dependency cache.
+	 *
+	 * @return     array Provided tokens from the dependency cache.
+	 *
+	 * @author     Steffen Gransow <agavi@mivesto.de>
+	 * @since      1.0.8
+	 */
+	public function getDependTokens()
+	{
+		return $this->depData;
+	}
 }
+
 ?>
