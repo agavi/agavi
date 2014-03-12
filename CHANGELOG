@@ -49,3 +49,4 @@ CHG: Move loading of autoload.xml into Agavi::bootstrap() (#1206) (David)
 CHG: Add response to default template assigns (#1095) (David)
 CHG: Move all includes necessary for startup from Agavi::boostrap() into agavi.php (#1094) (David)
 
+FIX: BREAKING CHANGE: <filters> element in translation.xml doesn't allow multiple <filter> child elements (#1475) (Dominik, Armin Rezayati)

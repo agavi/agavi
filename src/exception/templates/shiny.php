@@ -38,9 +38,9 @@ $svg = false;
 $ua = '';
 if(isset($_SERVER['HTTP_USER_AGENT'])) {
 	$ua = $_SERVER['HTTP_USER_AGENT'];
-} elseif($container !== null && ($rd = $container->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder && $rd->hasHeader('User-Agent')) {
+} elseif(isset($container) && ($rd = $container->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder && $rd->hasHeader('User-Agent')) {
 	$ua = $rd->getHeader('User-Agent');
-} elseif($context !== null && ($rq = $context->getRequest()) !== null && !$rq->isLocked() && ($rd = $rq->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder) {
+} elseif(isset($context) && ($rq = $context->getRequest()) !== null && !$rq->isLocked() && ($rd = $rq->getRequestData()) !== null && $rd instanceof AgaviIHeadersRequestDataHolder) {
 	$ua = $rd->getHeader('User-Agent');
 }
 if(strpos($ua, 'AppleWebKit') !== false) {
@@ -57,12 +57,18 @@ if(strpos($ua, 'AppleWebKit') !== false) {
 	}
 }
 
-header('HTTP/1.0 500 Internal Server Error');
+if(!headers_sent()) {
+	header('HTTP/1.0 500 Internal Server Error');
+}
 if($svg) {
-	header('Content-Type: application/xhtml+xml; charset=utf-8');
+	if(!headers_sent()) {
+		header('Content-Type: application/xhtml+xml; charset=utf-8');
+	}
 	echo '<?xml version="1.0" encoding="utf-8" standalone="no" ?>';
 } else {
-	header('Content-Type: text/html; charset=utf-8');
+	if(!headers_sent()) {
+		header('Content-Type: text/html; charset=utf-8');
+	}
 }
 
 ?>
@@ -379,13 +385,14 @@ foreach(array(
 ) as $directive) {
 	$filepaths['#^' . preg_quote(AgaviConfig::get($directive)) . '(?<=.)#'] = sprintf('<abbr title="%s">%s</abbr>', htmlspecialchars(AgaviConfig::get($directive)), $directive);
 } 
-foreach(AgaviException::getFixedTrace($e, isset($exceptions[$ei+1]) ? $exceptions[$ei+1] : null) as $trace):
+$fixedTrace = AgaviException::getFixedTrace($e, isset($exceptions[$ei+1]) ? $exceptions[$ei+1] : null);
+foreach($fixedTrace as $trace):
 	$i++;
 	if(isset($trace['file']) && !isset($highlights[$trace['file']])) {
 		$highlights[$trace['file']] = AgaviException::highlightFile($trace['file']);
 	}
 ?>
-					<li id="exception<?php echo $ei; ?>frame<?php echo $i; ?>"<?php if($i != 2): ?> class="closed"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?>(</strong><?php if(isset($trace['args'])): ?><?php echo AgaviException::buildParamList($trace['args']); ?><strong>)</strong><?php endif; ?><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo preg_replace(array_keys($filepaths), $filepaths, $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'closed' ? '' : 'closed'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php
+					<li id="exception<?php echo $ei; ?>frame<?php echo $i; ?>"<?php if($i != 2 && count($fixedTrace) > 1): ?> class="closed"<?php endif; ?>>at <?php if($i > 1): ?><strong><?php if(isset($trace['class'])): ?><?php echo $trace['class'], htmlspecialchars($trace['type']); ?><?php endif; ?><?php echo $trace['function']; ?>(</strong><?php if(isset($trace['args'])): ?><?php echo AgaviException::buildParamList($trace['args']); ?><strong>)</strong><?php endif; ?><?php else: ?><em>exception origin</em><?php endif; ?><br />in <?php if(isset($trace['file'])): echo preg_replace(array_keys($filepaths), $filepaths, $trace['file']); ?> <a href="#frame<?php echo $i; ?>" class="toggle" title="Toggle source code snippet" onclick="this.parentNode.className = this.parentNode.className == 'closed' ? '' : 'closed'; return false;">line <?php echo $trace['line']; ?></a><ol start="<?php echo $start = $trace['line'] < 4 ? 1 : $trace['line'] - 3; ?>" style="padding-left:<?php echo strlen($start+6)*0.6+2; ?>em"><?php
 $lines = array_slice($highlights[$trace['file']], $start - 1, 7, true);
 foreach($lines as $key => &$line) {
 	if($key + 1 == $trace['line']): ?><li class="highlight"><?php if($svg): ?><div style="float:left; width:1em; height:1em; margin-left:-1.35em; background-color:#FFF;"><svg:svg viewBox="3 3 42 42" preserveAspectRatio="xMaxYMax meet" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:use xlink:href="#warningSign" /></svg:svg></div><?php endif; else: ?><li><?php endif; ?><code><?php

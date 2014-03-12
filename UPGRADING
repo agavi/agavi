@@ -29,3 +29,7 @@ to these elements yourself.
 The handler is also namespace-aware. By default, it will assume your configuration file's actual contents will be in no XML namespace. If you wish to use an XML namespace for those elements, define the corresponding namespace URI using
   <ae:parameter name="namespace_uri">urn:com.acme.rockets</ae:parameter>
 on the affected <handler> elements.
+
+Translation
+-----------
+Appending of <filter> elements now works as expected. If you defined multiple <filters> for the same <translator> (e.g. by overwriting a previously defined <translator>) you need to check your translation.xml for occurences triggering the buggy behaviour. Since Agavi 1.0 was not behaving as specified and buggy there is no way to replicate it Agavi 1.1.
