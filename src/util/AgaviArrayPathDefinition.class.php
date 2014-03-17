@@ -110,6 +110,8 @@ final class AgaviArrayPathDefinition
 				}
 			}
 		}
+		$retval = null;
+		return $retval;
 	}
 
 	/**

@@ -4,6 +4,8 @@ AGAVI CHANGELOG (1.0.x)
 1.0.8 RC1 (January ??, 2011)
 ----------------------------
 
+FIX: AgaviTemplateLayer possibly overwrites given parameters with defaults (#1490) (Steffen Gransow)
+FIX: AgaviArrayPathDefinition::unsetValue() triggers a warning on empty paths (#1488) (Ionuț Matei)
 FIX: Various fixes to the shiny exception template (#1478) (Thomas Bachem)
 FIX: Use the Composer autoloader when running tests (#1473) (Dominik, Leon Weidauer)
 FIX: Some tests fail when date.timezone is not set (#1474) (Dominik, Leon Weidauer)

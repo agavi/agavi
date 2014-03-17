@@ -54,10 +54,10 @@ abstract class AgaviTemplateLayer extends AgaviParameterHolder
 	 */
 	public function __construct(array $parameters = array())
 	{
-		parent::__construct(array_merge($parameters, array(
+		parent::__construct(array_merge(array(
 			'module' => null,
 			'template' => null,
-		)));
+		), $parameters));
 	}
 	
 	/**
