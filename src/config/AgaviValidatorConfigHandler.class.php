@@ -107,15 +107,17 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 	 * @param      string                   The severity of the parent container.
 	 * @param      string                   The method of the parent container.
 	 * @param      bool                     Whether parent container is required.
+	 * @param      string                   The default translation domain of the parent container.
 	 *
 	 * @return     array PHP code blocks that register the validators
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @author     Steffen Gransow <agavi@mivesto.de>
 	 * @since      0.11.0
 	 */
-	protected function getValidatorArray($validator, $code, $parent, $stdSeverity, $stdMethod, $stdRequired = true)
+	protected function getValidatorArray($validator, $code, $parent, $stdSeverity, $stdMethod, $stdRequired = true, $stdTranslationDomain = null)
 	{
 		if(!isset($this->classMap[$validator->getAttribute('class')])) {
 			$class = $validator->getAttribute('class');
@@ -132,6 +134,11 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 			'severity' => $validator->getAttribute('severity', $stdSeverity),
 			'required' => $stdRequired,
 		);
+
+		$translationDomain = $validator->getAttribute('translation_domain', $stdTranslationDomain);
+		if($translationDomain !== null) {
+			$parameters['translation_domain'] = $translationDomain;
+		}
 
 		$arguments = array();
 		$errors = array();
@@ -212,7 +219,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		}
 		
 		// more <validator> or <validators> children
-		$code = $this->processValidatorElements($validator, $code, '_validator_' . $name, $stdSeverity, $stdMethod, $stdRequired);
+		$code = $this->processValidatorElements($validator, $code, '_validator_' . $name, $stdSeverity, $stdMethod, $stdRequired, $translationDomain);
 		
 		return $code;
 	}
@@ -229,15 +236,17 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 	 * @param      string                   The name of the parent container.
 	 * @param      string                   The method of the parent container.
 	 * @param      bool                     Whether parent container is required.
+	 * @param      string                   The default translation domain of the parent container.
 	 *
 	 * @return     array PHP code blocks that register the validators
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @author     Steffen Gransow <agavi@mivesto.de>
 	 * @since      0.11.0
 	 */
-	protected function processValidatorElements($node, $code, $name, $defaultSeverity = 'error', $defaultMethod = null, $defaultRequired = true)
+	protected function processValidatorElements($node, $code, $name, $defaultSeverity = 'error', $defaultMethod = null, $defaultRequired = true, $defaultTranslationDomain = null)
 	{
 		// the problem here is that the <validators> parent is not just optional, but can also occur more than once
 		foreach($node->get('validators') as $validator) {
@@ -245,14 +254,16 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 			if($validator->parentNode->localName == 'validators') {
 				$severity = $validator->parentNode->getAttribute('severity', $defaultSeverity);
 				$method = $validator->parentNode->getAttribute('method', $defaultMethod);
+				$translationDomain = $validator->parentNode->getAttribute('translation_domain', $defaultTranslationDomain);
 			} else {
 				$severity = $defaultSeverity;
 				$method = $defaultMethod;
+				$translationDomain = $defaultTranslationDomain;
 			}
 			$required = $defaultRequired;
 			
 			// append the code to generate
-			$code = $this->getValidatorArray($validator, $code, $name, $severity, $method, $required);
+			$code = $this->getValidatorArray($validator, $code, $name, $severity, $method, $required, $translationDomain);
 		}
 		
 		return $code;
