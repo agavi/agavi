@@ -430,7 +430,7 @@ class AgaviTranslationManager
 
 		$retval = $translator->translate($message, $domainExtra, $locale);
 		if(is_array($parameters)) {
-			$retval = vsprintf($retval, $parameters);
+			$retval = AgaviToolkit::vksprintf($retval, $parameters);
 		}
 		
 		$retval = $this->applyFilters($retval, $domain, self::MESSAGE);
