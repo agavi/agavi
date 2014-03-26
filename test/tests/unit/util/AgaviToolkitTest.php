@@ -273,6 +273,27 @@ class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 				),
 				"expected" => 'Value must be between 003 and 099.'
 			),
+			array(
+				"input" => '%hyphened-param$s',
+				"arguments" => array(
+					'hyphened-param' => 'Value'
+				),
+				"expected" => 'Value'
+			),
+			array(
+				"input" => '%base[param]$s',
+				"arguments" => array(
+					'base[param]' => 'Value'
+				),
+				"expected" => 'Value'
+			),
+			array(
+				"input" => '%most.complex-base[param][eters]$s',
+				"arguments" => array(
+					'most.complex-base[param][eters]' => 'Value'
+				),
+				"expected" => 'Value'
+			),
 		);
 		
 		foreach($tests as $test) {

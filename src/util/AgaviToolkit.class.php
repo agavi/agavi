@@ -484,7 +484,7 @@ final class AgaviToolkit
 	}
 	/**
 	 * Like vsprintf(), but accepts keys instead of an order index.
-	 * The allowed format of named arguments is: /[a-zA-Z0-9_-]+/
+	 * The allowed format of named arguments is: /[a-zA-Z0-9_\-\.\[\]]+/
 	 *
 	 * For the base version of this method by Josef Kufner see:
 	 * @see http://www.php.net/manual/de/function.vsprintf.php#110666
@@ -521,7 +521,7 @@ final class AgaviToolkit
 		$map = array_flip(array_keys($args));
 		
 		$str = preg_replace_callback(
-			'/(^|[^%])%([a-zA-Z0-9_-]+)\$/',
+			'/(^|[^%])%([a-zA-Z0-9_\-\.\[\]]+)\$/',
 			function ($m) use ($map) {
 				$key = $m[2];
 				if (!is_numeric($key) && array_key_exists($key, $map)) {
