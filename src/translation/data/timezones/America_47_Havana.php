@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Havana".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -507,7 +507,7 @@ return array (
     ),
     92 => 
     array (
-      'time' => 1081054800,
+      'time' => 1080450000,
       'type' => 2,
     ),
     93 => 
@@ -567,13 +567,18 @@ return array (
     ),
     104 => 
     array (
-      'time' => 1331442000,
+      'time' => 1333256400,
       'type' => 2,
     ),
     105 => 
     array (
-      'time' => 1351400400,
+      'time' => 1352005200,
       'type' => 3,
+    ),
+    106 => 
+    array (
+      'time' => 1362891600,
+      'type' => 2,
     ),
   ),
   'finalRule' => 
@@ -592,16 +597,16 @@ return array (
     ),
     'end' => 
     array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
+      'month' => 10,
+      'date' => '1',
+      'day_of_week' => -1,
       'time' => 0,
       'type' => 1,
     ),
-    'startYear' => 2012,
+    'startYear' => 2013,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Havana',
 );
 

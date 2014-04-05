@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Atlantic/Bermuda".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -35,7 +35,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1262281256,
+      'time' => -1262281242,
       'type' => 0,
     ),
     1 => 
@@ -408,8 +408,8 @@ return array (
     ),
     'startYear' => 2007,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Atlantic/Bermuda',
 );
 

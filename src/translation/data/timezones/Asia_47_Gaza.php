@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Gaza".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -47,6 +47,12 @@ return array (
       'rawOffset' => 7200,
       'dstOffset' => 3600,
       'name' => 'IDT',
+    ),
+    5 => 
+    array (
+      'rawOffset' => 7200,
+      'dstOffset' => 0,
+      'name' => 'EEST',
     ),
   ),
   'rules' => 
@@ -273,12 +279,12 @@ return array (
     ),
     44 => 
     array (
-      'time' => 576540000,
+      'time' => 576626400,
       'type' => 4,
     ),
     45 => 
     array (
-      'time' => 589237200,
+      'time' => 589323600,
       'type' => 3,
     ),
     46 => 
@@ -483,7 +489,7 @@ return array (
     ),
     86 => 
     array (
-      'time' => 1207000800,
+      'time' => 1206655200,
       'type' => 2,
     ),
     87 => 
@@ -493,44 +499,96 @@ return array (
     ),
     88 => 
     array (
-      'time' => 1238104800,
-      'type' => 2,
+      'time' => 1220220000,
+      'type' => 0,
     ),
     89 => 
     array (
-      'time' => 1252018800,
-      'type' => 0,
+      'time' => 1238108400,
+      'type' => 2,
     ),
     90 => 
     array (
-      'time' => 1269640860,
-      'type' => 2,
+      'time' => 1252015200,
+      'type' => 0,
     ),
     91 => 
     array (
-      'time' => 1281474000,
+      'time' => 1262296800,
       'type' => 0,
     ),
     92 => 
     array (
-      'time' => 1301738460,
-      'type' => 2,
+      'time' => 1269640860,
+      'type' => 5,
     ),
     93 => 
     array (
+      'time' => 1281474000,
+      'type' => 0,
+    ),
+    94 => 
+    array (
+      'time' => 1301608860,
+      'type' => 2,
+    ),
+    95 => 
+    array (
       'time' => 1312146000,
+      'type' => 0,
+    ),
+    96 => 
+    array (
+      'time' => 1312149600,
+      'type' => 0,
+    ),
+    97 => 
+    array (
+      'time' => 1325368800,
+      'type' => 0,
+    ),
+    98 => 
+    array (
+      'time' => 1333058400,
+      'type' => 2,
+    ),
+    99 => 
+    array (
+      'time' => 1348178400,
+      'type' => 0,
+    ),
+    100 => 
+    array (
+      'time' => 1380232800,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'EET',
+    'type' => 'dynamic',
     'offset' => 7200,
-    'startYear' => 2012,
+    'name' => 'EE%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 5,
+      'time' => 86400000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 8,
+      'date' => '21',
+      'day_of_week' => -6,
+      'time' => 0,
+      'type' => 0,
+    ),
+    'startYear' => 2013,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Gaza',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Hovd".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -281,8 +281,8 @@ return array (
     'offset' => 25200,
     'startYear' => 2007,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Hovd',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Australia/Eucla".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -140,8 +140,8 @@ return array (
     'offset' => 31500,
     'startYear' => 2010,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Australia/Eucla',
 );
 

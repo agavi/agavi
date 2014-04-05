@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Halifax".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -78,7 +78,7 @@ return array (
     ),
     5 => 
     array (
-      'time' => -1614798000,
+      'time' => -1615143600,
       'type' => 2,
     ),
     6 => 
@@ -936,8 +936,8 @@ return array (
     ),
     'startYear' => 2007,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Halifax',
 );
 

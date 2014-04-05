@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Port-au-Prince".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -230,15 +230,43 @@ return array (
       'time' => 1162094400,
       'type' => 3,
     ),
+    37 => 
+    array (
+      'time' => 1331449200,
+      'type' => 2,
+    ),
+    38 => 
+    array (
+      'time' => 1352008800,
+      'type' => 3,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'none',
+    'type' => 'dynamic',
     'offset' => -18000,
+    'name' => 'E%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => '8',
+      'day_of_week' => -1,
+      'time' => 7200000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 10,
+      'date' => '1',
+      'day_of_week' => -1,
+      'time' => 7200000,
+      'type' => 0,
+    ),
     'startYear' => 2007,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Port-au-Prince',
 );
 

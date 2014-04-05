@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Jakarta".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -22,7 +22,7 @@ return array (
     array (
       'rawOffset' => 25632,
       'dstOffset' => 0,
-      'name' => 'JMT',
+      'name' => 'BMT',
     ),
     1 => 
     array (
@@ -34,7 +34,7 @@ return array (
     array (
       'rawOffset' => 27000,
       'dstOffset' => 0,
-      'name' => 'WIT',
+      'name' => 'WIB',
     ),
     3 => 
     array (
@@ -46,13 +46,13 @@ return array (
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'WIT',
+      'name' => 'WIB',
     ),
     5 => 
     array (
       'rawOffset' => 25200,
       'dstOffset' => 0,
-      'name' => 'WIT',
+      'name' => 'WIB',
     ),
   ),
   'rules' => 
@@ -101,12 +101,12 @@ return array (
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'WIT',
+    'name' => 'WIB',
     'offset' => 25200,
     'startYear' => 1964,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Jakarta',
 );
 

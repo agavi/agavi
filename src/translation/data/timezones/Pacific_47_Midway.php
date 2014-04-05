@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Midway".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -78,8 +78,8 @@ return array (
     'offset' => -39600,
     'startYear' => 1984,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Midway',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Zurich".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 1784,
+      'rawOffset' => 1786,
       'dstOffset' => 0,
       'name' => 'BMT',
     ),
@@ -41,12 +41,12 @@ return array (
   array (
     0 => 
     array (
-      'time' => -3827954048,
+      'time' => -3675198848,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -2385246584,
+      'time' => -2385246586,
       'type' => 1,
     ),
     2 => 
@@ -259,8 +259,8 @@ return array (
     ),
     'startYear' => 1996,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Europe/Zurich',
 );
 

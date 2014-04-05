@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Makassar".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -28,7 +28,7 @@ return array (
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'CIT',
+      'name' => 'WITA',
     ),
     2 => 
     array (
@@ -63,12 +63,12 @@ return array (
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'CIT',
+    'name' => 'WITA',
     'offset' => 28800,
     'startYear' => 1946,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Makassar',
 );
 

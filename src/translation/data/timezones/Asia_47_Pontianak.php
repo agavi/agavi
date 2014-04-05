@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Pontianak".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -28,7 +28,7 @@ return array (
     array (
       'rawOffset' => 27000,
       'dstOffset' => 0,
-      'name' => 'WIT',
+      'name' => 'WIB',
     ),
     2 => 
     array (
@@ -40,19 +40,19 @@ return array (
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'WIT',
+      'name' => 'WIB',
     ),
     4 => 
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'CIT',
+      'name' => 'WITA',
     ),
     5 => 
     array (
       'rawOffset' => 25200,
       'dstOffset' => 0,
-      'name' => 'WIT',
+      'name' => 'WIB',
     ),
   ),
   'rules' => 
@@ -101,12 +101,12 @@ return array (
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'WIT',
+    'name' => 'WIB',
     'offset' => 25200,
     'startYear' => 1988,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Pontianak',
 );
 

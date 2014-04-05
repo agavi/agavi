@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Nouakchott".
- * Compiled from olson file "africa", version 8.33.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -56,8 +56,8 @@ return array (
     'offset' => 0,
     'startYear' => 1961,
   ),
-  'source' => 'africa',
-  'version' => '8.33',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Africa/Nouakchott',
 );
 

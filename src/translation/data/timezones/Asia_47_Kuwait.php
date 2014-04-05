@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Kuwait".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -40,8 +40,8 @@ return array (
     'offset' => 10800,
     'startYear' => 1950,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Kuwait',
 );
 

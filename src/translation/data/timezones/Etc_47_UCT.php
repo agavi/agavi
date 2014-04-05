@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Etc/UCT".
- * Compiled from olson file "etcetera", version 8.3.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -29,8 +29,8 @@ return array (
     'offset' => 0,
     'startYear' => -2147483647,
   ),
-  'source' => 'etcetera',
-  'version' => '8.3',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Etc/UCT',
 );
 

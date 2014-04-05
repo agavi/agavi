@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Nauru".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -67,8 +67,8 @@ return array (
     'offset' => 43200,
     'startYear' => 1980,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Nauru',
 );
 

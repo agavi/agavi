@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Santarem".
- * Compiled from olson file "southamerica", version 8.52.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -202,8 +202,8 @@ return array (
     'offset' => -10800,
     'startYear' => 2009,
   ),
-  'source' => 'southamerica',
-  'version' => '8.52',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Santarem',
 );
 

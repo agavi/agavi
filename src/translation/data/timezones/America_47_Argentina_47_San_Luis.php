@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Argentina/San_Luis".
- * Compiled from olson file "southamerica", version 8.52.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -382,17 +382,18 @@ return array (
     62 => 
     array (
       'time' => 1255233600,
-      'type' => 6,
+      'type' => 3,
     ),
   ),
   'finalRule' => 
   array (
-    'type' => 'none',
-    'offset' => -14400,
+    'type' => 'static',
+    'name' => 'ART',
+    'offset' => -10800,
     'startYear' => 2010,
   ),
-  'source' => 'southamerica',
-  'version' => '8.52',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Argentina/San_Luis',
 );
 

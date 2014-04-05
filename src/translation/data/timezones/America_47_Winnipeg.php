@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Winnipeg".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -73,7 +73,7 @@ return array (
     ),
     4 => 
     array (
-      'time' => -1614790800,
+      'time' => -1615136400,
       'type' => 2,
     ),
     5 => 
@@ -711,8 +711,8 @@ return array (
     ),
     'startYear' => 2007,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Winnipeg',
 );
 

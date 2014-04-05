@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Easter".
- * Compiled from olson file "southamerica", version 8.52.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -430,182 +430,122 @@ return array (
     ),
     73 => 
     array (
-      'time' => 971582400,
-      'type' => 6,
-    ),
-    74 => 
-    array (
       'time' => 984279600,
       'type' => 5,
     ),
-    75 => 
+    74 => 
     array (
       'time' => 1003028400,
       'type' => 6,
     ),
-    76 => 
-    array (
-      'time' => 1003032000,
-      'type' => 6,
-    ),
-    77 => 
+    75 => 
     array (
       'time' => 1015729200,
       'type' => 5,
     ),
-    78 => 
+    76 => 
     array (
       'time' => 1034478000,
       'type' => 6,
     ),
-    79 => 
-    array (
-      'time' => 1034481600,
-      'type' => 6,
-    ),
-    80 => 
+    77 => 
     array (
       'time' => 1047178800,
       'type' => 5,
     ),
-    81 => 
+    78 => 
     array (
       'time' => 1065927600,
       'type' => 6,
     ),
-    82 => 
-    array (
-      'time' => 1065931200,
-      'type' => 6,
-    ),
-    83 => 
+    79 => 
     array (
       'time' => 1079233200,
       'type' => 5,
     ),
-    84 => 
+    80 => 
     array (
       'time' => 1097377200,
       'type' => 6,
     ),
-    85 => 
-    array (
-      'time' => 1097380800,
-      'type' => 6,
-    ),
-    86 => 
+    81 => 
     array (
       'time' => 1110682800,
       'type' => 5,
     ),
-    87 => 
+    82 => 
     array (
       'time' => 1128826800,
       'type' => 6,
     ),
-    88 => 
-    array (
-      'time' => 1128830400,
-      'type' => 6,
-    ),
-    89 => 
+    83 => 
     array (
       'time' => 1142132400,
       'type' => 5,
     ),
-    90 => 
+    84 => 
     array (
       'time' => 1160881200,
       'type' => 6,
     ),
-    91 => 
-    array (
-      'time' => 1160884800,
-      'type' => 6,
-    ),
-    92 => 
+    85 => 
     array (
       'time' => 1173582000,
       'type' => 5,
     ),
-    93 => 
+    86 => 
     array (
       'time' => 1192330800,
       'type' => 6,
     ),
-    94 => 
-    array (
-      'time' => 1192334400,
-      'type' => 6,
-    ),
-    95 => 
+    87 => 
     array (
       'time' => 1206846000,
       'type' => 5,
     ),
-    96 => 
+    88 => 
     array (
       'time' => 1223780400,
       'type' => 6,
     ),
-    97 => 
-    array (
-      'time' => 1223784000,
-      'type' => 6,
-    ),
-    98 => 
+    89 => 
     array (
       'time' => 1237086000,
       'type' => 5,
     ),
-    99 => 
+    90 => 
     array (
       'time' => 1255230000,
       'type' => 6,
     ),
-    100 => 
-    array (
-      'time' => 1255233600,
-      'type' => 6,
-    ),
-    101 => 
+    91 => 
     array (
       'time' => 1270350000,
       'type' => 5,
     ),
-    102 => 
+    92 => 
     array (
       'time' => 1286679600,
       'type' => 6,
     ),
-    103 => 
-    array (
-      'time' => 1286683200,
-      'type' => 6,
-    ),
-    104 => 
+    93 => 
     array (
       'time' => 1304823600,
       'type' => 5,
     ),
-    105 => 
+    94 => 
     array (
       'time' => 1313899200,
       'type' => 6,
     ),
-    106 => 
+    95 => 
     array (
-      'time' => 1318129200,
-      'type' => 6,
-    ),
-    107 => 
-    array (
-      'time' => 1331434800,
+      'time' => 1335668400,
       'type' => 5,
     ),
-    108 => 
+    96 => 
     array (
-      'time' => 1350187200,
+      'time' => 1346558400,
       'type' => 6,
     ),
   ),
@@ -617,24 +557,24 @@ return array (
     'save' => 3600,
     'start' => 
     array (
-      'month' => 9,
-      'date' => '9',
+      'month' => 8,
+      'date' => '2',
       'day_of_week' => -1,
       'time' => 14400000,
       'type' => 2,
     ),
     'end' => 
     array (
-      'month' => 2,
-      'date' => '9',
+      'month' => 3,
+      'date' => '23',
       'day_of_week' => -1,
       'time' => 10800000,
       'type' => 2,
     ),
     'startYear' => 2012,
   ),
-  'source' => 'southamerica',
-  'version' => '8.52',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Easter',
 );
 

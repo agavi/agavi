@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Apia".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -94,19 +94,46 @@ return array (
     ),
     7 => 
     array (
-      'time' => 1333202400,
+      'time' => 1333188000,
       'type' => 5,
+    ),
+    8 => 
+    array (
+      'time' => 1333206000,
+      'type' => 5,
+    ),
+    9 => 
+    array (
+      'time' => 1348927200,
+      'type' => 4,
     ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'WST',
+    'type' => 'dynamic',
     'offset' => 46800,
+    'name' => 'WS%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 8,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 10800000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 3,
+      'date' => '1',
+      'day_of_week' => -1,
+      'time' => 14400000,
+      'type' => 0,
+    ),
     'startYear' => 2013,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Apia',
 );
 

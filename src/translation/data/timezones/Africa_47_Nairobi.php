@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Nairobi".
- * Compiled from olson file "africa", version 8.33.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -67,8 +67,8 @@ return array (
     'offset' => 10800,
     'startYear' => 1960,
   ),
-  'source' => 'africa',
-  'version' => '8.33',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Africa/Nairobi',
 );
 

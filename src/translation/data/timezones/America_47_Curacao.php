@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Curacao".
- * Compiled from olson file "southamerica", version 8.52.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -35,7 +35,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1826738656,
+      'time' => -1826738653,
       'type' => 0,
     ),
     1 => 
@@ -51,8 +51,8 @@ return array (
     'offset' => -14400,
     'startYear' => 1966,
   ),
-  'source' => 'southamerica',
-  'version' => '8.52',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Curacao',
 );
 

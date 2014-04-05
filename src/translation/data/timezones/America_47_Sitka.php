@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Sitka".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -534,8 +534,8 @@ return array (
     ),
     'startYear' => 2007,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Sitka',
 );
 

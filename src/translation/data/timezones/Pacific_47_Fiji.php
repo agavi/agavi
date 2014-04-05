@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Fiji".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -35,7 +35,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1709985220,
+      'time' => -1709985344,
       'type' => 0,
     ),
     1 => 
@@ -80,7 +80,7 @@ return array (
     ),
     9 => 
     array (
-      'time' => 1319292000,
+      'time' => 1319295600,
       'type' => 1,
     ),
     10 => 
@@ -88,15 +88,58 @@ return array (
       'time' => 1327154400,
       'type' => 0,
     ),
+    11 => 
+    array (
+      'time' => 1350745200,
+      'type' => 1,
+    ),
+    12 => 
+    array (
+      'time' => 1358604000,
+      'type' => 0,
+    ),
+    13 => 
+    array (
+      'time' => 1382799600,
+      'type' => 1,
+    ),
+    14 => 
+    array (
+      'time' => 1390050000,
+      'type' => 0,
+    ),
+    15 => 
+    array (
+      'time' => 1414245600,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'none',
+    'type' => 'dynamic',
     'offset' => 43200,
-    'startYear' => 2013,
+    'name' => 'FJ%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 9,
+      'date' => '21',
+      'day_of_week' => -1,
+      'time' => 7200000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 0,
+      'date' => '18',
+      'day_of_week' => -1,
+      'time' => 7200000,
+      'type' => 0,
+    ),
+    'startYear' => 2014,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Fiji',
 );
 

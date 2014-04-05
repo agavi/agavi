@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Seoul".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -129,8 +129,8 @@ return array (
     'offset' => 32400,
     'startYear' => 1989,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Seoul',
 );
 

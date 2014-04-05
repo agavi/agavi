@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Choibalsan".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -293,8 +293,8 @@ return array (
     'offset' => 28800,
     'startYear' => 2007,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Choibalsan',
 );
 

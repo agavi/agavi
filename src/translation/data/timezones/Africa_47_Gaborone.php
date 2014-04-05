@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Gaborone".
- * Compiled from olson file "africa", version 8.33.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,11 +20,17 @@ return array (
   array (
     0 => 
     array (
+      'rawOffset' => 5400,
+      'dstOffset' => 0,
+      'name' => 'SAST',
+    ),
+    1 => 
+    array (
       'rawOffset' => 7200,
       'dstOffset' => 0,
       'name' => 'CAT',
     ),
-    1 => 
+    2 => 
     array (
       'rawOffset' => 7200,
       'dstOffset' => 3600,
@@ -40,13 +46,18 @@ return array (
     ),
     1 => 
     array (
-      'time' => -829526400,
+      'time' => -2109288600,
       'type' => 1,
     ),
     2 => 
     array (
+      'time' => -829526400,
+      'type' => 2,
+    ),
+    3 => 
+    array (
       'time' => -813805200,
-      'type' => 0,
+      'type' => 1,
     ),
   ),
   'finalRule' => 
@@ -56,8 +67,8 @@ return array (
     'offset' => 7200,
     'startYear' => 1945,
   ),
-  'source' => 'africa',
-  'version' => '8.33',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Africa/Gaborone',
 );
 

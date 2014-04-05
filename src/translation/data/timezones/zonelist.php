@@ -2,7 +2,7 @@
 
 /**
  * Zone list file.
- * Generated on 2011-11-01T11:38:05+00:00.
+ * Generated on 2014-04-05T20:04:05+00:00.
  *
  * @package    agavi
  * @subpackage translation
@@ -75,11 +75,6 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'America_47_Argentina_47_Ushuaia.php',
-  ),
-  'America/Aruba' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_Aruba.php',
   ),
   'America/La_Paz' => 
   array (
@@ -531,6 +526,11 @@ return array (
     'type' => 'zone',
     'filename' => 'America_47_Dawson_Creek.php',
   ),
+  'America/Creston' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'America_47_Creston.php',
+  ),
   'America/Pangnirtung' => 
   array (
     'type' => 'zone',
@@ -636,11 +636,6 @@ return array (
     'type' => 'zone',
     'filename' => 'America_47_Santa_Isabel.php',
   ),
-  'America/Anguilla' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_Anguilla.php',
-  ),
   'America/Antigua' => 
   array (
     'type' => 'zone',
@@ -681,11 +676,6 @@ return array (
     'type' => 'zone',
     'filename' => 'America_47_Havana.php',
   ),
-  'America/Dominica' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_Dominica.php',
-  ),
   'America/Santo_Domingo' => 
   array (
     'type' => 'zone',
@@ -695,16 +685,6 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'America_47_El_Salvador.php',
-  ),
-  'America/Grenada' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_Grenada.php',
-  ),
-  'America/Guadeloupe' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_Guadeloupe.php',
   ),
   'America/Guatemala' => 
   array (
@@ -731,11 +711,6 @@ return array (
     'type' => 'zone',
     'filename' => 'America_47_Martinique.php',
   ),
-  'America/Montserrat' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_Montserrat.php',
-  ),
   'America/Managua' => 
   array (
     'type' => 'zone',
@@ -751,40 +726,15 @@ return array (
     'type' => 'zone',
     'filename' => 'America_47_Puerto_Rico.php',
   ),
-  'America/St_Kitts' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_St_Kitts.php',
-  ),
-  'America/St_Lucia' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_St_Lucia.php',
-  ),
   'America/Miquelon' => 
   array (
     'type' => 'zone',
     'filename' => 'America_47_Miquelon.php',
   ),
-  'America/St_Vincent' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_St_Vincent.php',
-  ),
   'America/Grand_Turk' => 
   array (
     'type' => 'zone',
     'filename' => 'America_47_Grand_Turk.php',
-  ),
-  'America/Tortola' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_Tortola.php',
-  ),
-  'America/St_Thomas' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'America_47_St_Thomas.php',
   ),
   'Europe/London' => 
   array (
@@ -931,11 +881,6 @@ return array (
     'type' => 'zone',
     'filename' => 'Europe_47_Riga.php',
   ),
-  'Europe/Vaduz' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'Europe_47_Vaduz.php',
-  ),
   'Europe/Vilnius' => 
   array (
     'type' => 'zone',
@@ -1056,6 +1001,11 @@ return array (
     'type' => 'zone',
     'filename' => 'Asia_47_Vladivostok.php',
   ),
+  'Asia/Khandyga' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'Asia_47_Khandyga.php',
+  ),
   'Asia/Sakhalin' => 
   array (
     'type' => 'zone',
@@ -1065,6 +1015,11 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'Asia_47_Magadan.php',
+  ),
+  'Asia/Ust-Nera' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'Asia_47_Ust_45_Nera.php',
   ),
   'Asia/Kamchatka' => 
   array (
@@ -1336,6 +1291,11 @@ return array (
     'type' => 'zone',
     'filename' => 'Australia_47_Lord_Howe.php',
   ),
+  'Antarctica/Macquarie' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'Antarctica_47_Macquarie.php',
+  ),
   'Indian/Christmas' => 
   array (
     'type' => 'zone',
@@ -1495,11 +1455,6 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'Pacific_47_Funafuti.php',
-  ),
-  'Pacific/Johnston' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'Pacific_47_Johnston.php',
   ),
   'Pacific/Midway' => 
   array (
@@ -1871,11 +1826,6 @@ return array (
     'type' => 'zone',
     'filename' => 'Antarctica_47_Mawson.php',
   ),
-  'Antarctica/Macquarie' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'Antarctica_47_Macquarie.php',
-  ),
   'Indian/Kerguelen' => 
   array (
     'type' => 'zone',
@@ -1891,6 +1841,11 @@ return array (
     'type' => 'zone',
     'filename' => 'Antarctica_47_Syowa.php',
   ),
+  'Antarctica/Troll' => 
+  array (
+    'type' => 'zone',
+    'filename' => 'Antarctica_47_Troll.php',
+  ),
   'Antarctica/Vostok' => 
   array (
     'type' => 'zone',
@@ -1905,11 +1860,6 @@ return array (
   array (
     'type' => 'zone',
     'filename' => 'Antarctica_47_Palmer.php',
-  ),
-  'Antarctica/McMurdo' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'Antarctica_47_McMurdo.php',
   ),
   'Africa/Algiers' => 
   array (
@@ -2166,11 +2116,6 @@ return array (
     'type' => 'zone',
     'filename' => 'Africa_47_Khartoum.php',
   ),
-  'Africa/Juba' => 
-  array (
-    'type' => 'zone',
-    'filename' => 'Africa_47_Juba.php',
-  ),
   'Africa/Mbabane' => 
   array (
     'type' => 'zone',
@@ -2206,6 +2151,11 @@ return array (
     'type' => 'zone',
     'filename' => 'Africa_47_Harare.php',
   ),
+  'America/Aruba' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Curacao',
+  ),
   'America/Lower_Princes' => 
   array (
     'type' => 'link',
@@ -2215,6 +2165,66 @@ return array (
   array (
     'type' => 'link',
     'to' => 'America/Curacao',
+  ),
+  'America/Anguilla' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/Dominica' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/Grenada' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/Guadeloupe' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/Marigot' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/Montserrat' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/St_Barthelemy' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/St_Kitts' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/St_Lucia' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/St_Thomas' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/St_Vincent' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'America/Tortola' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Port_of_Spain',
   ),
   'Mideast/Riyadh89' => 
   array (
@@ -2236,20 +2246,10 @@ return array (
     'type' => 'link',
     'to' => 'America/Los_Angeles',
   ),
-  'America/Shiprock' => 
+  'Pacific/Johnston' => 
   array (
     'type' => 'link',
-    'to' => 'America/Denver',
-  ),
-  'America/St_Barthelemy' => 
-  array (
-    'type' => 'link',
-    'to' => 'America/Guadeloupe',
-  ),
-  'America/Marigot' => 
-  array (
-    'type' => 'link',
-    'to' => 'America/Guadeloupe',
+    'to' => 'Pacific/Honolulu',
   ),
   'Europe/Jersey' => 
   array (
@@ -2271,6 +2271,11 @@ return array (
     'type' => 'link',
     'to' => 'Europe/Helsinki',
   ),
+  'Europe/Busingen' => 
+  array (
+    'type' => 'link',
+    'to' => 'Europe/Zurich',
+  ),
   'Europe/Vatican' => 
   array (
     'type' => 'link',
@@ -2280,6 +2285,11 @@ return array (
   array (
     'type' => 'link',
     'to' => 'Europe/Rome',
+  ),
+  'Europe/Vaduz' => 
+  array (
+    'type' => 'link',
+    'to' => 'Europe/Zurich',
   ),
   'Arctic/Longyearbyen' => 
   array (
@@ -2441,15 +2451,30 @@ return array (
     'type' => 'link',
     'to' => 'America/Argentina/Cordoba',
   ),
+  'America/Shiprock' => 
+  array (
+    'type' => 'link',
+    'to' => 'America/Denver',
+  ),
   'America/Virgin' => 
   array (
     'type' => 'link',
-    'to' => 'America/St_Thomas',
+    'to' => 'America/Port_of_Spain',
+  ),
+  'Antarctica/South_Pole' => 
+  array (
+    'type' => 'link',
+    'to' => 'Pacific/Auckland',
   ),
   'Asia/Ashkhabad' => 
   array (
     'type' => 'link',
     'to' => 'Asia/Ashgabat',
+  ),
+  'Asia/Calcutta' => 
+  array (
+    'type' => 'link',
+    'to' => 'Asia/Kolkata',
   ),
   'Asia/Chungking' => 
   array (
@@ -2466,25 +2491,20 @@ return array (
     'type' => 'link',
     'to' => 'Asia/Kathmandu',
   ),
-  'Asia/Calcutta' => 
-  array (
-    'type' => 'link',
-    'to' => 'Asia/Kolkata',
-  ),
   'Asia/Macao' => 
   array (
     'type' => 'link',
     'to' => 'Asia/Macau',
   ),
-  'Asia/Tel_Aviv' => 
-  array (
-    'type' => 'link',
-    'to' => 'Asia/Jerusalem',
-  ),
   'Asia/Saigon' => 
   array (
     'type' => 'link',
     'to' => 'Asia/Ho_Chi_Minh',
+  ),
+  'Asia/Tel_Aviv' => 
+  array (
+    'type' => 'link',
+    'to' => 'Asia/Jerusalem',
   ),
   'Asia/Thimbu' => 
   array (
@@ -2771,25 +2791,25 @@ return array (
     'type' => 'link',
     'to' => 'Asia/Shanghai',
   ),
+  'Pacific/Ponape' => 
+  array (
+    'type' => 'link',
+    'to' => 'Pacific/Pohnpei',
+  ),
   'Pacific/Samoa' => 
   array (
     'type' => 'link',
     'to' => 'Pacific/Pago_Pago',
-  ),
-  'Pacific/Yap' => 
-  array (
-    'type' => 'link',
-    'to' => 'Pacific/Chuuk',
   ),
   'Pacific/Truk' => 
   array (
     'type' => 'link',
     'to' => 'Pacific/Chuuk',
   ),
-  'Pacific/Ponape' => 
+  'Pacific/Yap' => 
   array (
     'type' => 'link',
-    'to' => 'Pacific/Pohnpei',
+    'to' => 'Pacific/Chuuk',
   ),
   'Poland' => 
   array (
@@ -2906,15 +2926,20 @@ return array (
     'type' => 'link',
     'to' => 'Etc/UTC',
   ),
+  'Antarctica/McMurdo' => 
+  array (
+    'type' => 'link',
+    'to' => 'Pacific/Auckland',
+  ),
   'Europe/Nicosia' => 
   array (
     'type' => 'link',
     'to' => 'Asia/Nicosia',
   ),
-  'Antarctica/South_Pole' => 
+  'Africa/Juba' => 
   array (
     'type' => 'link',
-    'to' => 'Antarctica/McMurdo',
+    'to' => 'Africa/Khartoum',
   ),
 );
 
