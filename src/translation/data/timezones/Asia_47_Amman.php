@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Amman".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -310,7 +310,82 @@ return array (
     ),
     55 => 
     array (
+      'time' => 1143669600,
+      'type' => 1,
+    ),
+    56 => 
+    array (
       'time' => 1161900000,
+      'type' => 0,
+    ),
+    57 => 
+    array (
+      'time' => 1175119200,
+      'type' => 1,
+    ),
+    58 => 
+    array (
+      'time' => 1193349600,
+      'type' => 0,
+    ),
+    59 => 
+    array (
+      'time' => 1206568800,
+      'type' => 1,
+    ),
+    60 => 
+    array (
+      'time' => 1225404000,
+      'type' => 0,
+    ),
+    61 => 
+    array (
+      'time' => 1238018400,
+      'type' => 1,
+    ),
+    62 => 
+    array (
+      'time' => 1256853600,
+      'type' => 0,
+    ),
+    63 => 
+    array (
+      'time' => 1269468000,
+      'type' => 1,
+    ),
+    64 => 
+    array (
+      'time' => 1288303200,
+      'type' => 0,
+    ),
+    65 => 
+    array (
+      'time' => 1301522400,
+      'type' => 1,
+    ),
+    66 => 
+    array (
+      'time' => 1319752800,
+      'type' => 0,
+    ),
+    67 => 
+    array (
+      'time' => 1332972000,
+      'type' => 1,
+    ),
+    68 => 
+    array (
+      'time' => 1387486800,
+      'type' => 0,
+    ),
+    69 => 
+    array (
+      'time' => 1395957600,
+      'type' => 1,
+    ),
+    70 => 
+    array (
+      'time' => 1414706400,
       'type' => 0,
     ),
   ),
@@ -336,10 +411,10 @@ return array (
       'time' => 0,
       'type' => 1,
     ),
-    'startYear' => 2006,
+    'startYear' => 2014,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Amman',
 );
 

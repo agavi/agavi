@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Barbados".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => -14308,
+      'rawOffset' => -14309,
       'dstOffset' => 0,
       'name' => 'BMT',
     ),
@@ -47,12 +47,12 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1451678492,
+      'time' => -1451678491,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1199217692,
+      'time' => -1199217691,
       'type' => 1,
     ),
     2 => 
@@ -102,8 +102,8 @@ return array (
     'offset' => -14400,
     'startYear' => 1981,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Barbados',
 );
 

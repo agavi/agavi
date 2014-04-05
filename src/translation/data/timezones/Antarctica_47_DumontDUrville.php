@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/DumontDUrville".
- * Compiled from olson file "antarctica", version 8.9.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -62,8 +62,8 @@ return array (
     'offset' => 36000,
     'startYear' => 1957,
   ),
-  'source' => 'antarctica',
-  'version' => '8.9',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Antarctica/DumontDUrville',
 );
 

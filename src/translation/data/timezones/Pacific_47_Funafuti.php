@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Funafuti".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -40,8 +40,8 @@ return array (
     'offset' => 43200,
     'startYear' => 1901,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Funafuti',
 );
 

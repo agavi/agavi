@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Rangoon".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 23076,
+      'rawOffset' => 23080,
       'dstOffset' => 0,
       'name' => 'RMT',
     ),
@@ -52,7 +52,7 @@ return array (
     ),
     1 => 
     array (
-      'time' => -1577946276,
+      'time' => -1577946280,
       'type' => 1,
     ),
     2 => 
@@ -73,8 +73,8 @@ return array (
     'offset' => 23400,
     'startYear' => 1946,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Rangoon',
 );
 

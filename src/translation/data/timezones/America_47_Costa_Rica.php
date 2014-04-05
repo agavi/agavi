@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Costa_Rica".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => -20180,
+      'rawOffset' => -20173,
       'dstOffset' => 0,
       'name' => 'SJMT',
     ),
@@ -47,12 +47,12 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2524501420,
+      'time' => -2524501427,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1545071020,
+      'time' => -1545071027,
       'type' => 1,
     ),
     2 => 
@@ -102,8 +102,8 @@ return array (
     'offset' => -21600,
     'startYear' => 1993,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Costa_Rica',
 );
 

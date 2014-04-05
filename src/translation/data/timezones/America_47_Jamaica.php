@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Jamaica".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => -18432,
+      'rawOffset' => -18431,
       'dstOffset' => 0,
       'name' => 'KMT',
     ),
@@ -47,12 +47,12 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2524503168,
+      'time' => -2524503169,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1827687168,
+      'time' => -1827687169,
       'type' => 1,
     ),
     2 => 
@@ -168,8 +168,8 @@ return array (
     'offset' => -18000,
     'startYear' => 1985,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Jamaica',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Dili".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -40,7 +40,7 @@ return array (
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'CIT',
+      'name' => 'WITA',
     ),
   ),
   'rules' => 
@@ -78,8 +78,8 @@ return array (
     'offset' => 32400,
     'startYear' => 2001,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Dili',
 );
 

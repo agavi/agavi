@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Qyzylorda".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -256,8 +256,8 @@ return array (
     'offset' => 21600,
     'startYear' => 2006,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Qyzylorda',
 );
 

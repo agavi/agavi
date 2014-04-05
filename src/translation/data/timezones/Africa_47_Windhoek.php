@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Windhoek".
- * Compiled from olson file "africa", version 8.33.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -122,8 +122,8 @@ return array (
     ),
     'startYear' => 1995,
   ),
-  'source' => 'africa',
-  'version' => '8.33',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Africa/Windhoek',
 );
 

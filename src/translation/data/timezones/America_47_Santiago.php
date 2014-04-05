@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Santiago".
- * Compiled from olson file "southamerica", version 8.52.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -493,182 +493,122 @@ return array (
     ),
     88 => 
     array (
-      'time' => 971582400,
-      'type' => 4,
-    ),
-    89 => 
-    array (
       'time' => 984279600,
       'type' => 2,
     ),
-    90 => 
+    89 => 
     array (
       'time' => 1003028400,
       'type' => 4,
     ),
-    91 => 
-    array (
-      'time' => 1003032000,
-      'type' => 4,
-    ),
-    92 => 
+    90 => 
     array (
       'time' => 1015729200,
       'type' => 2,
     ),
-    93 => 
+    91 => 
     array (
       'time' => 1034478000,
       'type' => 4,
     ),
-    94 => 
-    array (
-      'time' => 1034481600,
-      'type' => 4,
-    ),
-    95 => 
+    92 => 
     array (
       'time' => 1047178800,
       'type' => 2,
     ),
-    96 => 
+    93 => 
     array (
       'time' => 1065927600,
       'type' => 4,
     ),
-    97 => 
-    array (
-      'time' => 1065931200,
-      'type' => 4,
-    ),
-    98 => 
+    94 => 
     array (
       'time' => 1079233200,
       'type' => 2,
     ),
-    99 => 
+    95 => 
     array (
       'time' => 1097377200,
       'type' => 4,
     ),
-    100 => 
-    array (
-      'time' => 1097380800,
-      'type' => 4,
-    ),
-    101 => 
+    96 => 
     array (
       'time' => 1110682800,
       'type' => 2,
     ),
-    102 => 
+    97 => 
     array (
       'time' => 1128826800,
       'type' => 4,
     ),
-    103 => 
-    array (
-      'time' => 1128830400,
-      'type' => 4,
-    ),
-    104 => 
+    98 => 
     array (
       'time' => 1142132400,
       'type' => 2,
     ),
-    105 => 
+    99 => 
     array (
       'time' => 1160881200,
       'type' => 4,
     ),
-    106 => 
-    array (
-      'time' => 1160884800,
-      'type' => 4,
-    ),
-    107 => 
+    100 => 
     array (
       'time' => 1173582000,
       'type' => 2,
     ),
-    108 => 
+    101 => 
     array (
       'time' => 1192330800,
       'type' => 4,
     ),
-    109 => 
-    array (
-      'time' => 1192334400,
-      'type' => 4,
-    ),
-    110 => 
+    102 => 
     array (
       'time' => 1206846000,
       'type' => 2,
     ),
-    111 => 
+    103 => 
     array (
       'time' => 1223780400,
       'type' => 4,
     ),
-    112 => 
-    array (
-      'time' => 1223784000,
-      'type' => 4,
-    ),
-    113 => 
+    104 => 
     array (
       'time' => 1237086000,
       'type' => 2,
     ),
-    114 => 
+    105 => 
     array (
       'time' => 1255230000,
       'type' => 4,
     ),
-    115 => 
-    array (
-      'time' => 1255233600,
-      'type' => 4,
-    ),
-    116 => 
+    106 => 
     array (
       'time' => 1270350000,
       'type' => 2,
     ),
-    117 => 
+    107 => 
     array (
       'time' => 1286679600,
       'type' => 4,
     ),
-    118 => 
-    array (
-      'time' => 1286683200,
-      'type' => 4,
-    ),
-    119 => 
+    108 => 
     array (
       'time' => 1304823600,
       'type' => 2,
     ),
-    120 => 
+    109 => 
     array (
       'time' => 1313899200,
       'type' => 4,
     ),
-    121 => 
+    110 => 
     array (
-      'time' => 1318129200,
-      'type' => 4,
-    ),
-    122 => 
-    array (
-      'time' => 1331434800,
+      'time' => 1335668400,
       'type' => 2,
     ),
-    123 => 
+    111 => 
     array (
-      'time' => 1350187200,
+      'time' => 1346558400,
       'type' => 4,
     ),
   ),
@@ -680,24 +620,24 @@ return array (
     'save' => 3600,
     'start' => 
     array (
-      'month' => 9,
-      'date' => '9',
+      'month' => 8,
+      'date' => '2',
       'day_of_week' => -1,
       'time' => 14400000,
       'type' => 2,
     ),
     'end' => 
     array (
-      'month' => 2,
-      'date' => '9',
+      'month' => 3,
+      'date' => '23',
       'day_of_week' => -1,
       'time' => 10800000,
       'type' => 2,
     ),
     'startYear' => 2012,
   ),
-  'source' => 'southamerica',
-  'version' => '8.52',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Santiago',
 );
 

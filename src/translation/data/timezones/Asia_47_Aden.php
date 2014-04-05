@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Aden".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -29,7 +29,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -631162848,
+      'time' => -631162794,
       'type' => 0,
     ),
   ),
@@ -40,8 +40,8 @@ return array (
     'offset' => 10800,
     'startYear' => 1950,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Aden',
 );
 

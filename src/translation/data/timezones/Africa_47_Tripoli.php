@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Tripoli".
- * Compiled from olson file "africa", version 8.33.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -182,6 +182,31 @@ return array (
     28 => 
     array (
       'time' => 875916000,
+      'type' => 0,
+    ),
+    29 => 
+    array (
+      'time' => 875919600,
+      'type' => 2,
+    ),
+    30 => 
+    array (
+      'time' => 1352505600,
+      'type' => 0,
+    ),
+    31 => 
+    array (
+      'time' => 1364515200,
+      'type' => 1,
+    ),
+    32 => 
+    array (
+      'time' => 1382659200,
+      'type' => 0,
+    ),
+    33 => 
+    array (
+      'time' => 1382662800,
       'type' => 2,
     ),
   ),
@@ -190,10 +215,10 @@ return array (
     'type' => 'static',
     'name' => 'EET',
     'offset' => 7200,
-    'startYear' => 1998,
+    'startYear' => 2014,
   ),
-  'source' => 'africa',
-  'version' => '8.33',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Africa/Tripoli',
 );
 

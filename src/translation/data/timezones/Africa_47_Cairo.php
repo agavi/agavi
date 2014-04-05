@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Cairo".
- * Compiled from olson file "africa", version 8.33.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -35,7 +35,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2185409100,
+      'time' => -2185409109,
       'type' => 0,
     ),
     1 => 
@@ -665,8 +665,8 @@ return array (
     'offset' => 7200,
     'startYear' => 2011,
   ),
-  'source' => 'africa',
-  'version' => '8.33',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Africa/Cairo',
 );
 

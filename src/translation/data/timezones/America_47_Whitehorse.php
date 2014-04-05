@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Whitehorse".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -109,13 +109,13 @@ return array (
     ),
     4 => 
     array (
-      'time' => -1615125600,
-      'type' => 2,
+      'time' => -1615129200,
+      'type' => 6,
     ),
     5 => 
     array (
-      'time' => -1614783600,
-      'type' => 6,
+      'time' => -1615125600,
+      'type' => 2,
     ),
     6 => 
     array (
@@ -537,8 +537,8 @@ return array (
     ),
     'startYear' => 2007,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Whitehorse',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Davis".
- * Compiled from olson file "antarctica", version 8.9.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -64,16 +64,26 @@ return array (
       'time' => 1268251200,
       'type' => 0,
     ),
+    5 => 
+    array (
+      'time' => 1319742000,
+      'type' => 2,
+    ),
+    6 => 
+    array (
+      'time' => 1329854400,
+      'type' => 0,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'DAVT',
     'offset' => 25200,
-    'startYear' => 2011,
+    'startYear' => 2013,
   ),
-  'source' => 'antarctica',
-  'version' => '8.9',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Antarctica/Davis',
 );
 

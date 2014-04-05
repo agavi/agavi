@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Kamchatka".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -383,8 +383,8 @@ return array (
     'offset' => 43200,
     'startYear' => 2012,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Kamchatka',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Khartoum".
- * Compiled from olson file "africa", version 8.33.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -217,8 +217,8 @@ return array (
     'offset' => 10800,
     'startYear' => 2001,
   ),
-  'source' => 'africa',
-  'version' => '8.33',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Africa/Khartoum',
 );
 

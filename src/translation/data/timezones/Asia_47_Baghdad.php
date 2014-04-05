@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Baghdad".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -316,8 +316,8 @@ return array (
     'offset' => 10800,
     'startYear' => 2008,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Baghdad',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Australia/Lord_Howe".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -355,8 +355,8 @@ return array (
     ),
     'startYear' => 2008,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Australia/Lord_Howe',
 );
 

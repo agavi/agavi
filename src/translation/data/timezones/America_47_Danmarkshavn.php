@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Danmarkshavn".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -223,8 +223,8 @@ return array (
     'offset' => 0,
     'startYear' => 1997,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Danmarkshavn',
 );
 

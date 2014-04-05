@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Hermosillo".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -133,8 +133,8 @@ return array (
     'offset' => -25200,
     'startYear' => 2000,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Hermosillo',
 );
 

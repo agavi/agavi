@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Palmer".
- * Compiled from olson file "antarctica", version 8.9.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -313,6 +313,131 @@ return array (
       'time' => 952830000,
       'type' => 5,
     ),
+    50 => 
+    array (
+      'time' => 971578800,
+      'type' => 6,
+    ),
+    51 => 
+    array (
+      'time' => 984279600,
+      'type' => 5,
+    ),
+    52 => 
+    array (
+      'time' => 1003028400,
+      'type' => 6,
+    ),
+    53 => 
+    array (
+      'time' => 1015729200,
+      'type' => 5,
+    ),
+    54 => 
+    array (
+      'time' => 1034478000,
+      'type' => 6,
+    ),
+    55 => 
+    array (
+      'time' => 1047178800,
+      'type' => 5,
+    ),
+    56 => 
+    array (
+      'time' => 1065927600,
+      'type' => 6,
+    ),
+    57 => 
+    array (
+      'time' => 1079233200,
+      'type' => 5,
+    ),
+    58 => 
+    array (
+      'time' => 1097377200,
+      'type' => 6,
+    ),
+    59 => 
+    array (
+      'time' => 1110682800,
+      'type' => 5,
+    ),
+    60 => 
+    array (
+      'time' => 1128826800,
+      'type' => 6,
+    ),
+    61 => 
+    array (
+      'time' => 1142132400,
+      'type' => 5,
+    ),
+    62 => 
+    array (
+      'time' => 1160881200,
+      'type' => 6,
+    ),
+    63 => 
+    array (
+      'time' => 1173582000,
+      'type' => 5,
+    ),
+    64 => 
+    array (
+      'time' => 1192330800,
+      'type' => 6,
+    ),
+    65 => 
+    array (
+      'time' => 1206846000,
+      'type' => 5,
+    ),
+    66 => 
+    array (
+      'time' => 1223780400,
+      'type' => 6,
+    ),
+    67 => 
+    array (
+      'time' => 1237086000,
+      'type' => 5,
+    ),
+    68 => 
+    array (
+      'time' => 1255230000,
+      'type' => 6,
+    ),
+    69 => 
+    array (
+      'time' => 1270350000,
+      'type' => 5,
+    ),
+    70 => 
+    array (
+      'time' => 1286679600,
+      'type' => 6,
+    ),
+    71 => 
+    array (
+      'time' => 1304823600,
+      'type' => 5,
+    ),
+    72 => 
+    array (
+      'time' => 1313899200,
+      'type' => 6,
+    ),
+    73 => 
+    array (
+      'time' => 1335668400,
+      'type' => 5,
+    ),
+    74 => 
+    array (
+      'time' => 1346558400,
+      'type' => 6,
+    ),
   ),
   'finalRule' => 
   array (
@@ -322,24 +447,24 @@ return array (
     'save' => 3600,
     'start' => 
     array (
-      'month' => 9,
-      'date' => '9',
+      'month' => 8,
+      'date' => '2',
       'day_of_week' => -1,
       'time' => 14400000,
       'type' => 2,
     ),
     'end' => 
     array (
-      'month' => 2,
-      'date' => '9',
+      'month' => 3,
+      'date' => '23',
       'day_of_week' => -1,
       'time' => 10800000,
       'type' => 2,
     ),
-    'startYear' => 2000,
+    'startYear' => 2012,
   ),
-  'source' => 'antarctica',
-  'version' => '8.9',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Antarctica/Palmer',
 );
 

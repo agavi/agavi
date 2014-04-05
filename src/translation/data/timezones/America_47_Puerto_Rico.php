@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Puerto_Rico".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -72,8 +72,8 @@ return array (
     'offset' => -14400,
     'startYear' => 1947,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Puerto_Rico',
 );
 

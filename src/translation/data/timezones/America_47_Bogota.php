@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Bogota".
- * Compiled from olson file "southamerica", version 8.52.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => -17780,
+      'rawOffset' => -17776,
       'dstOffset' => 0,
       'name' => 'BMT',
     ),
@@ -41,12 +41,12 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2707671820,
+      'time' => -2707671824,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1739041420,
+      'time' => -1739041424,
       'type' => 1,
     ),
     2 => 
@@ -66,8 +66,8 @@ return array (
     'offset' => -18000,
     'startYear' => 1994,
   ),
-  'source' => 'southamerica',
-  'version' => '8.52',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Bogota',
 );
 
