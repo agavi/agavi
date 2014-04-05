@@ -518,6 +518,7 @@ class AgaviWebRequest extends AgaviRequest
 				if(is_array($value)) {
 					static::fixFilesArray($input, $uploadedFileClass, $toIndex, $output);
 				} else {
+					$data = array();
 					foreach($theIndices as $name => $theIndex) {
 						$data[$name] = AgaviArrayPathDefinition::getValue(array_merge($theIndex, array($key)), $input, $name == 'is_uploaded_file' ? true : null);
 					}
@@ -526,6 +527,7 @@ class AgaviWebRequest extends AgaviRequest
 				}
 			}
 		} else {
+			$data = array();
 			foreach($theIndices as $name => $theIndex) {
 				$data[$name] = AgaviArrayPathDefinition::getValue($theIndex, $input, $name == 'is_uploaded_file' ? true : null);
 			}
