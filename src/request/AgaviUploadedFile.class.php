@@ -397,6 +397,7 @@ class AgaviUploadedFile implements ArrayAccess
 	 * @throws     AgaviException If the file has errors or has been moved.
 	 *
 	 * @author     David Zülke <dz@bitxtender.com>
+	 * @author     Peter Limbach <peter.limbach@gmail.com>
 	 * @since      0.11.2
 	 */
 	public function getContents()
@@ -405,14 +406,13 @@ class AgaviUploadedFile implements ArrayAccess
 		if($this->hasError() || (!$this->isMovable() && !$this->hasBufferedContents() && !$this->hasOpenStream())) {
 			throw new AgaviException('Cannot get contents of erroneous or moved file.');
 		}
-		
 		// we intentionally don't store the result of file_get_contents() here to keep memory usage low
 		return
 			$this->hasBufferedContents()
 				? $this->contents
-				: $this->hasOpenStream()
+				: ($this->hasOpenStream()
 					? stream_get_contents($this->getStream(), -1, 0)
-					: file_get_contents($this->getTmpName())
+					: file_get_contents($this->getTmpName()))
 		;
 	}
 	
