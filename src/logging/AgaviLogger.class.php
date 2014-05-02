@@ -114,6 +114,17 @@ class AgaviLogger implements AgaviILogger
 	}
 
 	/**
+	 * Get the level.
+	 *
+	 * @author     Peter Limbach <peter.limbach@gmail.com>
+	 * @since      1.1.0
+	 */
+	public function getLevel()
+	{
+		return $this->level;
+	}
+
+	/**
 	 * Execute the shutdown procedure.
 	 *
 	 * @author     Sean Kerr <skerr@mojavi.org>
