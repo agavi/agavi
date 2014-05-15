@@ -23,8 +23,7 @@
 		"ext-spl": "*",
 		"ext-reflection": "*",
 		"ext-pcre": "*",
-
-		"phing/phing": "~2.4"
+		"phing/phing": "~2.6.1"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~3.5"
