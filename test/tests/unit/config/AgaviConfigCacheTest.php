@@ -12,7 +12,6 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
 	}
 	
 	/**

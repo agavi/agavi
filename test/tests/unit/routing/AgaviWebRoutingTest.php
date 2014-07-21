@@ -15,7 +15,6 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
 	}
 	
 	public function setUp()
@@ -33,6 +32,9 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('foo?bar=%2Fshouldbeencoded', $url);
 	}
 	
+	/**
+	 * @runInSeparateProcess
+	 */
 	public function testGenNullDisabled()
 	{
 		$_SERVER['SCRIPT_NAME'] = 'lol.cats';

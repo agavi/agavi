@@ -1,5 +1,6 @@
 <?php
 /**
+ * @runTestsInSeparateProcesses
  * @agaviIsolationEnvironment testing.testIsolation	
  * @agaviIsolationDefaultContext web-isolated
  */
@@ -15,7 +16,6 @@ class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
 		$this->setIsolationEnvironment('testing.testIsolation'); // equivalent to the annotation @AgaviIsolationEnvironment on the testcase class
 	}
 	
