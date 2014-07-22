@@ -70,4 +70,4 @@ Duplicates are removed, so the "WinningModule" entry matched by the "*" wildcard
 
 Testing
 -------
-AgaviTesting::dispatch() now calls exit() with an appropriate shell exit code to indicate success or failures/errors by default; pass false as the second argument to prevent this behavior.
+The test runner infrastructure has seen an large overhaul. AgaviTesting has been completely deprecated and is now superseeded by AgaviPhpUnitCli, which supports all of PHPUnit's command line switches. Refer to UPGRADING for details.
