@@ -69,6 +69,8 @@
 			</ae:parameter>
 		</request>
 		
+		<storage class="AgaviNullStorage" />
+		
 	</ae:configuration>
 	
 	
