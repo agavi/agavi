@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @runTestsInSeparateProcesses
  * @agaviIsolationEnvironment testing.testIsolation	
@@ -44,6 +45,23 @@ class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 	{
 		$this->assertEquals('web-isolated-annotated-method', AgaviConfig::get('core.default_context'));
 	}
+	
+	/**
+	 * @preserveGlobalState enabled
+	 */
+	public function testPreserveGlobalStateOnWorks() {
+		// this test just needs to run to signal success
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @preserveGlobalState disabled
+	 */
+	public function testPreserveGlobalStateOffWorks() {
+		// this test just needs to run to signal success
+		$this->assertTrue(true);
+	}
+	
 }
 
 ?>

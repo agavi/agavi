@@ -23,6 +23,7 @@ ADD: Allow array syntax for slot names (#1110) (David)
 ADD: Add support for custom filesystem layouts for modules to the project configuration system (#874) (Noah)
 ADD: Response attributes (#1062) (David, TANAKA Koichi)
 
+CHG: Remove overwritten PHPUnit process isolation template (#1516) (Dominik)
 CHG: Bump PHPUnit requirement to >= 3.7 (#1519) (Dominik)
 CHG: Initialize Agavi on demand when used with composer (#1518) (Dominik)
 CHG: Check process isolation settings for tests (#1517) (Dominik)

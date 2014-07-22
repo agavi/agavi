@@ -62,6 +62,7 @@
 			</suite>
 			<suite name="Testing">
 				<testfiles>
+					<testfile>unit/testing/AgaviPhpUnitTestCaseDependenciesTest.php</testfile>
 					<testfile>unit/testing/AgaviPhpUnitTestCaseTest.php</testfile>
 				</testfiles>
 			</suite>
