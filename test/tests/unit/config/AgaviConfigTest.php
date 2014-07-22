@@ -7,7 +7,7 @@ require_once(__DIR__ . '/../../../../src/config/AgaviConfig.class.php');
  * @preserveGlobalState disabled
  * @runTestsInSeparateProcesses
  */
-class AgaviConfigTest extends PHPUnit_Framework_TestCase
+class AgaviConfigTest extends AgaviPhpUnitTestCase
 {
 	public function testInitiallyEmpty()
 	{

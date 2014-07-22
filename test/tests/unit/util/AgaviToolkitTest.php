@@ -11,7 +11,7 @@ if(!class_exists('AgaviException')) {
 	include(__DIR__ . '/../../../../src/exception/AgaviException.class.php');
 }
 
-class AgaviToolkitTest extends PHPUnit_Framework_TestCase
+class AgaviToolkitTest extends AgaviPhpUnitTestCase
 {
 
 	public function __construct($name = NULL, $data = array(), $dataName = '')
