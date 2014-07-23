@@ -271,6 +271,10 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 			$isBlacklisted = function($file) use ($testFile, $blacklist) {
 				return $file === $testFile || isset($blacklist[$file]);
 			};
+		} else {
+			$isBlacklisted = function($file) use ($testFile) {
+				return $file === $testFile;
+			};
 		}
 
 		$classesToFile = array('AgaviTesting' => realpath(__DIR__ . '/AgaviTesting.class.php'));
