@@ -1,12 +1,7 @@
 <?php
 
 if(version_compare(PHP_VERSION, '5.4', '<')) {
-	class SandboxTestingChildClass extends SandboxTestingParentClass implements SandboxITestingChild
-	{
-	}
+	require_once(__DIR__ . '/SandboxTestingChildClassPhp53.class.php');
 } else {
-	class SandboxTestingChildClass extends SandboxTestingParentClass implements SandboxITestingChild
-	{
-		use SandboxTestingTrait;
-	}
+	require_once(__DIR__ . '/SandboxTestingChildClassPhp54.class.php');
 }

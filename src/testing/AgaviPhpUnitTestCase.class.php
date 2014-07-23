@@ -204,7 +204,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 	 * @since        1.1.0
 	 */
 	private function getClassDependendFiles(ReflectionClass $reflectionClass, $isBlacklisted) {
-		$requires = [];
+		$requires = array();
 		
 		while($reflectionClass) {
 			$file = $reflectionClass->getFileName();
@@ -216,7 +216,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 				$file = $interface->getFileName();
 				$requires = array_merge($requires, $this->getClassDependendFiles($interface, $isBlacklisted));
 			}
-			if(is_callable([$reflectionClass, 'getTraits'])) {
+			if(is_callable(array($reflectionClass, 'getTraits'))) {
 				// FIXME: remove check after bumping php requirement to 5.4
 				foreach($reflectionClass->getTraits() as $trait) {
 					$file = $trait->getFileName();
@@ -273,7 +273,7 @@ abstract class AgaviPhpUnitTestCase extends PHPUnit_Framework_TestCase
 			};
 		}
 
-		$classesToFile = ['AgaviTesting' => realpath(__DIR__ . '/AgaviTesting.class.php')];
+		$classesToFile = array('AgaviTesting' => realpath(__DIR__ . '/AgaviTesting.class.php'));
 		foreach($classesInTest as $className) {
 			$classesToFile = array_merge(
 				$classesToFile,
