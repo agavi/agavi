@@ -226,9 +226,9 @@ abstract class AgaviViewTestCase extends AgaviFragmentTestCase
 		$response = $this->container->getResponse();
 		
 		if(!($response instanceof AgaviWebResponse)) {
-			$this->fail(sprintf($message . ' (response is not an AgaviWebResponse)', $expected));
+			$this->fail(sprintf($message . ' (response is not an AgaviWebResponse)', $expected, var_export($expectedValue, true)));
 		}
-		$this->assertEquals($expectedValue, $response->getCookie($expected), sprintf($message, $expected, $expectedValue));
+		$this->assertEquals($expectedValue, $response->getCookie($expected), sprintf($message, $expected, var_export($expectedValue, true)));
 	}
 	
 	/**
