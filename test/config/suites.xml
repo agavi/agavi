@@ -3,52 +3,22 @@
 	<ae:configuration>
 		<suites>
 			<suite name="Action">
-				<testfiles>
-					<testfile>unit/action/AgaviActionTest.php</testfile>
-				</testfiles>
+				<include>unit/action/.*Test.php</include>
 			</suite>
 			<suite name="Config">
-				<testfiles>
-					<testfile>unit/config/AgaviAutoloadConfigHandlerTest.php</testfile>
-					<testfile>unit/config/AgaviConfigCacheTest.php</testfile>
-					<testfile>unit/config/AgaviConfigHandlerTest.php</testfile>
-					<testfile>unit/config/AgaviConfigHandlersConfigHandlerTest.php</testfile>
-					<testfile>unit/config/AgaviConfigTest.php</testfile>
-					<testfile>unit/config/AgaviConfigValueHolderTest.php</testfile>
-					<testfile>unit/config/AgaviDatabaseConfigHandlerTest.php</testfile>
-					<testfile>unit/config/AgaviFactoryConfigHandlerTest.php</testfile>
-					<testfile>unit/config/AgaviFilterConfigHandlerTest.php</testfile>
-					<testfile>unit/config/AgaviLoggingConfigHandlerTest.php</testfile>
-					<testfile>unit/config/AgaviRbacdefinitionConfigHandlerTest.php</testfile>
-					<testfile>unit/config/AgaviReturnArrayConfigHandlerTest.php</testfile>
-				</testfiles>
+				<include>unit/config/.*Test.php</include>
 			</suite>
 			<suite name="Context">
-				<testfiles>
-					<testfile>unit/context/AgaviContextTest.php</testfile>
-				</testfiles>
+				<include>unit/context/.*Test.php</include>
 			</suite>
 			<suite name="Controller">
-				<testfiles>
-					<testfile>unit/controller/AgaviControllerTest.php</testfile>
-					<testfile>unit/controller/AgaviExecutionContainerTest.php</testfile>
-				</testfiles>
+				<include>unit/controller/.*Test.php</include>
 			</suite>
 			<suite name="Database">
-				<testfiles>
-					<testfile>unit/database/AgaviDatabaseManagerTest.php</testfile>
-				</testfiles>
+				<include>unit/database/.*Test.php</include>
 			</suite>
 			<suite name="Date">
-				<testfiles>
-					<testfile>unit/date/AgaviCalendarTest.php</testfile>
-					<testfile>unit/date/AgaviDateFormatTest.php</testfile>
-					<testfile>unit/date/AgaviGregorianCalendarTest.php</testfile>
-					<testfile>unit/date/AgaviTimeZoneTest.php</testfile>
-					<testfile>unit/date/BaseCalendarTest.php</testfile>
-					<testfile>unit/date/Ticket958Test.php</testfile>
-					<testfile>unit/date/TimeZoneBoundaryTest.php</testfile>
-				</testfiles>
+				<include>unit/date/.*Test.php</include>
 			</suite>
 			<suite name="Exception_">
 				<!-- Setting suite name to "Exception" causes a weird issue: -->
@@ -61,108 +31,43 @@
 				src/testing/AgaviTesting.class.php:101
 				test/run-tests.php:20
 				-->
-				<testfiles>
-					<testfile>unit/exception/AgaviExceptionTest.php</testfile>
-				</testfiles>
+				<include>unit/exception/.*Test.php</include>
 			</suite>
 			<suite name="Logging">
-				<testfiles>
-					<testfile>unit/logging/AgaviFileLoggerAppenderTest.php</testfile>
-					<testfile>unit/logging/AgaviLoggerAppenderTest.php</testfile>
-					<testfile>unit/logging/AgaviLoggerLayoutTest.php</testfile>
-					<testfile>unit/logging/AgaviLoggerManagerTest.php</testfile>
-					<testfile>unit/logging/AgaviLoggerMessageTest.php</testfile>
-					<testfile>unit/logging/AgaviPassthruLoggerLayoutTest.php</testfile>
-				</testfiles>
+				<include>unit/logging/.*Test.php</include>
 			</suite>
 			<suite name="Model">
-				<testfiles>
-					<testfile>unit/model/AgaviModelTest.php</testfile>
-				</testfiles>
+				<include>unit/model/.*Test.php</include>
 			</suite>
 			<suite name="Renderer">
-				<testfiles>
-					<testfile>unit/renderer/AgaviRendererTest.php</testfile>
-				</testfiles>
+				<include>unit/renderer/.*Test.php</include>
 			</suite>
 			<suite name="Request">
-				<testfiles>
-					<testfile>unit/request/AgaviRequestTest.php</testfile>
-					<testfile>unit/request/AgaviWebRequestDataHolderParameterTest.php</testfile>
-					<testfile>unit/request/AgaviWebRequestDataHolderHeaderTest.php</testfile>
-					<testfile>unit/request/AgaviWebRequestDataHolderCookieTest.php</testfile>
-					<testfile>unit/request/AgaviWebRequestTest.php</testfile>
-				</testfiles>
+				<include>unit/request/.*Test.php</include>
 			</suite>
 			<suite name="Response">
-				<testfiles>
-					<testfile>unit/response/AgaviResponseTest.php</testfile>
-					<testfile>unit/response/AgaviWebResponseTest.php</testfile>
-				</testfiles>
+				<include>unit/response/.*Test.php</include>
 			</suite>
 			<suite name="Routing">
-				<testfiles>
-					<testfile>unit/routing/AgaviRoutingCasesTest.php</testfile>
-					<testfile>unit/routing/AgaviRoutingTest.php</testfile>
-					<testfile>unit/routing/AgaviWebRoutingServerCasesTest.php</testfile>
-					<testfile>unit/routing/AgaviWebRoutingTest.php</testfile>
-					<testfile>unit/routing/Ticket1051Test.php</testfile>
-					<testfile>unit/routing/Ticket1294Test.php</testfile>
-				</testfiles>
+				<include>unit/routing/.*Test.php</include>
 			</suite>
 			<suite name="Testing">
-				<testfiles>
-					<testfile>unit/testing/AgaviPhpUnitTestCaseDependenciesTest.php</testfile>
-					<testfile>unit/testing/AgaviPhpUnitTestCaseTest.php</testfile>
-				</testfiles>
+				<include>unit/testing/.*Test.php</include>
 			</suite>
 			<suite name="Translation">
-				<testfiles>
-					<testfile>unit/translation/AgaviLocaleTest.php</testfile>
-					<testfile>unit/translation/AgaviTranslationManagerTest.php</testfile>
-				</testfiles>
+				<include>unit/translation/.*Test.php</include>
 			</suite>
 			<suite name="User">
-				<testfiles>
-					<testfile>unit/user/AgaviRbacSecurityUserTest.php</testfile>
-					<testfile>unit/user/AgaviSecurityUserTest.php</testfile>
-					<testfile>unit/user/AgaviUserTest.php</testfile>
-				</testfiles>
+				<include>unit/user/.*Test.php</include>
 			</suite>
 			<suite name="Util">
-				<testfiles>
-					<testfile>unit/util/AgaviArrayPathDefinitionTest.php</testfile>
-					<testfile>unit/util/AgaviAttributeHolderTest.php</testfile>
-					<testfile>unit/util/AgaviDecimalFormatterTest.php</testfile>
-					<testfile>unit/util/AgaviInflectorTest.php</testfile>
-					<testfile>unit/util/AgaviParameterHolderTest.php</testfile>
-					<testfile>unit/util/AgaviToolkitTest.php</testfile>
-					<testfile>unit/util/AgaviVirtualArrayPathTest.php</testfile>
-				</testfiles>
+				<include>unit/util/.*Test.php</include>
 			</suite>
 			<suite name="Validator">
-				<testfiles>
-					<testfile>unit/validator/AgaviNumberValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviBooleanValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviAndoperatorValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviBooleanValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviDependencyManagerTest.php</testfile>
-					<testfile>unit/validator/AgaviEmailValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviNotoperatorValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviNumberValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviOperatorValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviOroperatorValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviRegexValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviStringValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviValidationManagerTest.php</testfile>
-					<testfile>unit/validator/AgaviValidatorTest.php</testfile>
-					<testfile>unit/validator/AgaviXoroperatorValidatorTest.php</testfile>
-				</testfiles>
+				<include>unit/validator/.*Test.php</include>
 			</suite>
 			<suite name="View">
-				<testfiles>
-					<testfile>unit/view/AgaviViewTest.php</testfile>
-				</testfiles>
+				<include>unit/view/.*Test.php</include>
 			</suite>
 		</suites>
 	</ae:configuration>
