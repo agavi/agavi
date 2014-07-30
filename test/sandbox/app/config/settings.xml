@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurations xmlns="http://agavi.org/agavi/1.0/config">
-	<configuration>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/settings/1.1">
+	<ae:configuration>
 
 		<system_actions>
 
@@ -43,7 +43,7 @@
 			<setting name="debug">false</setting>
 
 			<setting name="use_database">false</setting>
-			<setting name="use_logging">false</setting>
+			<setting name="use_logging">true</setting>
 			<setting name="use_security">true</setting>
 			<setting name="use_translation">true</setting>
 		</settings>
@@ -53,13 +53,47 @@
 			<exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
 		</exception_templates>
 
-	</configuration>
+	</ae:configuration>
 
-	<configuration environment="testing.*">
+	<ae:configuration environment="testing.*">
 		<settings>
 			<setting name="default_context">web</setting>
 			<setting name="debug">true</setting>
 		</settings>
-	</configuration>
+	</ae:configuration>
 
-</configurations>
+	<ae:configuration environment="testing-use_database_on">
+		<settings>
+			<setting name="use_database">true</setting>
+		</settings>
+	</ae:configuration>
+	<ae:configuration environment="testing-use_database_off">
+		<settings>
+			<setting name="use_database">false</setting>
+		</settings>
+	</ae:configuration>
+
+	<ae:configuration environment="testing-use_security_on">
+		<settings>
+			<setting name="use_security">true</setting>
+		</settings>
+	</ae:configuration>
+	<ae:configuration environment="testing-use_security_off">
+		<settings>
+			<setting name="use_security">false</setting>
+		</settings>
+	</ae:configuration>
+
+	<ae:configuration environment="testing-use_translation_on">
+		<settings>
+			<setting name="use_translation">true</setting>
+		</settings>
+	</ae:configuration>
+	<ae:configuration environment="testing-use_translation_off">
+		<settings>
+			<setting name="use_translation">false</setting>
+		</settings>
+	</ae:configuration>
+
+
+</ae:configurations>

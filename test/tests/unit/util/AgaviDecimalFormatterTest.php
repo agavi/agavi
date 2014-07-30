@@ -3,6 +3,48 @@
 class AgaviDecimalFormatterTest extends AgaviPhpUnitTestCase
 {
 	/**
+	 * @dataProvider dataFormatNumber
+	 */
+	public function testFormatNumber($format, $input, $expected) {
+		$df = new AgaviDecimalFormatter($format);
+
+		$this->assertEquals($expected, $df->formatNumber($input));
+	}
+	
+	public function dataFormatNumber() {
+		return array(
+			array('0.00', 5345.502, '5345.50'),
+			// test rounding
+			array('0.00', 5345.505, '5345.51'),
+			array('0.00', 9999.995, '10000.00'),
+			
+			array('#.##', 0, '0'),
+			array('#.##', 0.345, '0.345'),
+			array('#.##', 1345, '1345'),
+
+			// TODO: should this be supported ? currently isn't
+			array('.##', 0.345, '.345'),
+
+			array(',###.##', 12345678, '12,345,678'),
+			array(',###.##', '12345678.09', '12,345,678.09'),
+
+			array('00;#-', 5, '05'),
+			array('00;#-', -5, '05-'),
+
+			array('00##', 15, '0015'),
+			array('00##', -15, '-0015'),
+
+			// example from prado manual (we want to be compatible, don't we ? :)
+			array('##,###.00', 1234567.12345, '1,234,567.12'),
+			array('##,###.##', 1234567.12345, '1,234,567.12345'),
+			array('##,##.0000', 1234567.12345, '1,23,45,67.1235'),
+			array('#,##,##0', 123456789.0, '12,34,56,789'),
+			array('#,#,###,##.0', 123456789.12345, '1,234,567,89.1'),
+			array('000,000,000.0', 1234567.12345, '001,234,567.1'),
+		);
+	}
+	
+	/**
 	 * @dataProvider getParseData
 	 */
 	public function testParse($input, $output, $expectExtraChars = false, $maxIcuVersion = null)

@@ -396,25 +396,35 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	
 	public function dataTicket358()
 	{
-		return array('authority' => array('https://localhost.localdomain:80443/#foo',  
-										  array('scheme' => 'https', 'authority' => 'localhost.localdomain:80443', 'fragment' => 'foo', 'relative' => false)),
-					 'host_port' => array('https://localhost.localdomain:80443/#foo',
-					 			          array('scheme' => 'https', 'host' => 'localhost.localdomain', 'port' => 80443, 'fragment' => 'foo', 'relative' => false)),
-					 'frag_only' => array('http://localhost/#foo',
-					 			          array('fragment' => 'foo', 'relative' => false)),
-					 'port_only' => array('http://localhost:80443/',
-					 			          array('port' => 80443, 'relative' => false)),
-					 'host_only' => array('http://localhost.localdomain/',
-					 			          array('host' => 'localhost.localdomain', 'relative' => false)),
-					 'scheme_only' => array('https://localhost/',
-					 			          array('scheme' => 'https', 'relative' => false)),
-					 'scheme_port_1' => array('https://localhost/',
-					 			          array('scheme' => 'https', 'port' => 443, 'relative' => false)),
-					 'scheme_port_2' => array('https://localhost:80443/',
-					 			          array('scheme' => 'https', 'port' => 80443, 'relative' => false)),
-					 'authority_host_port' => array('https://localhost2.localdomain:80445/#foo',
-					 			          array('scheme' => 'https', 'authority' => 'localhost2.localdomain:80445', 'host' => 'localhost.localdomain', 'port' => 80443, 'fragment' => 'foo', 'relative' => false)),
-					);
+		return array(
+			'authority' => array(
+				'https://localhost.localdomain:80443/#foo',
+				array('scheme' => 'https', 'authority' => 'localhost.localdomain:80443', 'fragment' => 'foo', 'relative' => false)),
+			'host_port' => array(
+				'https://localhost.localdomain:80443/#foo',
+				array('scheme' => 'https', 'host' => 'localhost.localdomain', 'port' => 80443, 'fragment' => 'foo', 'relative' => false)),
+			'frag_only' => array(
+				'http://localhost/#foo',
+				array('fragment' => 'foo', 'relative' => false)),
+			'port_only' => array(
+				'http://localhost:80443/',
+				array('port' => 80443, 'relative' => false)),
+			'host_only' => array(
+				'http://localhost.localdomain/',
+				array('host' => 'localhost.localdomain', 'relative' => false)),
+			'scheme_only' => array(
+				'https://localhost/',
+				array('scheme' => 'https', 'relative' => false)),
+			'scheme_port_1' => array(
+				'https://localhost/',
+				array('scheme' => 'https', 'port' => 443, 'relative' => false)),
+			'scheme_port_2' => array(
+				'https://localhost:80443/',
+				array('scheme' => 'https', 'port' => 80443, 'relative' => false)),
+			'authority_host_port' => array(
+				'https://localhost2.localdomain:80445/#foo',
+				array('scheme' => 'https', 'authority' => 'localhost2.localdomain:80445', 'host' => 'localhost.localdomain', 'port' => 80443, 'fragment' => 'foo', 'relative' => false)),
+		);
 	}
 	
 	/**
@@ -429,8 +439,10 @@ class AgaviWebRoutingTest extends AgaviPhpUnitTestCase
 	
 	public function dataTicket365()
 	{
-		return array('indexed' => array('/?data%5B0%5D=baz&amp;data%5B1%5D=bar', array('baz', 'bar')),
-					 'hashed'  => array('/?data%5Bfoo%5D=bar&amp;data%5Blol%5D=baz', array('foo' => 'bar', 'lol' => 'baz')));
+		return array(
+			'indexed' => array('/?data%5B0%5D=baz&amp;data%5B1%5D=bar', array('baz', 'bar')),
+			'hashed'  => array('/?data%5Bfoo%5D=bar&amp;data%5Blol%5D=baz', array('foo' => 'bar', 'lol' => 'baz'))
+		);
 	}
 	
 	public function testTicket432()

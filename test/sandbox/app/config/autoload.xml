@@ -42,5 +42,11 @@
 		<autoload class="AgaviTestingConfigCache">%core.app_dir%/../../lib/config/AgaviTestingConfigCache.class.php</autoload>
 		
 		<autoload class="AgaviWebRequestDataHolderTest">%core.app_dir%/../../tests/unit/request/AgaviWebRequestDataHolderTest.php</autoload>
+		
+		<autoload class="ImportTestHandler">%core.app_dir%/../../lib/config/ImportTestHandler.class.php</autoload>
+		<autoload class="ImportTestOnceHandler">%core.app_dir%/../../lib/config/ImportTestOnceHandler.class.php</autoload>
+		
+		<autoload class="DummyValidator">%core.app_dir%/../../lib/validator/DummyValidator.class.php</autoload>
+		
 	</ae:configuration>
 </ae:configurations>
