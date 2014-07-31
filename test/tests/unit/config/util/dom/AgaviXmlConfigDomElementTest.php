@@ -1,6 +1,6 @@
 <?php
 
-class AgaviXmlConfigDomElementTest extends AgaviPhpunitTestCase
+class AgaviXmlConfigDomElementTest extends AgaviPhpUnitTestCase
 {
 	protected $doc;
 	
@@ -264,19 +264,19 @@ class AgaviXmlConfigDomElementTest extends AgaviPhpunitTestCase
 			
 			'replace existing key'                      => array(array(
 			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
-			                                                 '<ae:parameter name="foo" mode="replace">baz</ae:parameter>',
+			                                                 '<ae:parameter name="foo" merge="replace">baz</ae:parameter>',
 			                                               ), array('foo' => 'baz')),
 			'replace non-existing key'                  => array(array(
 			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
-			                                                 '<ae:parameter name="bar" mode="replace">baz</ae:parameter>',
+			                                                 '<ae:parameter name="bar" merge="replace">baz</ae:parameter>',
 			                                               ), array('foo' => 'bar', 'bar' => 'baz')),
 			'replace simple item with complex item'     => array(array(
 			                                                 '<ae:parameter name="foo">bar</ae:parameter>',
-			                                                 '<ae:parameter name="foo" mode="replace"><ae:parameter>baz</ae:parameter></ae:parameter>',
+			                                                 '<ae:parameter name="foo" merge="replace"><ae:parameter>baz</ae:parameter></ae:parameter>',
 			                                               ), array('foo' => array('baz'))),
 			'replace complex item with simple item'     => array(array(
 			                                                 '<ae:parameter name="foo"><ae:parameter>bar</ae:parameter></ae:parameter>',
-			                                                 '<ae:parameter name="foo" mode="replace">baz</ae:parameter>',
+			                                                 '<ae:parameter name="foo" merge="replace">baz</ae:parameter>',
 			                                               ), array('foo' => 'baz')),
 			
 			'remove'                                    => array(array(
