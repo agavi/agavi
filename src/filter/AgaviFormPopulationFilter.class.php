@@ -295,34 +295,42 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 				}
 			}
 		} else {
-			$forms = $this->xpath->query(sprintf('//%1$sform[@action]', $this->xmlnsPrefix));
+			$forms = $this->xpath->query(AgaviToolkit::expandVariables($cfg['forms_xpath'], array('htmlnsPrefix' => $this->xmlnsPrefix)));
 		}
 
 		// an array of all validation incidents; errors inserted for fields or multiple fields will be removed in here
 		$allIncidents = $vr->getIncidents();
 
 		foreach($forms as $form) {
-			if($populate instanceof AgaviParameterHolder) {
-				$action = preg_replace('/#.*$/', '', trim($form->getAttribute('action')));
-				if(!(
-					$action == $rurl ||
-					(strpos($action, '/') === 0 && preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $action) == $ruri) ||
-					$baseHref . preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $action) == $rurl
-				)) {
-					continue;
-				}
-				$p = $populate;
-			} else {
-				if(isset($populate[$form->getAttribute('id')])) {
-					if($populate[$form->getAttribute('id')] instanceof AgaviParameterHolder) {
-						$p = $populate[$form->getAttribute('id')];
-					} elseif($populate[$form->getAttribute('id')] === true) {
-						$p = $rq->getRequestData();
+			if($form->tagName == 'form') {
+				if($populate instanceof AgaviParameterHolder) {
+					$action = preg_replace('/#.*$/', '', trim($form->getAttribute('action')));
+					if(!(
+						$action == $rurl ||
+						(strpos($action, '/') === 0 && preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $action) == $ruri) ||
+						$baseHref . preg_replace(array('#/\./#', '#/\.$#', '#[^\./]+/\.\.(/|\z)#', '#/{2,}#'), array('/', '/', '', '/'), $action) == $rurl
+					)) {
+						continue;
+					}
+					$p = $populate;
+				} else {
+					if(isset($populate[$form->getAttribute('id')])) {
+						if($populate[$form->getAttribute('id')] instanceof AgaviParameterHolder) {
+							$p = $populate[$form->getAttribute('id')];
+						} elseif($populate[$form->getAttribute('id')] === true) {
+							$p = $rq->getRequestData();
+						} else {
+							continue;
+						}
 					} else {
 						continue;
 					}
+				}
+			} else {
+				if($populate === true) {
+					$p = $rq->getRequestData();
 				} else {
-					continue;
+					$p = $populate;
 				}
 			}
 
@@ -967,6 +975,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 			'methods'                    => array(),
 			'output_types'               => null,
 
+			'forms_xpath'                => '//${htmlnsPrefix}form[@action]',
 			'populate'                   => null,
 			'skip'                       => null,
 			'include_hidden_inputs'      => true,
