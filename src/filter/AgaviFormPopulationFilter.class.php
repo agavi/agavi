@@ -714,19 +714,19 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 	 */
 	protected function insertErrorMessages(DOMElement $element, array $rules, array $incidents)
 	{
-		$errorMessages = array();
+		$errors = array();
 		foreach($incidents as $incident) {
 			if($incident->getSeverity() <= AgaviValidator::SILENT) {
 				continue;
 			}
 			foreach($incident->getErrors() as $error) {
-				if(($errorMessage = $error->getMessage()) !== null && $errorMessage !== '') {
-					$errorMessages[] = $errorMessage;
+				if(strlen($error->getMessage())) {
+					$errors[] = $error;
 				}
 			}
 		}
 		
-		if(!$errorMessages) {
+		if(!$errors) {
 			// nothing to do here
 			return true;
 		}
@@ -763,7 +763,7 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 
 			$errorElements = array();
 
-			foreach($errorMessages as $errorMessage) {
+			foreach($errors as $error) {
 				if(is_string($errorMarkup)) {
 					// it's a string with the HTML to insert
 					// %s is the placeholder in the HTML for the error message
@@ -774,14 +774,15 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 							array(
 								'elementId'    => htmlspecialchars($element->getAttribute('id'), ENT_QUOTES, 'UTF-8'),
 								'elementName'  => htmlspecialchars($element->getAttribute('name'), ENT_QUOTES, 'UTF-8'),
-								'errorMessage' => htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8'),
+								'errorMessage' => htmlspecialchars($error->getMessage(), ENT_QUOTES, 'UTF-8'),
 							)
 						)
 					);
 				} elseif(is_callable($errorMarkup)) {
 					// it's a callback we can use to get a DOMElement
-					// we give it the element as the first, and the error message as the second argument
-					$errorElement = call_user_func($errorMarkup, $element, $errorMessage);
+					// we give it the element as the first, the error message as the second (for BC reasons)
+					// and the error object as the third argument
+					$errorElement = call_user_func($errorMarkup, $element, $error->getMessage(), $error);
 					$this->doc->importNode($errorElement, true);
 				} else {
 					throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
@@ -817,8 +818,9 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 					);
 				} elseif(is_callable($errorContainer)) {
 					// it's a callback we can use to get a DOMElement
-					// we give it the element as the first, and the error messages array(!) as the second argument
-					$containerElement = call_user_func($errorContainer, $element, $errorStrings);
+					// we give it the element as the first, the error messages array(!) as the second (for BC reasons)
+					// and the array of all error objects as the third argument
+					$containerElement = call_user_func($errorContainer, $element, $errorStrings, $errors);
 					$this->doc->importNode($containerElement, true);
 				} else {
 					throw new AgaviException('Form Population Filter was unable to insert an error message container into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
