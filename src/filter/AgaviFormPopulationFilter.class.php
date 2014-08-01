@@ -779,11 +779,18 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						)
 					);
 				} elseif(is_callable($errorMarkup)) {
-					// it's a callback we can use to get a DOMElement
+					// it's a callback we can use to get a DOMElement or an XML/HTML string (for convenience
+					// and because it is impossible to provide multiple sibling elements via a DOMElement)
 					// we give it the element as the first, the error message as the second (for BC reasons)
 					// and the error object as the third argument
 					$errorElement = call_user_func($errorMarkup, $element, $error->getMessage(), $error);
-					$this->doc->importNode($errorElement, true);
+					if(is_string($errorElement)) {
+						$errorElementHtml = $errorElement;
+						$errorElement = $this->doc->createDocumentFragment();
+						$errorElement->appendXML($errorElementHtml);
+					} else {
+						$this->doc->importNode($errorElement, true);
+					}
 				} else {
 					throw new AgaviException('Form Population Filter was unable to insert an error message into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
 				}
@@ -817,11 +824,18 @@ class AgaviFormPopulationFilter extends AgaviFilter implements AgaviIGlobalFilte
 						)
 					);
 				} elseif(is_callable($errorContainer)) {
-					// it's a callback we can use to get a DOMElement
+					// it's a callback we can use to get a DOMElement or an XML/HTML string (for convenience
+					// and because it is impossible to provide multiple sibling elements via a DOMElement)
 					// we give it the element as the first, the error messages array(!) as the second (for BC reasons)
 					// and the array of all error objects as the third argument
 					$containerElement = call_user_func($errorContainer, $element, $errorStrings, $errors);
-					$this->doc->importNode($containerElement, true);
+					if(is_string($containerElement)) {
+						$containerElementHtml = $containerElement;
+						$containerElement = $this->doc->createDocumentFragment();
+						$containerElement->appendXML($containerElementHtml);
+					} else {
+						$this->doc->importNode($containerElement, true);
+					}
 				} else {
 					throw new AgaviException('Form Population Filter was unable to insert an error message container into the document using the XPath expression "' . $xpathExpression . '" because the element information could not be evaluated as an XML/HTML fragment or as a PHP callback.');
 				}
