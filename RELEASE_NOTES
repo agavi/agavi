@@ -39,6 +39,8 @@ For "depends", the exact same syntax and behavior is now used; the old behavior 
 If your validation config is from the 1.0 namespace, then the old behavior is retained automatically, so if you want to take advantage of this new functionality, you must bump the config namespace to 1.1.
 Some more examples can be found in ticket #1199 (and also in #1073 where the same syntax is discussed for the exporting feature).
 
+You can now specify the Translation domain for multiple / all validators at once by placing the translation_domain attribute on the <validators> element. This causes some breaking changes when you bump your config namespaces to 1.1, so please see UPGRADING for instructions first.
+
 Filters
 -------
 AgaviIFilter::executeOnce() has been deprecated; in most cases, you can simply use execute() instead, see UPGRADING for further information.

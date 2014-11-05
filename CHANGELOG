@@ -4,6 +4,8 @@ AGAVI CHANGELOG
 1.1.0 beta1 (June ??, 2009)
 ---------------------------
 
+ADD: BREAKING CHANGE: Allow 'translation_domain' attribute on <validators> (#1498) (Steffen Gransow, Dominik)
+ADD: Allow all image formats supported by PHP in ImageFileValidator (#1480) (Thomas Bachem)
 ADD: Allow all image formats supported by PHP in ImageFileValidator (#1480) (Thomas Bachem)
 ADD: Support arbitrary "provides" and "depends" validator options with access to argument base parts (#1199) (David)
 ADD: Allow calls to PHP functions in configuration file transformations (#1456) (David)

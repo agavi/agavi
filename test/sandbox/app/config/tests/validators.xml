@@ -5,6 +5,26 @@
 >
 	
 	<ae:configuration environment="test-translation-domain">
+		<validators translation_domain="test-domain-toplevel">
+			<validator name="toplevel_simple" class="string" />
+			<validator name="toplevel_reset" class="string" translation_domain="" />
+			<validator name="toplevel_or" class="or">
+				<validator name="or_child" class="string" />
+			</validator>
+			<validator name="toplevel_param_or" class="or">
+				<ae:parameter name="translation_domain">test-domain-param-or</ae:parameter>
+				<validator name="param_or_child" class="string" />
+			</validator>
+			<validator name="toplevel_direct_or" class="or" translation_domain="test-domain-direct-or">
+				<validators translation_domain="test-domain-direct-nested-or">
+					<validator name="direct_or_child" class="string" />
+				</validators>
+			</validator>
+			
+		</validators>
+	</ae:configuration>
+
+	<ae:configuration environment="test-translation-domain-1.0-behaviour" xmlns="http://agavi.org/agavi/config/parts/validators/1.0">
 		<validators>
 			<validator name="toplevel_simple" class="string" />
 			<validator name="toplevel_empty" class="string" translation_domain="" />
@@ -16,5 +36,6 @@
 			</validator>
 		</validators>
 	</ae:configuration>
+
 	
 </ae:configurations>

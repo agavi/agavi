@@ -107,15 +107,17 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 	 * @param      string                   The severity of the parent container.
 	 * @param      string                   The method of the parent container.
 	 * @param      bool                     Whether parent container is required.
+	 * @param      string                   The default translation domain of the parent container.
 	 *
 	 * @return     array PHP code blocks that register the validators
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @author     Steffen Gransow <agavi@mivesto.de>
 	 * @since      0.11.0
 	 */
-	protected function getValidatorArray($validator, $code, $parent, $stdSeverity, $stdMethod, $stdRequired = true)
+	protected function getValidatorArray($validator, $code, $parent, $stdSeverity, $stdMethod, $stdRequired = true, $stdTranslationDomain = null)
 	{
 		if(!isset($this->classMap[$validator->getAttribute('class')])) {
 			$class = $validator->getAttribute('class');
@@ -148,7 +150,9 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		$parameters = array_merge($this->classMap[$validator->getAttribute('class')]['parameters'], $parameters);
 		$parameters = array_merge($parameters, $validator->getAttributes());
 		$parameters = $validator->getAgaviParameters($parameters);
-		if(isset($parameters['translation_domain']) && $parameters['translation_domain'] === '') {
+		if(!array_key_exists('translation_domain', $parameters) && $stdTranslationDomain !== null) {
+			$parameters['translation_domain'] = $stdTranslationDomain;
+		} elseif(isset($parameters['translation_domain']) && $parameters['translation_domain'] === '') {
 			// empty translation domains are forbidden, treat as if translation_domain was not set
 			unset($parameters['translation_domain']);
 		}
@@ -212,7 +216,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		}
 		
 		// more <validator> or <validators> children
-		$code = $this->processValidatorElements($validator, $code, '_validator_' . $name, $stdSeverity, $stdMethod, $stdRequired);
+		$code = $this->processValidatorElements($validator, $code, '_validator_' . $name, $stdSeverity, $stdMethod, $stdRequired, isset($parameters['translation_domain']) ? $parameters['translation_domain'] : null);
 		
 		return $code;
 	}
@@ -229,15 +233,17 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 	 * @param      string                   The name of the parent container.
 	 * @param      string                   The method of the parent container.
 	 * @param      bool                     Whether parent container is required.
+	 * @param      string                   The default translation domain of the parent container.
 	 *
 	 * @return     array PHP code blocks that register the validators
 	 *
 	 * @author     Uwe Mesecke <uwe@mesecke.net>
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
+	 * @author     Steffen Gransow <agavi@mivesto.de>
 	 * @since      0.11.0
 	 */
-	protected function processValidatorElements($node, $code, $name, $defaultSeverity = 'error', $defaultMethod = null, $defaultRequired = true)
+	protected function processValidatorElements($node, $code, $name, $defaultSeverity = 'error', $defaultMethod = null, $defaultRequired = true, $defaultTranslationDomain = null)
 	{
 		// the problem here is that the <validators> parent is not just optional, but can also occur more than once
 		foreach($node->get('validators') as $validator) {
@@ -245,14 +251,16 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 			if($validator->parentNode->localName == 'validators') {
 				$severity = $validator->parentNode->getAttribute('severity', $defaultSeverity);
 				$method = $validator->parentNode->getAttribute('method', $defaultMethod);
+				$translationDomain = $validator->parentNode->getAttribute('translation_domain', $defaultTranslationDomain);
 			} else {
 				$severity = $defaultSeverity;
 				$method = $defaultMethod;
+				$translationDomain = $defaultTranslationDomain;
 			}
 			$required = $defaultRequired;
 			
 			// append the code to generate
-			$code = $this->getValidatorArray($validator, $code, $name, $severity, $method, $required);
+			$code = $this->getValidatorArray($validator, $code, $name, $severity, $method, $required, $translationDomain);
 		}
 		
 		return $code;
