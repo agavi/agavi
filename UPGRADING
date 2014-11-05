@@ -40,3 +40,7 @@ You have to update your run-tests.php files to take advantage of the new feature
 Translation
 -----------
 Appending of <filter> elements now works as expected. If you defined multiple <filters> for the same <translator> (e.g. by overwriting a previously defined <translator>) you need to check your translation.xml for occurences triggering the buggy behaviour. Since Agavi 1.0 was not behaving as specified and buggy there is no way to replicate it Agavi 1.1.
+
+Validation
+----------
+Defining a translation_domain on a operator validator (and, or, xor, etc) will now be inherited by child validators. To prevent inheritance use translation_domain="" on the child validators or the nested <validators> tag. For configuration files in the 1.0 namespace backwards compatibility is retained by an XSL transformation.
