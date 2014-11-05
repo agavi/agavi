@@ -63,7 +63,7 @@
 			            minOccurs="0" />
 			<xs:group ref="_translators" />
 		</xs:sequence>
-		<xs:attribute name="domain" type="xs:string" use="required" />
+		<xs:attribute name="domain" type="types_1_0:non_empty_string" use="required" />
 	</xs:complexType>
 
 	<xs:complexType name="translators">

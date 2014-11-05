@@ -148,6 +148,10 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		$parameters = array_merge($this->classMap[$validator->getAttribute('class')]['parameters'], $parameters);
 		$parameters = array_merge($parameters, $validator->getAttributes());
 		$parameters = $validator->getAgaviParameters($parameters);
+		if(isset($parameters['translation_domain']) && $parameters['translation_domain'] === '') {
+			// empty translation domains are forbidden, treat as if translation_domain was not set
+			unset($parameters['translation_domain']);
+		}
 		
 		foreach($validator->get('arguments') as $argument) {
 			if($argument->hasAttribute('name')) {

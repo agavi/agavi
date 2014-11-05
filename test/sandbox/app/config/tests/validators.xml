@@ -1,0 +1,20 @@
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+	parent="%core.agavi_dir%/config/defaults/validators.xml"
+>
+	
+	<ae:configuration environment="test-translation-domain">
+		<validators>
+			<validator name="toplevel_simple" class="string" />
+			<validator name="toplevel_empty" class="string" translation_domain="" />
+			<validator name="toplevel_or" class="or" translation_domain="test-domain">
+				<validator name="or_child" class="string" />
+			</validator>
+			<validator name="toplevel_param" class="string">
+				<ae:parameter name="translation_domain">test-domain</ae:parameter>
+			</validator>
+		</validators>
+	</ae:configuration>
+	
+</ae:configurations>
