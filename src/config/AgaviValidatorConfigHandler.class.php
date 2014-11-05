@@ -135,11 +135,6 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 			'required' => $stdRequired,
 		);
 
-		$translationDomain = $validator->getAttribute('translation_domain', $stdTranslationDomain);
-		if($translationDomain !== null) {
-			$parameters['translation_domain'] = $translationDomain;
-		}
-
 		$arguments = array();
 		$errors = array();
 
@@ -155,7 +150,9 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		$parameters = array_merge($this->classMap[$validator->getAttribute('class')]['parameters'], $parameters);
 		$parameters = array_merge($parameters, $validator->getAttributes());
 		$parameters = $validator->getAgaviParameters($parameters);
-		if(isset($parameters['translation_domain']) && $parameters['translation_domain'] === '') {
+		if(!array_key_exists('translation_domain', $parameters) && $stdTranslationDomain !== null) {
+			$parameters['translation_domain'] = $stdTranslationDomain;
+		} elseif(isset($parameters['translation_domain']) && $parameters['translation_domain'] === '') {
 			// empty translation domains are forbidden, treat as if translation_domain was not set
 			unset($parameters['translation_domain']);
 		}
@@ -219,7 +216,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		}
 		
 		// more <validator> or <validators> children
-		$code = $this->processValidatorElements($validator, $code, '_validator_' . $name, $stdSeverity, $stdMethod, $stdRequired, $translationDomain);
+		$code = $this->processValidatorElements($validator, $code, '_validator_' . $name, $stdSeverity, $stdMethod, $stdRequired, isset($parameters['translation_domain']) ? $parameters['translation_domain'] : null);
 		
 		return $code;
 	}
