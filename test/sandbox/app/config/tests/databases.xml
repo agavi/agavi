@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/databases/1.1">
+	<ae:configuration>
+		<databases default="test1">
+
+			<database name="test1" class="DCHTestDatabase">
+				<ae:parameters>
+					<ae:parameter name="host">localhost1</ae:parameter>
+					<ae:parameter name="user">username1</ae:parameter>
+					<ae:parameter name="config">%core.app_dir%/config/project-conf.php</ae:parameter>
+				</ae:parameters>
+			</database>
+			
+		</databases>
+	</ae:configuration>
+	<ae:configuration environment="env1 env2">
+		<databases default="test1" />
+	</ae:configuration>
+	<ae:configuration environment="env2">
+		<databases default="test2">
+			<database name="test1">
+				<ae:parameters>
+					<ae:parameter name="user">testuser1</ae:parameter>
+				</ae:parameters>
+			</database>
+			
+			<database name="test2" class="DCHTestDatabase"></database>
+			
+		</databases>
+	</ae:configuration>
+	<ae:configuration environment="nonexistent-default">
+		<databases default="test2" />
+	</ae:configuration>
+	
+</ae:configurations>

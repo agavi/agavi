@@ -9,7 +9,7 @@ if(!class_exists('AgaviArrayPathDefinition')) {
 }
 
 //class AgaviParameterHolderTest extends AgaviUnitTestCase
-class AgaviParameterHolderTest extends PHPUnit_Framework_TestCase
+class AgaviParameterHolderTest extends AgaviPhpUnitTestCase
 {
 	
 	public function __construct($name = NULL, array $data = array(), $dataName = '')

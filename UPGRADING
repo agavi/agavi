@@ -30,6 +30,13 @@ The handler is also namespace-aware. By default, it will assume your configurati
   <ae:parameter name="namespace_uri">urn:com.acme.rockets</ae:parameter>
 on the affected <handler> elements.
 
+Testing
+-------
+The PHPUnit minimum requirement has been updated to 3.7.
+This has allowed us to update the test runner infrastructure to remove the custom handling of command line arguments. So  now you pass all command line switches supported by PHPUnit. Additionally bootstrap files are now properly supported. 
+For phpunit.xml configuration files we allow usage of configuration directives in all attributes and texts (disableable with the --no-expand-configuration switch).
+You have to update your run-tests.php files to take advantage of the new features. See test/run-tests.php and test/config/phpunit.xml as examples. This will now check if %core.testing_dir%/config/phpunit.xml exists automatically and use that as configuration file (except you supplied a custom configuration on the command line of course).
+
 Translation
 -----------
 Appending of <filter> elements now works as expected. If you defined multiple <filters> for the same <translator> (e.g. by overwriting a previously defined <translator>) you need to check your translation.xml for occurences triggering the buggy behaviour. Since Agavi 1.0 was not behaving as specified and buggy there is no way to replicate it Agavi 1.1.

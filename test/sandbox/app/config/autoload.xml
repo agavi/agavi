@@ -32,8 +32,21 @@
 		<autoload class="GenChangeExtraParamRoutingCallback">%core.app_dir%/../../lib/routing/GenChangeExtraParamRoutingCallback.class.php</autoload>
 		<autoload class="GenChangeExtraParamRoutingValueRoutingCallback">%core.app_dir%/../../lib/routing/GenChangeExtraParamRoutingValueRoutingCallback.class.php</autoload>
 		
+		<autoload class="SandboxITestingChild">%core.app_dir%/../../lib/testing/SandboxITestingChild.interface.php</autoload>
+		<autoload class="SandboxITestingParent1">%core.app_dir%/../../lib/testing/SandboxITestingParent1.interface.php</autoload>
+		<autoload class="SandboxITestingParent2">%core.app_dir%/../../lib/testing/SandboxITestingParent2.interface.php</autoload>
+		<autoload class="SandboxTestingTrait">%core.app_dir%/../../lib/testing/SandboxTestingTrait.trait.php</autoload>
+		<autoload class="SandboxTestingParentClass">%core.app_dir%/../../lib/testing/SandboxTestingParentClass.class.php</autoload>
+		<autoload class="SandboxTestingChildClass">%core.app_dir%/../../lib/testing/SandboxTestingChildClass.class.php</autoload>
+		
 		<autoload class="AgaviTestingConfigCache">%core.app_dir%/../../lib/config/AgaviTestingConfigCache.class.php</autoload>
 		
 		<autoload class="AgaviWebRequestDataHolderTest">%core.app_dir%/../../tests/unit/request/AgaviWebRequestDataHolderTest.php</autoload>
+		
+		<autoload class="ImportTestHandler">%core.app_dir%/../../lib/config/ImportTestHandler.class.php</autoload>
+		<autoload class="ImportTestOnceHandler">%core.app_dir%/../../lib/config/ImportTestOnceHandler.class.php</autoload>
+		
+		<autoload class="DummyValidator">%core.app_dir%/../../lib/validator/DummyValidator.class.php</autoload>
+		
 	</ae:configuration>
 </ae:configurations>

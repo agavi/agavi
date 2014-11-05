@@ -3,13 +3,7 @@
 	<ae:configuration>
 		<suites>
 			<suite name="Default">
-				<testfiles>
-					<testfile>unit/ProductFinderModelTest.php</testfile>
-					<testfile>fragment/Products/Product/ViewActionTest.php</testfile>
-					<testfile>fragment/Products/Product/ViewSuccessViewTest.php</testfile>
-					<testfile>fragment/LoginSuccessViewTest.php</testfile>
-					<testfile>flow/LoginFlowTest.php</testfile>
-				</testfiles>
+				<include>.*Test.php</include>
 			</suite>
 		</suites>
 	</ae:configuration>

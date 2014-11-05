@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/logging/1.1">
+	<ae:configuration>
+		<loggers default="default">
+
+			<logger name="default" class="TestLogger3" level="TestLogger::DEBUG">
+				<appenders>
+					<appender>appender1</appender>
+				</appenders>
+			</logger>
+
+			<logger name="test1" class="TestLogger1" level="TestLogger::INFO">
+				<appenders>
+					<appender>appender1</appender>
+					<appender>appender2</appender>
+				</appenders>
+			</logger>
+
+			<logger name="test2" class="TestLogger2" level="TestLogger::ERROR">
+				<appenders>
+					<appender>appender2</appender>
+					<appender>appender1</appender>
+					<appender>appender3</appender>
+				</appenders>
+			</logger>
+
+			<logger name="test3" class="TestLogger3" level="TestLogger::INFO | TestLogger::ERROR">
+				<appenders>
+					<appender>appender1</appender>
+				</appenders>
+			</logger>
+
+
+		</loggers>
+		<appenders>
+			<appender name="appender1" class="TestAppender1" layout="layout1">
+				<ae:parameters>
+					<ae:parameter name="param1">value1</ae:parameter>
+					<ae:parameter name="param2">value2</ae:parameter>
+				</ae:parameters>
+			</appender>
+
+			<appender name="appender2" class="TestAppender2" layout="layout1" />
+
+			<appender name="appender3" class="TestAppender3" layout="layout2">
+				<ae:parameters>
+					<ae:parameter name="file">%core.app_dir%/log/myapp.log</ae:parameter>
+				</ae:parameters>
+			</appender>
+		</appenders>
+		<layouts>
+			<layout name="layout1" class="TestLayout1">
+				<ae:parameters>
+					<ae:parameter name="param1">value1</ae:parameter>
+					<ae:parameter name="param2">value2</ae:parameter>
+				</ae:parameters>
+			</layout>
+			<layout name="layout2" class="TestLayout2" />
+		</layouts>
+
+	</ae:configuration>
+</ae:configurations>

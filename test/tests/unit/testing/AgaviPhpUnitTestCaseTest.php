@@ -1,5 +1,7 @@
 <?php
+
 /**
+ * @runTestsInSeparateProcesses
  * @agaviIsolationEnvironment testing.testIsolation	
  * @agaviIsolationDefaultContext web-isolated
  */
@@ -15,7 +17,6 @@ class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
 		$this->setIsolationEnvironment('testing.testIsolation'); // equivalent to the annotation @AgaviIsolationEnvironment on the testcase class
 	}
 	
@@ -44,6 +45,23 @@ class AgaviPhpUnitTestCaseTest extends AgaviPhpUnitTestCase
 	{
 		$this->assertEquals('web-isolated-annotated-method', AgaviConfig::get('core.default_context'));
 	}
+	
+	/**
+	 * @preserveGlobalState enabled
+	 */
+	public function testPreserveGlobalStateOnWorks() {
+		// this test just needs to run to signal success
+		$this->assertTrue(true);
+	}
+
+	/**
+	 * @preserveGlobalState disabled
+	 */
+	public function testPreserveGlobalStateOffWorks() {
+		// this test just needs to run to signal success
+		$this->assertTrue(true);
+	}
+	
 }
 
 ?>

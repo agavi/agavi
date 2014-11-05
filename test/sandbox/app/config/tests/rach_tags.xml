@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+	<ae:configuration>
+		<section1>
+			<One>A</One>
+			<Two>B</Two>
+			<Three>C</Three>
+		</section1>
+		<section2>
+			<Three>Z</Three>
+			<Two>Y</Two>
+			<One>X</One>
+		</section2>
+	</ae:configuration>
+</ae:configurations>
+

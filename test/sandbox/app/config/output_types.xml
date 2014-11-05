@@ -31,6 +31,13 @@
 				</parameter>
 				
 			</output_type>
+			
+			<output_type name="controllerTest">
+				<renderers default="php">
+					<renderer name="php" class="AgaviPhpRenderer" />
+				</renderers>
+			</output_type>
+			
 
 		</output_types>
 		

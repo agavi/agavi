@@ -12,7 +12,6 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
 	}
 	
 	/**
@@ -96,6 +95,22 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		$content = file_get_contents($cacheName);
 		$this->assertEquals($expected.$append, $content);
 	}
+	
+	public function testload()
+	{
+		$this->assertFalse( defined('ConfigCacheImportTest_included') );
+		AgaviConfigCache::load(AgaviConfig::get('core.config_dir') . '/tests/importtest.xml');
+		$this->assertTrue( defined('ConfigCacheImportTest_included') );
+
+		$GLOBALS["ConfigCacheImportTestOnce_included"] = false;
+		AgaviConfigCache::load(AgaviConfig::get('core.config_dir') . '/tests/importtest_once.xml', true);
+		$this->assertTrue( $GLOBALS["ConfigCacheImportTestOnce_included"] );
+
+		$GLOBALS["ConfigCacheImportTestOnce_included"] = false;
+		AgaviConfigCache::load(AgaviConfig::get('core.config_dir') . '/tests/importtest_once.xml', true);
+		$this->assertFalse( $GLOBALS["ConfigCacheImportTestOnce_included"] );
+	}
+
 	
 	public function testClear()
 	{

@@ -25,6 +25,7 @@
  * @copyright  The Agavi Project
  *
  * @since      1.0.0
+ * @deprecated 1.1.0 Use AgaviPhpUnitCli
  *
  * @version    $Id$
  */
@@ -45,6 +46,7 @@ class AgaviTesting
 	 *
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.7
+	 * @deprecated 1.1.0 Use AgaviPhpUnitCli
 	 */
 	public static function getCodeCoverageFilter()
 	{
@@ -63,31 +65,11 @@ class AgaviTesting
 	 *
 	 * @author     Felix Gilcher <felix.gilcher@exozet.com>
 	 * @since      1.0.0
+	 * @deprecated 1.1.0 Use AgaviPhpUnitCli
 	 */
 	public static function bootstrap($environment = null)
 	{
-		if($environment === null) {
-			// no env given? let's read one from testing.environment
-			$environment = AgaviConfig::get('testing.environment');
-		} elseif(AgaviConfig::has('testing.environment') && AgaviConfig::isReadonly('testing.environment')) {
-			// env given, but testing.environment is read-only? then we must use that instead and ignore the given setting
-			$environment = AgaviConfig::get('testing.environment');
-		}
-		
-		if($environment === null) {
-			// still no env? oh man...
-			throw new Exception('You must supply an environment name to AgaviTesting::bootstrap() or set the name of the default environment to be used for testing in the configuration directive "testing.environment".');
-		}
-		
-		// finally set the env to what we're really using now.
-		AgaviConfig::set('testing.environment', $environment, true, true);
-		
-		// bootstrap the framework for autoload, config handlers etc.
-		Agavi::bootstrap($environment);
-		
-		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(__DIR__));
-		
-		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
+		AgaviPhpUnitCli::bootstrap($environment);
 	}
 
 	/**
@@ -102,6 +84,7 @@ class AgaviTesting
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      1.0.0
+	 * @deprecated 1.1.0 Use AgaviPhpUnitCli
 	 */
 	public static function dispatch($arguments = array(), $exit = true)
 	{
@@ -159,6 +142,7 @@ class AgaviTesting
 	 * @param      PHPUnit_Framework_TestResult The test result object.
 	 *
 	 * @return     int The shell exit code.
+	 * @deprecated 1.1.0 Use AgaviPhpUnitCli
 	 */
 	public static function getExitStatus(PHPUnit_Framework_TestResult $result)
 	{
@@ -181,6 +165,7 @@ class AgaviTesting
 	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
+	 * @deprecated 1.1.0 Use AgaviPhpUnitCli
 	 */
 	protected static function createSuite($name, array $suite) 
 	{
@@ -221,6 +206,7 @@ class AgaviTesting
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
+	 * @deprecated 1.1.0 Use AgaviPhpUnitCli
 	 */
 	public static function processCommandlineOptions()
 	{
@@ -344,6 +330,7 @@ class AgaviTesting
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
+	 * @deprecated 1.1.0 Use AgaviPhpUnitCli
 	 */
 	protected static function checkCodeCoverageDeps()
 	{
@@ -365,6 +352,7 @@ class AgaviTesting
 	 * 
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
+	 * @deprecated 1.1.0 Use AgaviPhpUnitCli
 	 */
 	protected static function showHelp()
 	{
