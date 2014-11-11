@@ -73,7 +73,9 @@ class AgaviDatabaseConfigHandler extends AgaviXmlConfigHandler
 
 				throw new AgaviParseException($error);
 			}
-			$default = $databasesElement->getAttribute('default');
+			if($databasesElement->hasAttribute('default')) {
+				$default = $databasesElement->getAttribute('default');
+			}
 
 			// let's do our fancy work
 			foreach($configuration->get('databases') as $database) {

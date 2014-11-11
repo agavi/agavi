@@ -66,6 +66,21 @@ class AgaviDatabaseConfigHandlerTest extends ConfigHandlerTestBase
 		$this->assertSame($this->databases['test2'], $this->databases[$this->defaultDatabaseName]);
 	}
 	
+	public function testMissingDefaultDoesNotReset() {
+		// see https://github.com/agavi/agavi/issues/1533
+		$DBCH = new AgaviDatabaseConfigHandler();
+
+		$document = $this->parseConfiguration(
+			AgaviConfig::get('core.config_dir') . '/tests/databases.xml',
+			AgaviConfig::get('core.agavi_dir') . '/config/xsl/databases.xsl',
+			'missing-default-does-not-reset'
+		);
+
+		$this->includeCode($DBCH->execute($document));
+
+		$this->assertSame('test1', $this->defaultDatabaseName);
+	}
+
 	/**
 	 * @expectedException AgaviConfigurationException
 	 */

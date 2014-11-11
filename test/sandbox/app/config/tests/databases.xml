@@ -13,6 +13,13 @@
 			
 		</databases>
 	</ae:configuration>
+
+	<ae:configuration environment="missing-default-does-not-reset">
+		<databases>
+			<database name="test2" class="DCHTestDatabase"></database>
+		</databases>
+	</ae:configuration>
+
 	<ae:configuration environment="env1 env2">
 		<databases default="test1" />
 	</ae:configuration>
