@@ -224,16 +224,21 @@ EOT;
 		}
 		$s = new $suite['class']($name);
 		if(!empty($suite['includes'])) {
-			foreach(
-				new RecursiveIteratorIterator(
-					new AgaviRecursiveDirectoryFilterIterator(
-						new RecursiveDirectoryIterator($base), 
-						$suite['includes'], 
-						$suite['excludes']
-					),
-					RecursiveIteratorIterator::CHILD_FIRST
-				) as $finfo) {
-					
+			$files = iterator_to_array(new RecursiveIteratorIterator(
+				new AgaviRecursiveDirectoryFilterIterator(
+					new RecursiveDirectoryIterator($base),
+					$suite['includes'],
+					$suite['excludes']
+				),
+				RecursiveIteratorIterator::CHILD_FIRST
+			));
+			// ensure that the execution order of the tests is always in deterministic
+			// order and doesn't depend on the filesystem order
+			usort($files, function($a, $b) {
+				return strcmp($a->getPathName(), $b->getPathName());
+			});
+			
+			foreach($files as $finfo) {
 				if($finfo->isFile()) {
 					$s->addTestFile($finfo->getPathName());
 				}

@@ -35,7 +35,7 @@ Testing
 The PHPUnit minimum requirement has been updated to 3.7.
 This has allowed us to update the test runner infrastructure to remove the custom handling of command line arguments. So  now you pass all command line switches supported by PHPUnit. Additionally bootstrap files are now properly supported. 
 For phpunit.xml configuration files we allow usage of configuration directives in all attributes and texts (disableable with the --no-expand-configuration switch).
-You have to update your run-tests.php files to take advantage of the new features. See test/run-tests.php and test/config/phpunit.xml as examples. This will now check if %core.testing_dir%/config/phpunit.xml exists automatically and use that as configuration file (except you supplied a custom configuration on the command line of course).
+You have to update your run-tests.php files to take advantage of the new features. See test/run-tests.php and test/config/phpunit.xml as examples. This will now check if %core.testing_dir%/config/phpunit.xml exists automatically and use that as configuration file (except you supplied a custom configuration on the command line of course). Also when using the new AgaviPhpUnitCli, your tests will now run in a defined order (see #1532)
 
 Translation
 -----------
