@@ -59,6 +59,7 @@ CHG: Move loading of autoload.xml into Agavi::bootstrap() (#1206) (David)
 CHG: Add response to default template assigns (#1095) (David)
 CHG: Move all includes necessary for startup from Agavi::boostrap() into agavi.php (#1094) (David)
 
+FIX: [Config Breaking Change] Can't set default database with an empty <databases> block (#1524) (Dominik)
 FIX: <databases> without default should not unset parent's default (#1533) (Dominik)
 FIX: Prevent empty translation domains in the config (#1531) (Dominik)
 FIX: <exclude> in suites.xml files is broken (#1525) (Dominik)

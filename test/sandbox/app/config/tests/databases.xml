@@ -35,6 +35,27 @@
 			
 		</databases>
 	</ae:configuration>
+	
+	<!-- testDefaultDatabase() -->
+	<ae:configuration environment="test-default">
+		<databases>
+			<database name="test2" class="DCHTestDatabase"></database>
+		</databases>
+	</ae:configuration>
+	<ae:configuration environment="test-default">
+		<databases default="test2" />
+	</ae:configuration>
+	
+	<!-- testDefaultDatabase1_0() -->
+	<ae:configuration environment="test-default-1.0">
+		<databases xmlns="http://agavi.org/agavi/config/parts/databases/1.0">
+			<database name="test2" class="DCHTestDatabase"></database>
+		</databases>
+	</ae:configuration>
+	<ae:configuration environment="test-default-1.0">
+		<databases xmlns="http://agavi.org/agavi/config/parts/databases/1.0" default="test2" />
+	</ae:configuration>
+	
 	<ae:configuration environment="nonexistent-default">
 		<databases default="test2" />
 	</ae:configuration>

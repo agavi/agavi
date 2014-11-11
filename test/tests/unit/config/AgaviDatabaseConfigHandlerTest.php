@@ -20,17 +20,23 @@ class AgaviDatabaseConfigHandlerTest extends ConfigHandlerTestBase
 	{
 		$this->databases = array();
 	}
-
-	public function testDatabaseConfigHandler()
-	{
+	
+	protected function loadTestConfig($env = null) {
 		$DBCH = new AgaviDatabaseConfigHandler();
 		
 		$document = $this->parseConfiguration(
 			AgaviConfig::get('core.config_dir') . '/tests/databases.xml',
-			AgaviConfig::get('core.agavi_dir') . '/config/xsl/databases.xsl'
+			AgaviConfig::get('core.agavi_dir') . '/config/xsl/databases.xsl',
+			$env
 		);
 
 		$this->includeCode($DBCH->execute($document));
+		
+	}
+
+	public function testDatabaseConfigHandler()
+	{
+		$this->loadTestConfig();
 
 		$this->assertInstanceOf('DCHTestDatabase', $this->databases['test1']);
 		$paramsExpected = array(
@@ -45,15 +51,7 @@ class AgaviDatabaseConfigHandlerTest extends ConfigHandlerTestBase
 
 	public function testOverwrite()
 	{
-		$DBCH = new AgaviDatabaseConfigHandler();
-		
-		$document = $this->parseConfiguration(
-			AgaviConfig::get('core.config_dir') . '/tests/databases.xml',
-			AgaviConfig::get('core.agavi_dir') . '/config/xsl/databases.xsl',
-			'env2'
-		);
-
-		$this->includeCode($DBCH->execute($document));
+		$this->loadTestConfig('env2');
 
 		$this->assertInstanceOf('DCHTestDatabase', $this->databases['test1']);
 		$paramsExpected = array(
@@ -68,31 +66,28 @@ class AgaviDatabaseConfigHandlerTest extends ConfigHandlerTestBase
 	
 	public function testMissingDefaultDoesNotReset() {
 		// see https://github.com/agavi/agavi/issues/1533
-		$DBCH = new AgaviDatabaseConfigHandler();
-
-		$document = $this->parseConfiguration(
-			AgaviConfig::get('core.config_dir') . '/tests/databases.xml',
-			AgaviConfig::get('core.agavi_dir') . '/config/xsl/databases.xsl',
-			'missing-default-does-not-reset'
-		);
-
-		$this->includeCode($DBCH->execute($document));
+		$this->loadTestConfig('missing-default-does-not-reset');
 
 		$this->assertSame('test1', $this->defaultDatabaseName);
 	}
 
+	public function testDefaultDatabase() {
+		$this->loadTestConfig('test-default');
+		
+		$this->assertSame('test2', $this->defaultDatabaseName);
+	}
+
+	public function testDefaultDatabase1_0() {
+		$this->loadTestConfig('test-default-1.0');
+		
+		$this->assertSame('test1', $this->defaultDatabaseName);
+	}
+	
 	/**
 	 * @expectedException AgaviConfigurationException
 	 */
 	public function testNonExistentDefault() {
-		$DBCH = new AgaviDatabaseConfigHandler();
-		$document = $this->parseConfiguration(
-			AgaviConfig::get('core.config_dir') . '/tests/databases.xml',
-			AgaviConfig::get('core.agavi_dir') . '/config/xsl/databases.xsl',
-			'nonexistent-default'
-		);
-
-		$DBCH->execute($document);
+		$this->loadTestConfig('nonexistent-default');
 	}
 }
 ?>

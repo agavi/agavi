@@ -59,7 +59,7 @@ class AgaviDatabaseConfigHandler extends AgaviXmlConfigHandler
 		$databases = array();
 		$default = null;
 		foreach($document->getConfigurationElements() as $configuration) {
-			if(!$configuration->has('databases')) {
+			if(!$configuration->hasChildren('databases')) {
 				continue;
 			}
 			
