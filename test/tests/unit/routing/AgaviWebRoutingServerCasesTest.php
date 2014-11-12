@@ -47,10 +47,12 @@ class AgaviWebRoutingServerCasesTest extends AgaviUnitTestCase
 	 */
 	public function testCases($export)
 	{
+		// this has to be first, since the context could just be created and would reset
+		// the superglobals.
+		$ctx = AgaviContext::getInstance('routing-server-cases');
 		$_SERVER = $export['_SERVER'];
 		$_ENV = $export['_ENV'];
 		$_GET = $export['_GET'];
-		$ctx = AgaviContext::getInstance('routing-server-cases');
 		$ctx->getRequest()->initialize($ctx);
 		$this->_r = new AgaviWebRouting();
 		$this->_r->initialize($ctx);
