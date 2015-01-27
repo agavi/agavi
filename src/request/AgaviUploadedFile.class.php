@@ -410,9 +410,9 @@ class AgaviUploadedFile implements ArrayAccess
 		return
 			$this->hasBufferedContents()
 				? $this->contents
-				: $this->hasOpenStream()
+				: ($this->hasOpenStream()
 					? stream_get_contents($this->getStream(), -1, 0)
-					: file_get_contents($this->getTmpName())
+					: file_get_contents($this->getTmpName()))
 		;
 	}
 	
