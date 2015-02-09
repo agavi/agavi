@@ -495,7 +495,12 @@ class AgaviXmlConfigParser
 	public static function xinclude(AgaviXmlConfigDomDocument $document)
 	{
 		// replace %lala% directives in XInclude href attributes
-		foreach($document->getElementsByTagNameNS(self::NAMESPACE_XINCLUDE_2001, 'include') as $element) {
+		$elements = $document->getElementsByTagNameNS(self::NAMESPACE_XINCLUDE_2001, 'include');
+		$length = $elements->length;
+		// we can't foreach() over the DOMNodeList as we're modifying it further below
+		// see http://php.net/manual/en/class.domnodelist.php#83178
+		for($i = 0; $i < $length; $i++) {
+			$element = $elements->item($i);
 			if($element->hasAttribute('href')) {
 				$attribute = $element->getAttributeNode('href');
 				$parts = explode('#', $attribute->nodeValue, 2);
@@ -509,6 +514,7 @@ class AgaviXmlConfigParser
 							$new = $element->cloneNode(true);
 							$new->setAttribute('href', $path . (isset($parts[1]) ? '#' . $parts[1] : ''));
 							$element->parentNode->insertBefore($new, $element);
+							++$i;
 						}
 						$element->parentNode->removeChild($element);
 					}
