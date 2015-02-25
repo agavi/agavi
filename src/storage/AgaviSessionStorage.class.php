@@ -104,6 +104,12 @@ class AgaviSessionStorage extends AgaviStorage
 					$cookieDefaults['path'] = true;
 				}
 			}
+			if($cookieDefaults['secure'] === false && ini_get('session.cookie_secure') === '') {
+				// $cookieDefaults['secure'] will always be false if session.cookie_secure is not set, so we have
+				// to ensure it actually is null when the config option has not been set for the automatic session_cookie_secure
+				// setting detection to work
+				$cookieDefaults['secure'] = null;
+			}
 			
 			$lifetime = $this->getParameter('session_cookie_lifetime', $cookieDefaults['lifetime']);
 			if(is_numeric($lifetime)) {

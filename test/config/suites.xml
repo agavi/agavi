@@ -52,6 +52,11 @@
 			<suite name="Routing">
 				<include>unit/routing/.*Test.php</include>
 			</suite>
+			<suite name="Session">
+				<testfiles>
+					<testfile>unit/session/AgaviSessionStorageTest.php</testfile>
+				</testfiles>
+			</suite>
 			<suite name="Testing">
 				<include>unit/testing/.*Test.php</include>
 			</suite>
