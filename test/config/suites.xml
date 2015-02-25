@@ -49,6 +49,11 @@
 					<testfile>unit/request/AgaviWebRequestDataHolderCookieTest.php</testfile>
 				</testfiles>
 			</suite>
+			<suite name="Session">
+				<testfiles>
+					<testfile>unit/session/AgaviSessionStorageTest.php</testfile>
+				</testfiles>
+			</suite>
 			<suite name="Testing">
 				<testfiles>
 					<testfile>unit/testing/AgaviPhpUnitTestCaseTest.php</testfile>
