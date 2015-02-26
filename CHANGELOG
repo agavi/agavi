@@ -6,7 +6,6 @@ AGAVI CHANGELOG
 
 CHG: Update timezone database to 2014b (#1503) (David)
 
-FIX: [Possibly Breaking, see RELEASE_NOTES] Session cookies don't automatically set secure flag on HTTPS connections (#1541) (Dominik)
 FIX: AgaviTemplateLayer possibly overwrites given parameters with defaults (#1490) (Steffen Gransow)
 FIX: AgaviArrayPathDefinition::unsetValue() triggers a warning on empty paths (#1488) (Ionuț Matei)
 FIX: Various fixes to the shiny exception template (#1478) (Thomas Bachem)

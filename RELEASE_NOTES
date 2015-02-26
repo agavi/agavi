@@ -4,8 +4,6 @@ AGAVI RELEASE NOTES
 Version 1.0.8 - January ??, 2011
 ================================
 
-The session cookie now properly detects if the user came via HTTPS and sets the secure flag accordingly. If you rely on the session cookie not having a secure flag, even if the user came via HTTPS, you need to set "session_cookie_secure" to false for the <storage> your factories.xml.
-
 
 Version 1.0.7 - December 22, 2011
 =================================
