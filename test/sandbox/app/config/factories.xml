@@ -65,7 +65,9 @@
 	</ae:configuration>
 	
 	<ae:configuration environment="testing.*" context="agavi-session-storage-test::tests-startup-sets-cookie-secure-flag">
-		<storage class="AgaviNullStorage" />
+		<storage class="AgaviSessionStorage">
+			<ae:parameter name="session_cookie_secure"></ae:parameter>
+		</storage>
 		
 		<request class="AgaviWebRequest">
 			<ae:parameter name="sources">
