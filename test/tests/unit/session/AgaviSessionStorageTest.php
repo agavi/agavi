@@ -3,7 +3,7 @@
 class AgaviSessionStorageTest extends AgaviUnitTestCase
 {
 	
-	public function testStartupSetsCookieSecureFlag($iniValue, $secure)
+	public function testStartupSetsCookieSecureFlag()
 	{
 		// test for bug #1541
 		ini_set('session.cookie_secure', 0);
