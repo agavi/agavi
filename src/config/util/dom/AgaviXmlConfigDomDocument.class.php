@@ -125,7 +125,6 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 		
 		libxml_use_internal_errors($luie);
 		
-		unset($this->xpath);
 		$this->xpath = new DOMXPath($this);
 		
 		if($this->isAgaviConfiguration()) {
@@ -171,7 +170,6 @@ class AgaviXmlConfigDomDocument extends DOMDocument
 		
 		libxml_use_internal_errors($luie);
 		
-		unset($this->xpath);
 		$this->xpath = new DOMXPath($this);
 		
 		if($this->isAgaviConfiguration()) {
