@@ -139,7 +139,8 @@ class AgaviSchematronProcessor extends AgaviParameterHolder
 	 */
 	protected function prepareProcessor($processor)
 	{
-		$processor->setParameter('', $this->getParameters());
+		// ensure everything is a string to make hhvm happy
+		$processor->setParameter('', array_map('strval', $this->getParameters()));
 	}
 	
 	/**
