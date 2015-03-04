@@ -3,8 +3,6 @@ require_once(__DIR__ . '/ConfigHandlerTestBase.php');
 
 class TestLogger extends AgaviLogger
 {
-	const ERROR = 1;
-	const INFO = 2;
 	public $appenders;
 	public $level;
 
