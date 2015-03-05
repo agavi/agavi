@@ -6,6 +6,7 @@ AGAVI CHANGELOG
 
 CHG: Update timezone database to 2014b (#1503) (David)
 
+FIX: Fix closing tag `h2` in WelcomeSuccess (#1508) (Robert Schulze)
 FIX: AgaviTemplateLayer possibly overwrites given parameters with defaults (#1490) (Steffen Gransow)
 FIX: AgaviArrayPathDefinition::unsetValue() triggers a warning on empty paths (#1488) (Ionuț Matei)
 FIX: Various fixes to the shiny exception template (#1478) (Thomas Bachem)
