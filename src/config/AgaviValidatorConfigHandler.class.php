@@ -70,10 +70,11 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 				foreach($cfg->get('validator_definitions') as $def) {
 					$name = $def->getAttribute('name');
 					if(!isset($this->classMap[$name])) {
-						$this->classMap[$name] = array('class' => $def->getAttribute('class'), 'parameters' => array());
+						$this->classMap[$name] = array('class' => $def->getAttribute('class'), 'parameters' => array(), 'errors' => array());
 					}
 					$this->classMap[$name]['class'] = $def->getAttribute('class',$this->classMap[$name]['class']);
 					$this->classMap[$name]['parameters'] = $def->getAgaviParameters($this->classMap[$name]['parameters']);
+					$this->classMap[$name]['errors'] = $this->getAgaviErrors($def, $this->classMap[$name]['errors']);
 				}
 			}
 			
@@ -124,20 +125,19 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 			if(!class_exists($class)) {
 				throw new AgaviValidatorException('unknown validator found: ' . $class);
 			}
-			$this->classMap[$class] = array('class' => $class, 'parameters' => array());
+			$this->classMap[$class] = array('class' => $class, 'parameters' => array(), 'errors' => array());
 		} else {
 			$class = $this->classMap[$validator->getAttribute('class')]['class'];
 		}
-
+		
 		// setting up parameters
 		$parameters = array(
 			'severity' => $validator->getAttribute('severity', $stdSeverity),
 			'required' => $stdRequired,
 		);
-
+		
 		$arguments = array();
-		$errors = array();
-
+		
 		$stdMethod = $validator->getAttribute('method', $stdMethod);
 		$stdSeverity = $parameters['severity'];
 		if($validator->hasAttribute('name')) {
@@ -146,7 +146,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 			$name = AgaviToolkit::uniqid();
 			$validator->setAttribute('name', $name);
 		}
-
+		
 		$parameters = array_merge($this->classMap[$validator->getAttribute('class')]['parameters'], $parameters);
 		$parameters = array_merge($parameters, $validator->getAttributes());
 		$parameters = $validator->getAgaviParameters($parameters);
@@ -176,6 +176,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 			}
 		}
 		
+		$errors = $this->classMap[$validator->getAttribute('class')]['errors'];
 		foreach($validator->get('errors') as $error) {
 			if($error->hasAttribute('for')) {
 				$errors[$error->getAttribute('for')] = $error->getValue();
@@ -187,12 +188,12 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		if($validator->hasAttribute('required')) {
 			$stdRequired = $parameters['required'] = AgaviToolkit::literalize($validator->getAttribute('required'));
 		}
-
+		
 		$methods = array('');
 		if(trim($stdMethod)) {
 			$methods = preg_split('/[\s]+/', $stdMethod);
 		}
-
+		
 		foreach($methods as $method) {
 			$code[$method][$name] = implode("\n", array(
 				sprintf(
@@ -264,6 +265,38 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 		}
 		
 		return $code;
+	}
+	
+	/**
+	 * Retrieve all of the Agavi error elements associated with this
+	 * element.
+	 *
+	 * @param      AgaviXmlConfigDomElement The value holder of this validator.
+	 * @param      array                    An array of existing errors.
+	 *
+	 * @return     array The complete array of errors.
+	 *
+	 * @author     Jan Schütze <JanS@DracoBlue.de>
+	 * @author     Steffen Gransow <agavi@mivesto.de>
+	 *
+	 * @since      1.0.8
+	 */
+	public function getAgaviErrors(AgaviXmlConfigDomElement $node, array $existing = array())
+	{
+		$result = $existing;
+		
+		$elements = $node->get('errors', self::XML_NAMESPACE);
+		
+		foreach($elements as $element) {
+			$key = '';
+			if($element->hasAttribute('for')) {
+				$key = $element->getAttribute('for');
+			}
+			
+			$result[$key] = $element->getValue();
+		}
+		
+		return $result;
 	}
 }
 
