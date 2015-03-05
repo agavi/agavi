@@ -3,7 +3,6 @@
 class MyDependencyManager extends AgaviDependencyManager
 {
 	public function setDepData($data) { $this->depData = $data; }
-	public function getDepData() { return $this->depData; }
 }
 
 class AgaviDependencyManagerTest extends AgaviUnitTestCase
@@ -14,7 +13,7 @@ class AgaviDependencyManagerTest extends AgaviUnitTestCase
 		
 		$m->setDepData(array(1));
 		$m->clear();
-		$this->assertEquals($m->getDepData(), array());
+		$this->assertEquals($m->getDependTokens(), array());
 	}
 	
 	public function testcheckDependencies()
@@ -39,9 +38,9 @@ class AgaviDependencyManagerTest extends AgaviUnitTestCase
 		$m = new MyDependencyManager;
 		
 		$m->addDependTokens(array('foo', 'bar'), new AgaviVirtualArrayPath(''));
-		$this->assertEquals($m->getDepData(), array('foo' => true, 'bar' => true));
+		$this->assertEquals($m->getDependTokens(), array('foo' => true, 'bar' => true));
 		$m->addDependTokens(array('%s[test]', '%s[test2]'), new AgaviVirtualArrayPath('foobar'));
-		$this->assertEquals($m->getDepData(), array('foo' => true, 'bar' => true, 'foobar' => array('test' => true, 'test2' => true)));
+		$this->assertEquals($m->getDependTokens(), array('foo' => true, 'bar' => true, 'foobar' => array('test' => true, 'test2' => true)));
 	}
 }
 ?>
