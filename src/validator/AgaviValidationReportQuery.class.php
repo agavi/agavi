@@ -259,34 +259,6 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 	}
 	
 	/**
-	 * Retrieves all depend tokens provided by the validation run.
-	 *
-	 * @return     array All depend tokens provided by the validation run.
-	 *
-	 * @author     Steffen Gransow <agavi@mivesto.de>
-	 * @since      1.0.8
-	 */
-	public function getDependTokens()
-	{
-		return $this->report->getDependTokens();
-	}
-	
-	/**
-	 * Check whether the given depend token was provided by the validation run.
-	 *
-	 * @param      string Name of depend token suspected to have been provided.
-	 *
-	 * @return     bool True if depend token was provided.
-	 *
-	 * @author     Steffen Gransow <agavi@mivesto.de>
-	 * @since      1.0.8
-	 */
-	public function hasDependToken($name)
-	{
-		return array_key_exists($name, $this->report->getDependTokens());
-	}
-	
-	/**
 	 * Retrieves all AgaviValidationError objects which match the currently
 	 * defined filter rules.
 	 * 
