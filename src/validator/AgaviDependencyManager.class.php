@@ -132,7 +132,7 @@ class AgaviDependencyManager
 	 * @return     array Provided tokens from the dependency cache.
 	 *
 	 * @author     Steffen Gransow <agavi@mivesto.de>
-	 * @since      1.0.8
+	 * @since      1.1.0
 	 */
 	public function getDependTokens()
 	{

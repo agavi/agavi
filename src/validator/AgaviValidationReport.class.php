@@ -171,7 +171,7 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 	 * @return     array All provided depend tokens.
 	 *
 	 * @author     Steffen Gransow <agavi@mivesto.de>
-	 * @since      1.0.8
+	 * @since      1.1.0
 	 */
 	public function getDependTokens()
 	{
