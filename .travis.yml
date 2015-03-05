@@ -12,6 +12,8 @@ env:
   - PROCESS_ISOLATION=1
   - PROCESS_ISOLATION=0
 
+sudo: false
+
 # prevent hhvm from running the tests in isolation, since they take ages
 matrix:
   exclude:
