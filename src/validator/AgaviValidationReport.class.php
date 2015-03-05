@@ -45,6 +45,11 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 	protected $incidents = array();
 	
 	/**
+	 * @var        array The depend tokens provided by the validation run.
+	 */
+	protected $providedDependTokens = array();
+	
+	/**
 	 * Retrieves the highest validation result code in this report.
 	 *
 	 * @return     int An AgaviValidator::* severity constant, or null if there is
@@ -130,6 +135,47 @@ class AgaviValidationReport implements AgaviIValidationReportQuery
 			$incidents = array_merge($incidents, $validatorIncidents);
 		}
 		return $incidents;
+	}
+	
+	/**
+	 * Sets dependency tokens provided by executed validators onto the result.
+	 *
+	 * @param      array The depend tokens of the AgaviDependencyManager.
+	 *
+	 * @author     Steffen Gransow <agavi@mivesto.de>
+	 * @since      1.1.0
+	 */
+	public function setDependTokens(array $dependTokens = array())
+	{
+		$this->providedDependTokens = $dependTokens;
+	}
+	
+	/**
+	 * Check whether the given depend token was provided by the validation run.
+	 *
+	 * @param      string Name of depend token suspected to have been provided.
+	 *
+	 * @return     bool True if depend token was provided.
+	 *
+	 * @author     Steffen Gransow <agavi@mivesto.de>
+	 * @since      1.1.0
+	 */
+	public function hasDependToken($token)
+	{
+		return array_key_exists($token, $this->getDependTokens());
+	}
+	
+	/**
+	 * Check whether the given depend token was provided by the validation run.
+	 *
+	 * @return     array All provided depend tokens.
+	 *
+	 * @author     Steffen Gransow <agavi@mivesto.de>
+	 * @since      1.0.8
+	 */
+	public function getDependTokens()
+	{
+		return $this->providedDependTokens;
 	}
 	
 	/**

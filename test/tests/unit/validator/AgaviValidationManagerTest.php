@@ -135,5 +135,15 @@ class AgaviValidationManagerTest extends AgaviUnitTestCase
 	{
 		$this->assertEquals(AgaviValidator::NOT_PROCESSED, $this->_vm->getResult());
 	}
+	
+	public function testTransfersDependTokens()
+	{
+		$vm = new MyValidationManager;
+		$vm->initialize($this->_context);
+		$validator = $this->_vm->createValidator('DummyValidator', array(), array(), array('provides' => 'provide-token'));
+		$vm->registerValidators(array($validator));
+		$vm->execute(new AgaviRequestDataHolder());
+		$this->assertEquals(array('provide-token' => true), $vm->getReport()->getDependTokens());
+	}
 }
 ?>
