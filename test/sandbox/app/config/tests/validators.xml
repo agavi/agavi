@@ -37,5 +37,45 @@
 		</validators>
 	</ae:configuration>
 
-	
+	<ae:configuration environment="test-validator-definition-error-definition">
+		<validator_definitions>
+			<validator_definition name="standalone" class="DummyValidator">
+				<error>error-generic</error>
+				<error for="min">error-min</error>
+			</validator_definition>
+			<validator_definition name="overwritten" class="DummyValidator">
+				<error>error-generic</error>
+				<error for="min">error-min</error>
+			</validator_definition>
+			
+			<validator_definition name="overwritten" class="DummyValidator">
+				<error>error-generic-overwritten</error>
+				<error for="min">error-min-overwritten</error>
+			</validator_definition>
+		</validator_definitions>
+		<validators>
+			<validator name="standalone-empty" class="standalone" />
+			<validator name="standalone-with-errors-single" class="standalone">
+				<error>error-generic-validator1</error>
+			</validator>
+			
+			<validator name="standalone-with-errors-multi" class="standalone">
+				<error>error-generic-validator2</error>
+				<error for="min">error-min-validator2</error>
+			</validator>
+			
+			<validator name="overwritten-empty" class="overwritten" />
+			<validator name="overwritten-with-errors-single" class="overwritten">
+				<error>error-generic-validator3</error>
+			</validator>
+			
+			<validator name="overwritten-with-errors-multi" class="overwritten">
+				<error>error-generic-validator4</error>
+				<error for="min">error-min-validator4</error>
+			</validator>
+		</validators>
+		
+	</ae:configuration>
+
+
 </ae:configurations>

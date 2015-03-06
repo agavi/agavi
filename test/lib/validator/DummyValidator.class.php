@@ -16,5 +16,9 @@ class DummyValidator extends AgaviValidator
 	}
 	public function clear() { $this->cleared = true; $this->validated = false; $this->shutdown = false;}
 	public function shutdown() { $this->shutdown = true; }
+	
+	public function getErrorMessages() {
+		return $this->errorMessages;
+	}
 }
 ?>
