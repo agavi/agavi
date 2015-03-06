@@ -505,7 +505,6 @@ class AgaviXmlConfigParser
 					$glob = glob($parts[0], GLOB_BRACE);
 					if($glob) {
 						$glob = array_unique($glob); // it could be that someone used /path/to/{Foo,*}/burp.xml so Foo would come before all others, that's why we need to remove duplicates as the * would match Foo again
-						sort($glob); // As glob()'s sorting may be unreliable, see e.g. https://glotpress.trac.wordpress.org/ticket/211
 						foreach($glob as $path) {
 							$new = $element->cloneNode(true);
 							$new->setAttribute('href', $path . (isset($parts[1]) ? '#' . $parts[1] : ''));
