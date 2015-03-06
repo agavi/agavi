@@ -603,32 +603,27 @@ class AgaviTranslationManager
 	}
 
 	/**
-	 * Returns the identifier of the available locale which matches the given 
-	 * locale identifier most.
+	 * Returns all the identifiers of the available locales which match the given 
+	 * locale identifier.
 	 *
 	 * @param      string A locale identifier
 	 *
-	 * @return     string The actual locale identifier of the available locale.
+	 * @return     array The actual locale identifiers of the available locales.
 	 *
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @author     David Zülke <dz@bitxtender.com>
-	 * @since      0.11.0
+	 * @author     Thomas Bachem <mail@thomasbachem.com>
 	 */
-	public function getLocaleIdentifier($identifier)
+	public function getMatchingLocaleIdentifiers($identifier)
 	{
-		// if a locale with the given identifier doesn't exist try to find the closest
-		// match or bail out on no match or an ambiguous match
+		// if a locale with the given identifier doesn't exist try to find the closest matches
 		if(isset($this->availableLocales[$identifier])) {
-			return $identifier;
+			return array($identifier);
 		}
-
+		
 		$idData = AgaviLocale::parseLocaleIdentifier($identifier);
 		
-		if(isset($this->localeIdentifierCache[$identifier])) {
-			return $this->localeIdentifierCache[$identifier];
-		}
-		
-		$matchingLocales = array();
+		$matchingLocaleIdentifiers = array();
 		// iterate over all available locales
 		foreach($this->availableLocales as $availableLocaleIdentifier => $availableLocale) {
 			$matched = false;
@@ -648,25 +643,44 @@ class AgaviTranslationManager
 				}
 			}
 			if($matched) {
-				$matchingLocales[$availableLocaleIdentifier] = $availableLocale;
+				$matchingLocaleIdentifiers[] = $availableLocaleIdentifier;
 			}
 		}
 		
-		switch(count($matchingLocales)) {
+		return $matchingLocaleIdentifiers;
+	}
+
+	/**
+	 * Returns the identifier of the available locale which matches the given 
+	 * locale identifier most.
+	 *
+	 * @param      string A locale identifier
+	 *
+	 * @return     string The actual locale identifier of the available locale.
+	 *
+	 * @author     Dominik del Bondio <ddb@bitxtender.com>
+	 * @author     David Zülke <dz@bitxtender.com>
+	 * @since      0.11.0
+	 */
+	public function getLocaleIdentifier($identifier)
+	{
+		if(isset($this->localeIdentifierCache[$identifier])) {
+			return $this->localeIdentifierCache[$identifier];
+		}
+		
+		$matchingLocaleIdentifiers = $this->getMatchingLocaleIdentifiers($identifier);
+		
+		switch(count($matchingLocaleIdentifiers)) {
 			case 1:
-				$availableLocale = current($matchingLocales);
+				$availableLocaleIdentifier = current($matchingLocaleIdentifiers);
 				break;
 			case 0:
 				throw new AgaviException('Specified locale identifier ' . $identifier . ' which has no matching available locale defined');
 			default:
-				$matchedNames = array();
-				foreach($matchingLocales as $matchedLocale) {
-					$matchedNames[] = $matchedLocale['identifier'];
-				}
-				throw new AgaviException('Specified ambiguous locale identifier ' . $identifier . ' which has matches: ' . implode(', ', $matchedNames));
+				throw new AgaviException('Specified ambiguous locale identifier ' . $identifier . ' which has matches: ' . implode(', ', $matchingLocaleIdentifiers));
 		}
 		
-		return $this->localeIdentifierCache[$identifier] = $availableLocale['identifier'];
+		return $this->localeIdentifierCache[$identifier] = $availableLocaleIdentifier;
 	}
 
 	/**
