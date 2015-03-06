@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.1.0 beta1 (June ??, 2009)
 ---------------------------
 
+ADD: Allow errors in validator_definition elements (#1497) (Steffen Gransow)
 ADD: Add support for multiple option presets and mixed option/preset values (#1484) (Thomas Bachem)
 ADD: Add validation depend tokens to validation report (#1486) (Steffen Gransow, Dominik)
 ADD: BREAKING CHANGE: Allow 'translation_domain' attribute on <validators> (#1498) (Steffen Gransow, Dominik)

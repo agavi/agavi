@@ -43,6 +43,8 @@ Some more examples can be found in ticket #1199 (and also in #1073 where the sam
 
 You can now specify the Translation domain for multiple / all validators at once by placing the translation_domain attribute on the <validators> element. This causes some breaking changes when you bump your config namespaces to 1.1, so please see UPGRADING for instructions first.
 
+<validator_definition> now supports defining default error messages. This works exactly like defining error messages in individual validators.
+
 The validation report now provides access to the dependency tokens registered during the validation run.
 
 Filters
