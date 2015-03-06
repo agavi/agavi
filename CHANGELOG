@@ -63,6 +63,7 @@ CHG: Move loading of autoload.xml into Agavi::bootstrap() (#1206) (David)
 CHG: Add response to default template assigns (#1095) (David)
 CHG: Move all includes necessary for startup from Agavi::boostrap() into agavi.php (#1094) (David)
 
+FIX: Fixed path encoding in AgaviXmlConfigParser::xinclude() #1540 (Thomas Bachem)
 FIX: prevent additional template pattern lookup w/ i18n (#1491) (Steffen Gransow)
 FIX: Model code template Getter has unnessesary Parameter (#1322, #1494) (Robert Schulze, Benjamin Börngen-Schmidt)
 FIX: [Config Breaking Change] Can't set default database with an empty <databases> block (#1524) (Dominik)
