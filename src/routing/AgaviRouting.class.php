@@ -557,6 +557,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			}
 			return $genOptions;
 		}
+		throw new AgaviException('Unexpected type "' . gettype($input) . '" used as Routing gen() option preset identifier');
 	}
 	
 	/**
