@@ -176,14 +176,7 @@ class AgaviValidatorConfigHandler extends AgaviXmlConfigHandler
 			}
 		}
 		
-		$errors = $this->classMap[$validator->getAttribute('class')]['errors'];
-		foreach($validator->get('errors') as $error) {
-			if($error->hasAttribute('for')) {
-				$errors[$error->getAttribute('for')] = $error->getValue();
-			} else {
-				$errors[''] = $error->getValue();
-			}
-		}
+		$errors = $this->getAgaviErrors($validator, $this->classMap[$validator->getAttribute('class')]['errors']);
 		
 		if($validator->hasAttribute('required')) {
 			$stdRequired = $parameters['required'] = AgaviToolkit::literalize($validator->getAttribute('required'));
