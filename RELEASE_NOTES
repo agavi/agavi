@@ -16,6 +16,8 @@ Routing
 -------
 AgaviHttpRedirectRoutingCallback allows redirects of matched routes to static URLs or to other routes, including the ability to perform basic rewriting of arguments. The associated ticket #1382 contains further details.
 
+Option preset values can now be overwritten for a single gen() call. Additionally multiple option presets can be used (and will be automtically merged) at the same time. See ticket #1484 for details.
+
 Slots
 -----
 You can now use array syntax for slot names. Setting slots "foo[0]" and "foo[1]" will result in $slots['foo'][0] and $slots['foo'][1].
