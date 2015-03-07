@@ -28,6 +28,7 @@ ADD: Allow array syntax for slot names (#1110) (David)
 ADD: Add support for custom filesystem layouts for modules to the project configuration system (#874) (Noah)
 ADD: Response attributes (#1062) (David, TANAKA Koichi)
 
+CHG: Make AgaviXmlConfigParser::xinclude() use native sorting for glob (#1476) (Thomas Bachem)
 CHG: Improve AgaviFormPopulationFilter's "log_parse_errors" setting to handle severities (#1481) (Thomas Bachem)
 CHG: Ensure deterministic ordering of Tests (#1532) (Dominik)
 CHG: Remove custom command line argument parsing from test runner (#1514) (Dominik)
