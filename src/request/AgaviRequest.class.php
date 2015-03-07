@@ -284,7 +284,6 @@ abstract class AgaviRequest extends AgaviAttributeHolder
 	public final function toggleLock($key = null)
 	{
 		if(!$this->isLocked() && $key === null) {
-			$this->locked = true;
 			return $this->key = AgaviToolkit::uniqid();
 		} elseif($this->isLocked()) {
 			if($this->key === $key) {

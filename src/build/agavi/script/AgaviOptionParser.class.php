@@ -146,7 +146,6 @@ class AgaviOptionParser
 		$source = array_values($this->source);
 		$size = count($source);
 		
-		$i;
 		for($i = 0; $i < $size; $i++) {
 			if($source[$i] === $this->optionTerminator) {
 				break;

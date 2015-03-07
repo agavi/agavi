@@ -1031,7 +1031,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 			$prefix = $this->getPrefix();
 		}
 		
-		$routes = $route;
 		$isNullRoute = false;
 		$routes = $this->getAffectedRoutes($route, $isNullRoute);
 		
@@ -1571,9 +1570,6 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$parenthesisCount = 0;
 		$bracketCount = 0;
 		$hasBrackets = false;
-		// whether the regular expression is clean of any regular expression
-		// so we can reverse generate it
-		$cleanRx = true;
 
 		for($i = 0; $i < $len; ++$i) {
 			$atEnd = $i + 1 == $len;

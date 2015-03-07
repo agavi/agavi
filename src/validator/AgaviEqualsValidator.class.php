@@ -62,7 +62,7 @@ class AgaviEqualsValidator extends AgaviValidator
 
 		$strict = $this->getParameter('strict', false);
 
-		foreach($this->getArguments() as $key => $argument) {
+		foreach($this->getArguments() as $argument) {
 			$input = $this->getData($argument);
 			if(($strict && $input !== $value) || (!$strict && $input != $value)) {
 				$this->throwError();

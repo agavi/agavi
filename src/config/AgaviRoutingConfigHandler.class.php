@@ -67,7 +67,6 @@ class AgaviRoutingConfigHandler extends AgaviXmlConfigHandler
 
 		// clear the routing
 		$routing->importRoutes(array());
-		$data = array();
 		
 		foreach($document->getConfigurationElements() as $cfg) {
 			if($cfg->has('routes')) {

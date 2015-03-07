@@ -162,7 +162,6 @@ class AgaviWebRouting extends AgaviRouting
 				$this->input = rawurldecode($this->input);
 			}
 
-			$xrup = rawurldecode($ru['path']);
 			$this->basePath = $this->prefix = preg_replace('/' . preg_quote($this->input, '/') . '$/D', '', rawurldecode($ru['path']));
 
 			// that was easy. now clean up $_GET and the Request

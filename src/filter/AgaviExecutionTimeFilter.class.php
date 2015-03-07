@@ -55,8 +55,6 @@ class AgaviExecutionTimeFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 */
 	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
 	{
-		$context = $this->getContext();
-		
 		$comment = $this->getParameter('comment', false);
 		$replace = $this->getParameter('replace', false);
 		
