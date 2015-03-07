@@ -659,7 +659,7 @@ class AgaviGregorianCalendar extends AgaviCalendar
 	 */
 	protected function pinDayOfMonth()
 	{
-		$monthLen = $this->monthLength(internalGet(AgaviDateDefinitions::MONTH));
+		$monthLen = $this->monthLength($this->internalGet(AgaviDateDefinitions::MONTH));
 		$dom = $this->internalGet(AgaviDateDefinitions::DATE);
 		if($dom > $monthLen) 
 			$this->set(AgaviDateDefinitions::DATE, $monthLen);
