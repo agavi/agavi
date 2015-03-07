@@ -17,6 +17,9 @@ class AgaviXmlConfigHandlerTest extends ConfigHandlerTestBase
 
 	public function testParseXincludeGlobSimple()
 	{
+		if(defined('HHVM_VERSION')) {
+			$this->markTestSkipped('This tests triggers a bug in HHVM. See https://github.com/facebook/hhvm/issues/4972 for details');
+		}
 		$RACH = new AgaviReturnArrayConfigHandler();
 		$document = $this->parseConfiguration(AgaviConfig::get('core.config_dir') . '/tests/xinclude_glob_simple.xml');
 		$actual = $this->includeCode($RACH->execute($document));
@@ -41,6 +44,9 @@ class AgaviXmlConfigHandlerTest extends ConfigHandlerTestBase
 
 	public function testParseXincludeEncoding()
 	{
+		if(defined('HHVM_VERSION')) {
+			$this->markTestSkipped('This tests triggers a bug in HHVM. See https://github.com/facebook/hhvm/issues/4972 for details');
+		}
 		$RACH = new AgaviReturnArrayConfigHandler();
 		$document = $this->parseConfiguration(AgaviConfig::get('core.config_dir') . '/tests/xinclude_encoding.xml');
 		$actual = $this->includeCode($RACH->execute($document));
