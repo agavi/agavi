@@ -976,7 +976,10 @@ class AgaviTranslationManager
 		}
 
 		if($time instanceof DateTime) {
-			$tzName = $time->getTimezone()->getName();
+			// FIXME: we can't use $time->getTimezone()->getName() here since that triggers
+			// https://github.com/facebook/hhvm/issues/1777 but luckily using format('e')
+			// works for both php and hhvm
+			$tzName = $time->format('e');
 
 			if(preg_match('/^[+-0-9]/', $tzName)) {
 				$tzName = 'GMT' . $tzName;

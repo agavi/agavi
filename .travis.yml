@@ -6,8 +6,26 @@ php:
   - 5.5
   - 5.6
   - nightly
+  - hhvm
+  - hhvm-nightly
+env:
+  - PROCESS_ISOLATION=1
+  - PROCESS_ISOLATION=0
+
+sudo: false
+
+# prevent hhvm from running the tests in isolation, since they take ages
+matrix:
+  exclude:
+    - php: hhvm
+      env: PROCESS_ISOLATION=1
+    - php: hhvm-nightly
+      env: PROCESS_ISOLATION=1
+  allow_failures:
+    - php: hhvm-nightly
+  fast_finish: true
 
 before_script:
   - composer install
 
-script: php test/run-tests.php && php test/run-tests.php --process-isolation
+script: php test/run-tests.php $(if [ $PROCESS_ISOLATION -eq 1 ]; then echo "--process-isolation"; fi)

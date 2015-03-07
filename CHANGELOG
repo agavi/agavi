@@ -4,6 +4,7 @@ AGAVI CHANGELOG
 1.1.0 beta1 (June ??, 2009)
 ---------------------------
 
+ADD: Improve hhvm compatibility (#1542) (Dominik)
 ADD: Add AgaviTranslationManager::getMatchingLocaleIdentifiers() method (#1535) (Thomas Bachem)
 ADD: Allow errors in validator_definition elements (#1497) (Steffen Gransow)
 ADD: Add support for multiple option presets and mixed option/preset values (#1484) (Thomas Bachem)
