@@ -4,6 +4,10 @@ AGAVI RELEASE NOTES
 Version 1.1.0 - August ??, 2009
 ===============================
 
+HHVM
+----
+Agavi is now compatible with HHVM. You have to set the ini setting "hhvm.libxml.ext_entity_whitelist" to contain "file". Otherwise you will get error messages about Protocol 'file' being disabled for security reasons.
+
 Configuration
 -------------
 All configuration namespaces have been bumped to version 1.1 as a consequence of a version bump in the global "envelope" namespace, which now allows "xml:space" and "ae:literalize" attributes on the <parameter> element to control whitespace trimming and literalizing (conversion of booleans, expansion of configuration directives). Several configuration file namespaces contain new elements or changed behavior as detailed below. The UPGRADING file lists all changes and their implications. New XSL transformations will automatically convert older configuration files to new namespaces and adjust behavior where applicable, allowing you to run your projects with Agavi 1.1 without having to adjust configuration files immediately.
