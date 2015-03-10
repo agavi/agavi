@@ -53,7 +53,11 @@
 			</route>
 			
 			<!-- The last route in case the input URL is just "/". -->
-			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
+			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%">
+				<defaults>
+					<default for="foo">bar</default>
+				</defaults>
+			</route>
 			
 			<!-- If no route matched here, the 404 action will be used. You could change that behavior by setting the last route above to use an empty pattern. -->
 		</routes>

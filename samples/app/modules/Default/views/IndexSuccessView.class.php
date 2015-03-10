@@ -22,6 +22,15 @@ class Default_IndexSuccessView extends AgaviSampleAppDefaultBaseView
 
 		// set the title
 		$this->setAttribute('_title', $this->tm->_('Welcome to the Agavi Sample Application', 'default.layout'));
+
+		// Just a random parameter
+		var_dump($this->ro->gen('index', array('a' => 'b')));
+		// "foo=bar" is set as a default for the route
+		// and will be missing from the URL although omit_defaults is off
+		var_dump($this->ro->gen('index', array('foo' => 'bar')));
+		// "foo=baz" is NOT set as a default for the route
+		// and will still be missing from the URL
+		var_dump($this->ro->gen('index', array('foo' => 'baz')));
 	}
 
 }
