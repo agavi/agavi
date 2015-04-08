@@ -523,7 +523,9 @@ class AgaviConfigCache
 			// so we simply assume that when rename() fails that we are on win32 and try to use copy() followed by unlink()
 			// if that also fails, we know something's odd
 			if(@rename($tmpName, $cache) || (@copy($tmpName, $cache) && unlink($tmpName))) {
-				// alright, it did work after all. chmod() and bail out.
+				// alright, it did work after all. update modified timestamp with touch()
+				// fix permissions with chmod() and bail out.
+				touch($cache);
 				chmod($cache, $perms);
 				return;
 			}
