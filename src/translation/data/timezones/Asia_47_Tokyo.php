@@ -28,7 +28,7 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'CJT',
+      'name' => 'JCST',
     ),
     2 => 
     array (
@@ -57,7 +57,7 @@ return array (
     ),
     2 => 
     array (
-      'time' => -1009875600,
+      'time' => -1017824400,
       'type' => 2,
     ),
     3 => 

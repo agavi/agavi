@@ -29,7 +29,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -631163212,
+      'time' => -719636812,
       'type' => 0,
     ),
   ),
@@ -38,7 +38,7 @@ return array (
     'type' => 'static',
     'name' => 'AST',
     'offset' => 10800,
-    'startYear' => 1950,
+    'startYear' => 1948,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

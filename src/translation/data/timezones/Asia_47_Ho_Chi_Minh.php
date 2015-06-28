@@ -20,9 +20,9 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 25580,
+      'rawOffset' => 25590,
       'dstOffset' => 0,
-      'name' => 'SMT',
+      'name' => 'PLMT',
     ),
     1 => 
     array (
@@ -34,29 +34,60 @@ return array (
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'ICT',
+      'name' => 'IDT',
+    ),
+    3 => 
+    array (
+      'rawOffset' => 32400,
+      'dstOffset' => 0,
+      'name' => 'JST',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2005974400,
+      'time' => -2004073600,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1855983920,
+      'time' => -1851577590,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1819954800,
+      'time' => -852105600,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -1220428800,
+      'time' => -782643600,
+      'type' => 3,
+    ),
+    4 => 
+    array (
+      'time' => -767869200,
+      'type' => 1,
+    ),
+    5 => 
+    array (
+      'time' => -718095600,
+      'type' => 2,
+    ),
+    6 => 
+    array (
+      'time' => -457776000,
+      'type' => 1,
+    ),
+    7 => 
+    array (
+      'time' => -315648000,
+      'type' => 2,
+    ),
+    8 => 
+    array (
+      'time' => 171820800,
       'type' => 1,
     ),
   ),
@@ -65,7 +96,7 @@ return array (
     'type' => 'static',
     'name' => 'ICT',
     'offset' => 25200,
-    'startYear' => 1932,
+    'startYear' => 1976,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

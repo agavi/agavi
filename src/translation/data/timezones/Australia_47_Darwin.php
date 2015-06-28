@@ -22,19 +22,25 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'CST',
+      'name' => 'ACST',
     ),
     1 => 
     array (
       'rawOffset' => 34200,
       'dstOffset' => 0,
-      'name' => 'CST',
+      'name' => 'ACT',
     ),
     2 => 
     array (
       'rawOffset' => 34200,
       'dstOffset' => 3600,
-      'name' => 'CST',
+      'name' => 'ACDT',
+    ),
+    3 => 
+    array (
+      'rawOffset' => 34200,
+      'dstOffset' => 0,
+      'name' => 'ACST',
     ),
   ),
   'rules' => 
@@ -57,7 +63,7 @@ return array (
     3 => 
     array (
       'time' => -1665390600,
-      'type' => 1,
+      'type' => 3,
     ),
     4 => 
     array (
@@ -67,7 +73,7 @@ return array (
     5 => 
     array (
       'time' => -876126600,
-      'type' => 1,
+      'type' => 3,
     ),
     6 => 
     array (
@@ -77,7 +83,7 @@ return array (
     7 => 
     array (
       'time' => -844677000,
-      'type' => 1,
+      'type' => 3,
     ),
     8 => 
     array (
@@ -87,7 +93,7 @@ return array (
     9 => 
     array (
       'time' => -813227400,
-      'type' => 1,
+      'type' => 3,
     ),
   ),
   'finalRule' => 

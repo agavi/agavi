@@ -559,7 +559,32 @@ return array (
     ),
     100 => 
     array (
-      'time' => 1380232800,
+      'time' => 1364421600,
+      'type' => 2,
+    ),
+    101 => 
+    array (
+      'time' => 1380229200,
+      'type' => 0,
+    ),
+    102 => 
+    array (
+      'time' => 1395871200,
+      'type' => 2,
+    ),
+    103 => 
+    array (
+      'time' => 1414098000,
+      'type' => 0,
+    ),
+    104 => 
+    array (
+      'time' => 1427493600,
+      'type' => 2,
+    ),
+    105 => 
+    array (
+      'time' => 1445634000,
       'type' => 0,
     ),
   ),
@@ -573,19 +598,19 @@ return array (
     array (
       'month' => 2,
       'date' => -1,
-      'day_of_week' => 5,
+      'day_of_week' => 6,
       'time' => 86400000,
       'type' => 0,
     ),
     'end' => 
     array (
-      'month' => 8,
+      'month' => 9,
       'date' => '21',
       'day_of_week' => -6,
       'time' => 0,
       'type' => 0,
     ),
-    'startYear' => 2013,
+    'startYear' => 2015,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

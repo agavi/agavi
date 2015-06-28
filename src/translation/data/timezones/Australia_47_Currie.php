@@ -22,13 +22,19 @@ return array (
     array (
       'rawOffset' => 36000,
       'dstOffset' => 0,
-      'name' => 'EST',
+      'name' => 'AEST',
     ),
     1 => 
     array (
       'rawOffset' => 36000,
       'dstOffset' => 3600,
-      'name' => 'EST',
+      'name' => 'AEDT',
+    ),
+    2 => 
+    array (
+      'rawOffset' => 36000,
+      'dstOffset' => 0,
+      'name' => 'AEDT',
     ),
   ),
   'rules' => 
@@ -46,7 +52,7 @@ return array (
     2 => 
     array (
       'time' => -1669892400,
-      'type' => 0,
+      'type' => 2,
     ),
     3 => 
     array (
@@ -463,7 +469,7 @@ return array (
   array (
     'type' => 'dynamic',
     'offset' => 36000,
-    'name' => 'EST',
+    'name' => 'AE%sT',
     'save' => 3600,
     'start' => 
     array (

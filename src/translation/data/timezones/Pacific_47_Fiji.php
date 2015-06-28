@@ -110,8 +110,13 @@ return array (
     ),
     15 => 
     array (
-      'time' => 1414245600,
+      'time' => 1414850400,
       'type' => 1,
+    ),
+    16 => 
+    array (
+      'time' => 1421503200,
+      'type' => 0,
     ),
   ),
   'finalRule' => 
@@ -122,8 +127,8 @@ return array (
     'save' => 3600,
     'start' => 
     array (
-      'month' => 9,
-      'date' => '21',
+      'month' => 10,
+      'date' => '1',
       'day_of_week' => -1,
       'time' => 7200000,
       'type' => 0,
@@ -133,10 +138,10 @@ return array (
       'month' => 0,
       'date' => '18',
       'day_of_week' => -1,
-      'time' => 7200000,
+      'time' => 10800000,
       'type' => 0,
     ),
-    'startYear' => 2014,
+    'startYear' => 2015,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

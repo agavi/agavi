@@ -46,9 +46,26 @@ return array (
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'EST',
+    'type' => 'dynamic',
     'offset' => -18000,
+    'name' => 'E%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => '8',
+      'day_of_week' => -1,
+      'time' => 7200000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 10,
+      'date' => '1',
+      'day_of_week' => -1,
+      'time' => 7200000,
+      'type' => 0,
+    ),
     'startYear' => 1913,
   ),
   'source' => '(unknown)',

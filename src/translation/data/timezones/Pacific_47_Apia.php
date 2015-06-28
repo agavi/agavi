@@ -28,31 +28,43 @@ return array (
     array (
       'rawOffset' => -41400,
       'dstOffset' => 0,
-      'name' => 'SAMT',
+      'name' => 'WSST',
     ),
     2 => 
     array (
       'rawOffset' => -39600,
       'dstOffset' => 0,
-      'name' => 'WST',
+      'name' => 'ST',
     ),
     3 => 
     array (
       'rawOffset' => -39600,
       'dstOffset' => 3600,
-      'name' => 'WSDT',
+      'name' => 'SDT',
     ),
     4 => 
     array (
-      'rawOffset' => 46800,
-      'dstOffset' => 3600,
-      'name' => 'WSDT',
+      'rawOffset' => -39600,
+      'dstOffset' => 0,
+      'name' => 'SST',
     ),
     5 => 
     array (
       'rawOffset' => 46800,
       'dstOffset' => 0,
-      'name' => 'WST',
+      'name' => 'WSDT',
+    ),
+    6 => 
+    array (
+      'rawOffset' => 46800,
+      'dstOffset' => 0,
+      'name' => 'WSST',
+    ),
+    7 => 
+    array (
+      'rawOffset' => 46800,
+      'dstOffset' => 3600,
+      'name' => 'WSDT',
     ),
   ),
   'rules' => 
@@ -80,7 +92,7 @@ return array (
     4 => 
     array (
       'time' => 1301752800,
-      'type' => 2,
+      'type' => 4,
     ),
     5 => 
     array (
@@ -90,22 +102,17 @@ return array (
     6 => 
     array (
       'time' => 1325239200,
-      'type' => 4,
+      'type' => 5,
     ),
     7 => 
     array (
-      'time' => 1333188000,
-      'type' => 5,
+      'time' => 1333202400,
+      'type' => 6,
     ),
     8 => 
     array (
-      'time' => 1333206000,
-      'type' => 5,
-    ),
-    9 => 
-    array (
       'time' => 1348927200,
-      'type' => 4,
+      'type' => 7,
     ),
   ),
   'finalRule' => 
@@ -130,7 +137,7 @@ return array (
       'time' => 14400000,
       'type' => 0,
     ),
-    'startYear' => 2013,
+    'startYear' => 2012,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

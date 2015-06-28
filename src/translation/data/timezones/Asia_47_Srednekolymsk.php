@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "Asia/Magadan".
+ * Data file for timezone "Asia/Srednekolymsk".
  * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
@@ -48,12 +48,18 @@ return array (
       'dstOffset' => 0,
       'name' => 'MAGT',
     ),
+    5 => 
+    array (
+      'rawOffset' => 39600,
+      'dstOffset' => 0,
+      'name' => 'SRET',
+    ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1441188192,
+      'time' => -1441188892,
       'type' => 0,
     ),
     1 => 
@@ -379,19 +385,19 @@ return array (
     65 => 
     array (
       'time' => 1414245600,
-      'type' => 0,
+      'type' => 5,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'MAGT',
-    'offset' => 36000,
+    'name' => 'SRET',
+    'offset' => 39600,
     'startYear' => 2015,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',
-  'name' => 'Asia/Magadan',
+  'name' => 'Asia/Srednekolymsk',
 );
 
 ?>

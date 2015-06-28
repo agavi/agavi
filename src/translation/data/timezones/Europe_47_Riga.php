@@ -20,13 +20,13 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 5784,
+      'rawOffset' => 5794,
       'dstOffset' => 0,
       'name' => 'RMT',
     ),
     1 => 
     array (
-      'rawOffset' => 5784,
+      'rawOffset' => 5794,
       'dstOffset' => 3600,
       'name' => 'LST',
     ),
@@ -83,32 +83,32 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2840146584,
+      'time' => -2840146594,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1632008184,
+      'time' => -1632008194,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1618702584,
+      'time' => -1618702594,
       'type' => 0,
     ),
     3 => 
     array (
-      'time' => -1601681784,
+      'time' => -1601681794,
       'type' => 1,
     ),
     4 => 
     array (
-      'time' => -1597275384,
+      'time' => -1597275394,
       'type' => 0,
     ),
     5 => 
     array (
-      'time' => -1377308184,
+      'time' => -1377308194,
       'type' => 2,
     ),
     6 => 

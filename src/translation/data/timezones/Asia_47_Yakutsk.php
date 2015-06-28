@@ -53,7 +53,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1579423120,
+      'time' => -1579423138,
       'type' => 0,
     ),
     1 => 
@@ -376,13 +376,18 @@ return array (
       'time' => 1301158800,
       'type' => 4,
     ),
+    65 => 
+    array (
+      'time' => 1414252800,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'YAKT',
-    'offset' => 36000,
-    'startYear' => 2012,
+    'offset' => 32400,
+    'startYear' => 2015,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',
