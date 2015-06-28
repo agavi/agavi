@@ -212,8 +212,8 @@
 		<property name="basedir" value="pear-build" override="true" />
 		<property name="builddir" value="${basedir}/agavi-${agavi.pear.version}" override="true" />
 		
-		<delete dir="${builddir}" includeemptydirs="true" verbose="false" failonerror="true" />
-		<delete file="agavi-${agavi.pear.version}.tgz" verbose="false" failonerror="true" />
+		<delete dir="${builddir}" includeemptydirs="true" verbose="false" failonerror="false" />
+		<delete file="agavi-${agavi.pear.version}.tgz" verbose="false" failonerror="false" />
 		
 		<mkdir dir="${builddir}" />
 		
@@ -255,9 +255,9 @@
 	</target>
 	
 	<target name="package-release" depends="generate-properties">
-		<delete dir="./package-build" includeemptydirs="true" verbose="false" failonerror="true" />
-		<delete file="${agavi.pear.version}.tgz" verbose="false" failonerror="true" />
-		<delete file="${agavi.pear.version}.zip" verbose="false" failonerror="true" />
+		<delete dir="./package-build" includeemptydirs="true" verbose="false" failonerror="false" />
+		<delete file="${agavi.pear.version}.tgz" verbose="false" failonerror="false" />
+		<delete file="${agavi.pear.version}.zip" verbose="false" failonerror="false" />
 		
 		<mkdir dir="./package-build/agavi-${agavi.pear.version}" />
 		
@@ -266,6 +266,8 @@
 				<exclude name="*-build/**" />
 				<exclude name="*.tgz*" />
 				<exclude name="*.zip*" />
+				<exclude name="composer.lock" />
+				<exclude name="vendor/**" />
 				<include name="**/*" />
 			</fileset>
 		</copy>
