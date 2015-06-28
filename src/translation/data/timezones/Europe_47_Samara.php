@@ -46,33 +46,39 @@ return array (
     array (
       'rawOffset' => 10800,
       'dstOffset' => 0,
-      'name' => 'KUYT',
+      'name' => 'MSK',
     ),
     5 => 
     array (
       'rawOffset' => 10800,
       'dstOffset' => 3600,
-      'name' => 'KUYST',
+      'name' => 'MSD',
     ),
     6 => 
     array (
       'rawOffset' => 7200,
       'dstOffset' => 0,
-      'name' => 'KUYT',
+      'name' => 'EET',
     ),
     7 => 
     array (
       'rawOffset' => 7200,
       'dstOffset' => 3600,
-      'name' => 'KUYST',
+      'name' => 'EEST',
     ),
     8 => 
+    array (
+      'rawOffset' => 10800,
+      'dstOffset' => 0,
+      'name' => 'KUYT',
+    ),
+    9 => 
     array (
       'rawOffset' => 14400,
       'dstOffset' => 3600,
       'name' => 'SAMST',
     ),
-    9 => 
+    10 => 
     array (
       'rawOffset' => 10800,
       'dstOffset' => 3600,
@@ -83,7 +89,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1593825636,
+      'time' => -1593825620,
       'type' => 0,
     ),
     1 => 
@@ -214,7 +220,7 @@ return array (
     26 => 
     array (
       'time' => 686102400,
-      'type' => 4,
+      'type' => 8,
     ),
     27 => 
     array (
@@ -224,7 +230,7 @@ return array (
     28 => 
     array (
       'time' => 701809200,
-      'type' => 8,
+      'type' => 9,
     ),
     29 => 
     array (
@@ -234,7 +240,7 @@ return array (
     30 => 
     array (
       'time' => 733269600,
-      'type' => 8,
+      'type' => 9,
     ),
     31 => 
     array (
@@ -244,7 +250,7 @@ return array (
     32 => 
     array (
       'time' => 764719200,
-      'type' => 8,
+      'type' => 9,
     ),
     33 => 
     array (
@@ -254,7 +260,7 @@ return array (
     34 => 
     array (
       'time' => 796168800,
-      'type' => 8,
+      'type' => 9,
     ),
     35 => 
     array (
@@ -264,7 +270,7 @@ return array (
     36 => 
     array (
       'time' => 828223200,
-      'type' => 8,
+      'type' => 9,
     ),
     37 => 
     array (
@@ -274,7 +280,7 @@ return array (
     38 => 
     array (
       'time' => 859672800,
-      'type' => 8,
+      'type' => 9,
     ),
     39 => 
     array (
@@ -284,7 +290,7 @@ return array (
     40 => 
     array (
       'time' => 891122400,
-      'type' => 8,
+      'type' => 9,
     ),
     41 => 
     array (
@@ -294,7 +300,7 @@ return array (
     42 => 
     array (
       'time' => 922572000,
-      'type' => 8,
+      'type' => 9,
     ),
     43 => 
     array (
@@ -304,7 +310,7 @@ return array (
     44 => 
     array (
       'time' => 954021600,
-      'type' => 8,
+      'type' => 9,
     ),
     45 => 
     array (
@@ -314,7 +320,7 @@ return array (
     46 => 
     array (
       'time' => 985471200,
-      'type' => 8,
+      'type' => 9,
     ),
     47 => 
     array (
@@ -324,7 +330,7 @@ return array (
     48 => 
     array (
       'time' => 1017525600,
-      'type' => 8,
+      'type' => 9,
     ),
     49 => 
     array (
@@ -334,7 +340,7 @@ return array (
     50 => 
     array (
       'time' => 1048975200,
-      'type' => 8,
+      'type' => 9,
     ),
     51 => 
     array (
@@ -344,7 +350,7 @@ return array (
     52 => 
     array (
       'time' => 1080424800,
-      'type' => 8,
+      'type' => 9,
     ),
     53 => 
     array (
@@ -354,7 +360,7 @@ return array (
     54 => 
     array (
       'time' => 1111874400,
-      'type' => 8,
+      'type' => 9,
     ),
     55 => 
     array (
@@ -364,7 +370,7 @@ return array (
     56 => 
     array (
       'time' => 1143324000,
-      'type' => 8,
+      'type' => 9,
     ),
     57 => 
     array (
@@ -374,7 +380,7 @@ return array (
     58 => 
     array (
       'time' => 1174773600,
-      'type' => 8,
+      'type' => 9,
     ),
     59 => 
     array (
@@ -384,7 +390,7 @@ return array (
     60 => 
     array (
       'time' => 1206828000,
-      'type' => 8,
+      'type' => 9,
     ),
     61 => 
     array (
@@ -394,7 +400,7 @@ return array (
     62 => 
     array (
       'time' => 1238277600,
-      'type' => 8,
+      'type' => 9,
     ),
     63 => 
     array (
@@ -409,7 +415,7 @@ return array (
     65 => 
     array (
       'time' => 1269730800,
-      'type' => 9,
+      'type' => 10,
     ),
     66 => 
     array (

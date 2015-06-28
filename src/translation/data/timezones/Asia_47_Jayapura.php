@@ -28,7 +28,7 @@ return array (
     array (
       'rawOffset' => 34200,
       'dstOffset' => 0,
-      'name' => 'CST',
+      'name' => 'ACST',
     ),
   ),
   'rules' => 

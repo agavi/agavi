@@ -22,13 +22,19 @@ return array (
     array (
       'rawOffset' => 36000,
       'dstOffset' => 0,
-      'name' => 'EST',
+      'name' => 'AET',
     ),
     1 => 
     array (
       'rawOffset' => 36000,
       'dstOffset' => 3600,
-      'name' => 'EST',
+      'name' => 'AEDT',
+    ),
+    2 => 
+    array (
+      'rawOffset' => 36000,
+      'dstOffset' => 0,
+      'name' => 'AEST',
     ),
   ),
   'rules' => 
@@ -46,7 +52,7 @@ return array (
     2 => 
     array (
       'time' => -1665392400,
-      'type' => 0,
+      'type' => 2,
     ),
     3 => 
     array (
@@ -56,7 +62,7 @@ return array (
     4 => 
     array (
       'time' => -876128400,
-      'type' => 0,
+      'type' => 2,
     ),
     5 => 
     array (
@@ -66,7 +72,7 @@ return array (
     6 => 
     array (
       'time' => -844678800,
-      'type' => 0,
+      'type' => 2,
     ),
     7 => 
     array (
@@ -76,7 +82,7 @@ return array (
     8 => 
     array (
       'time' => -813229200,
-      'type' => 0,
+      'type' => 2,
     ),
     9 => 
     array (
@@ -91,7 +97,7 @@ return array (
     11 => 
     array (
       'time' => 67968000,
-      'type' => 0,
+      'type' => 2,
     ),
     12 => 
     array (
@@ -101,7 +107,7 @@ return array (
     13 => 
     array (
       'time' => 636480000,
-      'type' => 0,
+      'type' => 2,
     ),
     14 => 
     array (
@@ -111,7 +117,7 @@ return array (
     15 => 
     array (
       'time' => 667929600,
-      'type' => 0,
+      'type' => 2,
     ),
     16 => 
     array (
@@ -121,7 +127,7 @@ return array (
     17 => 
     array (
       'time' => 699379200,
-      'type' => 0,
+      'type' => 2,
     ),
     18 => 
     array (
@@ -136,7 +142,7 @@ return array (
     20 => 
     array (
       'time' => 731433600,
-      'type' => 0,
+      'type' => 2,
     ),
     21 => 
     array (
@@ -146,7 +152,7 @@ return array (
     22 => 
     array (
       'time' => 762883200,
-      'type' => 0,
+      'type' => 2,
     ),
   ),
   'finalRule' => 

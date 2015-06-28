@@ -136,30 +136,18 @@ return array (
       'time' => 1035702000,
       'type' => 0,
     ),
+    17 => 
+    array (
+      'time' => 1422777600,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => -21600,
-    'name' => 'C%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 3,
-      'date' => '1',
-      'day_of_week' => -1,
-      'time' => 7200000,
-      'type' => 0,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 0,
-    ),
-    'startYear' => 2002,
+    'type' => 'static',
+    'name' => 'EST',
+    'offset' => -18000,
+    'startYear' => 2016,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

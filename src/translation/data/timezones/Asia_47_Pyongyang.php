@@ -28,11 +28,17 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'KST',
+      'name' => 'JCST',
     ),
     2 => 
     array (
-      'rawOffset' => 28800,
+      'rawOffset' => 32400,
+      'dstOffset' => 0,
+      'name' => 'JST',
+    ),
+    3 => 
+    array (
+      'rawOffset' => 32400,
       'dstOffset' => 0,
       'name' => 'KST',
     ),
@@ -41,33 +47,23 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2524551780,
+      'time' => -1948782180,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -2053931400,
+      'time' => -1830414600,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1325494800,
-      'type' => 0,
+      'time' => -1017824400,
+      'type' => 2,
     ),
     3 => 
     array (
-      'time' => -1199262600,
-      'type' => 1,
-    ),
-    4 => 
-    array (
-      'time' => -498128400,
-      'type' => 2,
-    ),
-    5 => 
-    array (
-      'time' => -264931200,
-      'type' => 1,
+      'time' => -768646800,
+      'type' => 3,
     ),
   ),
   'finalRule' => 
@@ -75,7 +71,7 @@ return array (
     'type' => 'static',
     'name' => 'KST',
     'offset' => 32400,
-    'startYear' => 1962,
+    'startYear' => 1946,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

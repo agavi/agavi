@@ -53,7 +53,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1577513480,
+      'time' => -1577513486,
       'type' => 0,
     ),
     1 => 
@@ -376,13 +376,18 @@ return array (
       'time' => 1301166000,
       'type' => 4,
     ),
+    65 => 
+    array (
+      'time' => 1414260000,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'KRAT',
-    'offset' => 28800,
-    'startYear' => 2012,
+    'offset' => 25200,
+    'startYear' => 2015,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

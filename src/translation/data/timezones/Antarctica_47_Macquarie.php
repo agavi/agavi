@@ -22,21 +22,33 @@ return array (
     array (
       'rawOffset' => 36000,
       'dstOffset' => 0,
-      'name' => 'EST',
+      'name' => 'AEST',
     ),
     1 => 
     array (
       'rawOffset' => 36000,
       'dstOffset' => 3600,
-      'name' => 'EST',
+      'name' => 'AEDT',
     ),
     2 => 
+    array (
+      'rawOffset' => 36000,
+      'dstOffset' => 0,
+      'name' => 'AEDT',
+    ),
+    3 => 
     array (
       'rawOffset' => 0,
       'dstOffset' => 0,
       'name' => 'zzz',
     ),
-    3 => 
+    4 => 
+    array (
+      'rawOffset' => 36000,
+      'dstOffset' => 0,
+      'name' => 'AET',
+    ),
+    5 => 
     array (
       'rawOffset' => 39600,
       'dstOffset' => 0,
@@ -48,7 +60,7 @@ return array (
     0 => 
     array (
       'time' => NULL,
-      'type' => 0,
+      'type' => 4,
     ),
     1 => 
     array (
@@ -63,7 +75,7 @@ return array (
     3 => 
     array (
       'time' => -1669892400,
-      'type' => 0,
+      'type' => 2,
     ),
     4 => 
     array (
@@ -73,7 +85,7 @@ return array (
     5 => 
     array (
       'time' => -1601719200,
-      'type' => 2,
+      'type' => 3,
     ),
     6 => 
     array (
@@ -488,7 +500,7 @@ return array (
     88 => 
     array (
       'time' => 1270314000,
-      'type' => 3,
+      'type' => 5,
     ),
   ),
   'finalRule' => 

@@ -48,6 +48,12 @@ return array (
       'dstOffset' => 3600,
       'name' => 'CLST',
     ),
+    5 => 
+    array (
+      'rawOffset' => -10800,
+      'dstOffset' => 0,
+      'name' => 'CLT',
+    ),
   ),
   'rules' => 
   array (
@@ -58,7 +64,7 @@ return array (
     ),
     1 => 
     array (
-      'time' => -1893439034,
+      'time' => -1892661434,
       'type' => 1,
     ),
     2 => 
@@ -68,7 +74,7 @@ return array (
     ),
     3 => 
     array (
-      'time' => -1619983034,
+      'time' => -1619205434,
       'type' => 2,
     ),
     4 => 
@@ -134,7 +140,7 @@ return array (
     16 => 
     array (
       'time' => -1178132400,
-      'type' => 3,
+      'type' => 2,
     ),
     17 => 
     array (
@@ -144,17 +150,17 @@ return array (
     18 => 
     array (
       'time' => -865278000,
-      'type' => 3,
+      'type' => 2,
     ),
     19 => 
     array (
       'time' => -740520000,
-      'type' => 3,
+      'type' => 4,
     ),
     20 => 
     array (
       'time' => -736376400,
-      'type' => 1,
+      'type' => 2,
     ),
     21 => 
     array (
@@ -163,7 +169,7 @@ return array (
     ),
     22 => 
     array (
-      'time' => -713646000,
+      'time' => -713649600,
       'type' => 2,
     ),
     23 => 
@@ -368,7 +374,7 @@ return array (
     ),
     63 => 
     array (
-      'time' => 591768000,
+      'time' => 592372800,
       'type' => 4,
     ),
     64 => 
@@ -383,7 +389,7 @@ return array (
     ),
     66 => 
     array (
-      'time' => 637729200,
+      'time' => 637128000,
       'type' => 2,
     ),
     67 => 
@@ -611,30 +617,38 @@ return array (
       'time' => 1346558400,
       'type' => 4,
     ),
+    112 => 
+    array (
+      'time' => 1367121600,
+      'type' => 2,
+    ),
+    113 => 
+    array (
+      'time' => 1378612800,
+      'type' => 4,
+    ),
+    114 => 
+    array (
+      'time' => 1398571200,
+      'type' => 2,
+    ),
+    115 => 
+    array (
+      'time' => 1410062400,
+      'type' => 4,
+    ),
+    116 => 
+    array (
+      'time' => 1430017200,
+      'type' => 5,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => -14400,
-    'name' => 'CL%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 8,
-      'date' => '2',
-      'day_of_week' => -1,
-      'time' => 14400000,
-      'type' => 2,
-    ),
-    'end' => 
-    array (
-      'month' => 3,
-      'date' => '23',
-      'day_of_week' => -1,
-      'time' => 10800000,
-      'type' => 2,
-    ),
-    'startYear' => 2012,
+    'type' => 'static',
+    'name' => 'CLT',
+    'offset' => -10800,
+    'startYear' => 2016,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

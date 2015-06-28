@@ -279,13 +279,18 @@ return array (
       'time' => 846374400,
       'type' => 2,
     ),
+    42 => 
+    array (
+      'time' => 1414274400,
+      'type' => 2,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'MSK',
-    'offset' => 14400,
-    'startYear' => 1997,
+    'offset' => 10800,
+    'startYear' => 2015,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

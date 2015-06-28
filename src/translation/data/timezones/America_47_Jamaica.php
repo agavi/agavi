@@ -33,12 +33,6 @@ return array (
     2 => 
     array (
       'rawOffset' => -18000,
-      'dstOffset' => 0,
-      'name' => 'EDT',
-    ),
-    3 => 
-    array (
-      'rawOffset' => -18000,
       'dstOffset' => 3600,
       'name' => 'EDT',
     ),
@@ -57,105 +51,110 @@ return array (
     ),
     2 => 
     array (
-      'time' => 136364400,
-      'type' => 2,
+      'time' => 126248400,
+      'type' => 1,
     ),
     3 => 
+    array (
+      'time' => 126687600,
+      'type' => 2,
+    ),
+    4 => 
     array (
       'time' => 152085600,
       'type' => 1,
     ),
-    4 => 
+    5 => 
     array (
       'time' => 162370800,
-      'type' => 3,
+      'type' => 2,
     ),
-    5 => 
+    6 => 
     array (
       'time' => 183535200,
       'type' => 1,
     ),
-    6 => 
+    7 => 
     array (
       'time' => 199263600,
-      'type' => 3,
+      'type' => 2,
     ),
-    7 => 
+    8 => 
     array (
       'time' => 215589600,
       'type' => 1,
     ),
-    8 => 
+    9 => 
     array (
       'time' => 230713200,
-      'type' => 3,
+      'type' => 2,
     ),
-    9 => 
+    10 => 
     array (
       'time' => 247039200,
       'type' => 1,
     ),
-    10 => 
+    11 => 
     array (
       'time' => 262767600,
-      'type' => 3,
+      'type' => 2,
     ),
-    11 => 
+    12 => 
     array (
       'time' => 278488800,
       'type' => 1,
     ),
-    12 => 
+    13 => 
     array (
       'time' => 294217200,
-      'type' => 3,
+      'type' => 2,
     ),
-    13 => 
+    14 => 
     array (
       'time' => 309938400,
       'type' => 1,
     ),
-    14 => 
+    15 => 
     array (
       'time' => 325666800,
-      'type' => 3,
+      'type' => 2,
     ),
-    15 => 
+    16 => 
     array (
       'time' => 341388000,
       'type' => 1,
     ),
-    16 => 
+    17 => 
     array (
       'time' => 357116400,
-      'type' => 3,
+      'type' => 2,
     ),
-    17 => 
+    18 => 
     array (
       'time' => 372837600,
       'type' => 1,
     ),
-    18 => 
+    19 => 
     array (
       'time' => 388566000,
-      'type' => 3,
+      'type' => 2,
     ),
-    19 => 
+    20 => 
     array (
       'time' => 404892000,
       'type' => 1,
     ),
-    20 => 
+    21 => 
     array (
       'time' => 420015600,
-      'type' => 3,
+      'type' => 2,
     ),
-    21 => 
+    22 => 
     array (
       'time' => 436341600,
       'type' => 1,
     ),
-    22 => 
+    23 => 
     array (
       'time' => 441781200,
       'type' => 1,

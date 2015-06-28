@@ -381,13 +381,18 @@ return array (
       'time' => 1301169600,
       'type' => 1,
     ),
+    66 => 
+    array (
+      'time' => 1414263600,
+      'type' => 0,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'NOVT',
-    'offset' => 25200,
-    'startYear' => 2012,
+    'offset' => 21600,
+    'startYear' => 2015,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

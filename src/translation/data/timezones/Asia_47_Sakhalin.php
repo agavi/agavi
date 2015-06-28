@@ -22,7 +22,7 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'CJT',
+      'name' => 'JCST',
     ),
     1 => 
     array (
@@ -64,7 +64,7 @@ return array (
     ),
     1 => 
     array (
-      'time' => -1009875600,
+      'time' => -1017824400,
       'type' => 1,
     ),
     2 => 
@@ -392,13 +392,18 @@ return array (
       'time' => 1301155200,
       'type' => 2,
     ),
+    67 => 
+    array (
+      'time' => 1414249200,
+      'type' => 4,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'SAKT',
-    'offset' => 39600,
-    'startYear' => 2012,
+    'offset' => 36000,
+    'startYear' => 2015,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

@@ -48,12 +48,6 @@ return array (
       'dstOffset' => 3600,
       'name' => 'PDT',
     ),
-    5 => 
-    array (
-      'rawOffset' => -28800,
-      'dstOffset' => 0,
-      'name' => 'MeST',
-    ),
   ),
   'rules' => 
   array (
@@ -250,13 +244,13 @@ return array (
     38 => 
     array (
       'time' => 436356000,
-      'type' => 5,
+      'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'MeST',
+    'name' => 'PST',
     'offset' => -28800,
     'startYear' => 1984,
   ),

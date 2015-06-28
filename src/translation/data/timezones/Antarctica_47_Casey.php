@@ -22,7 +22,7 @@ return array (
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'WST',
+      'name' => 'AWST',
     ),
     1 => 
     array (
@@ -62,7 +62,7 @@ return array (
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'WST',
+    'name' => 'AWST',
     'offset' => 28800,
     'startYear' => 2013,
   ),

@@ -22,13 +22,19 @@ return array (
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'WST',
+      'name' => 'AWT',
     ),
     1 => 
     array (
       'rawOffset' => 28800,
       'dstOffset' => 3600,
-      'name' => 'WST',
+      'name' => 'AWDT',
+    ),
+    2 => 
+    array (
+      'rawOffset' => 28800,
+      'dstOffset' => 0,
+      'name' => 'AWST',
     ),
   ),
   'rules' => 
@@ -46,7 +52,7 @@ return array (
     2 => 
     array (
       'time' => -1665385200,
-      'type' => 0,
+      'type' => 2,
     ),
     3 => 
     array (
@@ -56,7 +62,7 @@ return array (
     4 => 
     array (
       'time' => -876121200,
-      'type' => 0,
+      'type' => 2,
     ),
     5 => 
     array (
@@ -66,7 +72,7 @@ return array (
     6 => 
     array (
       'time' => -844671600,
-      'type' => 0,
+      'type' => 2,
     ),
     7 => 
     array (
@@ -81,7 +87,7 @@ return array (
     9 => 
     array (
       'time' => 162928800,
-      'type' => 0,
+      'type' => 2,
     ),
     10 => 
     array (
@@ -91,7 +97,7 @@ return array (
     11 => 
     array (
       'time' => 447184800,
-      'type' => 0,
+      'type' => 2,
     ),
     12 => 
     array (
@@ -101,7 +107,7 @@ return array (
     13 => 
     array (
       'time' => 699386400,
-      'type' => 0,
+      'type' => 2,
     ),
     14 => 
     array (
@@ -111,7 +117,7 @@ return array (
     15 => 
     array (
       'time' => 1174759200,
-      'type' => 0,
+      'type' => 2,
     ),
     16 => 
     array (
@@ -121,7 +127,7 @@ return array (
     17 => 
     array (
       'time' => 1206813600,
-      'type' => 0,
+      'type' => 2,
     ),
     18 => 
     array (
@@ -131,7 +137,7 @@ return array (
     19 => 
     array (
       'time' => 1238263200,
-      'type' => 0,
+      'type' => 2,
     ),
   ),
   'finalRule' => 

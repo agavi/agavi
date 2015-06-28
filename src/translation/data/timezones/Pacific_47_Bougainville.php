@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "Africa/Asmara".
+ * Data file for timezone "Pacific/Bougainville".
  * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
@@ -20,51 +20,67 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 9332,
+      'rawOffset' => 35312,
       'dstOffset' => 0,
-      'name' => 'AMT',
+      'name' => 'PMMT',
     ),
     1 => 
     array (
-      'rawOffset' => 9320,
+      'rawOffset' => 36000,
       'dstOffset' => 0,
-      'name' => 'ADMT',
+      'name' => 'PGT',
     ),
     2 => 
     array (
-      'rawOffset' => 10800,
+      'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'EAT',
+      'name' => 'JST',
+    ),
+    3 => 
+    array (
+      'rawOffset' => 39600,
+      'dstOffset' => 0,
+      'name' => 'BST',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -3155682932,
+      'time' => -2840178136,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -2524530932,
+      'time' => -2366790512,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1062210920,
+      'time' => -868010400,
       'type' => 2,
+    ),
+    3 => 
+    array (
+      'time' => -768906000,
+      'type' => 1,
+    ),
+    4 => 
+    array (
+      'time' => 1419696000,
+      'type' => 3,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'EAT',
-    'offset' => 10800,
-    'startYear' => 1937,
+    'name' => 'BST',
+    'offset' => 39600,
+    'startYear' => 2015,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',
-  'name' => 'Africa/Asmara',
+  'name' => 'Pacific/Bougainville',
 );
 
 ?>

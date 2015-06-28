@@ -64,31 +64,31 @@ return array (
     array (
       'rawOffset' => -36000,
       'dstOffset' => 0,
-      'name' => 'HAT',
+      'name' => 'HT',
     ),
     8 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 3600,
-      'name' => 'HADT',
+      'name' => 'HDT',
     ),
     9 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 0,
-      'name' => 'HAST',
+      'name' => 'HST',
     ),
     10 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 3600,
-      'name' => 'HAWT',
+      'name' => 'HWT',
     ),
     11 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 3600,
-      'name' => 'HAPT',
+      'name' => 'HPT',
     ),
   ),
   'rules' => 
@@ -748,7 +748,7 @@ return array (
   array (
     'type' => 'dynamic',
     'offset' => -36000,
-    'name' => 'HA%sT',
+    'name' => 'H%sT',
     'save' => 3600,
     'start' => 
     array (
