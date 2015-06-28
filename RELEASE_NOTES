@@ -1,8 +1,14 @@
 AGAVI RELEASE NOTES
 ===================
 
-Version 1.0.8 - January ??, 2011
-================================
+Version 1.0.8 - June 28, 2015
+=============================
+
+The most notable feature is the availability of Agavi via Composer. While we still provide possibility to install Agavi via Pear, you should only use Agavi via Composer for new projects.
+
+Otherwise this release only contains minor bugfixes. Most notably, the merging of parameters in AgaviTemplateLayer has been fixed.
+
+The timezone database was updated to version 2015e.
 
 
 Version 1.0.7 - December 22, 2011
