@@ -530,10 +530,17 @@ abstract class AgaviValidator extends AgaviParameterHolder
 	 * @author     David Zülke <david.zuelke@bitextender.com>
 	 * @since      0.11.0
 	 */
-	protected function export($value, $argument = null, $result = AgaviValidator::SUCCESS)
+	protected function export($value, $argument = null, $result = null)
 	{
 		if($argument === null) {
 			$argument = $this->getParameter('export');
+		}
+		
+		if($result === null) {
+			$result = $this->getParameter('export_severity', AgaviValidator::SUCCESS);
+			if(!is_numeric($result) && defined($result)) {
+				$result = constant($result);
+			}
 		}
 
 		if(!($argument instanceof AgaviValidationArgument) && (!is_string($argument) || $argument === '')) {

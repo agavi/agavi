@@ -15,6 +15,7 @@ ADD: Support arbitrary "provides" and "depends" validator options with access to
 ADD: Allow calls to PHP functions in configuration file transformations (#1456) (David)
 ADD: PSR-0 compatible namespaces autoloader (#1454) (David)
 ADD: Allow validators to specify result code for exported data (#1453) (David)
+ADD: Support "export_severity" validator parameter (#1565) (Thomas Bachem)
 ADD: Allow validators to export to a different source (#1419) (David)
 ADD: Automatically read from STDIN in AgaviConsoleRequest (#1437) (David)
 ADD: Streams support in AgaviUploadedFile (#1449) (David)
