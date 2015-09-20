@@ -13,7 +13,8 @@ class BaseValidatorTest extends AgaviUnitTestCase
 		
 		return array(
 			'result' => $result,
-			'vm' => $vm
+			'vm' => $vm,
+			'rd' => $rd
 		);
 	}
 	
