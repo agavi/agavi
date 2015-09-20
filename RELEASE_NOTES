@@ -53,6 +53,8 @@ You can now specify the Translation domain for multiple / all validators at once
 
 The validation report now provides access to the dependency tokens registered during the validation run.
 
+We added AgaviJsonValidator to validate JSON parameters and optionally export the decoded value as this is a common need in modern web applications.
+
 Filters
 -------
 AgaviIFilter::executeOnce() has been deprecated; in most cases, you can simply use execute() instead, see UPGRADING for further information.
