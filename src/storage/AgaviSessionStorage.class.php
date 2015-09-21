@@ -90,11 +90,13 @@ class AgaviSessionStorage extends AgaviStorage
 		
 		session_name($this->getParameter('session_name', 'Agavi'));
 		
-		if($this->hasParameter('session_id')) {
-			session_id($this->getParameter('session_id'));
-		}
-		
-		if(session_id() === '') {
+		$sessionId = session_id();
+		$staticSessionId = $this->getParameter('session_id');
+		if($sessionId === '' || ($staticSessionId && $sessionId !== $staticSessionId)) {
+			if($staticSessionId) {
+				session_id($staticSessionId);
+			}
+
 			$cookieDefaults = session_get_cookie_params();
 			
 			$routing = $this->context->getRouting();
