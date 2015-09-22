@@ -76,6 +76,12 @@
 		</request>
 		
 	</ae:configuration>
+
+	<ae:configuration environment="testing.*" context="agavi-session-storage-test::tests-static-session-id">
+		<storage class="AgaviSessionStorage">
+			<ae:parameter name="session_id">foobar</ae:parameter>
+		</storage>
+	</ae:configuration>
 	
 	<ae:configuration environment="development.*">
 		

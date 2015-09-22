@@ -17,5 +17,17 @@ class AgaviSessionStorageTest extends AgaviUnitTestCase
 		$cookieParams = session_get_cookie_params();
 		$this->assertTrue($cookieParams['secure']);
 	}
+
+	/**
+	 * @runInSeparateProcess
+	 */
+	public function testStaticSessionId()
+	{
+		$context = AgaviContext::getInstance('agavi-session-storage-test::tests-static-session-id');
+		$storage = new AgaviSessionStorage();
+		$storage->initialize($context);
+		$storage->startup();
+		$this->assertEquals(session_id(), 'foobar');
+	}
 	
 }
