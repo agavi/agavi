@@ -34,6 +34,9 @@
 				-->
 				<include>unit/exception/.*Test.php</include>
 			</suite>
+			<suite name="Filter">
+				<include>unit/filter/.*Test.php</include>
+			</suite>
 			<suite name="Logging">
 				<include>unit/logging/.*Test.php</include>
 			</suite>

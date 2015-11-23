@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/module/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+	<ae:configuration>
+		
+		<module enabled="true">
+			<settings>
+				<setting name="title">FilterTests Module</setting>
+				<setting name="version">1.0</setting>
+<!--
+				<setting name="authors">
+					<ae:parameter name="joe.cool@peanuts.com">Snoopy</ae:parameter>
+				</setting>
+				<setting name="homepage">http://www.agavi.org</setting>
+				<setting name="update_url" />
+				<setting name="description">An example module</setting>
+-->
+				<setting name="agavi.action.path">%core.module_dir%/${moduleName}/actions/${actionName}Action.class.php</setting>
+				<setting name="agavi.view.path">%core.module_dir%/${moduleName}/views/${viewName}View.class.php</setting>
+				<setting name="agavi.view.name">${actionName}${viewName}</setting>
+				<setting name="agavi.cache.path">%core.module_dir%/${moduleName}/cache/${actionName}.xml</setting>
+				<setting name="agavi.validate.path">%core.module_dir%/${moduleName}/validate/${actionName}.xml</setting>
+				<setting name="agavi.template.directory">%core.module_dir%/${module}/templates</setting>
+			</settings>
+		</module>
+		
+	</ae:configuration>
+</ae:configurations>

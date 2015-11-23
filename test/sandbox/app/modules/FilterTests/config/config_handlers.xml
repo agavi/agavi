@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/config_handlers/1.1">
+	<ae:configuration>
+		<handlers>
+			<handler pattern="%core.module_dir%/*/validate/*.xml" class="AgaviValidatorConfigHandler">
+				<validation>%core.agavi_dir%/config/xsd/validators.xsd</validation>
+				<transformation>%core.agavi_dir%/config/xsl/validators.xsl</transformation>
+			</handler>
+			<handler pattern="%core.module_dir%/*/cache/*.xml" class="AgaviCachingConfigHandler">
+				<validation>%core.agavi_dir%/config/xsd/caching.xsd</validation>
+				<transformation>%core.agavi_dir%/config/xsl/caching.xsl</transformation>
+			</handler>
+		</handlers>
+	</ae:configuration>
+</ae:configurations>
