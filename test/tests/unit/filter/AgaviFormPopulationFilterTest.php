@@ -129,6 +129,69 @@ class AgaviFormPopulationFilterTest extends AgaviUnitTestCase
 		$this->assertEquals(1, $xpath->query('//input[@value="bar"]')->length);
 	}
 	
+	public function testErrorCallbacksClosureHtml()
+	{
+		$html = '<!DOCTYPE html><html><body><form action="/"><input type="text" name="foo"></form></body></html>';
+		$parameters = array(
+			'foo' => 'bar',
+		);
+		
+		$vm = $this->_context->createInstanceFor('validation_manager'); /** @var $vm \AgaviValidationManager */
+		$val1 = $vm->createValidator('DummyValidator', array('foo'), array('' => 'My error message'));
+		$val1->val_result = false;
+		
+		$config = array(
+			'error_messages' => array(
+				'self::*' =>  array(
+					'location'  => 'before',
+					'container' => function($element, array $errorStrings, array $errors) {
+						$html = '<ul>';
+						foreach($errors as $error) {
+							$html .= '<li>' . htmlspecialchars($error->getMessage()) . '</li>';
+						}
+						$html .= '</ul>';
+						return $html;
+					},
+				),
+			),
+		);
+		
+		$content = $this->executeFormPopulationFilter($html, $parameters, $vm, $config);
+		$xpath = $this->loadXpath($content);
+		
+		$this->assertEquals(1, $xpath->query('//ul/li')->length);
+	}
+	
+	public function testErrorCallbacksCallableDomelement()
+	{
+		$html = '<!DOCTYPE html><html><body><form action="/"><input type="text" name="foo"></form></body></html>';
+		$parameters = array(
+			'foo' => 'bar',
+		);
+		
+		$vm = $this->_context->createInstanceFor('validation_manager'); /** @var $vm \AgaviValidationManager */
+		$val1 = $vm->createValidator('DummyValidator', array('foo'), array('' => 'My error message'));
+		$val1->val_result = false;
+		
+		$config = array(
+			'error_messages' => array(
+				'self::*' =>  array(
+					'location'  => 'before',
+					'container' => __CLASS__ . '::_errorCallback',
+				),
+			),
+		);
+		
+		$content = $this->executeFormPopulationFilter($html, $parameters, $vm, $config);
+		$xpath = $this->loadXpath($content);
+		
+		$this->assertEquals(1, $xpath->query('//div')->length);
+	}
+	
+	public static function _errorCallback($element, array $errorStrings, array $errors) {
+		return new DOMElement('div', implode(',', $errorStrings));
+	}
+	
 	/**
 	 * @param string $content
 	 * @param \AgaviRequestDataHolder|array $parameters

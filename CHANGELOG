@@ -34,6 +34,7 @@ ADD: Add "forms_xpath" setting to AgaviFormPopulationFilter (#1527) (Thomas Bach
 
 CHG: Make AgaviXmlConfigParser::xinclude() use native sorting for glob (#1476) (Thomas Bachem)
 CHG: Improve AgaviFormPopulationFilter's "log_parse_errors" setting to handle severities (#1481) (Thomas Bachem)
+CHG: Improve AgaviFormPopulationFilter's error message callbacks (#1528) (Thomas Bachem, Steffen Gransow) 
 CHG: Ensure deterministic ordering of Tests (#1532) (Dominik)
 CHG: Remove custom command line argument parsing from test runner (#1514) (Dominik)
 CHG: Remove overwritten PHPUnit process isolation template (#1516) (Dominik)
