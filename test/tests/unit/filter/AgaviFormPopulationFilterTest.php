@@ -112,6 +112,23 @@ class AgaviFormPopulationFilterTest extends AgaviUnitTestCase
 		$this->assertEquals('ul', $xpath->query('//form/*[1]')->item(0)->nodeName);
 	}
 	
+	public function testFormsXpathSetting()
+	{
+		$html = '<!DOCTYPE html><html><body><input type="text" name="foo"></body></html>';
+		$parameters = array(
+			'foo' => 'bar',
+		);
+		
+		$config = array(
+			'forms_xpath' => '//${htmlnsPrefix}body',
+		);
+		
+		$content = $this->executeFormPopulationFilter($html, $parameters, null, $config);
+		$xpath = $this->loadXpath($content);
+		
+		$this->assertEquals(1, $xpath->query('//input[@value="bar"]')->length);
+	}
+	
 	/**
 	 * @param string $content
 	 * @param \AgaviRequestDataHolder|array $parameters
