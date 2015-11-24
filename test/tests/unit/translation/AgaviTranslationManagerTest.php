@@ -59,6 +59,24 @@ class AgaviTranslationManagerTest extends AgaviUnitTestCase
 		$this->assertEquals('9.876,00', $tm->_c(9876, 'ticket1099', 'de_DE'));
 		$this->assertEquals('9.876.543.210,00', $tm->_c(9876543210, 'ticket1099', 'de_DE'));
 	}
+	
+	public function testNamedParametersInMessages()
+	{
+		$tm = $this->getContext()->getTranslationManager();
+		$this->assertEquals(
+			'Value must be between 003 and 099.',
+			$tm->_(
+				'%param$s must be between %min$03d and %max$03d.',
+				'default.errors',
+				'de_DE',
+				array(
+					'param' => 'Value',
+					'min' => 3,
+					'max' => 99
+				)
+			)
+		);
+	}
 }
 
 ?>

@@ -482,6 +482,58 @@ final class AgaviToolkit
 		);
 		
 	}
+	/**
+	 * Like vsprintf(), but accepts keys instead of an order index.
+	 * The allowed format of named arguments is: /[a-zA-Z0-9_\-\.\[\]]+/
+	 *
+	 * For the base version of this method by Josef Kufner see:
+	 * @see http://www.php.net/manual/de/function.vsprintf.php#110666
+	 *
+	 * @example vskprintf(
+	 *      '%param$s must be between %min$03d and %max$03d.',
+	 *      array('param' => 'Value', 'min' => 3, 'max' => 99)
+	 *  ) // gives: 'Value must be between 003 and 099.'
+	 *
+	 * '%s' without argument name and positional directives like '%1$s' do
+	 * work. Everything vsprintf() can do is still supported.
+	 *
+	 * @param      string The input string with formatting directives.
+	 * @param      array  The arguments to use for formatting directives.
+	 *
+	 * @return     string The formatted string according to given format and arguments.
+	 *
+	 * @throws     RuntimeException in case of non-string format string.
+	 *
+	 * @author     Josef Kufner <jkufner(at)gmail.com>
+	 * @author     Steffen Gransow <agavi@mivesto.de>
+	 * @since      1.0.8
+	 */
+	public static function vksprintf($format, array $args)
+	{
+		if(!is_string($format)) {
+			throw new RuntimeException('Only strings are acceptable as input format.');
+		}
+		
+		if(empty($args)) {
+			return $format;
+		}
+		
+		$map = array_flip(array_keys($args));
+		
+		$str = preg_replace_callback(
+			'/(^|[^%])%([a-zA-Z0-9_\-\.\[\]]+)\$/',
+			function ($m) use ($map) {
+				$key = $m[2];
+				if (!is_numeric($key) && array_key_exists($key, $map)) {
+					return $m[1] . '%' . ($map[$key] + 1) . '$';
+				}
+				return $m[1] . '%' . $key . '$';
+			},
+			$format
+		);
+		
+		return vsprintf($str, $args);
+	}
 }
 
 ?>

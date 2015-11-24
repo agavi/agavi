@@ -487,10 +487,17 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$this->affectedArguments = $affectedArguments;
 		}
 
+		$translationParameters = $this->getParameters();
+		if(count($this->affectedArguments) > 1) {
+			$translationParameters['arguments'] = implode(', ', $this->affectedArguments);
+		} elseif(isset($this->affectedArguments[0])) {
+			$translationParameters['argument'] = $this->affectedArguments[0];
+		}
+
 		$error = $this->getErrorMessage($index);
 
 		if($this->hasParameter('translation_domain')) {
-			$error = $this->getContext()->getTranslationManager()->_($error, $this->getParameter('translation_domain'));
+			$error = $this->getContext()->getTranslationManager()->_($error, $this->getParameter('translation_domain'), null, $translationParameters);
 		}
 
 		if(!$this->incident) {
