@@ -131,10 +131,21 @@ class AgaviSessionStorage extends AgaviStorage
 			
 			session_set_cookie_params($lifetime, $path, $domain, $secure, $httpOnly);
 			
-			session_start();
-			
-			if($lifetime !== 0) {
-				setcookie(session_name(), session_id(), time() + $lifetime, $path, $domain, $secure, $httpOnly);
+			$response = $this->context->getController()->getGlobalResponse();
+			if($response instanceof AgaviWebResponse && ini_get('session.use_cookies')) {
+				if(!$this->hasParameter('session_id')) {
+					$rd = $this->context->getRequest()->getRequestData();
+					session_id($rd->getCookie(session_name()));
+				}
+				
+				// As we do the actual cookie handling on our own
+				ini_set('session.use_cookies', false);
+				session_start();
+				ini_set('session.use_cookies', true);
+				
+				$response->setCookie(session_name(), session_id(), $lifetime, $path, $domain, $secure, $httpOnly);
+			} else {
+				session_start();
 			}
 		}
 	}
