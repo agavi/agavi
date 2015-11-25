@@ -218,6 +218,13 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 		$this->assertEquals('Default', $container->getModuleName());
 		$this->assertEquals('Foo/Bar', $container->getActionName());
 	}
+	
+	public function testEmptyDefaultValue() {
+		$this->routing->setInput('/empty_default_value');
+		$container = $this->routing->execute();
+		$rd = AgaviContext::getInstance(null)->getRequest()->getRequestData();
+		$this->assertSame('0', $rd->getParameter('value'));
+	}
 }
 
 

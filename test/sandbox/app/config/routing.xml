@@ -111,6 +111,10 @@
 			<route name="ticket_1051" pattern="^/ticket_1051$" callback="Ticket1051RoutingCallback" />
 			
 			<route name="ticket_1294" pattern="^/ticket_1294$" />
+
+			<route name="empty_default_value" pattern="^/empty_default_value$">
+				<default for="value">0</default>
+			</route>
 			
 			<route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 		</routes>
