@@ -30,6 +30,10 @@ The handler is also namespace-aware. By default, it will assume your configurati
   <ae:parameter name="namespace_uri">urn:com.acme.rockets</ae:parameter>
 on the affected <handler> elements.
 
+Logging
+-------
+We added a getLevel() method to AgaviLogger and the AgaviILogger interface. This may break your code if you're using the AgaviILogger interface or have added a custom getLevel() method to classes inheriting from AgaviLogger.
+
 Testing
 -------
 The PHPUnit minimum requirement has been updated to 3.7.
