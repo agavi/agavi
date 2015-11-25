@@ -26,7 +26,8 @@
 		"phing/phing": "~2.6.1"
 	},
 	"require-dev": {
-		"phpunit/phpunit": ">=3.7 <=4.8.10"
+		"phpunit/phpunit": ">=3.7 <=4.8.10",
+		"ext-xdebug": ">=2.1"
 	},
 	"suggest": {
 		"phpunit/phpunit": "Install phpunit if you want to run your tests",

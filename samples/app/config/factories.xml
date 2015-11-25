@@ -19,7 +19,12 @@
 		
 		<request class="AgaviWebRequest" />
 		
-		<response class="AgaviWebResponse" />
+		<response class="AgaviWebResponse">
+			<!-- Encode cookies with rawurlencode() instead of urlencode() to make them compliant with RFC 6265. -->
+			<!-- We sadly cannot change the default encoding of cookies as it would be a breaking change for -->
+			<!-- existing Agavi projects, but recommend to set this setting to "rawurlencode" for new projects. -->
+			<ae:parameter name="cookie_encode_callback">rawurlencode</ae:parameter>
+		</response>
 		
 		<routing class="AgaviWebRouting" />
 		
