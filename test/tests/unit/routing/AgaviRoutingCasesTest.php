@@ -276,6 +276,29 @@ class AgaviRoutingCasesTest extends AgaviUnitTestCase
 
 	}
 
+	/**
+	 * @runInSeparateProcess
+	 */
+	public function testHttpRedirectCallback()
+	{
+		$this->setConfig('routing_callbacks.xml', 'test_callbacks');
+		$this->initConfig();
+		$r = $this->_r;
+		$rq = $r->getContext()->getRequest(); /** @var $rq TestWebRequest */
+		$rd = $rq->getRequestData();
+
+		$rd->clearParameters();
+		
+		$rq->setUrlScheme('http');
+		$rq->setUrlHost('example.com');
+		$rq->setUrlPort(80);
+		$rq->setRequestUri('/httpredirect');
+		$r->setInput($rq->getRequestUri());
+		$rp = $r->execute(); /** @var $rp AgaviWebResponse */
+
+		$this->assertEquals(array('location' => 'https://example.com/httpredirect', 'code' => 302), $rp->getRedirect());
+	}
+
 }
 
 ?>
