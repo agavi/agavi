@@ -1,21 +1,31 @@
 <?php
 
-class NoHeadersAgaviWebResponse extends AgaviWebResponse
+class TestAgaviWebResponse extends AgaviWebResponse
 {
 	protected function sendHttpResponseHeaders(AgaviOutputType $outputType = null)
 	{
-		// don't send headers, it won't work on the command line
-		return;
+		// suppress errors when headers cannot be sent
+		set_error_handler(function($errNo, $errStr) {
+			return (stripos($errStr, 'headers already sent') !== false);
+		}, E_WARNING);
+		
+		parent::sendHttpResponseHeaders($outputType);
+		
+		restore_error_handler();
 	}
 }
 
 class AgaviWebResponseTest extends AgaviUnitTestCase
 {
+	
+	/**
+	 * @var \TestAgaviWebResponse
+	 */
 	private $_r = null;
 
 	public function setUp()
 	{
-		$this->_r = new NoHeadersAgaviWebResponse();
+		$this->_r = new TestAgaviWebResponse();
 		$this->_r->initialize($this->getContext());
 	}
 
@@ -175,6 +185,7 @@ class AgaviWebResponseTest extends AgaviUnitTestCase
 			'domain' => '',
 			'secure' => false,
 			'httponly' => false,
+			'encode_callback' => 'urlencode',
 		);
 		$r->setCookie('cookieName', 'value');
 		$this->assertEquals($info_ex, $r->getCookie('cookieName'));
@@ -193,8 +204,78 @@ class AgaviWebResponseTest extends AgaviUnitTestCase
 			'domain' => 'foo.bar',
 			'secure' => true,
 			'httponly' => false,
+			'encode_callback' => 'urlencode',
 		);
 		$this->assertEquals($info_ex, $r->getCookie('cookieName2'));
+	}
+	
+	/** 
+	 * @runInSeparateProcess
+	 */
+	public function testCookieEncoding()
+	{
+		if(!extension_loaded('xdebug')) {
+			$this->markTestSkipped('This test requires xdebug for the xdebug_get_headers() function.');
+		}
+		
+		$r = $this->_r;
+		$r->setCookie('spaceCookie',  'my value');
+		$r->setCookie('plusCookie',   'my+value');
+		$r->setCookie('customCookie', 'my%01value', null, null, null, null, null, false);
+		$r->send();
+		
+		// headers_list() does sadly not work on CLI, but xdebug_get_headers() does
+		// (see http://www.santiagolizardo.com/article/testing-if-http-headers-were-sent-in-php-and-phpunit)
+		$headers = xdebug_get_headers();
+		
+		$encodedCookieValues = array();
+		foreach($headers as $header) {
+			list($headerName, $headerValue) = preg_split('/:\s*/', $header, 2);
+			if($headerName == 'Set-Cookie') {
+				$parts = preg_split('/;\s*/', $headerValue);
+				list($cookieName, $cookieValue) = explode('=', $parts[0]);
+				$encodedCookieValues[$cookieName] = $cookieValue;
+			}
+		}
+		
+		$this->assertEquals('my+value',   $encodedCookieValues['spaceCookie']);
+		$this->assertEquals('my%2Bvalue', $encodedCookieValues['plusCookie']);
+		$this->assertEquals('my%01value', $encodedCookieValues['customCookie']);
+	}
+	
+	/** 
+	 * @runInSeparateProcess
+	 */
+	public function testRawCookieEncoding()
+	{
+		if(!extension_loaded('xdebug')) {
+			$this->markTestSkipped('This test requires xdebug for the xdebug_get_headers() function.');
+		}
+		
+		$r = $this->_r;
+		$r->setParameter('cookie_encode_callback', 'rawurlencode');
+		$r->setCookie('spaceCookie',  'my value');
+		$r->setCookie('plusCookie',   'my+value');
+		$r->setCookie('customCookie', 'my%01value', null, null, null, null, null, false);
+		$r->send();
+		
+		// headers_list() does sadly not work on CLI, but xdebug_get_headers() does
+		// (see http://www.santiagolizardo.com/article/testing-if-http-headers-were-sent-in-php-and-phpunit)
+		$headers = xdebug_get_headers();
+		
+		$encodedCookieValues = array();
+		foreach($headers as $header) {
+			list($headerName, $headerValue) = preg_split('/:\s*/', $header, 2);
+			if($headerName == 'Set-Cookie') {
+				$parts = preg_split('/;\s*/', $headerValue);
+				list($cookieName, $cookieValue) = explode('=', $parts[0]);
+				$encodedCookieValues[$cookieName] = $cookieValue;
+			}
+		}
+		
+		$this->assertEquals('my%20value', $encodedCookieValues['spaceCookie']);
+		$this->assertEquals('my%2Bvalue', $encodedCookieValues['plusCookie']);
+		$this->assertEquals('my%01value', $encodedCookieValues['customCookie']);
 	}
 }
 
