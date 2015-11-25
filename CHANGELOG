@@ -13,6 +13,8 @@ FIX: Various fixes to the shiny exception template (#1478) (Thomas Bachem)
 FIX: Use the Composer autoloader when running tests (#1473) (Dominik, Leon Weidauer)
 FIX: Some tests fail when date.timezone is not set (#1474) (Dominik, Leon Weidauer)
 FIX: The NumberFormatter tests fail with recent ICU versions (#1469) (Dominik)
+FIX: Routing default values can now be zero or an empty string (#1545) (Thomas Bachem)
+
 
 1.0.7 (December 22, 2011)
 -------------------------
