@@ -32,6 +32,12 @@
 					</route>
 				</routes>
 			</route>
+			
+			<route name="httpredirect" pattern="^/httpredirect">
+				<callback class="AgaviHttpRedirectRoutingCallback">
+					<ae:parameter name="scheme">https</ae:parameter>
+				</callback>
+			</route>
 		</routes>
 	</ae:configuration>
 

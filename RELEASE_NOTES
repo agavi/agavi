@@ -20,7 +20,7 @@ Response classes now extend from AgaviAttributeHolder instead of AgaviParameterH
 
 Routing
 -------
-AgaviHttpRedirectRoutingCallback allows redirects of matched routes to static URLs or to other routes, including the ability to perform basic rewriting of arguments. The associated ticket #1382 contains further details.
+AgaviHttpRedirectRoutingCallback allows redirects of matched routes to static URLs, to only change parts of the current URL or to redirect to other routes, including the ability to perform basic rewriting of arguments. The associated tickets #1382 and #1534 contain further details.
 
 Option preset values can now be overwritten for a single gen() call. Additionally multiple option presets can be used (and will be automtically merged) at the same time. See ticket #1484 for details.
 
