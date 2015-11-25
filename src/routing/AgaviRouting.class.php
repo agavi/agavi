@@ -1178,7 +1178,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 						}
 
 						foreach($opts['defaults'] as $key => $value) {
-							if(!isset($ign[$key]) && $value->getValue()) {
+							if(!isset($ign[$key]) && $value->getValue() !== null) {
 								$vars[$key] = $value->getValue();
 							}
 						}
