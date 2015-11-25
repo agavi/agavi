@@ -63,6 +63,12 @@ class AgaviLoggerManagerTest extends AgaviUnitTestCase
 		$this->assertEquals($this->_l2, $this->_lm->getLogger('logfile2'));
 	}
 
+	public function testLoggerLogLevel()
+	{
+		$this->assertEquals(AgaviLogger::INFO, $this->_l->getLevel());
+		$this->assertEquals(AgaviLogger::DEBUG | AgaviLogger::INFO, $this->_l2->getLevel());
+	}
+
 	public function testLog()
 	{
 		$this->_lm->setLogger('logfile', $this->_l);
