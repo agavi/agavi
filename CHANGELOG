@@ -32,6 +32,7 @@ ADD: Response attributes (#1062) (David, TANAKA Koichi)
 ADD: Add AgaviJsonValidator (#1566) (Thomas Bachem)
 ADD: Add "forms_xpath" setting to AgaviFormPopulationFilter (#1527) (Thomas Bachem)
 ADD: Add "cookie_encoding_callback" parameter to AgaviWebResponse (#1482) (Thomas Bachem)
+ADD: Add getLevel() method to AgaviLogger and AgaviILogger (#1507) (Peter Limbach, Thomas Bachem)
 
 CHG: Make AgaviXmlConfigParser::xinclude() use native sorting for glob (#1476) (Thomas Bachem)
 CHG: Improve AgaviFormPopulationFilter's "log_parse_errors" setting to handle severities (#1481) (Thomas Bachem)

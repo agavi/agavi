@@ -84,6 +84,10 @@ The href attribute of <xi:include /> elements now supports glob() syntax with th
 For any path matched, the <xi:include /> element will be duplicated with the expanded path inserted into the href attribute.
 Duplicates are removed, so the "WinningModule" entry matched by the "*" wildcard alternative in the last example will not be included a second time.
 
+Logging
+-------
+We added a getLevel() method to AgaviLogger and the AgaviILogger interface. This may break your code if you're using the AgaviILogger interface or have added a custom getLevel() method to classes inheriting from AgaviLogger.
+
 Testing
 -------
 The test runner infrastructure has seen an large overhaul. AgaviTesting has been completely deprecated and is now superseeded by AgaviPhpUnitCli, which supports all of PHPUnit's command line switches. Refer to UPGRADING for details.
