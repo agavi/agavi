@@ -18,7 +18,7 @@ if(!class_exists('AgaviAttributeHolder')) {
 
 class MyAgaviAttributeHolder extends AgaviAttributeHolder {}
 
-class AgaviAttributeHolderTest extends PHPUnit_Framework_TestCase
+class AgaviAttributeHolderTest extends AgaviPhpUnitTestCase
 {
 
 	public function __construct($name = NULL, array $data = array(), $dataName = '')

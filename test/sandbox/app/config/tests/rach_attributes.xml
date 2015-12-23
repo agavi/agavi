@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+	<ae:configuration>
+		<section1 One="A" Two="B" Three="C" />
+		<section2 Three="%core.config_dir%" Two="false" One="on" />
+	</ae:configuration>
+</ae:configurations>
+

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Yerevan".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -237,30 +237,13 @@ return array (
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
+    'type' => 'static',
+    'name' => 'AMT',
     'offset' => 14400,
-    'name' => 'AM%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 7200000,
-      'type' => 1,
-    ),
     'startYear' => 1996,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Yerevan',
 );
 

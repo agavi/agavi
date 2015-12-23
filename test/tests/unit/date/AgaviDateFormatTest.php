@@ -85,7 +85,7 @@ class AgaviDateFormatTest extends AgaviUnitTestCase
 
 	public function testFormatWithProvidedLocaleTimeZone()
 	{
-		$zoneId = 'Africa/Bamako';
+		$zoneId = 'Africa/Abidjan';
 		$tm = $this->getContext()->getTranslationManager();
 		$tm->setDefaultTimeZone('Europe/Moscow');
 		$tm->setLocale($tm->getCurrentLocale()->getIdentifier() . '@timezone=Europe/Berlin');

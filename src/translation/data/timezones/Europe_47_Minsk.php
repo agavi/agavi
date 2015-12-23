@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Minsk".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -420,16 +420,21 @@ return array (
       'time' => 1301184000,
       'type' => 8,
     ),
+    69 => 
+    array (
+      'time' => 1414274400,
+      'type' => 2,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'FET',
+    'name' => 'MSK',
     'offset' => 10800,
-    'startYear' => 2012,
+    'startYear' => 2015,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Europe/Minsk',
 );
 

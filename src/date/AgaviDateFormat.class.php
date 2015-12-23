@@ -664,7 +664,6 @@ class AgaviDateFormat
 		$datePos = 0;
 
 		$unprocessedTokens = array();
-		$data = array();
 
 		$tlCount = count($this->tokenList);
 		for($i = 0; $i < $tlCount; ++$i) {

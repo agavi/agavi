@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/rbac_definitions/1.1">
+	<ae:configuration>
+		<roles>
+			<role name="administrator">
+				<permissions>
+					<permission>admin</permission>
+				</permissions>
+			</role>
+			<role name="guest">
+				<permissions>
+					<permission>photos.list</permission>
+					<permission>photos.detail</permission>
+				</permissions>
+				<roles>
+					<role name="member">
+						<permissions>
+							<permission>photos.comments.view</permission>
+							<permission>photos.comments.add</permission>
+							<permission>photos.rate</permission>
+							<permission>lightbox</permission>
+							<permission>tags.suggest</permission>
+						</permissions>
+						<roles>
+							<role name="photographer">
+								<permissions>
+									<permission>photos.edit-own</permission>
+									<permission>photos.add</permission>
+									<permission>photos.lock</permission>
+								</permissions>
+							</role>
+							<role name="photomoderator">
+								<permissions>
+									<permission>photos.edit</permission>
+									<permission>photos.delete</permission>
+									<permission>photos.unlock</permission>
+								</permissions>
+							</role>
+						</roles>
+					</role>
+				</roles>
+			</role>
+		</roles>
+	</ae:configuration>
+</ae:configurations>

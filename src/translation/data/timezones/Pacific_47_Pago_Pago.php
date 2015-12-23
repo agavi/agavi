@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Pago_Pago".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -26,23 +26,17 @@ return array (
     ),
     1 => 
     array (
-      'rawOffset' => -41400,
+      'rawOffset' => -39600,
       'dstOffset' => 0,
-      'name' => 'SAMT',
+      'name' => 'NST',
     ),
     2 => 
     array (
       'rawOffset' => -39600,
       'dstOffset' => 0,
-      'name' => 'NST',
-    ),
-    3 => 
-    array (
-      'rawOffset' => -39600,
-      'dstOffset' => 0,
       'name' => 'BST',
     ),
-    4 => 
+    3 => 
     array (
       'rawOffset' => -39600,
       'dstOffset' => 0,
@@ -63,18 +57,13 @@ return array (
     ),
     2 => 
     array (
-      'time' => -631110600,
+      'time' => -86878800,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -86878800,
-      'type' => 3,
-    ),
-    4 => 
-    array (
       'time' => 439038000,
-      'type' => 4,
+      'type' => 3,
     ),
   ),
   'finalRule' => 
@@ -84,8 +73,8 @@ return array (
     'offset' => -39600,
     'startYear' => 1984,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Pago_Pago',
 );
 

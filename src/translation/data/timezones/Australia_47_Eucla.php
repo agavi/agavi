@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Australia/Eucla".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -22,13 +22,19 @@ return array (
     array (
       'rawOffset' => 31500,
       'dstOffset' => 0,
-      'name' => 'CWST',
+      'name' => 'ACWT',
     ),
     1 => 
     array (
       'rawOffset' => 31500,
       'dstOffset' => 3600,
-      'name' => 'CWST',
+      'name' => 'ACWDT',
+    ),
+    2 => 
+    array (
+      'rawOffset' => 31500,
+      'dstOffset' => 0,
+      'name' => 'ACWST',
     ),
   ),
   'rules' => 
@@ -46,7 +52,7 @@ return array (
     2 => 
     array (
       'time' => -1665387900,
-      'type' => 0,
+      'type' => 2,
     ),
     3 => 
     array (
@@ -56,7 +62,7 @@ return array (
     4 => 
     array (
       'time' => -876123900,
-      'type' => 0,
+      'type' => 2,
     ),
     5 => 
     array (
@@ -66,7 +72,7 @@ return array (
     6 => 
     array (
       'time' => -844674300,
-      'type' => 0,
+      'type' => 2,
     ),
     7 => 
     array (
@@ -81,7 +87,7 @@ return array (
     9 => 
     array (
       'time' => 162926100,
-      'type' => 0,
+      'type' => 2,
     ),
     10 => 
     array (
@@ -91,7 +97,7 @@ return array (
     11 => 
     array (
       'time' => 447182100,
-      'type' => 0,
+      'type' => 2,
     ),
     12 => 
     array (
@@ -101,7 +107,7 @@ return array (
     13 => 
     array (
       'time' => 699383700,
-      'type' => 0,
+      'type' => 2,
     ),
     14 => 
     array (
@@ -111,7 +117,7 @@ return array (
     15 => 
     array (
       'time' => 1174756500,
-      'type' => 0,
+      'type' => 2,
     ),
     16 => 
     array (
@@ -121,7 +127,7 @@ return array (
     17 => 
     array (
       'time' => 1206810900,
-      'type' => 0,
+      'type' => 2,
     ),
     18 => 
     array (
@@ -131,7 +137,7 @@ return array (
     19 => 
     array (
       'time' => 1238260500,
-      'type' => 0,
+      'type' => 2,
     ),
   ),
   'finalRule' => 
@@ -140,8 +146,8 @@ return array (
     'offset' => 31500,
     'startYear' => 2010,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Australia/Eucla',
 );
 

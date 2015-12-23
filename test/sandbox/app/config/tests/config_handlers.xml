@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/config_handlers/1.1">
+	<ae:configuration>
+		<handlers>
+			<handler pattern="%core.config_dir%/routing.xml" class="CHCHTestHandler">
+				<validation>%core.agavi_dir%/config/xsd/routing.xsd</validation>
+				<transformation>%core.agavi_dir%/config/xsl/routing.xsl</transformation>
+				<ae:parameters>
+					<ae:parameter name="foo">bar</ae:parameter>
+					<ae:parameter name="dir">%core.agavi_dir%</ae:parameter>
+				</ae:parameters>
+			</handler>
+		</handlers>
+	</ae:configuration>
+</ae:configurations>

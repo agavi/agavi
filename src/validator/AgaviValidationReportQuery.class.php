@@ -196,7 +196,6 @@ class AgaviValidationReportQuery implements AgaviIValidationReportQuery
 		$incidents = $this->report->getIncidents();
 		$resultIncidents = array();
 		foreach($incidents as $incident) {
-			$matches = true;
 			if($this->validatorFilter && $incident->getValidator()) {
 				if(!in_array($incident->getValidator()->getName(), $this->validatorFilter)) {
 					continue;

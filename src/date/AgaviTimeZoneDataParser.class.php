@@ -172,8 +172,6 @@ class AgaviTimeZoneDataParser
 			$activeRules = array();
 			$myRules = array();
 
-			$lastDstOff = 0;
-
 			$cnt = count($ruleList);
 			for($i = 0; $i < $cnt; ++$i) {
 				$last = ($i + 1 == $cnt);
@@ -184,13 +182,10 @@ class AgaviTimeZoneDataParser
 				} else {
 					$year = $myRule['startYear'];
 				}
-				$dstOff = $myRule['save'];
 
 				// while we have active rules and the next rule is more then 1 year
 				// beyond we need to apply the active rules to all the missing years
 				do {
-					$needsBreak = false;
-
 					$hasNonFinalRules = false;
 					// check if we have any active rules which are not final, so we need to process the final ones too
 					foreach($activeRules as $activeRule) {

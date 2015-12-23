@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Choibalsan".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -45,6 +45,18 @@ return array (
     4 => 
     array (
       'rawOffset' => 32400,
+      'dstOffset' => 3600,
+      'name' => 'CHOST',
+    ),
+    5 => 
+    array (
+      'rawOffset' => 28800,
+      'dstOffset' => 0,
+      'name' => 'CHOT',
+    ),
+    6 => 
+    array (
+      'rawOffset' => 28800,
       'dstOffset' => 3600,
       'name' => 'CHOST',
     ),
@@ -286,15 +298,48 @@ return array (
       'time' => 1159545600,
       'type' => 3,
     ),
+    47 => 
+    array (
+      'time' => 1206889200,
+      'type' => 5,
+    ),
+    48 => 
+    array (
+      'time' => 1427479200,
+      'type' => 6,
+    ),
+    49 => 
+    array (
+      'time' => 1443193200,
+      'type' => 5,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'none',
+    'type' => 'dynamic',
     'offset' => 28800,
-    'startYear' => 2007,
+    'name' => 'CHO%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 7,
+      'time' => 7200000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 8,
+      'date' => -1,
+      'day_of_week' => 7,
+      'time' => 0,
+      'type' => 0,
+    ),
+    'startYear' => 2009,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Choibalsan',
 );
 

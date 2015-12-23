@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Vladivostok".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -39,16 +39,10 @@ return array (
     3 => 
     array (
       'rawOffset' => 32400,
-      'dstOffset' => 0,
+      'dstOffset' => 3600,
       'name' => 'VLAST',
     ),
     4 => 
-    array (
-      'rawOffset' => 32400,
-      'dstOffset' => 3600,
-      'name' => 'VLASST',
-    ),
-    5 => 
     array (
       'rawOffset' => 39600,
       'dstOffset' => 0,
@@ -59,7 +53,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1487321264,
+      'time' => -1487321251,
       'type' => 0,
     ),
     1 => 
@@ -170,17 +164,17 @@ return array (
     22 => 
     array (
       'time' => 670348800,
-      'type' => 3,
+      'type' => 0,
     ),
     23 => 
     array (
       'time' => 670352400,
-      'type' => 4,
+      'type' => 3,
     ),
     24 => 
     array (
       'time' => 686077200,
-      'type' => 3,
+      'type' => 0,
     ),
     25 => 
     array (
@@ -380,18 +374,23 @@ return array (
     64 => 
     array (
       'time' => 1301155200,
-      'type' => 5,
+      'type' => 4,
+    ),
+    65 => 
+    array (
+      'time' => 1414249200,
+      'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'VLAT',
-    'offset' => 39600,
-    'startYear' => 2012,
+    'offset' => 36000,
+    'startYear' => 2015,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Vladivostok',
 );
 

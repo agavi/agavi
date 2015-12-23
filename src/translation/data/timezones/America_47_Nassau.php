@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Nassau".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -41,7 +41,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1825095036,
+      'time' => -1825095030,
       'type' => 0,
     ),
     1 => 
@@ -514,8 +514,8 @@ return array (
     ),
     'startYear' => 2007,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Nassau',
 );
 

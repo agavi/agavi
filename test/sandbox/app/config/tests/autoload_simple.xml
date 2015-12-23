@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/autoload/1.1">
+	<ae:configuration>
+		<autoloads>
+			<autoload class="AgaviConfigAutoloadClass1">lib/config/autoload/AgaviConfigAutoloadClass1.class.php</autoload>
+			<autoload class="AgaviConfigAutoloadClass2">%core.app_dir%/lib/config/autoload/AgaviConfigAutoloadClass2.class.php</autoload>
+			<autoload class="AgaviConfigAutoloadClass3">%core.app_dir%/lib/config/autoload/AgaviConfigAutoloadClass3.class.php</autoload>
+			
+			<autoload namespace="Agavi\TestAbsolute">%core.app_dir%/lib/config/autoload/</autoload>
+			<autoload namespace="Agavi\TestRelative">lib/config/autoload/</autoload>
+			
+		</autoloads>
+	</ae:configuration>
+	<ae:configuration environment="test-overwrite">
+		<autoloads>
+			<autoload class="AgaviConfigAutoloadClass2">%core.app_dir%/lib/config/autoload/AgaviConfigAutoloadClass3.class.php</autoload>
+			
+			<autoload namespace="Agavi\TestAbsolute">%core.app_dir%/lib/config/</autoload>
+		</autoloads>
+	</ae:configuration>
+	<ae:configuration environment="test-class-missing">
+		<autoloads>
+			<autoload class="ClassMissing">%core.app_dir%/lib/config/autoload/missing</autoload>
+		</autoloads>
+	</ae:configuration>
+	<ae:configuration environment="test-namespace-missing">
+		<autoloads>
+			<autoload namespace="Missing">%core.app_dir%/lib/config/autoload/missing</autoload>
+		</autoloads>
+	</ae:configuration>
+	
+</ae:configurations>

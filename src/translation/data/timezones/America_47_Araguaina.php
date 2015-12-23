@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Araguaina".
- * Compiled from olson file "southamerica", version 8.52.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -293,16 +293,31 @@ return array (
       'time' => 1064372400,
       'type' => 0,
     ),
+    52 => 
+    array (
+      'time' => 1350788400,
+      'type' => 1,
+    ),
+    53 => 
+    array (
+      'time' => 1361066400,
+      'type' => 0,
+    ),
+    54 => 
+    array (
+      'time' => 1378004400,
+      'type' => 0,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
     'name' => 'BRT',
     'offset' => -10800,
-    'startYear' => 2004,
+    'startYear' => 2014,
   ),
-  'source' => 'southamerica',
-  'version' => '8.52',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Araguaina',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Metlakatla".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -47,12 +47,6 @@ return array (
       'rawOffset' => -28800,
       'dstOffset' => 3600,
       'name' => 'PDT',
-    ),
-    5 => 
-    array (
-      'rawOffset' => -28800,
-      'dstOffset' => 0,
-      'name' => 'MeST',
     ),
   ),
   'rules' => 
@@ -250,18 +244,18 @@ return array (
     38 => 
     array (
       'time' => 436356000,
-      'type' => 5,
+      'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'MeST',
+    'name' => 'PST',
     'offset' => -28800,
     'startYear' => 1984,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Metlakatla',
 );
 

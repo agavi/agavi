@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+	<ae:configuration>
+		
+		<autoload class="SandboxFilterTestsBaseAction">%core.module_dir%/FilterTests/lib/action/SandboxFilterTestsBaseAction.class.php</autoload>
+		<autoload class="SandboxFilterTestsBaseModel">%core.module_dir%/FilterTests/lib/model/SandboxFilterTestsBaseModel.class.php</autoload>
+		<autoload class="SandboxFilterTestsBaseView">%core.module_dir%/FilterTests/lib/view/SandboxFilterTestsBaseView.class.php</autoload>
+		
+	</ae:configuration>
+</ae:configurations>

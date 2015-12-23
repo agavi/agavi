@@ -1,24 +1,9 @@
 <?php
 
-require('../src/testing.php');
+require(__DIR__ . '/../src/testing.php');
 
-require('config.php');
+require(__DIR__ . '/config.php');
 
-$arguments = AgaviTesting::processCommandlineOptions(); 
-
-if(isset($arguments['environment'])) {
-	$env = $arguments['environment'];
-	unset($arguments['environment']);
-} else {
-	$env = 'testing';
-}
-
-AgaviToolkit::clearCache();
-
-AgaviTesting::bootstrap($env);
-
-AgaviTesting::getCodeCoverageFilter()->addDirectoryToBlacklist(AgaviConfig::get('core.cache_dir'));
-
-AgaviTesting::dispatch($arguments);
+AgaviPhpUnitCli::dispatch($_SERVER['argv']);
 
 ?>

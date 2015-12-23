@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Eirunepe".
- * Compiled from olson file "southamerica", version 8.52.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -214,16 +214,21 @@ return array (
       'time' => 1214283600,
       'type' => 2,
     ),
+    35 => 
+    array (
+      'time' => 1384056000,
+      'type' => 0,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'AMT',
-    'offset' => -14400,
-    'startYear' => 2009,
+    'name' => 'ACT',
+    'offset' => -18000,
+    'startYear' => 2014,
   ),
-  'source' => 'southamerica',
-  'version' => '8.52',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Eirunepe',
 );
 

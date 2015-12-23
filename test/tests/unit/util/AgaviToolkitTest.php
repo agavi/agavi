@@ -11,7 +11,7 @@ if(!class_exists('AgaviException')) {
 	include(__DIR__ . '/../../../../src/exception/AgaviException.class.php');
 }
 
-class AgaviToolkitTest extends PHPUnit_Framework_TestCase
+class AgaviToolkitTest extends AgaviPhpUnitTestCase
 {
 
 	public function __construct($name = NULL, $data = array(), $dataName = '')
@@ -235,6 +235,68 @@ class AgaviToolkitTest extends PHPUnit_Framework_TestCase
 			$data['file://' . $key] = array('file://' . $value[0], $value[1]);
 		}
 		return $data;
+	}
+	
+	/**
+	 * @dataProvider urlData
+	 */
+	public function testBuildUrl($parts, $url)
+	{
+		$this->assertEquals($url, AgaviToolkit::buildUrl($parts));
+	}
+	
+	public function urlData()
+	{
+		return array(
+			array(
+				array('host' => 'example.com'),
+				'//example.com/',
+			),
+			array(
+				array('scheme' => 'http', 'host' => 'example.com'),
+				'http://example.com/',
+			),
+			array(
+				array('scheme' => 'http', 'host' => 'example.com', 'port' => '80'),
+				'http://example.com:80/',
+			),
+			array(
+				array('scheme' => 'http', 'host' => 'example.com', 'user' => 'user', 'pass' => 'pass'),
+				'http://user:pass@example.com/',
+			),
+			array(
+				array('scheme' => 'http', 'host' => 'example.com', 'path' => '/path'),
+				'http://example.com/path',
+			),
+			array(
+				array('scheme' => 'http', 'host' => 'example.com', 'query' => 'param1=foo&param2=bar'),
+				'http://example.com/?param1=foo&param2=bar',
+			),
+			array(
+				array('scheme' => 'http', 'host' => 'example.com', 'fragment' => 'fragment'),
+				'http://example.com/#fragment',
+			),
+			array(
+				array('scheme' => 'http', 'host' => 'example.com', 'port' => '80', 'user' => 'user', 'pass' => 'pass', 'path' => '/path', 'query' => 'param1=foo&param2=bar', 'fragment' => 'fragment'),
+				'http://user:pass@example.com:80/path?param1=foo&param2=bar#fragment',
+			),
+			array(
+				parse_url('//example.com/'),
+				'//example.com/',
+			),
+			array(
+				parse_url('http://example.com/?'),
+				'http://example.com/',
+			),
+			array(
+				parse_url('http://example.com/#'),
+				'http://example.com/',
+			),
+			array(
+				parse_url('http://user:pass@example.com:80/path?param1=foo&param2=bar#fragment'),
+				'http://user:pass@example.com:80/path?param1=foo&param2=bar#fragment',
+			),
+		);
 	}
 	
 }

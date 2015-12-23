@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Blanc-Sablon".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -63,7 +63,7 @@ return array (
     ),
     2 => 
     array (
-      'time' => -1614798000,
+      'time' => -1615143600,
       'type' => 2,
     ),
     3 => 
@@ -94,8 +94,8 @@ return array (
     'offset' => -14400,
     'startYear' => 1971,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Blanc-Sablon',
 );
 

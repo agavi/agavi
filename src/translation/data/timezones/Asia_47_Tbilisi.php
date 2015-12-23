@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Tbilisi".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 10756,
+      'rawOffset' => 10751,
       'dstOffset' => 0,
       'name' => 'TBMT',
     ),
@@ -94,12 +94,12 @@ return array (
     ),
     1 => 
     array (
-      'time' => -2840151556,
+      'time' => -2840151551,
       'type' => 0,
     ),
     2 => 
     array (
-      'time' => -1441162756,
+      'time' => -1441162751,
       'type' => 1,
     ),
     3 => 
@@ -455,8 +455,8 @@ return array (
     'offset' => 14400,
     'startYear' => 2006,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Tbilisi',
 );
 

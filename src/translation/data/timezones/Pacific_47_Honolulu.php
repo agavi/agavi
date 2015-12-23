@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Honolulu".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -77,8 +77,8 @@ return array (
     'offset' => -36000,
     'startYear' => 1948,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Honolulu',
 );
 

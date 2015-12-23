@@ -1,0 +1,81 @@
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+	parent="%core.agavi_dir%/config/defaults/validators.xml"
+>
+	
+	<ae:configuration environment="test-translation-domain">
+		<validators translation_domain="test-domain-toplevel">
+			<validator name="toplevel_simple" class="string" />
+			<validator name="toplevel_reset" class="string" translation_domain="" />
+			<validator name="toplevel_or" class="or">
+				<validator name="or_child" class="string" />
+			</validator>
+			<validator name="toplevel_param_or" class="or">
+				<ae:parameter name="translation_domain">test-domain-param-or</ae:parameter>
+				<validator name="param_or_child" class="string" />
+			</validator>
+			<validator name="toplevel_direct_or" class="or" translation_domain="test-domain-direct-or">
+				<validators translation_domain="test-domain-direct-nested-or">
+					<validator name="direct_or_child" class="string" />
+				</validators>
+			</validator>
+			
+		</validators>
+	</ae:configuration>
+
+	<ae:configuration environment="test-translation-domain-1.0-behaviour" xmlns="http://agavi.org/agavi/config/parts/validators/1.0">
+		<validators>
+			<validator name="toplevel_simple" class="string" />
+			<validator name="toplevel_empty" class="string" translation_domain="" />
+			<validator name="toplevel_or" class="or" translation_domain="test-domain">
+				<validator name="or_child" class="string" />
+			</validator>
+			<validator name="toplevel_param" class="string">
+				<ae:parameter name="translation_domain">test-domain</ae:parameter>
+			</validator>
+		</validators>
+	</ae:configuration>
+
+	<ae:configuration environment="test-validator-definition-error-definition">
+		<validator_definitions>
+			<validator_definition name="standalone" class="DummyValidator">
+				<error>error-generic</error>
+				<error for="min">error-min</error>
+			</validator_definition>
+			<validator_definition name="overwritten" class="DummyValidator">
+				<error>error-generic</error>
+				<error for="min">error-min</error>
+			</validator_definition>
+			
+			<validator_definition name="overwritten" class="DummyValidator">
+				<error>error-generic-overwritten</error>
+				<error for="min">error-min-overwritten</error>
+			</validator_definition>
+		</validator_definitions>
+		<validators>
+			<validator name="standalone-empty" class="standalone" />
+			<validator name="standalone-with-errors-single" class="standalone">
+				<error>error-generic-validator1</error>
+			</validator>
+			
+			<validator name="standalone-with-errors-multi" class="standalone">
+				<error>error-generic-validator2</error>
+				<error for="min">error-min-validator2</error>
+			</validator>
+			
+			<validator name="overwritten-empty" class="overwritten" />
+			<validator name="overwritten-with-errors-single" class="overwritten">
+				<error>error-generic-validator3</error>
+			</validator>
+			
+			<validator name="overwritten-with-errors-multi" class="overwritten">
+				<error>error-generic-validator4</error>
+				<error for="min">error-min-validator4</error>
+			</validator>
+		</validators>
+		
+	</ae:configuration>
+
+
+</ae:configurations>

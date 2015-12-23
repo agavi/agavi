@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Novokuznetsk".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -65,7 +65,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1577512128,
+      'time' => -1441259328,
       'type' => 0,
     ),
     1 => 
@@ -393,16 +393,21 @@ return array (
       'time' => 1301169600,
       'type' => 6,
     ),
+    66 => 
+    array (
+      'time' => 1414263600,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'NOVT',
+    'name' => 'KRAT',
     'offset' => 25200,
-    'startYear' => 2012,
+    'startYear' => 2015,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Novokuznetsk',
 );
 

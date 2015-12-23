@@ -119,8 +119,19 @@ class AgaviHttpRedirectRoutingCallback extends AgaviRoutingCallback
 				)
 			);
 		} else {
-			// improper configuration for whatever reason; bail out
-			return false;
+			$parts = array();
+			foreach(array('scheme', 'host', 'port', 'user', 'pass', 'path', 'query', 'fragment') as $part) {
+				if(($value = $this->getParameter($part)) !== null) {
+					$parts[$part] = $value;
+				}
+			}
+			
+			if($parts) {
+				$url = AgaviToolkit::buildUrl(array_merge(parse_url($this->getContext()->getRequest()->getUrl()), $parts));
+			} else {
+				// improper configuration for whatever reason; bail out
+				return false;
+			}
 		}
 		
 		// create response and set redirect

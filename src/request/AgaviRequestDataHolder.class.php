@@ -88,7 +88,7 @@ class AgaviRequestDataHolder extends AgaviParameterHolder implements AgaviIParam
 			$funcname = 'clear' . $source;
 			$this->$funcname();
 		} else {
-			throw new InvalidArgumentException('Unknown source ' . $source . 'specified');
+			throw new InvalidArgumentException('Unknown source ' . $source . ' specified');
 		}
 	}
 

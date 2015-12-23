@@ -55,9 +55,7 @@ class AgaviArraylengthValidator extends AgaviValidator
 		$paramType = $this->getParameter('source');
 		$result = true;
 
-		$baseParts = $this->curBase->getParts();
 		foreach($this->getArguments() as $argument) {
-			$new = $this->curBase->pushRetNew($argument);
 			$pName = $this->curBase->pushRetNew($argument)->__toString();
 			// can't do this:
 			// if($this->validationParameters->isValueEmpty($paramType, $pName)) {

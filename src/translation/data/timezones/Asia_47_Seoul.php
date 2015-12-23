@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Seoul".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -28,25 +28,25 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'KST',
+      'name' => 'JCST',
     ),
     2 => 
     array (
-      'rawOffset' => 28800,
+      'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'KT',
+      'name' => 'JST',
     ),
     3 => 
     array (
-      'rawOffset' => 28800,
-      'dstOffset' => 3600,
-      'name' => 'KDT',
+      'rawOffset' => 32400,
+      'dstOffset' => 0,
+      'name' => 'KST',
     ),
     4 => 
     array (
-      'rawOffset' => 28800,
-      'dstOffset' => 0,
-      'name' => 'KST',
+      'rawOffset' => 30600,
+      'dstOffset' => 3600,
+      'name' => 'KDT',
     ),
     5 => 
     array (
@@ -59,68 +59,113 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2524552072,
+      'time' => -1948782472,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -2053931400,
+      'time' => -1830414600,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1325494800,
-      'type' => 0,
+      'time' => -1017824400,
+      'type' => 2,
     ),
     3 => 
     array (
-      'time' => -1199262600,
-      'type' => 1,
+      'time' => -767350800,
+      'type' => 3,
     ),
     4 => 
     array (
       'time' => -498128400,
-      'type' => 2,
+      'type' => 0,
     ),
     5 => 
     array (
-      'time' => -303984000,
-      'type' => 3,
+      'time' => -462702600,
+      'type' => 4,
     ),
     6 => 
     array (
-      'time' => -293533200,
-      'type' => 4,
+      'time' => -451733400,
+      'type' => 0,
     ),
     7 => 
     array (
-      'time' => -264931200,
-      'type' => 0,
+      'time' => -429784200,
+      'type' => 4,
     ),
     8 => 
     array (
-      'time' => -39515400,
-      'type' => 1,
+      'time' => -418296600,
+      'type' => 0,
     ),
     9 => 
     array (
-      'time' => 547570800,
-      'type' => 5,
+      'time' => -399544200,
+      'type' => 4,
     ),
     10 => 
     array (
-      'time' => 560872800,
-      'type' => 1,
+      'time' => -387451800,
+      'type' => 0,
     ),
     11 => 
     array (
-      'time' => 579020400,
-      'type' => 5,
+      'time' => -368094600,
+      'type' => 4,
     ),
     12 => 
     array (
-      'time' => 592322400,
-      'type' => 1,
+      'time' => -356002200,
+      'type' => 0,
+    ),
+    13 => 
+    array (
+      'time' => -336645000,
+      'type' => 4,
+    ),
+    14 => 
+    array (
+      'time' => -324552600,
+      'type' => 0,
+    ),
+    15 => 
+    array (
+      'time' => -305195400,
+      'type' => 4,
+    ),
+    16 => 
+    array (
+      'time' => -293103000,
+      'type' => 0,
+    ),
+    17 => 
+    array (
+      'time' => -264933000,
+      'type' => 3,
+    ),
+    18 => 
+    array (
+      'time' => 547578000,
+      'type' => 5,
+    ),
+    19 => 
+    array (
+      'time' => 560883600,
+      'type' => 3,
+    ),
+    20 => 
+    array (
+      'time' => 579031200,
+      'type' => 5,
+    ),
+    21 => 
+    array (
+      'time' => 592333200,
+      'type' => 3,
     ),
   ),
   'finalRule' => 
@@ -129,8 +174,8 @@ return array (
     'offset' => 32400,
     'startYear' => 1989,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Seoul',
 );
 

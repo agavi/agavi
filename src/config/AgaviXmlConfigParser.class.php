@@ -494,21 +494,27 @@ class AgaviXmlConfigParser
 	 */
 	public static function xinclude(AgaviXmlConfigDomDocument $document)
 	{
-		// replace %lala% directives in XInclude href attributes
-		foreach($document->getElementsByTagNameNS(self::NAMESPACE_XINCLUDE_2001, 'include') as $element) {
+		// expand directives, resolve globs and encode paths in XInclude href attributes
+		$elements = $document->getElementsByTagNameNS(self::NAMESPACE_XINCLUDE_2001, 'include');
+		$length = $elements->length;
+		// we can't foreach() over the DOMNodeList as we're modifying it further below
+		// see http://php.net/manual/en/class.domnodelist.php#83178
+		for($i = 0; $i < $length; $i++) {
+			$element = $elements->item($i);
 			if($element->hasAttribute('href')) {
 				$attribute = $element->getAttributeNode('href');
 				$parts = explode('#', $attribute->nodeValue, 2);
 				$parts[0] = str_replace('\\', '/', AgaviToolkit::expandDirectives($parts[0]));
-				$attribute->nodeValue = implode('#', $parts);
+				$attribute->nodeValue = rawurlencode($parts[0]) . (isset($parts[1]) ? '#' . $parts[1] : '');
 				if(strpos($parts[0], '*') !== false || strpos($parts[0], '{') !== false) {
-					$glob = glob($parts[0], GLOB_BRACE | GLOB_NOSORT);
+					$glob = glob($parts[0], GLOB_BRACE);
 					if($glob) {
 						$glob = array_unique($glob); // it could be that someone used /path/to/{Foo,*}/burp.xml so Foo would come before all others, that's why we need to remove duplicates as the * would match Foo again
 						foreach($glob as $path) {
 							$new = $element->cloneNode(true);
-							$new->setAttribute('href', $path . (isset($parts[1]) ? '#' . $parts[1] : ''));
+							$new->setAttribute('href', rawurlencode($path) . (isset($parts[1]) ? '#' . $parts[1] : ''));
 							$element->parentNode->insertBefore($new, $element);
+							++$i;
 						}
 						$element->parentNode->removeChild($element);
 					}
@@ -612,10 +618,11 @@ class AgaviXmlConfigParser
 			// set some info (config file path, context name, environment name) as params
 			// first arg is the namespace URI, which PHP doesn't support. awesome. see http://bugs.php.net/bug.php?id=30622 for the sad details
 			// we could use "agavi:context" etc, that does work even without such a prefix being declared in the stylesheet, but that would be completely non-XML-ish, confusing, and against the spec. so we use dots instead.
+			// the string casts are required for hhvm ($context could be null for example and hhvm bails out on that)
 			$proc->setParameter('', array(
-				'agavi.config_path' => $document->documentURI,
-				'agavi.environment' => $environment,
-				'agavi.context' => $context,
+				'agavi.config_path' => (string)$document->documentURI,
+				'agavi.environment' => (string)$environment,
+				'agavi.context' => (string)$context,
 			));
 			
 			try {

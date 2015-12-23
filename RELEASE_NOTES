@@ -4,9 +4,15 @@ AGAVI RELEASE NOTES
 Version 1.1.0 - August ??, 2009
 ===============================
 
+HHVM
+----
+Agavi is now compatible with HHVM. You have to set the ini setting "hhvm.libxml.ext_entity_whitelist" to contain "file". Otherwise you will get error messages about Protocol 'file' being disabled for security reasons.
+
 Configuration
 -------------
 All configuration namespaces have been bumped to version 1.1 as a consequence of a version bump in the global "envelope" namespace, which now allows "xml:space" and "ae:literalize" attributes on the <parameter> element to control whitespace trimming and literalizing (conversion of booleans, expansion of configuration directives). Several configuration file namespaces contain new elements or changed behavior as detailed below. The UPGRADING file lists all changes and their implications. New XSL transformations will automatically convert older configuration files to new namespaces and adjust behavior where applicable, allowing you to run your projects with Agavi 1.1 without having to adjust configuration files immediately.
+
+We fixed the encoding of the file in x:include statements, so you can include files containing spaces and funny characters now.
 
 Response
 --------
@@ -14,7 +20,9 @@ Response classes now extend from AgaviAttributeHolder instead of AgaviParameterH
 
 Routing
 -------
-AgaviHttpRedirectRoutingCallback allows redirects of matched routes to static URLs or to other routes, including the ability to perform basic rewriting of arguments. The associated ticket #1382 contains further details.
+AgaviHttpRedirectRoutingCallback allows redirects of matched routes to static URLs, to only change parts of the current URL or to redirect to other routes, including the ability to perform basic rewriting of arguments. The associated tickets #1382 and #1534 contain further details.
+
+Option preset values can now be overwritten for a single gen() call. Additionally multiple option presets can be used (and will be automtically merged) at the same time. See ticket #1484 for details.
 
 Slots
 -----
@@ -31,13 +39,21 @@ Support for Propel versions prior to 1.3 has been dropped from AgaviPropelDataba
 Validators
 ----------
 It is now possible to export request data arguments to a different source. This is done by either passing an AgaviValidationArgument object as the second argument to AgaviValidator::export(), or, if the validator does not provide an argument name or only a name, but not an object, via the "export_to_source" parameter of the validator.
-Furthermore, a new third parameter in AgaviValidator::export() now accepts the result code to use when exporting; it defaults to AgaviValidator::SUCCESS and may be used to for instance require validation of the exported value by using AgaviValidator::NOT_PROCESSED.
+Furthermore, a new third parameter in AgaviValidator::export() now accepts the result code to use when exporting; it defaults to AgaviValidator::SUCCESS and may be used to for instance require validation of the exported value by using AgaviValidator::NOT_PROCESSED. You can also control its value via the "export_severity" parameter of the validator.
 
 The "provides" and "depends" options of a validator now take an sprintf() string where you can use position specifiers to access parts of the argument base.
 This means that having a "provides" value of "foobar" with an argument base of "foo[]" will now provide into "foobar" for every iteration, and not into "foo[$key][foobar]" like in 1.0. To get this old behavior back in this example, you'd have to use "foo[%2$s][foobar]" or "%1$s[%2$s][foobar]" as the value for "provides". The referencing of argument base parts works exactly like in "export" strings.
 For "depends", the exact same syntax and behavior is now used; the old behavior was for a plain "foobar" to depend on just "foobar" no matter the argument base, and for "[foobar]" with an argument base of "foo[]" to depend on "foo[$key][foobar]", which was a bit confusing and also meant that you could only ever depend on provides from the same argument base. To depend on the "provides" results for the same keys as in the example above, you would again use "foo[%2$s][foobar]" or "%1$s[%2$s][foobar]" (but if we assume that this second validator had "lulz[]" as the argument base, then only "foo[%2$s][foobar]" would work of course).
 If your validation config is from the 1.0 namespace, then the old behavior is retained automatically, so if you want to take advantage of this new functionality, you must bump the config namespace to 1.1.
 Some more examples can be found in ticket #1199 (and also in #1073 where the same syntax is discussed for the exporting feature).
+
+You can now specify the Translation domain for multiple / all validators at once by placing the translation_domain attribute on the <validators> element. This causes some breaking changes when you bump your config namespaces to 1.1, so please see UPGRADING for instructions first.
+
+<validator_definition> now supports defining default error messages. This works exactly like defining error messages in individual validators.
+
+The validation report now provides access to the dependency tokens registered during the validation run.
+
+We added AgaviJsonValidator to validate JSON parameters and optionally export the decoded value as this is a common need in modern web applications.
 
 Filters
 -------
@@ -68,6 +84,10 @@ The href attribute of <xi:include /> elements now supports glob() syntax with th
 For any path matched, the <xi:include /> element will be duplicated with the expanded path inserted into the href attribute.
 Duplicates are removed, so the "WinningModule" entry matched by the "*" wildcard alternative in the last example will not be included a second time.
 
+Logging
+-------
+We added a getLevel() method to AgaviLogger and the AgaviILogger interface. This may break your code if you're using the AgaviILogger interface or have added a custom getLevel() method to classes inheriting from AgaviLogger.
+
 Testing
 -------
-AgaviTesting::dispatch() now calls exit() with an appropriate shell exit code to indicate success or failures/errors by default; pass false as the second argument to prevent this behavior.
+The test runner infrastructure has seen an large overhaul. AgaviTesting has been completely deprecated and is now superseeded by AgaviPhpUnitCli, which supports all of PHPUnit's command line switches. Refer to UPGRADING for details.

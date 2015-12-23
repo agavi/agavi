@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Dhaka".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -99,7 +99,7 @@ return array (
     ),
     8 => 
     array (
-      'time' => 1262278740,
+      'time' => 1262278800,
       'type' => 4,
     ),
   ),
@@ -109,8 +109,8 @@ return array (
     'offset' => 21600,
     'startYear' => 2010,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Dhaka',
 );
 

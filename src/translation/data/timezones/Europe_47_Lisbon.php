@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Lisbon".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => -2192,
+      'rawOffset' => -2205,
       'dstOffset' => 0,
       'name' => 'LMT',
     ),
@@ -59,12 +59,12 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2713908208,
+      'time' => -2713908195,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1830381808,
+      'time' => -1830381795,
       'type' => 1,
     ),
     2 => 
@@ -792,8 +792,8 @@ return array (
     ),
     'startYear' => 1996,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Europe/Lisbon',
 );
 

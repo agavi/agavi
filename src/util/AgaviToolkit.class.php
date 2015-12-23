@@ -482,6 +482,47 @@ final class AgaviToolkit
 		);
 		
 	}
+	
+	/**
+	 * Counterpart of PHP's parse_url().
+	 * 
+	 * @param      array $parts The parts of the URL as defined by parse_url()
+	 * @return     string
+	 * 
+	 * @author     Thomas Bachem <mail@thomasbachem.com>
+	 */
+	public static function buildUrl(array $parts)
+	{
+		$url = '';
+		if(isset($parts['host']) && strlen($parts['host'])) {
+			if(isset($parts['scheme'])) {
+				$url .= $parts['scheme'] . ':';
+			}
+			$url .= '//';
+			if(isset($parts['user'])) {
+				$url .= $parts['user'];
+				if(isset($parts['pass'])) {
+					$url .= ':' . $parts['pass'];
+				}
+				$url .= '@';
+			}
+			$url .= $parts['host'];
+			if(isset($parts['port'])) {
+				$url .= ':' . $parts['port'];
+			}
+		}
+		$url .= '/';
+		if(isset($parts['path']) && strlen($parts['path'])) {
+			$url .= $parts['path'][0] === '/' ? substr($parts['path'], 1) : $parts['path'];
+		}
+		if(isset($parts['query']) && strlen($parts['query'])) {
+			$url .= '?' . $parts['query'];
+		}
+		if(isset($parts['fragment']) && strlen($parts['fragment'])) {
+			$url .= '#' . $parts['fragment'];
+		}
+		return $url;
+	}
 }
 
 ?>

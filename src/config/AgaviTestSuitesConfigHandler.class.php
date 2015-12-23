@@ -64,8 +64,8 @@ class AgaviTestSuitesConfigHandler extends AgaviXmlConfigHandler
 				}
 				
 				$excludes = array();
-				foreach($current->get('excludes') as $excludes) {
-					$excludes[] = $excludes->textContent;
+				foreach($current->get('excludes') as $exclude) {
+					$excludes[] = $exclude->textContent;
 				}
 				
 				$suite =  array(

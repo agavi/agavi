@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Kiev".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -201,17 +201,17 @@ return array (
     ),
     26 => 
     array (
-      'time' => 631141200,
-      'type' => 2,
+      'time' => 638319600,
+      'type' => 6,
     ),
     27 => 
     array (
-      'time' => 646786800,
-      'type' => 1,
+      'time' => 646783200,
+      'type' => 7,
     ),
     28 => 
     array (
-      'time' => 694216800,
+      'time' => 686102400,
       'type' => 1,
     ),
     29 => 
@@ -294,8 +294,8 @@ return array (
     ),
     'startYear' => 1996,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Europe/Kiev',
 );
 

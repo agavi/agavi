@@ -262,6 +262,7 @@
 			<autoload class="AgaviIssetValidator">%core.agavi_dir%/validator/AgaviIssetValidator.class.php</autoload>
 			<autoload class="AgaviIValidatorContainer">%core.agavi_dir%/validator/AgaviIValidatorContainer.interface.php</autoload>
 			<autoload class="AgaviIValidationReportQuery">%core.agavi_dir%/validator/AgaviIValidationReportQuery.interface.php</autoload>
+			<autoload class="AgaviJsonValidator">%core.agavi_dir%/validator/AgaviJsonValidator.class.php</autoload>
 			<autoload class="AgaviNotoperatorValidator">%core.agavi_dir%/validator/AgaviNotoperatorValidator.class.php</autoload>
 			<autoload class="AgaviNumberValidator">%core.agavi_dir%/validator/AgaviNumberValidator.class.php</autoload>
 			<autoload class="AgaviOperatorValidator">%core.agavi_dir%/validator/AgaviOperatorValidator.class.php</autoload>

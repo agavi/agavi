@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Apia".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -28,31 +28,43 @@ return array (
     array (
       'rawOffset' => -41400,
       'dstOffset' => 0,
-      'name' => 'SAMT',
+      'name' => 'WSST',
     ),
     2 => 
     array (
       'rawOffset' => -39600,
       'dstOffset' => 0,
-      'name' => 'WST',
+      'name' => 'ST',
     ),
     3 => 
     array (
       'rawOffset' => -39600,
       'dstOffset' => 3600,
-      'name' => 'WSDT',
+      'name' => 'SDT',
     ),
     4 => 
     array (
-      'rawOffset' => 46800,
-      'dstOffset' => 3600,
-      'name' => 'WSDT',
+      'rawOffset' => -39600,
+      'dstOffset' => 0,
+      'name' => 'SST',
     ),
     5 => 
     array (
       'rawOffset' => 46800,
       'dstOffset' => 0,
-      'name' => 'WST',
+      'name' => 'WSDT',
+    ),
+    6 => 
+    array (
+      'rawOffset' => 46800,
+      'dstOffset' => 0,
+      'name' => 'WSST',
+    ),
+    7 => 
+    array (
+      'rawOffset' => 46800,
+      'dstOffset' => 3600,
+      'name' => 'WSDT',
     ),
   ),
   'rules' => 
@@ -80,7 +92,7 @@ return array (
     4 => 
     array (
       'time' => 1301752800,
-      'type' => 2,
+      'type' => 4,
     ),
     5 => 
     array (
@@ -90,23 +102,45 @@ return array (
     6 => 
     array (
       'time' => 1325239200,
-      'type' => 4,
+      'type' => 5,
     ),
     7 => 
     array (
       'time' => 1333202400,
-      'type' => 5,
+      'type' => 6,
+    ),
+    8 => 
+    array (
+      'time' => 1348927200,
+      'type' => 7,
     ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'WST',
+    'type' => 'dynamic',
     'offset' => 46800,
-    'startYear' => 2013,
+    'name' => 'WS%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 8,
+      'date' => -1,
+      'day_of_week' => 1,
+      'time' => 10800000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 3,
+      'date' => '1',
+      'day_of_week' => -1,
+      'time' => 14400000,
+      'type' => 0,
+    ),
+    'startYear' => 2012,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Apia',
 );
 

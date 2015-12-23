@@ -15,7 +15,6 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 	public function __construct($name = NULL, array $data = array(), $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
 	}
 	
 	public function setUp()
@@ -173,26 +172,31 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 	
 	public function dataParseRouteString()
 	{
-		return array('escaped_balanced'    => array('static\(text(prefix{foo:1\(2\{3\}4\)5}postfix)',
-													array('#static\(text(prefix(?P<foo>1(2{3}4)5)postfix)#',
-														  'static(text(:foo:)',
-														  array('foo' => array( 'pre'  => 'prefix',
-																				'val'  => '',
-																				'post' => 'postfix',
-																				'is_optional' => false,
-																			   ),
-																),
-														  0,
-													     )
-												  ),
-					 '#789'               => array('#static#with#quote',
-													array('#\#static\#with\#quote#',
-														  '#static#with#quote',
-														  array(),
-														  0,
-													     )
-												  ),
-					);
+		return array(
+			'escaped_balanced' => array(
+				'static\(text(prefix{foo:1\(2\{3\}4\)5}postfix)',
+				array(
+					'#static\(text(prefix(?P<foo>1(2{3}4)5)postfix)#',
+					'static(text(:foo:)',
+					array('foo' => array(
+						'pre'  => 'prefix',
+						'val'  => '',
+						'post' => 'postfix',
+						'is_optional' => false,
+					)),
+					0,
+				)
+			),
+			'#789' => array(
+				'#static#with#quote',
+				array(
+					'#\#static\#with\#quote#',
+					'#static#with#quote',
+					array(),
+					0,
+				)
+			),
+		);
 	}
 	
 	public function testTicket263()
@@ -213,6 +217,13 @@ class AgaviRoutingTest extends AgaviPhpUnitTestCase
 		$container = $this->routing->execute();
 		$this->assertEquals('Default', $container->getModuleName());
 		$this->assertEquals('Foo/Bar', $container->getActionName());
+	}
+	
+	public function testEmptyDefaultValue() {
+		$this->routing->setInput('/empty_default_value');
+		$container = $this->routing->execute();
+		$rd = AgaviContext::getInstance(null)->getRequest()->getRequestData();
+		$this->assertSame('0', $rd->getParameter('value'));
 	}
 }
 

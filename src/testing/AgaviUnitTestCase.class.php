@@ -36,19 +36,6 @@ abstract class AgaviUnitTestCase extends AgaviPhpUnitTestCase implements AgaviIU
 	protected $contextName = null;
 	
 	/**
-	 * Constructs a test case with the given name.
-	 *
-	 * @param  string $name
-	 * @param  array  $data
-	 * @param  string $dataName
-	 */
-	public function __construct($name = NULL, array $data = array(), $dataName = '')
-	{
-		parent::__construct($name, $data, $dataName);
-		$this->setRunTestInSeparateProcess(true);
-	}
-	
-	/**
 	 * Return the context defined for this test (or the default one).
 	 *
 	 * @return     AgaviContext The context instance defined for this test.

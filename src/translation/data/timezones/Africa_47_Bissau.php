@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Africa/Bissau".
- * Compiled from olson file "africa", version 8.33.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -35,7 +35,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1849388260,
+      'time' => -1830380260,
       'type' => 0,
     ),
     1 => 
@@ -51,8 +51,8 @@ return array (
     'offset' => 0,
     'startYear' => 1976,
   ),
-  'source' => 'africa',
-  'version' => '8.33',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Africa/Bissau',
 );
 

@@ -33,6 +33,8 @@
 			<validator_definition name="isset" class="AgaviIssetValidator" />
 			
 			<validator_definition name="isnotempty" class="AgaviIsNotEmptyValidator" />
+
+			<validator_definition name="json" class="AgaviJsonValidator" />
 			
 			<validator_definition name="not" class="AgaviNotoperatorValidator" />
 			

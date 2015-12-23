@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Antarctica/Palmer".
- * Compiled from olson file "antarctica", version 8.9.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -59,6 +59,12 @@ return array (
       'rawOffset' => -14400,
       'dstOffset' => 3600,
       'name' => 'CLST',
+    ),
+    7 => 
+    array (
+      'rawOffset' => -10800,
+      'dstOffset' => 0,
+      'name' => 'CLT',
     ),
   ),
   'rules' => 
@@ -195,7 +201,7 @@ return array (
     ),
     26 => 
     array (
-      'time' => 591768000,
+      'time' => 592372800,
       'type' => 6,
     ),
     27 => 
@@ -210,7 +216,7 @@ return array (
     ),
     29 => 
     array (
-      'time' => 637729200,
+      'time' => 637128000,
       'type' => 5,
     ),
     30 => 
@@ -313,33 +319,166 @@ return array (
       'time' => 952830000,
       'type' => 5,
     ),
+    50 => 
+    array (
+      'time' => 971578800,
+      'type' => 6,
+    ),
+    51 => 
+    array (
+      'time' => 984279600,
+      'type' => 5,
+    ),
+    52 => 
+    array (
+      'time' => 1003028400,
+      'type' => 6,
+    ),
+    53 => 
+    array (
+      'time' => 1015729200,
+      'type' => 5,
+    ),
+    54 => 
+    array (
+      'time' => 1034478000,
+      'type' => 6,
+    ),
+    55 => 
+    array (
+      'time' => 1047178800,
+      'type' => 5,
+    ),
+    56 => 
+    array (
+      'time' => 1065927600,
+      'type' => 6,
+    ),
+    57 => 
+    array (
+      'time' => 1079233200,
+      'type' => 5,
+    ),
+    58 => 
+    array (
+      'time' => 1097377200,
+      'type' => 6,
+    ),
+    59 => 
+    array (
+      'time' => 1110682800,
+      'type' => 5,
+    ),
+    60 => 
+    array (
+      'time' => 1128826800,
+      'type' => 6,
+    ),
+    61 => 
+    array (
+      'time' => 1142132400,
+      'type' => 5,
+    ),
+    62 => 
+    array (
+      'time' => 1160881200,
+      'type' => 6,
+    ),
+    63 => 
+    array (
+      'time' => 1173582000,
+      'type' => 5,
+    ),
+    64 => 
+    array (
+      'time' => 1192330800,
+      'type' => 6,
+    ),
+    65 => 
+    array (
+      'time' => 1206846000,
+      'type' => 5,
+    ),
+    66 => 
+    array (
+      'time' => 1223780400,
+      'type' => 6,
+    ),
+    67 => 
+    array (
+      'time' => 1237086000,
+      'type' => 5,
+    ),
+    68 => 
+    array (
+      'time' => 1255230000,
+      'type' => 6,
+    ),
+    69 => 
+    array (
+      'time' => 1270350000,
+      'type' => 5,
+    ),
+    70 => 
+    array (
+      'time' => 1286679600,
+      'type' => 6,
+    ),
+    71 => 
+    array (
+      'time' => 1304823600,
+      'type' => 5,
+    ),
+    72 => 
+    array (
+      'time' => 1313899200,
+      'type' => 6,
+    ),
+    73 => 
+    array (
+      'time' => 1335668400,
+      'type' => 5,
+    ),
+    74 => 
+    array (
+      'time' => 1346558400,
+      'type' => 6,
+    ),
+    75 => 
+    array (
+      'time' => 1367121600,
+      'type' => 5,
+    ),
+    76 => 
+    array (
+      'time' => 1378612800,
+      'type' => 6,
+    ),
+    77 => 
+    array (
+      'time' => 1398571200,
+      'type' => 5,
+    ),
+    78 => 
+    array (
+      'time' => 1410062400,
+      'type' => 6,
+    ),
+    79 => 
+    array (
+      'time' => 1430017200,
+      'type' => 7,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => -14400,
-    'name' => 'CL%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 9,
-      'date' => '9',
-      'day_of_week' => -1,
-      'time' => 14400000,
-      'type' => 2,
-    ),
-    'end' => 
-    array (
-      'month' => 2,
-      'date' => '9',
-      'day_of_week' => -1,
-      'time' => 10800000,
-      'type' => 2,
-    ),
-    'startYear' => 2000,
+    'type' => 'static',
+    'name' => 'CLT',
+    'offset' => -10800,
+    'startYear' => 2016,
   ),
-  'source' => 'antarctica',
-  'version' => '8.9',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Antarctica/Palmer',
 );
 

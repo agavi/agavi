@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Adak".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -64,31 +64,31 @@ return array (
     array (
       'rawOffset' => -36000,
       'dstOffset' => 0,
-      'name' => 'HAT',
+      'name' => 'HT',
     ),
     8 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 3600,
-      'name' => 'HADT',
+      'name' => 'HDT',
     ),
     9 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 0,
-      'name' => 'HAST',
+      'name' => 'HST',
     ),
     10 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 3600,
-      'name' => 'HAWT',
+      'name' => 'HWT',
     ),
     11 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 3600,
-      'name' => 'HAPT',
+      'name' => 'HPT',
     ),
   ),
   'rules' => 
@@ -748,7 +748,7 @@ return array (
   array (
     'type' => 'dynamic',
     'offset' => -36000,
-    'name' => 'HA%sT',
+    'name' => 'H%sT',
     'save' => 3600,
     'start' => 
     array (
@@ -768,8 +768,8 @@ return array (
     ),
     'startYear' => 2007,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Adak',
 );
 

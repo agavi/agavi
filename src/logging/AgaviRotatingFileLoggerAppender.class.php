@@ -83,7 +83,6 @@ class AgaviRotatingFileLoggerAppender extends AgaviFileLoggerAppender
 			// todays log file didn't exist so we need to create it
 			// and at the same time we'll remove all unwanted history files
 
-			$files = array();
 			$remove = glob($dir . $prefix . '*-*-*' . $suffix);
 			if($remove === false) {
 				// who cares, it's just log files

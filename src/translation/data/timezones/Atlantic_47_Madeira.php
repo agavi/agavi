@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Atlantic/Madeira".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -64,7 +64,7 @@ return array (
     ),
     1 => 
     array (
-      'time' => -1849560744,
+      'time' => -1830379944,
       'type' => 1,
     ),
     2 => 
@@ -787,8 +787,8 @@ return array (
     ),
     'startYear' => 1996,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Atlantic/Madeira',
 );
 

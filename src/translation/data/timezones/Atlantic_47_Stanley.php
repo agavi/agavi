@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Atlantic/Stanley".
- * Compiled from olson file "southamerica", version 8.52.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -46,6 +46,12 @@ return array (
     array (
       'rawOffset' => -10800,
       'dstOffset' => 3600,
+      'name' => 'FKST',
+    ),
+    5 => 
+    array (
+      'rawOffset' => -10800,
+      'dstOffset' => 0,
       'name' => 'FKST',
     ),
   ),
@@ -323,76 +329,99 @@ return array (
     ),
     54 => 
     array (
-      'time' => 1050818400,
-      'type' => 1,
+      'time' => 1030860000,
+      'type' => 2,
     ),
     55 => 
     array (
-      'time' => 1082268000,
+      'time' => 1050814800,
       'type' => 1,
     ),
     56 => 
     array (
-      'time' => 1113717600,
-      'type' => 1,
+      'time' => 1062914400,
+      'type' => 2,
     ),
     57 => 
     array (
-      'time' => 1145167200,
+      'time' => 1082264400,
       'type' => 1,
     ),
     58 => 
     array (
-      'time' => 1176616800,
-      'type' => 1,
+      'time' => 1094364000,
+      'type' => 2,
     ),
     59 => 
     array (
-      'time' => 1208671200,
+      'time' => 1113714000,
       'type' => 1,
     ),
     60 => 
     array (
-      'time' => 1240120800,
-      'type' => 1,
+      'time' => 1125813600,
+      'type' => 2,
     ),
     61 => 
     array (
-      'time' => 1271570400,
+      'time' => 1145163600,
       'type' => 1,
     ),
     62 => 
     array (
-      'time' => 1334469600,
+      'time' => 1157263200,
+      'type' => 2,
+    ),
+    63 => 
+    array (
+      'time' => 1176613200,
       'type' => 1,
+    ),
+    64 => 
+    array (
+      'time' => 1188712800,
+      'type' => 2,
+    ),
+    65 => 
+    array (
+      'time' => 1208667600,
+      'type' => 1,
+    ),
+    66 => 
+    array (
+      'time' => 1220767200,
+      'type' => 2,
+    ),
+    67 => 
+    array (
+      'time' => 1240117200,
+      'type' => 1,
+    ),
+    68 => 
+    array (
+      'time' => 1252216800,
+      'type' => 2,
+    ),
+    69 => 
+    array (
+      'time' => 1271566800,
+      'type' => 1,
+    ),
+    70 => 
+    array (
+      'time' => 1283666400,
+      'type' => 5,
     ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => -14400,
-    'name' => 'FK%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 8,
-      'date' => '1',
-      'day_of_week' => -1,
-      'time' => 7200000,
-      'type' => 0,
-    ),
-    'end' => 
-    array (
-      'month' => 3,
-      'date' => '15',
-      'day_of_week' => -1,
-      'time' => 7200000,
-      'type' => 0,
-    ),
+    'type' => 'static',
+    'name' => 'FKST',
+    'offset' => -10800,
     'startYear' => 2011,
   ),
-  'source' => 'southamerica',
-  'version' => '8.52',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Atlantic/Stanley',
 );
 

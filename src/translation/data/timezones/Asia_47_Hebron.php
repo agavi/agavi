@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Hebron".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -273,12 +273,12 @@ return array (
     ),
     44 => 
     array (
-      'time' => 576540000,
+      'time' => 576626400,
       'type' => 4,
     ),
     45 => 
     array (
-      'time' => 589237200,
+      'time' => 589323600,
       'type' => 3,
     ),
     46 => 
@@ -483,69 +483,121 @@ return array (
     ),
     86 => 
     array (
-      'time' => 1207000800,
+      'time' => 1206655200,
       'type' => 2,
     ),
     87 => 
     array (
-      'time' => 1217538000,
-      'type' => 2,
-    ),
-    88 => 
-    array (
       'time' => 1220216400,
       'type' => 0,
     ),
+    88 => 
+    array (
+      'time' => 1238108400,
+      'type' => 2,
+    ),
     89 => 
     array (
-      'time' => 1238104800,
-      'type' => 2,
+      'time' => 1252015200,
+      'type' => 0,
     ),
     90 => 
     array (
-      'time' => 1252018800,
-      'type' => 0,
-    ),
-    91 => 
-    array (
-      'time' => 1269640860,
+      'time' => 1269554400,
       'type' => 2,
     ),
-    92 => 
+    91 => 
     array (
       'time' => 1281474000,
       'type' => 0,
     ),
-    93 => 
+    92 => 
     array (
-      'time' => 1301652060,
+      'time' => 1301608860,
       'type' => 2,
     ),
-    94 => 
+    93 => 
     array (
       'time' => 1312146000,
       'type' => 0,
     ),
-    95 => 
+    94 => 
     array (
       'time' => 1314655200,
       'type' => 2,
     ),
+    95 => 
+    array (
+      'time' => 1317330000,
+      'type' => 0,
+    ),
     96 => 
     array (
-      'time' => 1317340800,
+      'time' => 1333058400,
+      'type' => 2,
+    ),
+    97 => 
+    array (
+      'time' => 1348178400,
+      'type' => 0,
+    ),
+    98 => 
+    array (
+      'time' => 1364421600,
+      'type' => 2,
+    ),
+    99 => 
+    array (
+      'time' => 1380229200,
+      'type' => 0,
+    ),
+    100 => 
+    array (
+      'time' => 1395871200,
+      'type' => 2,
+    ),
+    101 => 
+    array (
+      'time' => 1414098000,
+      'type' => 0,
+    ),
+    102 => 
+    array (
+      'time' => 1427493600,
+      'type' => 2,
+    ),
+    103 => 
+    array (
+      'time' => 1445634000,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'EET',
+    'type' => 'dynamic',
     'offset' => 7200,
-    'startYear' => 2012,
+    'name' => 'EE%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 6,
+      'time' => 86400000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 9,
+      'date' => '21',
+      'day_of_week' => -6,
+      'time' => 0,
+      'type' => 0,
+    ),
+    'startYear' => 2015,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Hebron',
 );
 

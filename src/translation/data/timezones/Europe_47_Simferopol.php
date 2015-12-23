@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Europe/Simferopol".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -279,33 +279,21 @@ return array (
       'time' => 846374400,
       'type' => 2,
     ),
+    42 => 
+    array (
+      'time' => 1414274400,
+      'type' => 2,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'dynamic',
-    'offset' => 7200,
-    'name' => 'EE%sT',
-    'save' => 3600,
-    'start' => 
-    array (
-      'month' => 2,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 3600000,
-      'type' => 2,
-    ),
-    'end' => 
-    array (
-      'month' => 9,
-      'date' => -1,
-      'day_of_week' => 1,
-      'time' => 3600000,
-      'type' => 2,
-    ),
-    'startYear' => 1997,
+    'type' => 'static',
+    'name' => 'MSK',
+    'offset' => 10800,
+    'startYear' => 2015,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Europe/Simferopol',
 );
 

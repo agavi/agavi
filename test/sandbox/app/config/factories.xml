@@ -40,7 +40,7 @@
 	<ae:configuration environment="testing.*">
 		<storage class="AgaviNullStorage" />
 		
-		<request class="AgaviWebRequest">
+		<request class="TestWebRequest">
 			<ae:parameter name="sources">
 				<ae:parameter name="SERVER_NAME">localhost</ae:parameter>
 				<ae:parameter name="SERVER_PORT">80</ae:parameter>
@@ -48,6 +48,39 @@
 			</ae:parameter>
 		</request>
 		
+	</ae:configuration>
+	
+	<ae:configuration environment="testing.*" context="routing-server-cases">
+		<request class="TestWebRequest">
+			<ae:parameter name="sources">
+				<ae:parameter name="SERVER_NAME">SERVER_NAME</ae:parameter>
+				<ae:parameter name="SERVER_PORT">SERVER_PORT</ae:parameter>
+				<ae:parameter name="SERVER_PROTOCOL">SERVER_PROTOCOL</ae:parameter>
+			</ae:parameter>
+		</request>
+	</ae:configuration>
+	
+	<ae:configuration environment="testing-use_security_off">
+		<user class="AgaviUser" />
+	</ae:configuration>
+	
+	<ae:configuration environment="testing.*" context="agavi-session-storage-test::tests-startup-sets-cookie-secure-flag">
+		<storage class="AgaviSessionStorage">
+			<ae:parameter name="session_cookie_secure"></ae:parameter>
+		</storage>
+		
+		<request class="TestWebRequest">
+			<ae:parameter name="sources">
+				<ae:parameter name="HTTPS">on</ae:parameter>
+			</ae:parameter>
+		</request>
+		
+	</ae:configuration>
+
+	<ae:configuration environment="testing.*" context="agavi-session-storage-test::tests-static-session-id">
+		<storage class="AgaviSessionStorage">
+			<ae:parameter name="session_id">foobar</ae:parameter>
+		</storage>
 	</ae:configuration>
 	
 	<ae:configuration environment="development.*">

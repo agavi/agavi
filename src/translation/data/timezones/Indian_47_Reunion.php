@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Indian/Reunion".
- * Compiled from olson file "africa", version 8.33.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -40,8 +40,8 @@ return array (
     'offset' => 14400,
     'startYear' => 1912,
   ),
-  'source' => 'africa',
-  'version' => '8.33',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Indian/Reunion',
 );
 

@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Pacific/Enderbury".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -62,8 +62,8 @@ return array (
     'offset' => 46800,
     'startYear' => 1996,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Pacific/Enderbury',
 );
 

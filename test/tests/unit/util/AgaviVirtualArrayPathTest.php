@@ -7,7 +7,7 @@ if(!class_exists('AgaviArrayPathDefinition')) {
 	include(__DIR__ . '/../../../../src/util/AgaviArrayPathDefinition.class.php');
 }
 
-class AgaviVirtualArrayPathTest extends PHPUnit_Framework_TestCase
+class AgaviVirtualArrayPathTest extends AgaviPhpUnitTestCase
 {
 
 	public function __construct($name = NULL, array $data = array(), $dataName = '')

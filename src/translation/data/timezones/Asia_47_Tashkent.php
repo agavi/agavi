@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Tashkent".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -59,7 +59,7 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1441168632,
+      'time' => -1441168631,
       'type' => 0,
     ),
     1 => 
@@ -200,8 +200,8 @@ return array (
     'offset' => 18000,
     'startYear' => 1992,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Tashkent',
 );
 

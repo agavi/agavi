@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Tokyo".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -28,7 +28,7 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'CJT',
+      'name' => 'JCST',
     ),
     2 => 
     array (
@@ -57,7 +57,7 @@ return array (
     ),
     2 => 
     array (
-      'time' => -1009875600,
+      'time' => -1017824400,
       'type' => 2,
     ),
     3 => 
@@ -107,8 +107,8 @@ return array (
     'offset' => 32400,
     'startYear' => 1952,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Tokyo',
 );
 

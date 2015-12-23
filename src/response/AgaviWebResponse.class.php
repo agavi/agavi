@@ -166,6 +166,13 @@ class AgaviWebResponse extends AgaviResponse
 			'cookie_domain'   => isset($parameters['cookie_domain'])   ? $parameters['cookie_domain']   : "",
 			'cookie_secure'   => isset($parameters['cookie_secure'])   ? $parameters['cookie_secure']   : false,
 			'cookie_httponly' => isset($parameters['cookie_httponly']) ? $parameters['cookie_httponly'] : false,
+			// For historical reasons, PHP's setcookie() encodes cookies with urlencode(), which
+			// is not compliant with RFC 6265 as it encodes spaces as a "+" sign instead of "%20".
+			// This makes most client-side Javascript cookie libraries decode it not as a space
+			// but as an actual plus sign. We sadly cannot change the default encoding of cookies
+			// as it would be a breaking change, but introduced a setting instead, which we
+			// recommend to set to "rawurlencode" for new projects.
+			'cookie_encode_callback' => isset($parameters['cookie_encode_callback']) ? $parameters['cookie_encode_callback'] : 'urlencode',
 		));
 		
 		switch($request->getProtocol()) {
@@ -308,7 +315,7 @@ class AgaviWebResponse extends AgaviResponse
 			}
 			foreach($otherResponse->getCookies() as $name => $cookie) {
 				if(!$this->hasCookie($name)) {
-					$this->setCookie($name, $cookie['value'], $cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
+					$this->setCookie($name, $cookie['value'], $cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'], $cookie['encode']);
 				}
 			}
 			if($otherResponse->hasRedirect() && !$this->hasRedirect()) {
@@ -467,38 +474,48 @@ class AgaviWebResponse extends AgaviResponse
 	/**
 	 * Send a cookie.
 	 *
-	 * @param      string A cookie name.
-	 * @param      mixed  Data to store into a cookie. If null or empty cookie
-	 *                    will be tried to be removed.
-	 * @param      mixed  The lifetime of the cookie in seconds. When you pass 0 
-	 *                    the cookie will be valid until the browser is closed.
-	 *                    You can also use a strtotime() string instead of an int.
-	 * @param      string The path on the server the cookie will be available on.
-	 * @param      string The domain the cookie is available on.
-	 * @param      bool   Indicates that the cookie should only be transmitted 
-	 *                    over a secure HTTPS connection.
-	 * @param      bool   Whether the cookie will be made accessible only through
-	 *                    the HTTP protocol, and not to client-side scripts.
+	 * @param      string         A cookie name.
+	 * @param      mixed          Data to store into a cookie. If null or empty cookie
+	 *                            will be tried to be removed.
+	 * @param      mixed          The lifetime of the cookie in seconds. When you pass 0 
+	 *                            the cookie will be valid until the browser is closed.
+	 *                            You can also use a strtotime() string instead of an int.
+	 * @param      string         The path on the server the cookie will be available on.
+	 * @param      string         The domain the cookie is available on.
+	 * @param      bool           Indicates that the cookie should only be transmitted 
+	 *                            over a secure HTTPS connection.
+	 * @param      bool           Whether the cookie will be made accessible only through
+	 *                            the HTTP protocol, and not to client-side scripts.
+	 * @param      callable|bool  Callback to encode the cookie value. Set to false
+	 *                            if you did already encode the value on your own.
 	 *
+	 * @throws     AgaviException If $encodeCallback is neither false nor callable.
+	 * 
 	 * @author     Veikko Mäkinen <mail@veikkomakinen.com>
 	 * @author     David Zülke <dz@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httponly = null)
+	public function setCookie($name, $value, $lifetime = null, $path = null, $domain = null, $secure = null, $httponly = null, $encodeCallback = null)
 	{
-		$lifetime =         $lifetime !== null ? $lifetime : $this->getParameter('cookie_lifetime');
-		$path     =         $path !== null     ? $path     : $this->getParameter('cookie_path');
-		$domain   =         $domain !== null   ? $domain   : $this->getParameter('cookie_domain');
-		$secure   = (bool) ($secure !== null   ? $secure   : $this->getParameter('cookie_secure'));
-		$httponly = (bool) ($httponly !== null ? $httponly : $this->getParameter('cookie_httponly'));
-
+		$lifetime       =         $lifetime       !== null ? $lifetime       : $this->getParameter('cookie_lifetime');
+		$path           =         $path           !== null ? $path           : $this->getParameter('cookie_path');
+		$domain         =         $domain         !== null ? $domain         : $this->getParameter('cookie_domain');
+		$secure         = (bool) ($secure         !== null ? $secure         : $this->getParameter('cookie_secure'));
+		$httponly       = (bool) ($httponly       !== null ? $httponly       : $this->getParameter('cookie_httponly'));
+		$encodeCallback =         $encodeCallback !== null ? $encodeCallback : $this->getParameter('cookie_encode_callback');
+		
+		if($encodeCallback !== false && !is_callable($encodeCallback)) {
+			throw new AgaviException(sprintf('setCookie() $encodeCallback argument is not callable: %s', $encodeCallback));
+		}
+		
 		$this->cookies[$name] = array(
 			'value' => $value,
 			'lifetime' => $lifetime,
 			'path' => $path,
 			'domain' => $domain,
 			'secure' => $secure,
-			'httponly' => $httponly
+			'httponly' => $httponly,
+			'encode_callback' => $encodeCallback
 		);
 	}
 	
@@ -689,12 +706,16 @@ class AgaviWebResponse extends AgaviResponse
 			if($values['value'] === false || $values['value'] === null || $values['value'] === '') {
 				$expire = time() - 3600 * 24;
 			}
+
+			if($values['encode_callback']) {
+				$values['value'] = call_user_func($values['encode_callback'], $values['value']);
+			}
 			
 			if($values['path'] === null) {
 				$values['path'] = $basePath;
 			}
 			
-			setcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httponly']);
+			setrawcookie($name, $values['value'], $expire, $values['path'], $values['domain'], $values['secure'], $values['httponly']);
 		}
 		
 		// send headers

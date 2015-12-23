@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Dawson_Creek".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -69,7 +69,7 @@ return array (
     ),
     2 => 
     array (
-      'time' => -1614783600,
+      'time' => -1615129200,
       'type' => 2,
     ),
     3 => 
@@ -360,8 +360,8 @@ return array (
     'offset' => -25200,
     'startYear' => 1973,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Dawson_Creek',
 );
 

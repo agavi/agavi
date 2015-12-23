@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Australia/Hobart".
- * Compiled from olson file "australasia", version 8.29.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -22,13 +22,25 @@ return array (
     array (
       'rawOffset' => 36000,
       'dstOffset' => 0,
-      'name' => 'EST',
+      'name' => 'AEST',
     ),
     1 => 
     array (
       'rawOffset' => 36000,
       'dstOffset' => 3600,
-      'name' => 'EST',
+      'name' => 'AEDT',
+    ),
+    2 => 
+    array (
+      'rawOffset' => 36000,
+      'dstOffset' => 0,
+      'name' => 'AEDT',
+    ),
+    3 => 
+    array (
+      'rawOffset' => 36000,
+      'dstOffset' => 0,
+      'name' => 'AET',
     ),
   ),
   'rules' => 
@@ -46,7 +58,7 @@ return array (
     2 => 
     array (
       'time' => -1669892400,
-      'type' => 0,
+      'type' => 2,
     ),
     3 => 
     array (
@@ -86,7 +98,7 @@ return array (
     10 => 
     array (
       'time' => -94730400,
-      'type' => 0,
+      'type' => 3,
     ),
     11 => 
     array (
@@ -503,7 +515,7 @@ return array (
   array (
     'type' => 'dynamic',
     'offset' => 36000,
-    'name' => 'EST',
+    'name' => 'AE%sT',
     'save' => 3600,
     'start' => 
     array (
@@ -523,8 +535,8 @@ return array (
     ),
     'startYear' => 2008,
   ),
-  'source' => 'australasia',
-  'version' => '8.29',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Australia/Hobart',
 );
 

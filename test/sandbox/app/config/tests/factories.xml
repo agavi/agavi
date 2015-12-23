@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/factories/1.1">
+	<ae:configuration>
+		<controller class="FCHTestController">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</controller>
+
+		<dispatch_filter class="FCHTestDispatchFilter">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</dispatch_filter>
+
+		<execution_container class="FCHTestExecutionContainer">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</execution_container>
+
+		<execution_filter class="FCHTestExecutionFilter">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</execution_filter>
+
+		<filter_chain class="FCHTestFilterChain">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</filter_chain>
+
+		<logger_manager class="FCHTestLoggerManager">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</logger_manager>
+
+		<request class="FCHTestRequest">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</request>
+
+		<response class="FCHTestResponse">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</response>
+
+		<routing class="FCHTestRouting">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</routing>
+
+		<storage class="FCHTestStorage">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</storage>
+
+		<validation_manager class="FCHTestValidationManager">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</validation_manager>
+
+		<translation_manager class="FCHTestTranslationManager">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</translation_manager>
+
+		<database_manager class="FCHTestDBManager">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</database_manager>
+
+		<security_filter class="FCHTestSecurityFilter">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</security_filter>
+
+		<user class="FCHTestUser">
+			<ae:parameters>
+				<ae:parameter name="p1">v1</ae:parameter>
+				<ae:parameter name="p2">v2</ae:parameter>
+			</ae:parameters>
+		</user>
+
+	</ae:configuration>
+	
+</ae:configurations>

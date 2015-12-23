@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Atlantic/Azores".
- * Compiled from olson file "europe", version 8.40.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -75,7 +75,7 @@ return array (
     ),
     2 => 
     array (
-      'time' => -1849557928,
+      'time' => -1830377128,
       'type' => 1,
     ),
     3 => 
@@ -958,8 +958,8 @@ return array (
     ),
     'startYear' => 1996,
   ),
-  'source' => 'europe',
-  'version' => '8.40',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Atlantic/Azores',
 );
 

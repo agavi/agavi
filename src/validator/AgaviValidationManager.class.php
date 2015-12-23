@@ -285,6 +285,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			}
 		}
 		$this->report->setResult($result);
+		$this->report->setDependTokens($this->getDependencyManager()->getDependTokens());
 
 		$ma = $req->getParameter('module_accessor');
 		$aa = $req->getParameter('action_accessor');
@@ -809,8 +810,6 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			}
 			return $msgs;
 		} else {
-			$msgs = array();
-
 			$incidents = $this->getIncidents(AgaviValidator::NOTICE);
 			$msgs = array();
 			foreach($incidents as $incident) {

@@ -103,14 +103,6 @@ class AgaviException extends Exception
 	 */
 	public static function buildParamList($params, $html = true, $level = 1)
 	{
-		if($html) {
-			$oem = '<em>';
-			$cem = '</em>';
-		} else {
-			$oem = '';
-			$cem = '';
-		}
-		
 		$retval = array();
 		foreach($params as $key => $param) {
 			if(is_string($key)) {

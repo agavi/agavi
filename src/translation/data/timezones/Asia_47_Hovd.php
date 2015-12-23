@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Hovd".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -274,15 +274,43 @@ return array (
       'time' => 1159552800,
       'type' => 1,
     ),
+    47 => 
+    array (
+      'time' => 1427482800,
+      'type' => 2,
+    ),
+    48 => 
+    array (
+      'time' => 1443196800,
+      'type' => 1,
+    ),
   ),
   'finalRule' => 
   array (
-    'type' => 'none',
+    'type' => 'dynamic',
     'offset' => 25200,
+    'name' => 'HOV%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => -1,
+      'day_of_week' => 7,
+      'time' => 7200000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 8,
+      'date' => -1,
+      'day_of_week' => 7,
+      'time' => 0,
+      'type' => 0,
+    ),
     'startYear' => 2007,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Hovd',
 );
 

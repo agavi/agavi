@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "Asia/Jayapura".
- * Compiled from olson file "asia", version 8.69.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -22,13 +22,13 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'EIT',
+      'name' => 'WIT',
     ),
     1 => 
     array (
       'rawOffset' => 34200,
       'dstOffset' => 0,
-      'name' => 'CST',
+      'name' => 'ACST',
     ),
   ),
   'rules' => 
@@ -52,12 +52,12 @@ return array (
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'EIT',
+    'name' => 'WIT',
     'offset' => 32400,
     'startYear' => 1964,
   ),
-  'source' => 'asia',
-  'version' => '8.69',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'Asia/Jayapura',
 );
 

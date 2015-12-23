@@ -106,6 +106,7 @@
 		</xs:sequence>
 		<xs:attribute name="method" type="types_1_0:php_label_list" />
 		<xs:attribute name="severity" type="severity" />
+		<xs:attribute name="translation_domain" type="xs:string" />
 	</xs:complexType>
 
 	<xs:group name="validators">
@@ -118,8 +119,10 @@
 	</xs:group>
 
 	<xs:complexType name="validator_definition">
-		<xs:sequence>
+		<xs:sequence maxOccurs="unbounded">
 			<xs:group ref="envelope_1_1:parameters" />
+			<xs:group ref="errors"
+			          minOccurs="0" />
 		</xs:sequence>
 		<xs:attribute name="name" type="types_1_0:non_empty_string" use="required" />
 		<xs:attribute name="class" type="types_1_0:php_class" use="required" />

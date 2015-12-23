@@ -2,7 +2,7 @@
 
 /**
  * Data file for timezone "America/Cayman".
- * Compiled from olson file "northamerica", version 8.51.
+ * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
  * @subpackage translation
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => -18432,
+      'rawOffset' => -18431,
       'dstOffset' => 0,
       'name' => 'KMT',
     ),
@@ -40,19 +40,36 @@ return array (
     ),
     1 => 
     array (
-      'time' => -1827687168,
+      'time' => -1827687169,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'EST',
+    'type' => 'dynamic',
     'offset' => -18000,
+    'name' => 'E%sT',
+    'save' => 3600,
+    'start' => 
+    array (
+      'month' => 2,
+      'date' => '8',
+      'day_of_week' => -1,
+      'time' => 7200000,
+      'type' => 0,
+    ),
+    'end' => 
+    array (
+      'month' => 10,
+      'date' => '1',
+      'day_of_week' => -1,
+      'time' => 7200000,
+      'type' => 0,
+    ),
     'startYear' => 1913,
   ),
-  'source' => 'northamerica',
-  'version' => '8.51',
+  'source' => '(unknown)',
+  'version' => '(unknown)',
   'name' => 'America/Cayman',
 );
 
