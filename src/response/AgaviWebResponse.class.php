@@ -315,7 +315,7 @@ class AgaviWebResponse extends AgaviResponse
 			}
 			foreach($otherResponse->getCookies() as $name => $cookie) {
 				if(!$this->hasCookie($name)) {
-					$this->setCookie($name, $cookie['value'], $cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'], $cookie['encode']);
+					$this->setCookie($name, $cookie['value'], $cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'], $cookie['encode_callback']);
 				}
 			}
 			if($otherResponse->hasRedirect() && !$this->hasRedirect()) {
