@@ -26,6 +26,6 @@ matrix:
   fast_finish: true
 
 before_script:
-  - composer install
+  - composer install --ignore-platform-reqs
 
 script: php test/run-tests.php $(if [ $PROCESS_ISOLATION -eq 1 ]; then echo "--process-isolation"; fi)
