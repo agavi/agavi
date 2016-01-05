@@ -44,7 +44,7 @@ library requirement to the `composer.json` file of your project works as well:
 ```json
 {
     "require": {
-        "agavi/agavi": "1.0.7"
+        "agavi/agavi": "~1.0.0"
     }
 }
 ```
