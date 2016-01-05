@@ -8,6 +8,8 @@ Configuration
 -------------
 All configuration namespaces got bumped to version 1.1. For example, the envelope namespace is now "http://agavi.org/agavi/config/global/envelope/1.1", and the factories.xml namespace is "http://agavi.org/agavi/config/parts/factories/1.1". XSL transformations will automatically port your existing configuration files to new versions and apply backwards compatibility modifications where necessary. If you do not have the XSL extension installed or if you would like to port the configuration files to the new namespace, adjust the namespace declarations accordingly. Occasionally, you will have to add, change or remove elements; new namespace versions may also affect system behavior. All changes that might affect your application are outlined in this file.
 
+The substitution of XML entities in configuration files was fixed. This may break your code in very rare cases, as entities were stripped previously.
+
 Filters
 -------
 AgaviIFilter::executeOnce() has been deprecated. The method was a leftover from an early development version of Agavi 0.11 that did not distinguish between global and action filters yet. In almost all cases, if your filter is using this method, you can simply rename it to execute(). If your filter is supposed to be usable both as a global and as an action filter (i.e. by implementing both AgaviIGlobalFilter and AgaviIActionFilter), you can now detect the type of the filter chain the filter is running in by calling AgaviFilterChain::getType().

@@ -271,6 +271,7 @@ EOT;
 		}
 		
 		$doc = new DOMDocument();
+		$doc->substituteEntities = true;
 		$doc->load($file);
 		$xpath = new DOMXPath($doc);
 		$attributeNodes = $xpath->query('//@*');
