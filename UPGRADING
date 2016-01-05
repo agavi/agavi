@@ -36,6 +36,11 @@ Logging
 -------
 We added a getLevel() method to AgaviLogger and the AgaviILogger interface. This may break your code if you're using the AgaviILogger interface or have added a custom getLevel() method to classes inheriting from AgaviLogger.
 
+Routing
+-------
+
+Prefix, value & postfix of routing values do now default to null instead of an empty string if not present. This may break your code if you're e.g. checking default values in routing callbacks and expect them to be empty strings.
+
 Testing
 -------
 The PHPUnit minimum requirement has been updated to 3.7.
