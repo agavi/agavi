@@ -1563,10 +1563,10 @@ abstract class AgaviRouting extends AgaviParameterHolder
 		$tmpStr = '';
 		$inEscape = false;
 
-		$rxName = '';
-		$rxInner = '';
-		$rxPrefix = '';
-		$rxPostfix = '';
+		$rxName = null;
+		$rxInner = null;
+		$rxPrefix = null;
+		$rxPostfix = null;
 		$parenthesisCount = 0;
 		$bracketCount = 0;
 		$hasBrackets = false;
@@ -1606,7 +1606,7 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 					$tmpStr = '';
 					$state = 'rxStart';
-					$rxName = $rxInner = $rxPrefix = $rxPostfix = '';
+					$rxName = $rxInner = $rxPrefix = $rxPostfix = null;
 					$parenthesisCount = 1;
 					$bracketCount = 0;
 					$hasBrackets = false;
@@ -1671,13 +1671,13 @@ abstract class AgaviRouting extends AgaviParameterHolder
 
 							if(!isset($vars[$rxName])) {
 								if(strpbrk($rxPrefix, $rxChars) !== false) {
-									$rxPrefix = '';
+									$rxPrefix = null;
 								}
 								if(strpbrk($rxInner, $rxChars) !== false) {
-									$rxInner = '';
+									$rxInner = null;
 								}
 								if(strpbrk($rxPostfix, $rxChars) !== false) {
-									$rxPostfix = '';
+									$rxPostfix = null;
 								}
 
 								$vars[$rxName] = array('pre' => $rxPrefix, 'val' => $rxInner, 'post' => $rxPostfix, 'is_optional' => false);
@@ -1726,11 +1726,8 @@ abstract class AgaviRouting extends AgaviParameterHolder
 	 */
 	protected function parseParameterDefinition($def)
 	{
-		$name = '';
-		$rx = '';
-
-		preg_match('#([a-z0-9_-]+:)?(.*)#i', $def, $match);
-		return array(substr($match[1], 0, -1), $match[2]);
+		preg_match('#(?:([a-z0-9_-]+):)?(.*)#i', $def, $match);
+		return array($match[1] !== '' ? $match[1] : null, $match[2]);
 	}
 	
 	/**
