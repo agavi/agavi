@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ae:configurations [
+	<!ENTITY foo "bar">
+]>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+	<ae:configuration>
+		<Name>&foo;</Name>
+	</ae:configuration>
+</ae:configurations>

@@ -387,6 +387,7 @@ class AgaviXmlConfigParser
 		// AgaviXmlConfigDomDocument has convenience methods!
 		try {
 			$this->doc = new AgaviXmlConfigDomDocument();
+			$this->doc->substituteEntities = true;
 			$this->doc->load($path);
 		} catch(DOMException $dome) {
 			throw new AgaviParseException(sprintf('Configuration file "%s" could not be parsed: %s', $path, $dome->getMessage()), 0, $dome);

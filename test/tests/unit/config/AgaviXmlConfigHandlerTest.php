@@ -55,5 +55,16 @@ class AgaviXmlConfigHandlerTest extends ConfigHandlerTestBase
 		);
 		$this->assertSame($expected, $actual);
 	}
+
+	public function testParseEntities()
+	{
+		$RACH = new AgaviReturnArrayConfigHandler();
+		$document = $this->parseConfiguration(AgaviConfig::get('core.config_dir') . '/tests/entities.xml');
+		$actual = $this->includeCode($RACH->execute($document));
+		$expected = array(
+			'Name' => 'bar',
+		);
+		$this->assertSame($expected, $actual);
+	}
 }
 ?>

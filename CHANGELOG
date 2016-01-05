@@ -84,3 +84,4 @@ FIX: fix AgaviViewTestCase::assertViewSetsCookie throwing a notice (#1521) (Domi
 FIX: Fix "session_id" parameter of AgaviSessionStorage (#1479) (Thomas Bachem)
 FIX: Routing default values can now be zero or an empty string (#1545) (Thomas Bachem)
 FIX: BREAKING CHANGE: <filters> element in translation.xml doesn't allow multiple <filter> child elements (#1475) (Dominik, Armin Rezayati)
+FIX: BREAKING CHANGE: XML entities in configuration files are now properly substituted everywhere (#1571) (Thomas Bachem)
