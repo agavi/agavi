@@ -70,6 +70,7 @@ CHG: Make AgaviReturnArrayConfigHandler an AgaviXmlConfigHandler and add namespa
 CHG: Move loading of autoload.xml into Agavi::bootstrap() (#1206) (David)
 CHG: Add response to default template assigns (#1095) (David)
 CHG: Move all includes necessary for startup from Agavi::boostrap() into agavi.php (#1094) (David)
+CHG: AgaviException::getFixedTrace() now also fixes empty traces and traces with a missing file entry (#1572) (Thomas Bachem)
 
 FIX: Fix/remove unused/undefined variables and properties in the codebase (#1483) (Thomas Bachem)
 FIX: Fix AgaviGregorianCalendar::pinDayOfMonth() (#1543) (Thomas Bachem)

@@ -72,7 +72,7 @@ class AgaviException extends Exception
 		// fix stack trace in case it doesn't contain the exception origin as the first entry
 		$fixedTrace = $e->getTrace();
 		
-		if(isset($fixedTrace[0]['file']) && !($fixedTrace[0]['file'] == $e->getFile() && $fixedTrace[0]['line'] == $e->getLine())) {
+		if(!isset($fixedTrace[0]['file']) || !($fixedTrace[0]['file'] == $e->getFile() && $fixedTrace[0]['line'] == $e->getLine())) {
 			$fixedTrace = array_merge(array(array('file' => $e->getFile(), 'line' => $e->getLine())), $fixedTrace);
 		}
 		
