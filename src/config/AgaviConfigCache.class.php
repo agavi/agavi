@@ -78,7 +78,9 @@ class AgaviConfigCache
 	protected static function callHandler($name, $config, $cache, $context, array $handlerInfo = null)
 	{
 		self::setupHandlers();
-		
+
+		$name = realpath($name);
+
 		if(null === $handlerInfo) {
 			// we need to load the handlers first
 			$handlerInfo = self::getHandlerInfo($name);
