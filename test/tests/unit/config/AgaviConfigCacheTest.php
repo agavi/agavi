@@ -3,8 +3,8 @@
 class TestAgaviConfigCacheTicket1574 extends AgaviConfigCache {
 
 	public static function test() {
-		$cfg = '/vagrant/agavi_/test/sandbox/app/../app/modules/Default/config/module.xml';
-		$cfg2 = '/vagrant/agavi_/test/sandbox/app/modules/Default/config/module.xml';
+		$cfg = str_replace('sandbox', 'sandbox/../sandbox', AgaviConfig::get('core.module_dir')).'/Default/config/module.xml';
+		$cfg2 = AgaviConfig::get('core.module_dir').'/Default/config/module.xml';
 		self::callHandler($cfg, $cfg2, AgaviConfigCache::getCacheName($cfg), 'test');
 	}
 }

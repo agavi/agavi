@@ -79,11 +79,9 @@ class AgaviConfigCache
 	{
 		self::setupHandlers();
 
-		$name = realpath($name);
-
 		if(null === $handlerInfo) {
 			// we need to load the handlers first
-			$handlerInfo = self::getHandlerInfo($name);
+			$handlerInfo = self::getHandlerInfo(realpath($name));
 		}
 
 		if($handlerInfo === null) {
