@@ -1,5 +1,13 @@
 <?php
 
+class TestAgaviConfigCacheTicket1574 extends AgaviConfigCache {
+
+	public static function test() {
+		$cfg = '/vagrant/agavi_/test/sandbox/app/../app/modules/Default/config/module.xml';
+		$cfg2 = '/vagrant/agavi_/test/sandbox/app/modules/Default/config/module.xml';
+		self::callHandler($cfg, $cfg2, AgaviConfigCache::getCacheName($cfg), 'test');
+	}
+}
 class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 {
 	/**
@@ -236,5 +244,10 @@ class AgaviConfigCacheTest extends AgaviPhpUnitTestCase
 		$config = AgaviConfig::get('core.module_dir').'/Default/config/config_handlers.xml';
 		AgaviTestingConfigCache::addConfigHandlersFile($config);
 		AgaviConfigCache::checkConfig(AgaviConfig::get('core.module_dir').'/Default/config/autoload.xml');
+	}
+
+	public function testTicket1573()
+	{
+		TestAgaviConfigCacheTicket1574::test();
 	}
 }
