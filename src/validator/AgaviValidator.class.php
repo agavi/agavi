@@ -487,11 +487,7 @@ abstract class AgaviValidator extends AgaviParameterHolder
 			$this->affectedArguments = $affectedArguments;
 		}
 
-		$error = $this->getErrorMessage($index);
-
-		if($this->hasParameter('translation_domain')) {
-			$error = $this->getContext()->getTranslationManager()->_($error, $this->getParameter('translation_domain'));
-		}
+		$error = $this->getContext()->getTranslationManager()->_($this->getErrorMessage($index), $this->getParameter('translation_domain'));
 
 		if(!$this->incident) {
 			$this->incident = new AgaviValidationIncident($this, self::mapErrorCode($this->getParameter('severity', 'error')));
