@@ -285,6 +285,7 @@ class AgaviValidationManager extends AgaviParameterHolder implements AgaviIValid
 			}
 		}
 		$this->report->setResult($result);
+		$this->report->setDependTokens($this->getDependencyManager()->getDependTokens());
 
 		$ma = $req->getParameter('module_accessor');
 		$aa = $req->getParameter('action_accessor');
