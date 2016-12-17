@@ -67,13 +67,17 @@ class AgaviStreamTemplateLayer extends AgaviTemplateLayer
 			return null;
 		}
 		
+		$args = array();
 		if(AgaviConfig::get('core.use_translation')) {
 			// i18n is enabled, build a list of sprintf args with the locale identifier
 			foreach(AgaviLocale::getLookupPath($this->context->getTranslationManager()->getCurrentLocaleIdentifier()) as $identifier) {
 				$args[] = array('locale' => $identifier);
 			}
 		}
-		$args[] = array();
+		
+		if(empty($args)) {
+			$args[] = array(); // add one empty arg to always trigger target lookups (even if i18n is disabled etc.)
+		}
 		
 		$scheme = $this->getParameter('scheme');
 		// FIXME: a simple workaround for broken ubuntu and debian packages (fixed already), we can remove that for final 0.11
