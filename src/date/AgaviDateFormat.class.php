@@ -665,7 +665,7 @@ class AgaviDateFormat
 
 		$unprocessedTokens = array();
 
-		$tlCount = count($this->tokenList);
+		$tlCount = isset($this->tokenList) ? count($this->tokenList) : 0;
 		for($i = 0; $i < $tlCount; ++$i) {
 			if($datePos >= strlen($dateString)) {
 				if($strict) {
