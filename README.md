@@ -3,7 +3,6 @@
 - License: LGPL
 - Latest Version: [![Latest Stable Version](https://poser.pugx.org/agavi/agavi/version.png)](https://packagist.org/packages/agavi/agavi)
 - Build: [![Build Status](https://secure.travis-ci.org/agavi/agavi.png)](http://travis-ci.org/agavi/agavi)
-- Homepage: [http://www.agavi.org/](http://www.agavi.org/)
 - Releases: see [downloads page] or [github releases]
 
 ## Purpose
@@ -78,7 +77,7 @@ information can be found in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## Changelog
 
-See the latest changes in the [repository CHANGELOG](CHANGELOG) or on the [homepage](http://www.agavi.org/download/1.0.7/changelog).
+See the latest changes in the [repository CHANGELOG](CHANGELOG) or on the [homepage](http://www.agavi.org/download/1.0.8/changelog).
 The [1.0 release notes](RELEASE_NOTES-1.0) or [upcoming release notes](RELEASE_NOTES)
 may be helpful as well.
 
