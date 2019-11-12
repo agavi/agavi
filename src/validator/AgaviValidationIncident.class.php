@@ -55,7 +55,7 @@ class AgaviValidationIncident
 	 * @author     Dominik del Bondio <ddb@bitxtender.com>
 	 * @since      0.11.0
 	 */
-	public function __construct($validator, $severity = AgaviValidator::ERROR)
+	public function __construct(AgaviValidator $validator = null, $severity = AgaviValidator::ERROR)
 	{
 		$this->validator = $validator;
 		$this->severity = $severity;
