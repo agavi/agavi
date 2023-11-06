@@ -22,21 +22,21 @@ return array (
     array (
       'rawOffset' => -36000,
       'dstOffset' => 0,
-      'name' => 'TAHT',
+      'name' => '-10',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1806674504,
+      'time' => -1806674504.0,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'TAHT',
+    'name' => '-10',
     'offset' => -36000,
     'startYear' => 1913,
   ),

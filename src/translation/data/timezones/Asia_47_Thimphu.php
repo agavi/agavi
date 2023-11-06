@@ -22,32 +22,32 @@ return array (
     array (
       'rawOffset' => 19800,
       'dstOffset' => 0,
-      'name' => 'IST',
+      'name' => '+0530',
     ),
     1 => 
     array (
       'rawOffset' => 21600,
       'dstOffset' => 0,
-      'name' => 'BTT',
+      'name' => '+06',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -706341516,
+      'time' => -706341516.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 560025000,
+      'time' => 560025000.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'BTT',
+    'name' => '+06',
     'offset' => 21600,
     'startYear' => 1988,
   ),

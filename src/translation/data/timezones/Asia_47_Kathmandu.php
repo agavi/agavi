@@ -22,32 +22,32 @@ return array (
     array (
       'rawOffset' => 19800,
       'dstOffset' => 0,
-      'name' => 'IST',
+      'name' => '+0530',
     ),
     1 => 
     array (
       'rawOffset' => 20700,
       'dstOffset' => 0,
-      'name' => 'NPT',
+      'name' => '+0545',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1577943676,
+      'time' => -1577943676.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 504901800,
+      'time' => 504901800.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'NPT',
+    'name' => '+0545',
     'offset' => 20700,
     'startYear' => 1986,
   ),

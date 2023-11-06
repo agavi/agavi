@@ -22,59 +22,42 @@ return array (
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'TLT',
+      'name' => '+08',
     ),
     1 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JST',
-    ),
-    2 => 
-    array (
-      'rawOffset' => 32400,
-      'dstOffset' => 0,
-      'name' => 'TLT',
-    ),
-    3 => 
-    array (
-      'rawOffset' => 28800,
-      'dstOffset' => 0,
-      'name' => 'WITA',
+      'name' => '+09',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1830414140,
+      'time' => -1830414140.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -879152400,
+      'time' => -879152400.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -766054800,
-      'type' => 2,
+      'time' => 199897200.0,
+      'type' => 0,
     ),
     3 => 
     array (
-      'time' => 199897200,
-      'type' => 3,
-    ),
-    4 => 
-    array (
-      'time' => 969120000,
-      'type' => 2,
+      'time' => 969120000.0,
+      'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'TLT',
+    'name' => '+09',
     'offset' => 32400,
     'startYear' => 2001,
   ),

@@ -28,26 +28,26 @@ return array (
     array (
       'rawOffset' => 25200,
       'dstOffset' => 0,
-      'name' => 'ICT',
+      'name' => '+07',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2840164924,
+      'time' => -2840164924.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1570084924,
+      'time' => -1570084924.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'ICT',
+    'name' => '+07',
     'offset' => 25200,
     'startYear' => 1921,
   ),

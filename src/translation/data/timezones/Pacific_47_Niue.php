@@ -22,45 +22,34 @@ return array (
     array (
       'rawOffset' => -40800,
       'dstOffset' => 0,
-      'name' => 'NUT',
+      'name' => '-1120',
     ),
     1 => 
     array (
-      'rawOffset' => -41400,
-      'dstOffset' => 0,
-      'name' => 'NUT',
-    ),
-    2 => 
-    array (
       'rawOffset' => -39600,
       'dstOffset' => 0,
-      'name' => 'NUT',
+      'name' => '-11',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2177412020,
+      'time' => -543069620.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -599575200,
+      'time' => -173623200.0,
       'type' => 1,
-    ),
-    2 => 
-    array (
-      'time' => 276089400,
-      'type' => 2,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'NUT',
+    'name' => '-11',
     'offset' => -39600,
-    'startYear' => 1979,
+    'startYear' => 1965,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

@@ -22,21 +22,21 @@ return array (
     array (
       'rawOffset' => 14400,
       'dstOffset' => 0,
-      'name' => 'GST',
+      'name' => '+04',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1577936472,
+      'time' => -1577936472.0,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'GST',
+    'name' => '+04',
     'offset' => 14400,
     'startYear' => 1920,
   ),

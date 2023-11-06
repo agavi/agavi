@@ -22,83 +22,67 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JST',
+      'name' => 'JT',
     ),
     1 => 
     array (
       'rawOffset' => 32400,
-      'dstOffset' => 0,
-      'name' => 'JCST',
+      'dstOffset' => 3600,
+      'name' => 'JDT',
     ),
     2 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JT',
-    ),
-    3 => 
-    array (
-      'rawOffset' => 32400,
-      'dstOffset' => 3600,
-      'name' => 'JDT',
+      'name' => 'JST',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2587712400,
+      'time' => -2587712400.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -2335251600,
+      'time' => -683802000.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1017824400,
+      'time' => -672310800.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -683794800,
-      'type' => 3,
+      'time' => -654771600.0,
+      'type' => 1,
     ),
     4 => 
     array (
-      'time' => -672393600,
-      'type' => 0,
+      'time' => -640864800.0,
+      'type' => 2,
     ),
     5 => 
     array (
-      'time' => -654764400,
-      'type' => 3,
+      'time' => -620298000.0,
+      'type' => 1,
     ),
     6 => 
     array (
-      'time' => -640944000,
-      'type' => 0,
+      'time' => -609415200.0,
+      'type' => 2,
     ),
     7 => 
     array (
-      'time' => -620290800,
-      'type' => 3,
+      'time' => -588848400.0,
+      'type' => 1,
     ),
     8 => 
     array (
-      'time' => -609494400,
-      'type' => 0,
-    ),
-    9 => 
-    array (
-      'time' => -588841200,
-      'type' => 3,
-    ),
-    10 => 
-    array (
-      'time' => -578044800,
-      'type' => 0,
+      'time' => -577965600.0,
+      'type' => 2,
     ),
   ),
   'finalRule' => 

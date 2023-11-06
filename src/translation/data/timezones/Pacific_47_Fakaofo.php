@@ -22,32 +22,32 @@ return array (
     array (
       'rawOffset' => -39600,
       'dstOffset' => 0,
-      'name' => 'TKT',
+      'name' => '-11',
     ),
     1 => 
     array (
       'rawOffset' => 46800,
       'dstOffset' => 0,
-      'name' => 'TKT',
+      'name' => '+13',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2177411704,
+      'time' => -2177411704.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 1325242800,
+      'time' => 1325242800.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'TKT',
+    'name' => '+13',
     'offset' => 46800,
     'startYear' => 2012,
   ),

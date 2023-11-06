@@ -20,164 +20,169 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => -37800,
+      'rawOffset' => -38344,
       'dstOffset' => 0,
-      'name' => 'CKT',
+      'name' => 'LMT',
     ),
     1 => 
     array (
-      'rawOffset' => -36000,
+      'rawOffset' => -37800,
       'dstOffset' => 0,
-      'name' => 'CKHST',
+      'name' => '-1030',
     ),
     2 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 0,
-      'name' => 'CKT',
+      'name' => '-10',
     ),
     3 => 
     array (
       'rawOffset' => -36000,
       'dstOffset' => 1800,
-      'name' => 'CKHST',
+      'name' => '-0930',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2177414456,
+      'time' => -2209555256.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 279714600,
+      'time' => -543072056.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => 289387800,
+      'time' => 279714600.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => 309952800,
-      'type' => 3,
+      'time' => 289387800.0,
+      'type' => 2,
     ),
     4 => 
     array (
-      'time' => 320837400,
-      'type' => 2,
+      'time' => 309952800.0,
+      'type' => 3,
     ),
     5 => 
     array (
-      'time' => 341402400,
-      'type' => 3,
+      'time' => 320837400.0,
+      'type' => 2,
     ),
     6 => 
     array (
-      'time' => 352287000,
-      'type' => 2,
+      'time' => 341402400.0,
+      'type' => 3,
     ),
     7 => 
     array (
-      'time' => 372852000,
-      'type' => 3,
+      'time' => 352287000.0,
+      'type' => 2,
     ),
     8 => 
     array (
-      'time' => 384341400,
-      'type' => 2,
+      'time' => 372852000.0,
+      'type' => 3,
     ),
     9 => 
     array (
-      'time' => 404906400,
-      'type' => 3,
+      'time' => 384341400.0,
+      'type' => 2,
     ),
     10 => 
     array (
-      'time' => 415791000,
-      'type' => 2,
+      'time' => 404906400.0,
+      'type' => 3,
     ),
     11 => 
     array (
-      'time' => 436356000,
-      'type' => 3,
+      'time' => 415791000.0,
+      'type' => 2,
     ),
     12 => 
     array (
-      'time' => 447240600,
-      'type' => 2,
+      'time' => 436356000.0,
+      'type' => 3,
     ),
     13 => 
     array (
-      'time' => 467805600,
-      'type' => 3,
+      'time' => 447240600.0,
+      'type' => 2,
     ),
     14 => 
     array (
-      'time' => 478690200,
-      'type' => 2,
+      'time' => 467805600.0,
+      'type' => 3,
     ),
     15 => 
     array (
-      'time' => 499255200,
-      'type' => 3,
+      'time' => 478690200.0,
+      'type' => 2,
     ),
     16 => 
     array (
-      'time' => 510139800,
-      'type' => 2,
+      'time' => 499255200.0,
+      'type' => 3,
     ),
     17 => 
     array (
-      'time' => 530704800,
-      'type' => 3,
+      'time' => 510139800.0,
+      'type' => 2,
     ),
     18 => 
     array (
-      'time' => 541589400,
-      'type' => 2,
+      'time' => 530704800.0,
+      'type' => 3,
     ),
     19 => 
     array (
-      'time' => 562154400,
-      'type' => 3,
+      'time' => 541589400.0,
+      'type' => 2,
     ),
     20 => 
     array (
-      'time' => 573643800,
-      'type' => 2,
+      'time' => 562154400.0,
+      'type' => 3,
     ),
     21 => 
     array (
-      'time' => 594208800,
-      'type' => 3,
+      'time' => 573643800.0,
+      'type' => 2,
     ),
     22 => 
     array (
-      'time' => 605093400,
-      'type' => 2,
+      'time' => 594208800.0,
+      'type' => 3,
     ),
     23 => 
     array (
-      'time' => 625658400,
-      'type' => 3,
+      'time' => 605093400.0,
+      'type' => 2,
     ),
     24 => 
     array (
-      'time' => 636543000,
-      'type' => 2,
+      'time' => 625658400.0,
+      'type' => 3,
     ),
     25 => 
     array (
-      'time' => 657108000,
-      'type' => 3,
+      'time' => 636543000.0,
+      'type' => 2,
     ),
     26 => 
     array (
-      'time' => 667992600,
+      'time' => 657108000.0,
+      'type' => 3,
+    ),
+    27 => 
+    array (
+      'time' => 667992600.0,
       'type' => 2,
     ),
   ),

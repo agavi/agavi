@@ -32,9 +32,9 @@ return array (
     ),
     2 => 
     array (
-      'rawOffset' => -21600,
-      'dstOffset' => 3600,
-      'name' => 'CDT',
+      'rawOffset' => -25200,
+      'dstOffset' => 0,
+      'name' => 'MT',
     ),
     3 => 
     array (
@@ -42,148 +42,224 @@ return array (
       'dstOffset' => 3600,
       'name' => 'MDT',
     ),
+    4 => 
+    array (
+      'rawOffset' => -21600,
+      'dstOffset' => 3600,
+      'name' => 'CDT',
+    ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1514739600,
+      'time' => -1514739600.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1343066400,
+      'time' => -1343066400.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1234807200,
-      'type' => 0,
+      'time' => -1234807200.0,
+      'type' => 2,
     ),
     3 => 
     array (
-      'time' => -1220292000,
-      'type' => 1,
+      'time' => -1220292000.0,
+      'type' => 3,
     ),
     4 => 
     array (
-      'time' => -1207159200,
+      'time' => -1207159200.0,
       'type' => 0,
     ),
     5 => 
     array (
-      'time' => -1191344400,
+      'time' => -1191344400.0,
       'type' => 1,
     ),
     6 => 
     array (
-      'time' => 820476000,
+      'time' => 820476000.0,
       'type' => 1,
     ),
     7 => 
     array (
-      'time' => 828864000,
-      'type' => 2,
+      'time' => 828864000.0,
+      'type' => 4,
     ),
     8 => 
     array (
-      'time' => 846399600,
+      'time' => 846399600.0,
       'type' => 1,
     ),
     9 => 
     array (
-      'time' => 860313600,
-      'type' => 2,
+      'time' => 860313600.0,
+      'type' => 4,
     ),
     10 => 
     array (
-      'time' => 877849200,
+      'time' => 877849200.0,
       'type' => 1,
     ),
     11 => 
     array (
-      'time' => 883634400,
+      'time' => 883634400.0,
       'type' => 1,
     ),
     12 => 
     array (
-      'time' => 891410400,
+      'time' => 891410400.0,
       'type' => 0,
     ),
     13 => 
     array (
-      'time' => 891766800,
+      'time' => 891766800.0,
       'type' => 3,
     ),
     14 => 
     array (
-      'time' => 909302400,
+      'time' => 909302400.0,
       'type' => 0,
     ),
     15 => 
     array (
-      'time' => 923216400,
+      'time' => 923216400.0,
       'type' => 3,
     ),
     16 => 
     array (
-      'time' => 941356800,
+      'time' => 941356800.0,
       'type' => 0,
     ),
     17 => 
     array (
-      'time' => 954666000,
+      'time' => 954666000.0,
       'type' => 3,
     ),
     18 => 
     array (
-      'time' => 972806400,
+      'time' => 972806400.0,
       'type' => 0,
     ),
     19 => 
     array (
-      'time' => 989139600,
+      'time' => 989139600.0,
       'type' => 3,
     ),
     20 => 
     array (
-      'time' => 1001836800,
+      'time' => 1001836800.0,
       'type' => 0,
     ),
     21 => 
     array (
-      'time' => 1018170000,
+      'time' => 1018170000.0,
       'type' => 3,
     ),
     22 => 
     array (
-      'time' => 1035705600,
+      'time' => 1035705600.0,
+      'type' => 0,
+    ),
+    23 => 
+    array (
+      'time' => 1049619600.0,
+      'type' => 3,
+    ),
+    24 => 
+    array (
+      'time' => 1067155200.0,
+      'type' => 0,
+    ),
+    25 => 
+    array (
+      'time' => 1081069200.0,
+      'type' => 3,
+    ),
+    26 => 
+    array (
+      'time' => 1099209600.0,
+      'type' => 0,
+    ),
+    27 => 
+    array (
+      'time' => 1112518800.0,
+      'type' => 3,
+    ),
+    28 => 
+    array (
+      'time' => 1130659200.0,
+      'type' => 0,
+    ),
+    29 => 
+    array (
+      'time' => 1143968400.0,
+      'type' => 3,
+    ),
+    30 => 
+    array (
+      'time' => 1162108800.0,
+      'type' => 0,
+    ),
+    31 => 
+    array (
+      'time' => 1175418000.0,
+      'type' => 3,
+    ),
+    32 => 
+    array (
+      'time' => 1193558400.0,
+      'type' => 0,
+    ),
+    33 => 
+    array (
+      'time' => 1207472400.0,
+      'type' => 3,
+    ),
+    34 => 
+    array (
+      'time' => 1225008000.0,
+      'type' => 0,
+    ),
+    35 => 
+    array (
+      'time' => 1238922000.0,
+      'type' => 3,
+    ),
+    36 => 
+    array (
+      'time' => 1256457600.0,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'dynamic',
-    'offset' => -25200,
-    'name' => 'M%sT',
+    'offset' => -21600,
+    'name' => 'C%sT',
     'save' => 3600,
     'start' => 
     array (
       'month' => 2,
       'date' => '8',
       'day_of_week' => -1,
-      'time' => 7200000,
-      'type' => 0,
+      'time' => 7200000.0,
+      'type' => 0.0,
     ),
     'end' => 
     array (
       'month' => 10,
       'date' => '1',
       'day_of_week' => -1,
-      'time' => 7200000,
-      'type' => 0,
+      'time' => 7200000.0,
+      'type' => 0.0,
     ),
-    'startYear' => 2002,
+    'startYear' => 2010,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

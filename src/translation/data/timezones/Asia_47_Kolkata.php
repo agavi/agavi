@@ -26,9 +26,9 @@ return array (
     ),
     1 => 
     array (
-      'rawOffset' => 23400,
+      'rawOffset' => 19270,
       'dstOffset' => 0,
-      'name' => 'BURT',
+      'name' => 'MMT',
     ),
     2 => 
     array (
@@ -40,34 +40,44 @@ return array (
     array (
       'rawOffset' => 19800,
       'dstOffset' => 3600,
-      'name' => 'IST',
+      'name' => '+0630',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2840162008,
+      'time' => -3645237208.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -891582800,
+      'time' => -3155694800.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -872058600,
+      'time' => -2019705670.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -862637400,
+      'time' => -891581400.0,
       'type' => 3,
     ),
     4 => 
     array (
-      'time' => -764145000,
+      'time' => -872058600.0,
+      'type' => 2,
+    ),
+    5 => 
+    array (
+      'time' => -862637400.0,
+      'type' => 3,
+    ),
+    6 => 
+    array (
+      'time' => -764145000.0,
       'type' => 2,
     ),
   ),

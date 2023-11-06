@@ -20,6 +20,24 @@ return array (
   array (
     0 => 
     array (
+      'rawOffset' => 0,
+      'dstOffset' => 0,
+      'name' => 'GMT',
+    ),
+    1 => 
+    array (
+      'rawOffset' => 815,
+      'dstOffset' => 0,
+      'name' => 'LMT',
+    ),
+    2 => 
+    array (
+      'rawOffset' => 1800,
+      'dstOffset' => 0,
+      'name' => '+0030',
+    ),
+    3 => 
+    array (
       'rawOffset' => 3600,
       'dstOffset' => 0,
       'name' => 'WAT',
@@ -29,8 +47,23 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1588464816,
+      'time' => -2035584815.0,
       'type' => 0,
+    ),
+    1 => 
+    array (
+      'time' => -1940889600.0,
+      'type' => 1,
+    ),
+    2 => 
+    array (
+      'time' => -1767226415.0,
+      'type' => 2,
+    ),
+    3 => 
+    array (
+      'time' => -1588465800.0,
+      'type' => 3,
     ),
   ),
   'finalRule' => 

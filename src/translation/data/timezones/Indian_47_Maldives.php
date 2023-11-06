@@ -28,26 +28,26 @@ return array (
     array (
       'rawOffset' => 18000,
       'dstOffset' => 0,
-      'name' => 'MVT',
+      'name' => '+05',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2840158440,
+      'time' => -2840158440.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -315636840,
+      'time' => -315636840.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'MVT',
+    'name' => '+05',
     'offset' => 18000,
     'startYear' => 1960,
   ),

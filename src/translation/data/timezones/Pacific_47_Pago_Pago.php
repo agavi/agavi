@@ -28,18 +28,6 @@ return array (
     array (
       'rawOffset' => -39600,
       'dstOffset' => 0,
-      'name' => 'NST',
-    ),
-    2 => 
-    array (
-      'rawOffset' => -39600,
-      'dstOffset' => 0,
-      'name' => 'BST',
-    ),
-    3 => 
-    array (
-      'rawOffset' => -39600,
-      'dstOffset' => 0,
       'name' => 'SST',
     ),
   ),
@@ -47,23 +35,13 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2855738232,
+      'time' => -2445424632.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1861879032,
+      'time' => -1861879032.0,
       'type' => 1,
-    ),
-    2 => 
-    array (
-      'time' => -86878800,
-      'type' => 2,
-    ),
-    3 => 
-    array (
-      'time' => 439038000,
-      'type' => 3,
     ),
   ),
   'finalRule' => 
@@ -71,7 +49,7 @@ return array (
     'type' => 'static',
     'name' => 'SST',
     'offset' => -39600,
-    'startYear' => 1984,
+    'startYear' => 1912,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

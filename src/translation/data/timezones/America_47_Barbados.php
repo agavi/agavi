@@ -20,80 +20,115 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => -14309,
-      'dstOffset' => 0,
-      'name' => 'BMT',
-    ),
-    1 => 
-    array (
       'rawOffset' => -14400,
       'dstOffset' => 0,
       'name' => 'AT',
     ),
-    2 => 
+    1 => 
     array (
       'rawOffset' => -14400,
       'dstOffset' => 3600,
       'name' => 'ADT',
     ),
-    3 => 
+    2 => 
     array (
       'rawOffset' => -14400,
       'dstOffset' => 0,
       'name' => 'AST',
+    ),
+    3 => 
+    array (
+      'rawOffset' => -14400,
+      'dstOffset' => 1800,
+      'name' => '-0330',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1451678491,
+      'time' => -1841256091.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1199217691,
+      'time' => -874263600.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => 234943200,
+      'time' => -862682400.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => 244616400,
-      'type' => 3,
+      'time' => -841604400.0,
+      'type' => 1,
     ),
     4 => 
     array (
-      'time' => 261554400,
+      'time' => -830714400.0,
       'type' => 2,
     ),
     5 => 
     array (
-      'time' => 276066000,
-      'type' => 3,
+      'time' => -820526400.0,
+      'type' => 2,
     ),
     6 => 
     array (
-      'time' => 293004000,
-      'type' => 2,
+      'time' => -811882800.0,
+      'type' => 3,
     ),
     7 => 
     array (
-      'time' => 307515600,
-      'type' => 3,
+      'time' => -798660000.0,
+      'type' => 2,
     ),
     8 => 
     array (
-      'time' => 325058400,
+      'time' => -788904000.0,
       'type' => 2,
     ),
     9 => 
     array (
-      'time' => 338706000,
-      'type' => 3,
+      'time' => 234943200.0,
+      'type' => 1,
+    ),
+    10 => 
+    array (
+      'time' => 244616400.0,
+      'type' => 2,
+    ),
+    11 => 
+    array (
+      'time' => 261554400.0,
+      'type' => 1,
+    ),
+    12 => 
+    array (
+      'time' => 276066000.0,
+      'type' => 2,
+    ),
+    13 => 
+    array (
+      'time' => 293004000.0,
+      'type' => 1,
+    ),
+    14 => 
+    array (
+      'time' => 307515600.0,
+      'type' => 2,
+    ),
+    15 => 
+    array (
+      'time' => 325058400.0,
+      'type' => 1,
+    ),
+    16 => 
+    array (
+      'time' => 338706000.0,
+      'type' => 2,
     ),
   ),
   'finalRule' => 

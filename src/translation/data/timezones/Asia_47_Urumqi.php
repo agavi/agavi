@@ -22,21 +22,21 @@ return array (
     array (
       'rawOffset' => 21600,
       'dstOffset' => 0,
-      'name' => 'XJT',
+      'name' => '+06',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1325483420,
+      'time' => -1325483420.0,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'XJT',
+    'name' => '+06',
     'offset' => 21600,
     'startYear' => 1928,
   ),

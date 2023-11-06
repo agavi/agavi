@@ -32,9 +32,9 @@ return array (
     ),
     2 => 
     array (
-      'rawOffset' => -28800,
+      'rawOffset' => -25200,
       'dstOffset' => 0,
-      'name' => 'PST',
+      'name' => 'MT',
     ),
     3 => 
     array (
@@ -42,87 +42,93 @@ return array (
       'dstOffset' => 3600,
       'name' => 'MDT',
     ),
+    4 => 
+    array (
+      'rawOffset' => -28800,
+      'dstOffset' => 0,
+      'name' => 'PST',
+    ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1514739600,
+      'time' => -1514739600.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1343066400,
+      'time' => -1343066400.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1234807200,
-      'type' => 0,
+      'time' => -1234807200.0,
+      'type' => 2,
     ),
     3 => 
     array (
-      'time' => -1220292000,
-      'type' => 1,
+      'time' => -1220292000.0,
+      'type' => 3,
     ),
     4 => 
     array (
-      'time' => -1207159200,
+      'time' => -1207159200.0,
       'type' => 0,
     ),
     5 => 
     array (
-      'time' => -1191344400,
+      'time' => -1191344400.0,
       'type' => 1,
     ),
     6 => 
     array (
-      'time' => -873828000,
+      'time' => -873828000.0,
       'type' => 0,
     ),
     7 => 
     array (
-      'time' => -661539600,
-      'type' => 2,
+      'time' => -661539600.0,
+      'type' => 4,
     ),
     8 => 
     array (
-      'time' => 28800,
+      'time' => 28800.0,
       'type' => 0,
     ),
     9 => 
     array (
-      'time' => 828867600,
+      'time' => 828867600.0,
       'type' => 3,
     ),
     10 => 
     array (
-      'time' => 846403200,
+      'time' => 846403200.0,
       'type' => 0,
     ),
     11 => 
     array (
-      'time' => 860317200,
+      'time' => 860317200.0,
       'type' => 3,
     ),
     12 => 
     array (
-      'time' => 877852800,
+      'time' => 877852800.0,
       'type' => 0,
     ),
     13 => 
     array (
-      'time' => 891766800,
+      'time' => 891766800.0,
       'type' => 3,
     ),
     14 => 
     array (
-      'time' => 909302400,
+      'time' => 909302400.0,
       'type' => 0,
     ),
     15 => 
     array (
-      'time' => 915174000,
+      'time' => 915174000.0,
       'type' => 0,
     ),
   ),

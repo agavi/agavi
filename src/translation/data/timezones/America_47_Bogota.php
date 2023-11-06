@@ -28,35 +28,35 @@ return array (
     array (
       'rawOffset' => -18000,
       'dstOffset' => 0,
-      'name' => 'COT',
+      'name' => '-05',
     ),
     2 => 
     array (
       'rawOffset' => -18000,
       'dstOffset' => 3600,
-      'name' => 'COST',
+      'name' => '-04',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2707671824,
+      'time' => -2707671824.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1739041424,
+      'time' => -1739041424.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => 704869200,
+      'time' => 704869200.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => 733896000,
+      'time' => 729057600.0,
       'type' => 1,
     ),
   ),

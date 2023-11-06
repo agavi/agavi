@@ -22,21 +22,21 @@ return array (
     array (
       'rawOffset' => 39600,
       'dstOffset' => 0,
-      'name' => 'SBT',
+      'name' => '+11',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1806748788,
+      'time' => -1806748788.0,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'SBT',
+    'name' => '+11',
     'offset' => 39600,
     'startYear' => 1913,
   ),

@@ -22,160 +22,154 @@ return array (
     array (
       'rawOffset' => 18000,
       'dstOffset' => 0,
-      'name' => 'DUST',
+      'name' => '+05',
     ),
     1 => 
     array (
       'rawOffset' => 21600,
       'dstOffset' => 0,
-      'name' => 'DUST',
+      'name' => '+06',
     ),
     2 => 
     array (
       'rawOffset' => 21600,
       'dstOffset' => 3600,
-      'name' => 'DUSST',
+      'name' => '+07',
     ),
     3 => 
     array (
       'rawOffset' => 18000,
       'dstOffset' => 3600,
-      'name' => 'DUSST',
-    ),
-    4 => 
-    array (
-      'rawOffset' => 18000,
-      'dstOffset' => 0,
-      'name' => 'TJT',
+      'name' => '+06',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1441168512,
+      'time' => -1441168512.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1247547600,
+      'time' => -1247547600.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => 354909600,
+      'time' => 354909600.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => 370717200,
+      'time' => 370717200.0,
       'type' => 1,
     ),
     4 => 
     array (
-      'time' => 386445600,
+      'time' => 386445600.0,
       'type' => 2,
     ),
     5 => 
     array (
-      'time' => 402253200,
+      'time' => 402253200.0,
       'type' => 1,
     ),
     6 => 
     array (
-      'time' => 417981600,
+      'time' => 417981600.0,
       'type' => 2,
     ),
     7 => 
     array (
-      'time' => 433789200,
+      'time' => 433789200.0,
       'type' => 1,
     ),
     8 => 
     array (
-      'time' => 449611200,
+      'time' => 449611200.0,
       'type' => 2,
     ),
     9 => 
     array (
-      'time' => 465336000,
+      'time' => 465336000.0,
       'type' => 1,
     ),
     10 => 
     array (
-      'time' => 481060800,
+      'time' => 481060800.0,
       'type' => 2,
     ),
     11 => 
     array (
-      'time' => 496785600,
+      'time' => 496785600.0,
       'type' => 1,
     ),
     12 => 
     array (
-      'time' => 512510400,
+      'time' => 512510400.0,
       'type' => 2,
     ),
     13 => 
     array (
-      'time' => 528235200,
+      'time' => 528235200.0,
       'type' => 1,
     ),
     14 => 
     array (
-      'time' => 543960000,
+      'time' => 543960000.0,
       'type' => 2,
     ),
     15 => 
     array (
-      'time' => 559684800,
+      'time' => 559684800.0,
       'type' => 1,
     ),
     16 => 
     array (
-      'time' => 575409600,
+      'time' => 575409600.0,
       'type' => 2,
     ),
     17 => 
     array (
-      'time' => 591134400,
+      'time' => 591134400.0,
       'type' => 1,
     ),
     18 => 
     array (
-      'time' => 606859200,
+      'time' => 606859200.0,
       'type' => 2,
     ),
     19 => 
     array (
-      'time' => 622584000,
+      'time' => 622584000.0,
       'type' => 1,
     ),
     20 => 
     array (
-      'time' => 638308800,
+      'time' => 638308800.0,
       'type' => 2,
     ),
     21 => 
     array (
-      'time' => 654638400,
+      'time' => 654638400.0,
       'type' => 1,
     ),
     22 => 
     array (
-      'time' => 670363200,
+      'time' => 670363200.0,
       'type' => 3,
     ),
     23 => 
     array (
-      'time' => 684363600,
-      'type' => 4,
+      'time' => 684363600.0,
+      'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'TJT',
+    'name' => '+05',
     'offset' => 18000,
     'startYear' => 1992,
   ),

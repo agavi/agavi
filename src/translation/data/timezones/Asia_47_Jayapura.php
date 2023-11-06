@@ -22,31 +22,37 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'WIT',
+      'name' => '+09',
     ),
     1 => 
     array (
       'rawOffset' => 34200,
       'dstOffset' => 0,
-      'name' => 'ACST',
+      'name' => '+0930',
+    ),
+    2 => 
+    array (
+      'rawOffset' => 32400,
+      'dstOffset' => 0,
+      'name' => 'WIT',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1172913768,
+      'time' => -1172913768.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -799491600,
+      'time' => -799491600.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -189423000,
-      'type' => 0,
+      'time' => -189423000.0,
+      'type' => 2,
     ),
   ),
   'finalRule' => 

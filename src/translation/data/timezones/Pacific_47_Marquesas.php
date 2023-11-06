@@ -22,21 +22,21 @@ return array (
     array (
       'rawOffset' => -34200,
       'dstOffset' => 0,
-      'name' => 'MART',
+      'name' => '-0930',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1806676920,
+      'time' => -1806676920.0,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'MART',
+    'name' => '-0930',
     'offset' => -34200,
     'startYear' => 1913,
   ),

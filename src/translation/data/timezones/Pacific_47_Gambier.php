@@ -22,21 +22,21 @@ return array (
     array (
       'rawOffset' => -32400,
       'dstOffset' => 0,
-      'name' => 'GAMT',
+      'name' => '-09',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1806678012,
+      'time' => -1806678012.0,
       'type' => 0,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'GAMT',
+    'name' => '-09',
     'offset' => -32400,
     'startYear' => 1913,
   ),

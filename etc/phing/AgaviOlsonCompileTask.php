@@ -96,8 +96,13 @@ return %s;
 
 		$zoneList = array();
 
+
 		foreach($zones as $name => $zone) {
-			$fname = preg_replace('#([^a-z0-9_])#ie', "'_'.ord('\\1').'_'", $name) . '.php';
+			echo "NAME: $name\n";
+			//$fname = preg_replace_callback('#([^a-z0-9_])#i', function($matches) {str_replace($matches[1], '_'.ord($matches[1]).'_', $name);}, $name) . '.php';
+			$fname = str_replace(['/', '+','-'], ['_'.ord('/').'_','_'.ord('+').'_','_'.ord('-').'_'], $name) . '.php';
+			echo "FNAME: $fname\n\n";
+
 			$pathname = $this->outputDir . '/' . $fname;
 			$zone['name'] = $name;
 
@@ -122,6 +127,7 @@ return %s;
 		}
 
 		foreach($links as $from => $to) {
+			echo "LINK FROM $from TO $to\n";
 			$zoneList[$from] = array('type' => 'link', 'to' => $to);
 		}
 
