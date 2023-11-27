@@ -22,48 +22,48 @@ return array (
     array (
       'rawOffset' => 41400,
       'dstOffset' => 0,
-      'name' => 'NRT',
+      'name' => '+1130',
     ),
     1 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JST',
+      'name' => '+09',
     ),
     2 => 
     array (
       'rawOffset' => 43200,
       'dstOffset' => 0,
-      'name' => 'NRT',
+      'name' => '+12',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1545131260,
+      'time' => -1545131260.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -877347000,
+      'time' => -862918200.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -800960400,
+      'time' => -767350800.0,
       'type' => 0,
     ),
     3 => 
     array (
-      'time' => 294323400,
+      'time' => 287418600.0,
       'type' => 2,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'NRT',
+    'name' => '+12',
     'offset' => 43200,
     'startYear' => 1980,
   ),

@@ -28,36 +28,42 @@ return array (
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'WITA',
+      'name' => '+08',
     ),
     2 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JST',
+      'name' => '+09',
+    ),
+    3 => 
+    array (
+      'rawOffset' => 28800,
+      'dstOffset' => 0,
+      'name' => 'WITA',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1577951856,
+      'time' => -1577951856.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1172908656,
+      'time' => -1172908656.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -880272000,
+      'time' => -880272000.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -766054800,
-      'type' => 1,
+      'time' => -766054800.0,
+      'type' => 3,
     ),
   ),
   'finalRule' => 

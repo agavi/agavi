@@ -22,32 +22,32 @@ return array (
     array (
       'rawOffset' => 14400,
       'dstOffset' => 0,
-      'name' => 'GST',
+      'name' => '+04',
     ),
     1 => 
     array (
       'rawOffset' => 10800,
       'dstOffset' => 0,
-      'name' => 'AST',
+      'name' => '+03',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1577935568,
+      'time' => -1577935568.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 76190400,
+      'time' => 76190400.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'AST',
+    'name' => '+03',
     'offset' => 10800,
     'startYear' => 1973,
   ),

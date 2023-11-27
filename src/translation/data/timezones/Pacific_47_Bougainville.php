@@ -28,53 +28,53 @@ return array (
     array (
       'rawOffset' => 36000,
       'dstOffset' => 0,
-      'name' => 'PGT',
+      'name' => '+10',
     ),
     2 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JST',
+      'name' => '+09',
     ),
     3 => 
     array (
       'rawOffset' => 39600,
       'dstOffset' => 0,
-      'name' => 'BST',
+      'name' => '+11',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2840178136,
+      'time' => -2840178136.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -2366790512,
+      'time' => -2366790512.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -868010400,
+      'time' => -868010400.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -768906000,
+      'time' => -768906000.0,
       'type' => 1,
     ),
     4 => 
     array (
-      'time' => 1419696000,
+      'time' => 1419696000.0,
       'type' => 3,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'BST',
+    'name' => '+11',
     'offset' => 39600,
     'startYear' => 2015,
   ),

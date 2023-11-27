@@ -22,7 +22,7 @@ return array (
     array (
       'rawOffset' => -3600,
       'dstOffset' => 0,
-      'name' => 'WAT',
+      'name' => '-01',
     ),
     1 => 
     array (
@@ -35,12 +35,12 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1830380260,
+      'time' => -1830380400.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 157770000,
+      'time' => 157770000.0,
       'type' => 1,
     ),
   ),

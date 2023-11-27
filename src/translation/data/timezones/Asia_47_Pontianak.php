@@ -28,19 +28,19 @@ return array (
     array (
       'rawOffset' => 27000,
       'dstOffset' => 0,
-      'name' => 'WIB',
+      'name' => '+0730',
     ),
     2 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JST',
+      'name' => '+09',
     ),
     3 => 
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'WIB',
+      'name' => '+08',
     ),
     4 => 
     array (
@@ -59,42 +59,42 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1946186240,
+      'time' => -1946186240.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1172906240,
+      'time' => -1172906240.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -881220600,
+      'time' => -881220600.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -766054800,
+      'time' => -766054800.0,
       'type' => 1,
     ),
     4 => 
     array (
-      'time' => -683883000,
+      'time' => -683883000.0,
       'type' => 3,
     ),
     5 => 
     array (
-      'time' => -620812800,
+      'time' => -620812800.0,
       'type' => 1,
     ),
     6 => 
     array (
-      'time' => -189415800,
+      'time' => -189415800.0,
       'type' => 4,
     ),
     7 => 
     array (
-      'time' => 567964800,
+      'time' => 567964800.0,
       'type' => 5,
     ),
   ),

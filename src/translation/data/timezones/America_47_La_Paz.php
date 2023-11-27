@@ -28,37 +28,37 @@ return array (
     array (
       'rawOffset' => -16356,
       'dstOffset' => 3600,
-      'name' => 'BOST',
+      'name' => 'BST',
     ),
     2 => 
     array (
       'rawOffset' => -14400,
       'dstOffset' => 0,
-      'name' => 'BOT',
+      'name' => '-04',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2524505244,
+      'time' => -2524505244.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1205954844,
+      'time' => -1205954844.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1192307244,
+      'time' => -1192307244.0,
       'type' => 2,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'BOT',
+    'name' => '-04',
     'offset' => -14400,
     'startYear' => 1933,
   ),

@@ -28,28 +28,43 @@ return array (
     array (
       'rawOffset' => -18000,
       'dstOffset' => 0,
-      'name' => 'ECT',
+      'name' => '-05',
+    ),
+    2 => 
+    array (
+      'rawOffset' => -18000,
+      'dstOffset' => 3600,
+      'name' => '-04',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2524502440,
+      'time' => -2524502440.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1230749160,
+      'time' => -1230749160.0,
+      'type' => 1,
+    ),
+    2 => 
+    array (
+      'time' => 722926800.0,
+      'type' => 2,
+    ),
+    3 => 
+    array (
+      'time' => 728884800.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
-    'type' => 'static',
-    'name' => 'ECT',
+    'type' => 'none',
     'offset' => -18000,
-    'startYear' => 1932,
+    'startYear' => 1994,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',

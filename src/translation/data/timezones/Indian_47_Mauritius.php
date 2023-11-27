@@ -22,40 +22,40 @@ return array (
     array (
       'rawOffset' => 14400,
       'dstOffset' => 0,
-      'name' => 'MUT',
+      'name' => '+04',
     ),
     1 => 
     array (
       'rawOffset' => 14400,
       'dstOffset' => 3600,
-      'name' => 'MUST',
+      'name' => '+05',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1988164200,
+      'time' => -1988164200.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 403041600,
+      'time' => 403041600.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => 417034800,
+      'time' => 417034800.0,
       'type' => 0,
     ),
     3 => 
     array (
-      'time' => 1224972000,
+      'time' => 1224972000.0,
       'type' => 1,
     ),
     4 => 
     array (
-      'time' => 1238274000,
+      'time' => 1238274000.0,
       'type' => 0,
     ),
   ),

@@ -22,48 +22,48 @@ return array (
     array (
       'rawOffset' => -7200,
       'dstOffset' => 0,
-      'name' => 'CVT',
+      'name' => '-02',
     ),
     1 => 
     array (
       'rawOffset' => -7200,
       'dstOffset' => 3600,
-      'name' => 'CVST',
+      'name' => '-01',
     ),
     2 => 
     array (
       'rawOffset' => -3600,
       'dstOffset' => 0,
-      'name' => 'CVT',
+      'name' => '-01',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1988144756,
+      'time' => -1830376800.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -862610400,
+      'time' => -862610400.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -764118000,
+      'time' => -764118000.0,
       'type' => 0,
     ),
     3 => 
     array (
-      'time' => 186120000,
+      'time' => 186120000.0,
       'type' => 2,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'CVT',
+    'name' => '-01',
     'offset' => -3600,
     'startYear' => 1976,
   ),

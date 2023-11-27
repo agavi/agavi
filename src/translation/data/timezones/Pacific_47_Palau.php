@@ -20,23 +20,34 @@ return array (
   array (
     0 => 
     array (
+      'rawOffset' => 32276,
+      'dstOffset' => 0,
+      'name' => 'LMT',
+    ),
+    1 => 
+    array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'PWT',
+      'name' => '+09',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2177485076,
+      'time' => -3944624276.0,
       'type' => 0,
+    ),
+    1 => 
+    array (
+      'time' => -2177485076.0,
+      'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'PWT',
+    'name' => '+09',
     'offset' => 32400,
     'startYear' => 1901,
   ),

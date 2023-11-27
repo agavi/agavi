@@ -22,32 +22,32 @@ return array (
     array (
       'rawOffset' => -30600,
       'dstOffset' => 0,
-      'name' => 'PNT',
+      'name' => '-0830',
     ),
     1 => 
     array (
       'rawOffset' => -28800,
       'dstOffset' => 0,
-      'name' => 'PST',
+      'name' => '-08',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2177421580,
+      'time' => -2177421580.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 893665800,
+      'time' => 893665800.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'PST',
+    'name' => '-08',
     'offset' => -28800,
     'startYear' => 1999,
   ),

@@ -25,7 +25,7 @@ return array (
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'GMT-8',
+    'name' => '+08',
     'offset' => 28800,
     'startYear' => -2147483647,
   ),

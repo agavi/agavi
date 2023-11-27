@@ -22,32 +22,32 @@ return array (
     array (
       'rawOffset' => -14400,
       'dstOffset' => 0,
-      'name' => 'GFT',
+      'name' => '-04',
     ),
     1 => 
     array (
       'rawOffset' => -10800,
       'dstOffset' => 0,
-      'name' => 'GFT',
+      'name' => '-03',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1846269040,
+      'time' => -1846269040.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -71092800,
+      'time' => -71092800.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'GFT',
+    'name' => '-03',
     'offset' => -10800,
     'startYear' => 1968,
   ),

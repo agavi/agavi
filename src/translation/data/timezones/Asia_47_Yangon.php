@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "Asia/Rangoon".
+ * Data file for timezone "Asia/Yangon".
  * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
@@ -20,7 +20,7 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 23080,
+      'rawOffset' => 23087,
       'dstOffset' => 0,
       'name' => 'RMT',
     ),
@@ -28,54 +28,48 @@ return array (
     array (
       'rawOffset' => 23400,
       'dstOffset' => 0,
-      'name' => 'BURT',
+      'name' => '+0630',
     ),
     2 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JST',
-    ),
-    3 => 
-    array (
-      'rawOffset' => 23400,
-      'dstOffset' => 0,
-      'name' => 'MMT',
+      'name' => '+09',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2840163880,
+      'time' => -2840163887.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1577946280,
+      'time' => -1577946287.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -873268200,
+      'time' => -873268200.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -778410000,
-      'type' => 3,
+      'time' => -778410000.0,
+      'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'MMT',
+    'name' => '+0630',
     'offset' => 23400,
     'startYear' => 1946,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',
-  'name' => 'Asia/Rangoon',
+  'name' => 'Asia/Yangon',
 );
 
 ?>

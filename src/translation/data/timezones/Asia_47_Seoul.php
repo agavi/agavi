@@ -28,29 +28,29 @@ return array (
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JCST',
+      'name' => 'JST',
     ),
     2 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JST',
+      'name' => 'KT',
     ),
     3 => 
+    array (
+      'rawOffset' => 32400,
+      'dstOffset' => 3600,
+      'name' => 'KDT',
+    ),
+    4 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
       'name' => 'KST',
     ),
-    4 => 
-    array (
-      'rawOffset' => 30600,
-      'dstOffset' => 3600,
-      'name' => 'KDT',
-    ),
     5 => 
     array (
-      'rawOffset' => 32400,
+      'rawOffset' => 30600,
       'dstOffset' => 3600,
       'name' => 'KDT',
     ),
@@ -59,113 +59,148 @@ return array (
   array (
     0 => 
     array (
-      'time' => -1948782472,
+      'time' => -1948782472.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1830414600,
+      'time' => -1830414600.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1017824400,
+      'time' => -767350800.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -767350800,
+      'time' => -681210000.0,
       'type' => 3,
     ),
     4 => 
     array (
-      'time' => -498128400,
-      'type' => 0,
+      'time' => -672228000.0,
+      'type' => 4,
     ),
     5 => 
     array (
-      'time' => -462702600,
-      'type' => 4,
+      'time' => -654771600.0,
+      'type' => 3,
     ),
     6 => 
     array (
-      'time' => -451733400,
-      'type' => 0,
+      'time' => -640864800.0,
+      'type' => 4,
     ),
     7 => 
     array (
-      'time' => -429784200,
-      'type' => 4,
+      'time' => -623408400.0,
+      'type' => 3,
     ),
     8 => 
     array (
-      'time' => -418296600,
-      'type' => 0,
+      'time' => -609501600.0,
+      'type' => 4,
     ),
     9 => 
     array (
-      'time' => -399544200,
-      'type' => 4,
+      'time' => -588848400.0,
+      'type' => 3,
     ),
     10 => 
     array (
-      'time' => -387451800,
-      'type' => 0,
+      'time' => -578052000.0,
+      'type' => 4,
     ),
     11 => 
     array (
-      'time' => -368094600,
-      'type' => 4,
+      'time' => -498128400.0,
+      'type' => 0,
     ),
     12 => 
     array (
-      'time' => -356002200,
-      'type' => 0,
+      'time' => -462702600.0,
+      'type' => 5,
     ),
     13 => 
     array (
-      'time' => -336645000,
-      'type' => 4,
+      'time' => -451733400.0,
+      'type' => 0,
     ),
     14 => 
     array (
-      'time' => -324552600,
-      'type' => 0,
+      'time' => -429784200.0,
+      'type' => 5,
     ),
     15 => 
     array (
-      'time' => -305195400,
-      'type' => 4,
+      'time' => -418296600.0,
+      'type' => 0,
     ),
     16 => 
     array (
-      'time' => -293103000,
-      'type' => 0,
+      'time' => -399544200.0,
+      'type' => 5,
     ),
     17 => 
     array (
-      'time' => -264933000,
-      'type' => 3,
+      'time' => -387451800.0,
+      'type' => 0,
     ),
     18 => 
     array (
-      'time' => 547578000,
+      'time' => -368008200.0,
       'type' => 5,
     ),
     19 => 
     array (
-      'time' => 560883600,
-      'type' => 3,
+      'time' => -356002200.0,
+      'type' => 0,
     ),
     20 => 
     array (
-      'time' => 579031200,
+      'time' => -336558600.0,
       'type' => 5,
     ),
     21 => 
     array (
-      'time' => 592333200,
+      'time' => -324552600.0,
+      'type' => 0,
+    ),
+    22 => 
+    array (
+      'time' => -305109000.0,
+      'type' => 5,
+    ),
+    23 => 
+    array (
+      'time' => -293103000.0,
+      'type' => 0,
+    ),
+    24 => 
+    array (
+      'time' => -264933000.0,
+      'type' => 4,
+    ),
+    25 => 
+    array (
+      'time' => 547578000.0,
       'type' => 3,
+    ),
+    26 => 
+    array (
+      'time' => 560883600.0,
+      'type' => 4,
+    ),
+    27 => 
+    array (
+      'time' => 579031200.0,
+      'type' => 3,
+    ),
+    28 => 
+    array (
+      'time' => 592333200.0,
+      'type' => 4,
     ),
   ),
   'finalRule' => 

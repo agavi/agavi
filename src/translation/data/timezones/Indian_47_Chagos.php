@@ -22,32 +22,32 @@ return array (
     array (
       'rawOffset' => 18000,
       'dstOffset' => 0,
-      'name' => 'IOT',
+      'name' => '+05',
     ),
     1 => 
     array (
       'rawOffset' => 21600,
       'dstOffset' => 0,
-      'name' => 'IOT',
+      'name' => '+06',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1988167780,
+      'time' => -1988167780.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 820436400,
+      'time' => 820436400.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'IOT',
+    'name' => '+06',
     'offset' => 21600,
     'startYear' => 1996,
   ),

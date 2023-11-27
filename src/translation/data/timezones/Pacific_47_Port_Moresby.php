@@ -28,26 +28,26 @@ return array (
     array (
       'rawOffset' => 36000,
       'dstOffset' => 0,
-      'name' => 'PGT',
+      'name' => '+10',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -2840176120,
+      'time' => -2840176120.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -2366790512,
+      'time' => -2366790512.0,
       'type' => 1,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'PGT',
+    'name' => '+10',
     'offset' => 36000,
     'startYear' => 1895,
   ),

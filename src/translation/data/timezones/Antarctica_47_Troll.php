@@ -22,25 +22,25 @@ return array (
     array (
       'rawOffset' => 0,
       'dstOffset' => 0,
-      'name' => 'UTC',
+      'name' => '+00',
     ),
     1 => 
     array (
       'rawOffset' => 0,
       'dstOffset' => 7200,
-      'name' => 'CEST',
+      'name' => '+02',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => 1108166400,
+      'time' => 1108166400.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => 1111885200,
+      'time' => 1111885200.0,
       'type' => 1,
     ),
   ),
@@ -55,16 +55,16 @@ return array (
       'month' => 2,
       'date' => -1,
       'day_of_week' => 1,
-      'time' => 3600000,
-      'type' => 2,
+      'time' => 3600000.0,
+      'type' => 2.0,
     ),
     'end' => 
     array (
       'month' => 9,
       'date' => -1,
       'day_of_week' => 1,
-      'time' => 3600000,
-      'type' => 2,
+      'time' => 3600000.0,
+      'type' => 2.0,
     ),
     'startYear' => 2006,
   ),

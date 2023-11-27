@@ -28,25 +28,25 @@ return array (
     array (
       'rawOffset' => 26400,
       'dstOffset' => 0,
-      'name' => 'JAVT',
+      'name' => '+0720',
     ),
     2 => 
     array (
       'rawOffset' => 27000,
       'dstOffset' => 0,
-      'name' => 'WIB',
+      'name' => '+0730',
     ),
     3 => 
     array (
       'rawOffset' => 32400,
       'dstOffset' => 0,
-      'name' => 'JST',
+      'name' => '+09',
     ),
     4 => 
     array (
       'rawOffset' => 28800,
       'dstOffset' => 0,
-      'name' => 'WIB',
+      'name' => '+08',
     ),
     5 => 
     array (
@@ -59,42 +59,42 @@ return array (
   array (
     0 => 
     array (
-      'time' => -3231299232,
+      'time' => -3231299232.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1451719200,
+      'time' => -1451719200.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -1172906400,
+      'time' => -1172906400.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => -876641400,
+      'time' => -876641400.0,
       'type' => 3,
     ),
     4 => 
     array (
-      'time' => -766054800,
+      'time' => -766054800.0,
       'type' => 2,
     ),
     5 => 
     array (
-      'time' => -683883000,
+      'time' => -683883000.0,
       'type' => 4,
     ),
     6 => 
     array (
-      'time' => -620812800,
+      'time' => -620812800.0,
       'type' => 2,
     ),
     7 => 
     array (
-      'time' => -189415800,
+      'time' => -189415800.0,
       'type' => 5,
     ),
   ),

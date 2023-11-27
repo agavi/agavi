@@ -28,7 +28,7 @@ return array (
     array (
       'rawOffset' => -2670,
       'dstOffset' => 0,
-      'name' => 'LRT',
+      'name' => 'MMT',
     ),
     2 => 
     array (
@@ -41,17 +41,17 @@ return array (
   array (
     0 => 
     array (
-      'time' => -2776979812,
+      'time' => -2776979812.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1604359012,
+      'time' => -1604359012.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => 73529070,
+      'time' => 63593070.0,
       'type' => 2,
     ),
   ),

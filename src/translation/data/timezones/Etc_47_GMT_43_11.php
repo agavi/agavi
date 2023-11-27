@@ -25,7 +25,7 @@ return array (
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'GMT+11',
+    'name' => '-11',
     'offset' => -39600,
     'startYear' => -2147483647,
   ),

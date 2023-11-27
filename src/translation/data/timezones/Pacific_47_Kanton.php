@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Data file for timezone "Antarctica/DumontDUrville".
+ * Data file for timezone "Pacific/Kanton".
  * Compiled from olson file "(unknown)", version (unknown).
  *
  * @package    agavi
@@ -20,51 +20,51 @@ return array (
   array (
     0 => 
     array (
-      'rawOffset' => 36000,
+      'rawOffset' => -43200,
       'dstOffset' => 0,
-      'name' => 'PMT',
+      'name' => '-12',
     ),
     1 => 
     array (
-      'rawOffset' => 0,
+      'rawOffset' => -39600,
       'dstOffset' => 0,
-      'name' => 'zzz',
+      'name' => '-11',
     ),
     2 => 
     array (
-      'rawOffset' => 36000,
+      'rawOffset' => 46800,
       'dstOffset' => 0,
-      'name' => 'DDUT',
+      'name' => '+13',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -725846400,
+      'time' => -1020470400.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -566992800,
+      'time' => 307627200.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -415497600,
+      'time' => 788871600.0,
       'type' => 2,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'DDUT',
-    'offset' => 36000,
-    'startYear' => 1957,
+    'name' => '+13',
+    'offset' => 46800,
+    'startYear' => 1995,
   ),
   'source' => '(unknown)',
   'version' => '(unknown)',
-  'name' => 'Antarctica/DumontDUrville',
+  'name' => 'Pacific/Kanton',
 );
 
 ?>

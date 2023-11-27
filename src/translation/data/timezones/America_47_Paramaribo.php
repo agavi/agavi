@@ -34,53 +34,42 @@ return array (
     array (
       'rawOffset' => -12600,
       'dstOffset' => 0,
-      'name' => 'NEGT',
+      'name' => '-0330',
     ),
     3 => 
     array (
-      'rawOffset' => -12600,
-      'dstOffset' => 0,
-      'name' => 'SRT',
-    ),
-    4 => 
-    array (
       'rawOffset' => -10800,
       'dstOffset' => 0,
-      'name' => 'SRT',
+      'name' => '-03',
     ),
   ),
   'rules' => 
   array (
     0 => 
     array (
-      'time' => -1861906760,
+      'time' => -1861906760.0,
       'type' => 0,
     ),
     1 => 
     array (
-      'time' => -1104524348,
+      'time' => -1104524348.0,
       'type' => 1,
     ),
     2 => 
     array (
-      'time' => -765317964,
+      'time' => -765317964.0,
       'type' => 2,
     ),
     3 => 
     array (
-      'time' => 185686200,
+      'time' => 465449400.0,
       'type' => 3,
-    ),
-    4 => 
-    array (
-      'time' => 465449400,
-      'type' => 4,
     ),
   ),
   'finalRule' => 
   array (
     'type' => 'static',
-    'name' => 'SRT',
+    'name' => '-03',
     'offset' => -10800,
     'startYear' => 1985,
   ),
