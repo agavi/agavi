@@ -298,7 +298,7 @@ class AgaviConfigCache
 		$cacheName = sprintf(
 			'%1$s_%2$s.php',
 			preg_replace(
-				'/[^\w-_.]/i', 
+				'/[^\w\-_.]/i', 
 				'_', 
 				sprintf(
 					'%1$s_%2$s_%3$s', 
