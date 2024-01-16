@@ -21,29 +21,29 @@
 			<language type="ak">อาคาน</language>
 			<language type="akk">อัคคาเดียน</language>
 			<language type="ale">อลิอุต</language>
-			<language type="alg">ภาษาอาลงเควียน</language>
+			<language type="alg">อาลงเควียน</language>
 			<language type="alt">อัลไตใต้</language>
 			<language type="am">อัมฮาริค</language>
 			<language type="an">อาราโกนิส</language>
 			<language type="ang">อังกฤษโบราณ (ค.ศ.450-1100)</language>
-			<language type="apa">ภาษาอาปาเช่</language>
+			<language type="apa">อาปาเช่</language>
 			<language type="ar" draft="provisional">อารบิก</language>
 			<language type="arc">อารามาอิค</language>
 			<language type="arn">อาราคาเนียน</language>
 			<language type="arp">อาราพาโฮ</language>
-			<language type="art">ภาษาประดิษฐ์ (อื่นๆ)</language>
+			<language type="art">ประดิษฐ์ (อื่นๆ)</language>
 			<language type="arw">อาราวัก</language>
 			<language type="as">อัสสัมมิส</language>
 			<language type="ast">อัสเตอเรียน</language>
-			<language type="ath">ภาษาอาธาพาสกาน</language>
-			<language type="aus">ภาษาออสเตรเลีย</language>
+			<language type="ath">อาธาพาสกาน</language>
+			<language type="aus">ออสเตรเลีย</language>
 			<language type="av">อาวาริก</language>
 			<language type="awa">อาวาดิ</language>
 			<language type="ay">ไอมารา</language>
 			<language type="az">อาเซอร์ไบจานี</language>
 			<language type="ba">บาสช์กีร์</language>
 			<language type="bad">บันดา</language>
-			<language type="bai">ภาษาบามิเลค</language>
+			<language type="bai">บามิเลค</language>
 			<language type="bal">บาลูชิ</language>
 			<language type="ban">บาหลี</language>
 			<language type="bas">บาสา</language>
@@ -72,7 +72,7 @@
 			<language type="byn">บลิน</language>
 			<language type="ca">แคตาแลน</language>
 			<language type="cad">คัดโด</language>
-			<language type="cai">อินเดียอเมริกากลาง(อื่นๆ)</language>
+			<language type="cai">อินเดียอเมริกากลาง (อื่นๆ)</language>
 			<language type="car">คาริบ</language>
 			<language type="cau">คอเคเซียน (อื่นๆ)</language>
 			<language type="ce">เชเชิน</language>
@@ -87,7 +87,7 @@
 			<language type="chp">ชิเพวยัน</language>
 			<language type="chr">เชอโรกี</language>
 			<language type="chy">เชเยน</language>
-			<language type="cmc">ภาษาชามิก</language>
+			<language type="cmc">ชามิก</language>
 			<language type="co">คอร์ซิกา</language>
 			<language type="cop">คอปทิก</language>
 			<language type="cpe">ครีโอเลสและพิกกินส์ที่มาจากอังกฤษอื่นๆ</language>
@@ -138,7 +138,7 @@
 			<language type="fi">ฟิน</language>
 			<language type="fil">ฟิลิปปินส์</language>
 			<language type="fiu">ฟินโน-อักเรียน</language>
-			<language type="fj">ฟิจิ</language>
+			<language type="fj">ฟีจี</language>
 			<language type="fo">ฟาโรส</language>
 			<language type="fon">ฟอน</language>
 			<language type="fr">ฝรั่งเศส</language>
@@ -197,7 +197,7 @@
 			<language type="inh">อินกุส</language>
 			<language type="io">อิโด</language>
 			<language type="ira">อิหร่าน</language>
-			<language type="iro">ภาษาอิโรกัวเอียน</language>
+			<language type="iro">อิโรกัวเอียน</language>
 			<language type="is">ไอซ์แลนด์ดิค</language>
 			<language type="it">อิตาลี</language>
 			<language type="iu">ไอนุกติตัท</language>
@@ -281,9 +281,9 @@
 			<language type="mkh">มอญ-เขมร (อื่นๆ)</language>
 			<language type="ml">มาลายาลัม</language>
 			<language type="mn">มองโกล</language>
-			<language type="mnc" references="RP2" draft="provisional">ชาวแมนจูเรีย</language>
+			<language type="mnc" references="RP2" draft="provisional">แมนจูเรีย</language>
 			<language type="mni">มานิพูริ</language>
-			<language type="mno">ภาษามาโนโบ</language>
+			<language type="mno">มาโนโบ</language>
 			<language type="mo">โมดาเวีย</language>
 			<language type="moh">โมฮอว์ก</language>
 			<language type="mos">มอสสิ</language>
@@ -291,12 +291,12 @@
 			<language type="ms">มลายู</language>
 			<language type="mt">มอลตา</language>
 			<language type="mul">หลายภาษา</language>
-			<language type="mun">ภาษามันดา</language>
+			<language type="mun">มันดา</language>
 			<language type="mus">ครีก</language>
 			<language type="mwl">มิรันกิส</language>
 			<language type="mwr">มาร์วาริ</language>
 			<language type="my">พม่า</language>
-			<language type="myn">ภาษามายัน</language>
+			<language type="myn">มายัน</language>
 			<language type="myv">อิร์ซยา</language>
 			<language type="na">นอรู</language>
 			<language type="nah">นาฮวตล์</language>
@@ -317,7 +317,7 @@
 			<language type="nog">โนไก</language>
 			<language type="non">นอร์ส</language>
 			<language type="nso">โซโธเหนือ</language>
-			<language type="nub">ภาษานูเบียน</language>
+			<language type="nub">นูเบียน</language>
 			<language type="nv">นาวาโจ</language>
 			<language type="nwc">เนวาริคลาสสิก</language>
 			<language type="ny">เนียนจา; ชิเชวา; เชวา</language>
@@ -332,7 +332,7 @@
 			<language type="os">ออสเซทิก</language>
 			<language type="osa">โอซาเก</language>
 			<language type="ota">ออตโทแมนเตอร์กีส</language>
-			<language type="oto">ภาษาโอโทเมียน</language>
+			<language type="oto">โอโทเมียน</language>
 			<language type="pa">ปัญจาป</language>
 			<language type="paa">ปาปัว (อื่นๆ)</language>
 			<language type="pag">พันกาซินัน</language>
@@ -346,7 +346,7 @@
 			<language type="pi">บาลี</language>
 			<language type="pl">โปแลนด์</language>
 			<language type="pon">โพฮ์นเพเอียน</language>
-			<language type="pra">ภาษาพรากริต</language>
+			<language type="pra">พรากริต</language>
 			<language type="pro">โพรเวนคอลโบราณ</language>
 			<language type="ps">พาสช์โต (พุสช์โต)</language>
 			<language type="pt">โปรตุเกส</language>
@@ -367,7 +367,7 @@
 			<language type="sad">ซันดาเว</language>
 			<language type="sah">ยากุต</language>
 			<language type="sai">อเมริกาอินเดียนใต้ (อื่นๆ)</language>
-			<language type="sal">ภาษาซาลิชัน</language>
+			<language type="sal">ซาลิชัน</language>
 			<language type="sam">ซามาริทันอารามาอิก</language>
 			<language type="sas">ซาซัก</language>
 			<language type="sat">ซันทาลิ</language>
@@ -385,14 +385,14 @@
 			<language type="shn">ชาน</language>
 			<language type="si">สิงหล</language>
 			<language type="sid">ซิดาโม</language>
-			<language type="sio">ภาษาซิอวน</language>
+			<language type="sio">ซิอวน</language>
 			<language type="sit">ซิโน-ทิเบต (อื่นๆ)</language>
 			<language type="sk">สโลวัค</language>
 			<language type="sl">สโลเวเนีย</language>
 			<language type="sla">สลาวิก (อื่นๆ)</language>
 			<language type="sm">ซามัว</language>
 			<language type="sma">ซามิใต้</language>
-			<language type="smi">ภาษาซามิ (อื่นๆ)</language>
+			<language type="smi">ซามิ (อื่นๆ)</language>
 			<language type="smj">ลูลซามิ</language>
 			<language type="smn">อินาริซามิ</language>
 			<language type="sms">สกอลตซามิ</language>
@@ -441,7 +441,7 @@
 			<language type="tsi">ซิมเชียน</language>
 			<language type="tt">ตาด</language>
 			<language type="tum">ทุมบุกา</language>
-			<language type="tup">ภาษาทุพิ</language>
+			<language type="tup">ทุพิ</language>
 			<language type="tut">อัลทาอิก (อื่นๆ)</language>
 			<language type="tvl">ทูวาลู</language>
 			<language type="tw">ทวี</language>
@@ -461,11 +461,11 @@
 			<language type="vo">โวลาพุก</language>
 			<language type="vot">โวทิก</language>
 			<language type="wa">วอลลูน</language>
-			<language type="wak">ภาษาวากาชาน</language>
+			<language type="wak">วากาชาน</language>
 			<language type="wal">วาลาโม</language>
 			<language type="war">วาเรย์</language>
 			<language type="was">วาโช</language>
-			<language type="wen">ภาษาซอร์เบียน</language>
+			<language type="wen">ซอร์เบียน</language>
 			<language type="wo">วูลอฟ</language>
 			<language type="xal">กาลมิก</language>
 			<language type="xh">โซสา</language>
@@ -473,7 +473,7 @@
 			<language type="yap">ยาเพส</language>
 			<language type="yi">ยีดิช</language>
 			<language type="yo">โยรูบา</language>
-			<language type="ypk">ภาษายูพิก</language>
+			<language type="ypk">ยูพิก</language>
 			<language type="za">จวง</language>
 			<language type="zap">ซาโปเทก</language>
 			<language type="zen">เซนากา</language>
@@ -831,7 +831,7 @@
 			<territory type="TD">ชาด</territory>
 			<territory type="TF">อาณาเขตทางใต้ของฝรั่งเศส</territory>
 			<territory type="TG">โตโก</territory>
-			<territory type="TH">ประเทศไทย</territory>
+			<territory type="TH">ไทย</territory>
 			<territory type="TJ">ทาจิกิสถาน</territory>
 			<territory type="TK">โทกิโล</territory>
 			<territory type="TL">ติมอร์ตะวันออก</territory>
@@ -867,7 +867,7 @@
 		<variants>
 			<variant type="1901">เยอรมันออร์โธกราฟีดั้งเดิม</variant>
 			<variant type="1996">เยอรมันออร์โธกราฟีปี 1996</variant>
-			<variant type="NEDIS">ภาษาพื้นเมืองนาทิโซเน</variant>
+			<variant type="NEDIS">พื้นเมืองนาทิโซเน</variant>
 			<variant type="POLYTONI">โพลีโทนิก</variant>
 			<variant type="REVISED">ออร์โธกราฟิปรับปรุง</variant>
 			<variant type="ROZAJ">เรเซียน</variant>
