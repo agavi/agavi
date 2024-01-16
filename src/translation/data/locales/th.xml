@@ -674,7 +674,7 @@
 			<territory type="CS">เซอร์เบีย</territory>
 			<territory type="CU">คิวบา</territory>
 			<territory type="CV">เคปเวิร์ด</territory>
-			<territory type="CX">เกาะคริสมาสต์</territory>
+			<territory type="CX">เกาะคริสต์มาส</territory>
 			<territory type="CY">ไซปรัส</territory>
 			<territory type="CZ">สาธารณรัฐเช็ก</territory>
 			<territory type="DE">เยอรมนี</territory>
@@ -692,7 +692,7 @@
 			<territory type="ET">เอธิโอเปีย</territory>
 			<territory type="FI">ฟินแลนด์</territory>
 			<territory type="FJ">ฟิจิ</territory>
-			<territory type="FK">หมู่เกาะฟอล์คแลนด์</territory>
+			<territory type="FK">หมู่เกาะฟอล์กแลนด์</territory>
 			<territory type="FM">ไมโครนีเซีย</territory>
 			<territory type="FO">หมู่เกาะฟาโร</territory>
 			<territory type="FR">ฝรั่งเศส</territory>
@@ -862,7 +862,7 @@
 			<territory type="YT">มายอต</territory>
 			<territory type="ZA">แอฟริกาใต้</territory>
 			<territory type="ZM">แซมเบีย</territory>
-			<territory type="ZW">ซิมบาบเว</territory>
+			<territory type="ZW">ซิมบับเว</territory>
 		</territories>
 		<variants>
 			<variant type="1901">เยอรมันออร์โธกราฟีดั้งเดิม</variant>
